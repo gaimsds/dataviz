@@ -1,0 +1,152 @@
+[
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "This is a book created from markdown and executable code.\nSee Knuth (1984) for additional discussion of literate programming.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "4  Summary",
+    "section": "",
+    "text": "In summary, this book has no content whatsoever.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Summary</span>"
+    ]
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
+    "crumbs": [
+      "References"
+    ]
+  },
+  {
+    "objectID": "week1.html",
+    "href": "week1.html",
+    "title": "2  test",
+    "section": "",
+    "text": "2.1 📖 Background & Motivation\nData visualization is the bridge between raw data and human understanding. In data science, visualizations are not just decorative — they are powerful analytical tools that help reveal patterns, outliers, and trends that might remain hidden in tables or statistical summaries.\nWell-designed visualizations can:\nApplications span across domains:\nAs data science projects grow in size and complexity, the ability to craft clear, truthful, and impactful visuals becomes as important as building the models themselves.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>test</span>"
+    ]
+  },
+  {
+    "objectID": "week1.html#background-motivation",
+    "href": "week1.html#background-motivation",
+    "title": "2  test",
+    "section": "",
+    "text": "Tell compelling, evidence-based stories that influence decision-making.\nMake complex concepts easier to grasp for diverse audiences.\nIdentify and expose errors or inconsistencies in data during the exploratory stage.\nEnable collaboration between technical and non-technical stakeholders.\n\n\n\nPublic health: Tracking disease spread with interactive dashboards.\nClimate science: Mapping temperature anomalies over decades.\nBusiness analytics: Visualizing customer behavior or sales performance.\nMachine learning: Understanding model performance through ROC curves, feature importance charts, or clustering visualizations.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>test</span>"
+    ]
+  },
+  {
+    "objectID": "week1.html#learning-objectives",
+    "href": "week1.html#learning-objectives",
+    "title": "2  test",
+    "section": "2.2 🔎 Learning Objectives",
+    "text": "2.2 🔎 Learning Objectives\n\nSet up a reliable Python environment for data visualization.\nNavigate Jupyter Notebook/Lab and basic notebook hygiene (headings, code vs. markdown, restart & run all).\nLoad and inspect tabular data with pandas.\nProduce the first charts with matplotlib and seaborn.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>test</span>"
+    ]
+  },
+  {
+    "objectID": "week1.html#readings-resources",
+    "href": "week1.html#readings-resources",
+    "title": "2  test",
+    "section": "2.3 📚 Readings & Resources",
+    "text": "2.3 📚 Readings & Resources\n\nJupyterLab User Guide\nPython Tutorial\nPandas\nMatplotlib Pyplot\nSeaborn Tutorials\n\nSample Data Sources for Practice:\n\nSeaborn Built-in Datasets\nKaggle Datasets\nFiveThirtyEight Data\nOur World in Data\nOpen Data DC\nUCI Machine Learning Repository\ndata.gov\nGeoPandas Sample Datasets\nSocial Explorer",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>test</span>"
+    ]
+  },
+  {
+    "objectID": "week1.html#setup-checklist",
+    "href": "week1.html#setup-checklist",
+    "title": "2  test",
+    "section": "2.4 🛠️ Setup Checklist",
+    "text": "2.4 🛠️ Setup Checklist\n\nInstall Anaconda or Miniconda.\nCreate/activate environment:\nconda create -n dataviz python=3.12 -y\nconda activate dataviz\nInstall libraries (CPU-friendly baseline):\npip install pandas numpy matplotlib seaborn plotly altair geopandas\nLaunch JupyterLab:\njupyter lab\n(Optional) IDEs you can use: VS Code, PyCharm, Sublime Text; or run in Google Colab.\n\nTroubleshooting\n\nIf geopandas fails on Windows, try conda install -c conda-forge geopandas.\nIf Jupyter can’t see the env, run: python -m ipykernel install --user --name dataviz --display-name \"Python (dataviz)\".",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>test</span>"
+    ]
+  },
+  {
+    "objectID": "week1.html#lecture-outline",
+    "href": "week1.html#lecture-outline",
+    "title": "2  test",
+    "section": "2.5 🧭 Lecture Outline",
+    "text": "2.5 🧭 Lecture Outline\n\n2.5.1 Session 1 (75 minutes)\n\nCourse overview & syllabus tour (15 min)\nWhy visualization in data science? (truthfulness, clarity, audience) (15 min)\nEnvironment setup: conda + Jupyter walkthrough, troubleshooting (30 min)\nFirst dataset in pandas: load CSV → DataFrame → quick EDA (15 min)\n\n\n\n2.5.2 Session 2 (75 minutes)\n\nRecap + Q&A on environment setup (10 min)\nNotebook workflow: cells, markdown, restart & run all, saving (20 min)\nBasic plotting: matplotlib bar/line; seaborn scatter/histogram (30 min)\nGuided practice with penguins dataset: scatterplot, pairplot activity (15 min)\nSample data 1 (customers_1000.csv); Sample data 2 (life_journey_data.csv), Sample data 3 (unemployment-x)\n\nCheck out the detailed instructions in a Notebook and download the week1_session2.ipynb",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>test</span>"
+    ]
+  },
+  {
+    "objectID": "week1.html#starter-notebook-snippets",
+    "href": "week1.html#starter-notebook-snippets",
+    "title": "2  test",
+    "section": "2.6 💻 Starter Notebook Snippets",
+    "text": "2.6 💻 Starter Notebook Snippets\n\n2.6.1 Load a tiny dataset (download the tab-separated file (tsv) version)\n\n\n\n\n\n\n\n\n\n2.6.2 First charts (matplotlib → seaborn)\n\n\n\n2.6.3 Quick EDA helpers",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>test</span>"
+    ]
+  },
+  {
+    "objectID": "week1.html#in-class-activity",
+    "href": "week1.html#in-class-activity",
+    "title": "2  test",
+    "section": "2.7 🧪 In-Class Activity",
+    "text": "2.7 🧪 In-Class Activity\nUsing seaborn.load_dataset(\"penguins\"):\n\nMake a scatterplot of flipper_length_mm vs body_mass_g colored by species.\nAdd axis labels, a title, and a legend with a better title.\nTry a seaborn.pairplot to see relationships across multiple variables.\n\nHints",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>test</span>"
+    ]
+  },
+  {
+    "objectID": "week1.html#homework-due-before-week-2",
+    "href": "week1.html#homework-due-before-week-2",
+    "title": "2  test",
+    "section": "2.8 🏠 Homework (Due before Week 2)",
+    "text": "2.8 🏠 Homework (Due before Week 2)\n\nSet up your environment and confirm you can open/run notebooks.\nImport a CSV of your choice and submit one notebook that includes:\n\nA short markdown description of the dataset (source, what, who, when).\nTop 5 rows, .info(), and .describe().\nOne bar or histogram plot, and one scatter plot.\nA brief paragraph reflecting on one insight + one limitation of the data.\n\nExport notebook to HTML (File → Save and Export Notebook As) and upload both .ipynb and .html.\n\nRubric (10 pts)\n\nReproducible environment & clean notebook structure (2)\nCorrect loading/inspection & basic EDA (3)\nTwo charts with sensible labels/titles (3)\nInsight + limitation reflection (2)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>test</span>"
+    ]
+  },
+  {
+    "objectID": "week1.html#optional-extensions",
+    "href": "week1.html#optional-extensions",
+    "title": "2  test",
+    "section": "2.9 🧩 Optional Extensions",
+    "text": "2.9 🧩 Optional Extensions\n\nTry the same chart in both matplotlib and seaborn; note the pros/cons you observe.\nInstall altair (a declarative statistical visualization library for Python, built on top of Vega-Lite, useful for creating interactive charts with minimal code) and create the same scatterplot with tooltips.\nIf you’re comfortable with maps, test your geopandas install (geopandas.datasets.get_path('naturalearth_lowres')).",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>test</span>"
+    ]
+  },
+  {
+    "objectID": "week1.html#submission-checklist",
+    "href": "week1.html#submission-checklist",
+    "title": "2  test",
+    "section": "2.10 ✅ Submission Checklist",
+    "text": "2.10 ✅ Submission Checklist\nThis section, for example, lists everything you should verify before submitting your work for Week 1.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>test</span>"
+    ]
+  },
+  {
+    "objectID": "demo.html",
+    "href": "demo.html",
+    "title": "3  DATS 2102 Final Project",
+    "section": "",
+    "text": "import seaborn as sns\nimport matplotlib.pyplot as plt\nimport pandas as pd\nfrom os import listdir\n\nprint(listdir(\"data\"))\n\nflights = pd.read_csv(\"data/flights.csv\")\nsns.relplot(\n  data = flights,\n  x = \"year\",\n  y = \"passengers\"\n)\nplt.show()",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>DATS 2102 Final Project</span>"
+    ]
+  }
+]

@@ -1,0 +1,32 @@
+project:
+  type: book
+
+book:
+  title: "Data Visualization for Data Science"
+  author: "Junjun Yin"
+  date: "12/29/2025"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - week1.qmd
+    - summary.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+    csss: styles.css
+    toc: true
+
+  # pdf:
+  #   documentclass: scrreprt
+
+# filters:
+#   - r-wasm/live
+
+
+
