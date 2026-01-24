@@ -9,18 +9,19 @@ book:
     - index.qmd
     - intro.qmd
     - week1.qmd
+    - weekly/module_week_1_getting_started.qmd
     - summary.qmd
     - references.qmd
 
 bibliography: references.bib
 
-format:
-  html:
-    theme:
-      - cosmo
-      - brand
-    csss: styles.css
-    toc: true
+format: live-html
+##  html:
+##    theme:
+##      - cosmo
+##      - brand
+##    csss: styles.css
+##    toc: true
 
   # pdf:
   #   documentclass: scrreprt

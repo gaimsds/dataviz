@@ -1,5 +1,7 @@
 # Introduction
+Welcome to Data Visualiztion for Data Science (DATS 2102)
 
-This is a book created from markdown and executable code.
+## Weekly Modules
+* `Week 1` - [Getting Started](weekly/module_week_1_getting_started.qmd)
 
-See @knuth84 for additional discussion of literate programming.
+## Data Sources
