@@ -2,21 +2,21 @@
   {
     "objectID": "intro.html",
     "href": "intro.html",
-    "title": "1  Introduction",
+    "title": "Introduction",
     "section": "",
-    "text": "1.1 Weekly Modules\nWelcome to Data Visualiztion for Data Science (DATS 2102)",
+    "text": "Weekly Modules\nWelcome to Data Visualiztion for Data Science (DATS 2102)",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+      "Introduction"
     ]
   },
   {
     "objectID": "summary.html",
     "href": "summary.html",
-    "title": "3  Summary",
+    "title": "4  Summary",
     "section": "",
     "text": "In summary, this book has no content whatsoever.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Summary</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Summary</span>"
     ]
   },
   {
@@ -162,131 +162,351 @@
   {
     "objectID": "intro.html#weekly-modules",
     "href": "intro.html#weekly-modules",
-    "title": "1  Introduction",
+    "title": "Introduction",
     "section": "",
-    "text": "Week 1 - Getting Started",
+    "text": "Week 1 - Getting Started\nWeek 2 - Language of Graphs\nWeek 3 - Distributions and Variations",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+      "Introduction"
     ]
   },
   {
     "objectID": "intro.html#data-sources",
     "href": "intro.html#data-sources",
-    "title": "1  Introduction",
-    "section": "1.2 Data Sources",
-    "text": "1.2 Data Sources",
+    "title": "Introduction",
+    "section": "Data Sources",
+    "text": "Data Sources",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+      "Introduction"
     ]
   },
   {
     "objectID": "weekly/module_week_1_getting_started.html",
     "href": "weekly/module_week_1_getting_started.html",
-    "title": "3  Week 1 — Getting Started",
+    "title": "1  Week 1 — Getting Started",
     "section": "",
-    "text": "3.1 📖 Background & Motivation\nData visualization is the bridge between raw data and human understanding. In data science, visualizations are not just decorative — they are powerful analytical tools that help reveal patterns, outliers, and trends that might remain hidden in tables or statistical summaries.\nWell-designed visualizations can:\nApplications span across domains:\nAs data science projects grow in size and complexity, the ability to craft clear, truthful, and impactful visuals becomes as important as building the models themselves.",
+    "text": "1.1 📖 Background & Motivation\nData visualization is the bridge between raw data and human understanding. In data science, visualizations are not just decorative — they are powerful analytical tools that help reveal patterns, outliers, and trends that might remain hidden in tables or statistical summaries.\nWell-designed visualizations can:\nApplications span across domains:\nAs data science projects grow in size and complexity, the ability to craft clear, truthful, and impactful visuals becomes as important as building the models themselves.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Week 1 — Getting Started</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Getting Started</span>"
     ]
   },
   {
     "objectID": "weekly/module_week_1_getting_started.html#background-motivation",
     "href": "weekly/module_week_1_getting_started.html#background-motivation",
-    "title": "3  Week 1 — Getting Started",
+    "title": "1  Week 1 — Getting Started",
     "section": "",
     "text": "Tell compelling, evidence-based stories that influence decision-making.\nMake complex concepts easier to grasp for diverse audiences.\nIdentify and expose errors or inconsistencies in data during the exploratory stage.\nEnable collaboration between technical and non-technical stakeholders.\n\n\n\nPublic health: Tracking disease spread with interactive dashboards.\nClimate science: Mapping temperature anomalies over decades.\nBusiness analytics: Visualizing customer behavior or sales performance.\nMachine learning: Understanding model performance through ROC curves, feature importance charts, or clustering visualizations.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Week 1 — Getting Started</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Getting Started</span>"
     ]
   },
   {
     "objectID": "weekly/module_week_1_getting_started.html#learning-objectives",
     "href": "weekly/module_week_1_getting_started.html#learning-objectives",
-    "title": "3  Week 1 — Getting Started",
-    "section": "3.2 🔎 Learning Objectives",
-    "text": "3.2 🔎 Learning Objectives\n\nSet up a reliable Python environment for data visualization.\nNavigate Jupyter Notebook/Lab and basic notebook hygiene (headings, code vs. markdown, restart & run all).\nLoad and inspect tabular data with pandas.\nProduce the first charts with matplotlib and seaborn.",
+    "title": "1  Week 1 — Getting Started",
+    "section": "1.2 🔎 Learning Objectives",
+    "text": "1.2 🔎 Learning Objectives\n\nSet up a reliable Python environment for data visualization.\nNavigate Jupyter Notebook/Lab and basic notebook hygiene (headings, code vs. markdown, restart & run all).\nLoad and inspect tabular data with pandas.\nProduce the first charts with matplotlib and seaborn.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Week 1 — Getting Started</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Getting Started</span>"
     ]
   },
   {
     "objectID": "weekly/module_week_1_getting_started.html#readings-resources",
     "href": "weekly/module_week_1_getting_started.html#readings-resources",
-    "title": "3  Week 1 — Getting Started",
-    "section": "3.3 📚 Readings & Resources",
-    "text": "3.3 📚 Readings & Resources\n\nJupyterLab User Guide\nPython Tutorial\nPandas\nMatplotlib Pyplot\nSeaborn Tutorials\n\nSample Data Sources for Practice:\n\nSeaborn Built-in Datasets\nKaggle Datasets\nFiveThirtyEight Data\nOur World in Data\nOpen Data DC\nUCI Machine Learning Repository\ndata.gov\nGeoPandas Sample Datasets\nSocial Explorer",
+    "title": "1  Week 1 — Getting Started",
+    "section": "1.3 📚 Readings & Resources",
+    "text": "1.3 📚 Readings & Resources\n\nJupyterLab User Guide\nPython Tutorial\nPandas\nMatplotlib Pyplot\nSeaborn Tutorials\n\nSample Data Sources for Practice:\n\nSeaborn Built-in Datasets\nKaggle Datasets\nFiveThirtyEight Data\nOur World in Data\nOpen Data DC\nUCI Machine Learning Repository\ndata.gov\nGeoPandas Sample Datasets\nSocial Explorer",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Week 1 — Getting Started</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Getting Started</span>"
     ]
   },
   {
     "objectID": "weekly/module_week_1_getting_started.html#setup-checklist",
     "href": "weekly/module_week_1_getting_started.html#setup-checklist",
-    "title": "3  Week 1 — Getting Started",
-    "section": "3.4 🛠️ Setup Checklist",
-    "text": "3.4 🛠️ Setup Checklist\n\nInstall Anaconda or Miniconda.\nCreate/activate environment:\nconda create -n dataviz python=3.12 -y\nconda activate dataviz\nInstall libraries (CPU-friendly baseline):\npip install pandas numpy matplotlib seaborn plotly altair geopandas\nLaunch JupyterLab:\njupyter lab\n(Optional) IDEs you can use: VS Code, PyCharm, Sublime Text; or run in Google Colab.\n\nTroubleshooting\n\nIf geopandas fails on Windows, try conda install -c conda-forge geopandas.\nIf Jupyter can’t see the env, run: python -m ipykernel install --user --name dataviz --display-name \"Python (dataviz)\".",
+    "title": "1  Week 1 — Getting Started",
+    "section": "1.4 🛠️ Setup Checklist",
+    "text": "1.4 🛠️ Setup Checklist\n\nInstall Anaconda or Miniconda.\nCreate/activate environment:\nconda create -n dataviz python=3.12 -y\nconda activate dataviz\nInstall libraries (CPU-friendly baseline):\npip install pandas numpy matplotlib seaborn plotly altair geopandas\nLaunch JupyterLab:\njupyter lab\n(Optional) IDEs you can use: VS Code, PyCharm, Sublime Text; or run in Google Colab.\n\nTroubleshooting\n\nIf geopandas fails on Windows, try conda install -c conda-forge geopandas.\nIf Jupyter can’t see the env, run: python -m ipykernel install --user --name dataviz --display-name \"Python (dataviz)\".",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Week 1 — Getting Started</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Getting Started</span>"
     ]
   },
   {
     "objectID": "weekly/module_week_1_getting_started.html#lecture-outline",
     "href": "weekly/module_week_1_getting_started.html#lecture-outline",
-    "title": "3  Week 1 — Getting Started",
-    "section": "3.5 🧭 Lecture Outline",
-    "text": "3.5 🧭 Lecture Outline\n\n3.5.1 Session 1 (75 minutes)\n\nCourse overview & syllabus tour (15 min)\nWhy visualization in data science? (truthfulness, clarity, audience) (15 min)\nEnvironment setup: conda + Jupyter walkthrough, troubleshooting (30 min)\nFirst dataset in pandas: load CSV → DataFrame → quick EDA (15 min)\n\n\n\n3.5.2 Session 2 (75 minutes)\n\nRecap + Q&A on environment setup (10 min)\nNotebook workflow: cells, markdown, restart & run all, saving (20 min)\nBasic plotting: matplotlib bar/line; seaborn scatter/histogram (30 min)\nGuided practice with penguins dataset: scatterplot, pairplot activity (15 min)\nSample data 1 (customers_1000.csv); Sample data 2 (life_journey_data.csv), Sample data 3 (unemployment-x)\n\nCheck out the detailed instructions in a Notebook and download the week1_session2.ipynb",
+    "title": "1  Week 1 — Getting Started",
+    "section": "1.5 🧭 Lecture Outline",
+    "text": "1.5 🧭 Lecture Outline\n\n1.5.1 Session 1 (75 minutes)\n\nCourse overview & syllabus tour (15 min)\nWhy visualization in data science? (truthfulness, clarity, audience) (15 min)\nEnvironment setup: conda + Jupyter walkthrough, troubleshooting (30 min)\nFirst dataset in pandas: load CSV → DataFrame → quick EDA (15 min)\n\n\n\n1.5.2 Session 2 (75 minutes)\n\nRecap + Q&A on environment setup (10 min)\nNotebook workflow: cells, markdown, restart & run all, saving (20 min)\nBasic plotting: matplotlib bar/line; seaborn scatter/histogram (30 min)\nGuided practice with penguins dataset: scatterplot, pairplot activity (15 min)\nSample data 1 (customers_1000.csv); Sample data 2 (life_journey_data.csv), Sample data 3 (unemployment-x)\nCheck out the detailed instructions in a Notebook and download the week1_session2.ipynb",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Week 1 — Getting Started</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Getting Started</span>"
     ]
   },
   {
     "objectID": "weekly/module_week_1_getting_started.html#starter-notebook-snippets",
     "href": "weekly/module_week_1_getting_started.html#starter-notebook-snippets",
-    "title": "3  Week 1 — Getting Started",
-    "section": "3.6 💻 Starter Notebook Snippets",
-    "text": "3.6 💻 Starter Notebook Snippets\n\n3.6.1 Load a tiny dataset (download the tab-separated file (tsv) version)\n\n\n\n\n\n\n\n\n\n3.6.2 First charts (matplotlib → seaborn)\n\n\n\n3.6.3 Quick EDA helpers",
+    "title": "1  Week 1 — Getting Started",
+    "section": "1.6 💻 Starter Notebook Snippets",
+    "text": "1.6 💻 Starter Notebook Snippets\n\n1.6.1 Load a tiny dataset (download the tab-separated file (tsv) version)\n\n\n\n\n\n\n\n\n1.6.2 First charts (matplotlib → seaborn)\n\n\n\n\n\n\n\n\n1.6.3 Quick EDA helpers",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Week 1 — Getting Started</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Getting Started</span>"
     ]
   },
   {
     "objectID": "weekly/module_week_1_getting_started.html#in-class-activity",
     "href": "weekly/module_week_1_getting_started.html#in-class-activity",
-    "title": "3  Week 1 — Getting Started",
-    "section": "3.7 🧪 In-Class Activity",
-    "text": "3.7 🧪 In-Class Activity\nUsing seaborn.load_dataset(\"penguins\"):\n\nMake a scatterplot of flipper_length_mm vs body_mass_g colored by species.\nAdd axis labels, a title, and a legend with a better title.\nTry a seaborn.pairplot to see relationships across multiple variables.\n\nHints",
+    "title": "1  Week 1 — Getting Started",
+    "section": "1.7 🧪 In-Class Activity",
+    "text": "1.7 🧪 In-Class Activity\nUsing seaborn.load_dataset(\"penguins\"):\n\nMake a scatterplot of flipper_length_mm vs body_mass_g colored by species.\nAdd axis labels, a title, and a legend with a better title.\nTry a seaborn.pairplot to see relationships across multiple variables.\n\nHints",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Week 1 — Getting Started</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Getting Started</span>"
     ]
   },
   {
     "objectID": "weekly/module_week_1_getting_started.html#homework-due-before-week-2",
     "href": "weekly/module_week_1_getting_started.html#homework-due-before-week-2",
-    "title": "3  Week 1 — Getting Started",
-    "section": "3.8 🏠 Homework (Due before Week 2)",
-    "text": "3.8 🏠 Homework (Due before Week 2)\n\nSet up your environment and confirm you can open/run notebooks.\nImport a CSV of your choice and submit one notebook that includes:\n\nA short markdown description of the dataset (source, what, who, when).\nTop 5 rows, .info(), and .describe().\nOne bar or histogram plot, and one scatter plot.\nA brief paragraph reflecting on one insight + one limitation of the data.\n\nExport notebook to HTML (File → Save and Export Notebook As) and upload both .ipynb and .html.\n\nRubric (10 pts)\n\nReproducible environment & clean notebook structure (2)\nCorrect loading/inspection & basic EDA (3)\nTwo charts with sensible labels/titles (3)\nInsight + limitation reflection (2)",
+    "title": "2  Week 1 — Getting Started",
+    "section": "2.8 🏠 Homework (Due before Week 2)",
+    "text": "2.8 🏠 Homework (Due before Week 2)\n\nSet up your environment and confirm you can open/run notebooks.\nImport a CSV of your choice and submit one notebook that includes:\n\nA short markdown description of the dataset (source, what, who, when).\nTop 5 rows, .info(), and .describe().\nOne bar or histogram plot, and one scatter plot.\nA brief paragraph reflecting on one insight + one limitation of the data.\n\nExport notebook to HTML (File → Save and Export Notebook As) and upload both .ipynb and .html.\n\nRubric (10 pts)\n\nReproducible environment & clean notebook structure (2)\nCorrect loading/inspection & basic EDA (3)\nTwo charts with sensible labels/titles (3)\nInsight + limitation reflection (2)",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Week 1 — Getting Started</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Week 1 — Getting Started</span>"
     ]
   },
   {
     "objectID": "weekly/module_week_1_getting_started.html#optional-extensions",
     "href": "weekly/module_week_1_getting_started.html#optional-extensions",
-    "title": "3  Week 1 — Getting Started",
-    "section": "3.9 🧩 Optional Extensions",
-    "text": "3.9 🧩 Optional Extensions\n\nTry the same chart in both matplotlib and seaborn; note the pros/cons you observe.\nInstall altair (a declarative statistical visualization library for Python, built on top of Vega-Lite, useful for creating interactive charts with minimal code) and create the same scatterplot with tooltips.\nIf you’re comfortable with maps, test your geopandas install (geopandas.datasets.get_path('naturalearth_lowres')).",
+    "title": "1  Week 1 — Getting Started",
+    "section": "1.9 🧩 Optional Extensions",
+    "text": "1.9 🧩 Optional Extensions\n\nTry the same chart in both matplotlib and seaborn; note the pros/cons you observe.\nInstall altair (a declarative statistical visualization library for Python, built on top of Vega-Lite, useful for creating interactive charts with minimal code) and create the same scatterplot with tooltips.\nIf you’re comfortable with maps, test your geopandas install (geopandas.datasets.get_path('naturalearth_lowres')).",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Week 1 — Getting Started</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Getting Started</span>"
     ]
   },
   {
     "objectID": "weekly/module_week_1_getting_started.html#submission-checklist",
     "href": "weekly/module_week_1_getting_started.html#submission-checklist",
-    "title": "3  Week 1 — Getting Started",
-    "section": "3.10 ✅ Submission Checklist",
-    "text": "3.10 ✅ Submission Checklist\nThis section, for example, lists everything you should verify before submitting your work for Week 1.",
+    "title": "1  Week 1 — Getting Started",
+    "section": "1.10 ✅ Submission Checklist",
+    "text": "1.10 ✅ Submission Checklist\nBefore submitting, make sure:\n\nYour assignment has fulfilled all the basic requirements listed above.\nUse Quarto to render the notebook into HTML and zip the files for submission.\nDouble-check the visualizations and your reflections in the HTML are properly organized and displayed.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Week 1 — Getting Started</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Getting Started</span>"
+    ]
+  },
+  {
+    "objectID": "syllabus.html",
+    "href": "syllabus.html",
+    "title": "DATS 2102: Data Visualization for Data Science",
+    "section": "",
+    "text": "Course Description\nInstructor: Junjun Yin\nEmail: j.yin@gwu.edu\nSemester: Spring 2026\nDates: 01/13/26 – 04/27/26\nClass Time: Tuesday & Thursday\nLocation: 212 Elliott School of International Affairs, 1957 E Street NW\nOffice Hours: (Details in Blackboard)\nOffice Location: 2036 H St NW, Room 309\nThis course introduces students to the core principles and practices of data visualization within the context of data science. Students will learn how to collect, process, analyze, and communicate data-driven insights using effective and ethical visualization techniques. Emphasis will be placed on hands-on programming with Python’s visualization ecosystem (pandas, matplotlib, seaborn, plotly, altair, geopandas) and applying best practices for clarity, accuracy, and storytelling. The course will cover visualization theory, design principles, and practical skills, including geographic data mapping and visualizing results from machine learning models. By the end of the semester, students will be able to produce high-quality visualizations that effectively communicate data insights to diverse audiences.",
+    "crumbs": [
+      "Syllabus"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#course-prerequisites",
+    "href": "syllabus.html#course-prerequisites",
+    "title": "DATS 2102: Data Visualization for Data Science",
+    "section": "Course Prerequisites",
+    "text": "Course Prerequisites\nDATS 1001 and STAT 1051/1053/1111/1127, or permission of the instructor.",
+    "crumbs": [
+      "Syllabus"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#learning-outcomes",
+    "href": "syllabus.html#learning-outcomes",
+    "title": "DATS 2102: Data Visualization for Data Science",
+    "section": "Learning Outcomes",
+    "text": "Learning Outcomes\nAs a result of completing this course, students will be able to: 1. Process and tidy real-world data using pandas. 2. Apply visual perception and design principles to create truthful, clear graphics. 3. Visualize univariate, bivariate, and multivariate patterns; compare groups effectively. 4. Map and analyze geographic data using geopandas,folium, and plotly. 5. Visualize relationships and communicate model context and uncertainty. 6. Build interactive, annotated visuals and simple data stories/dashboards. 7. Apply visualization to ML & NLP tasks (feature importance, confusion matrices/ROC, word clouds, BERTopic topic maps, embedding plots).",
+    "crumbs": [
+      "Syllabus"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#course-workload",
+    "href": "syllabus.html#course-workload",
+    "title": "DATS 2102: Data Visualization for Data Science",
+    "section": "Course Workload",
+    "text": "Course Workload\nThis is a 3-credit course. Students are expected to engage in 2.5 hours of direct instruction and a minimum of 5 hours of independent learning each week, for a combined minimum total of 7.5 hours per week or 112.5 hours over the semester.",
+    "crumbs": [
+      "Syllabus"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#required-tools-and-texts",
+    "href": "syllabus.html#required-tools-and-texts",
+    "title": "DATS 2102: Data Visualization for Data Science",
+    "section": "Required Tools and Texts",
+    "text": "Required Tools and Texts\nTools: Anaconda (or Python 3.10+), JupyterLab, VS Code, Google Colab, Quarto or other tools that support Python programming and visualization.\nCore Libraries: pandas, numpy, matplotlib, seaborn, altair, plotly, geopandas, mapclassify, contextily, folium, scikit-learn, umap-learn, sentence-transformers, bertopic, wordcloud.\nDocumentation & Guides:\n- Matplotlib\n- Seaborn\n- Plotly\n- Altair\n- GeoPandas\n- Pandas\n- Quarto\nTexts: No required textbook. Recommended: Fundamentals of Data Visualization by Claus O. Wilke (available free online) and Storytelling with Data by Cole Nussbaumer Knaflic.",
+    "crumbs": [
+      "Syllabus"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#weekly-topics-schedule",
+    "href": "syllabus.html#weekly-topics-schedule",
+    "title": "DATS 2102: Data Visualization for Data Science",
+    "section": "Weekly Topics & Schedule",
+    "text": "Weekly Topics & Schedule\n\n\n\n\n\n\n\n\nWeek\nTopic\nDescription\n\n\n\n\n1\nGetting Started\nPython setup, Jupyter, pandas basics, first plot with matplotlib.\n\n\n2\nLanguage of Graphs\nEncodings, tidy data, seaborn & altair grammar.\n\n\n3\nDistributions & Variation\nHist/KDE/violin/ECDF, binning & outliers.\n\n\n4\nWrangling with pandas\nselect/filter/mutate/groupby/merge, reshape, dates.\n\n\n5\nPerception & Principles\nCleveland–McGill, preattentive features, clutter.\n\n\n6\nComparisons\nBars/dots/small multiples, ordering & baselines, log scales.\n\n\n7\nText, Labels, & Tables\nDirect labeling, captions, tables.\n\n\n8\nMapping I & II\nChoropleths, CRS, spatial joins, geopandas, mapclassify, folium.\n\n\n9\nColor & Accessibility\nSequential/diverging/qualitative palettes, pitfalls.\n\n\n10\nRelationships & Modeling\nScatter/line, smoothing, statsmodels, model checks.\n\n\n11\nUncertainty\nError bars, intervals, bootstrap visuals.\n\n\n12\nVisualization for ML/NLP\nFeature importance, confusion/ROC-PR, word clouds, BERTopic, UMAP embeddings.\n\n\n13–14\nFinal Project Workshops\nScoping, refinement, narrative.",
+    "crumbs": [
+      "Syllabus"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#assignments-grading",
+    "href": "syllabus.html#assignments-grading",
+    "title": "DATS 2102: Data Visualization for Data Science",
+    "section": "Assignments & Grading",
+    "text": "Assignments & Grading\n\n\n\nAssignment\nWeight\n\n\n\n\nWeekly Notebooks & Exercises\n30%\n\n\nMid-Semester Visualization Project\n20%\n\n\nFinal Project\n40%\n\n\nParticipation & Peer Feedback\n10%",
+    "crumbs": [
+      "Syllabus"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#final-project",
+    "href": "syllabus.html#final-project",
+    "title": "DATS 2102: Data Visualization for Data Science",
+    "section": "Final Project",
+    "text": "Final Project\nThe final project will synthesize the skills learned throughout the course. Students will: - Propose a project idea by Week 9. - Develop a prototype by Week 13. - Submit the final project by April 30.\nRequirements: - Multiple well-designed visualizations with an accompanying narrative. - At least one map or ML/NLP visualization. - Accessibility considerations (color choice, labeling, alt text). - A reproducible Jupyter Notebook and any necessary datasets or data sources.\nProjects will be graded on clarity, creativity, technical proficiency, and adherence to visualization best practices.",
+    "crumbs": [
+      "Syllabus"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#university-policies",
+    "href": "syllabus.html#university-policies",
+    "title": "DATS 2102: Data Visualization for Data Science",
+    "section": "University Policies",
+    "text": "University Policies\nAcademic Integrity Code\nAcademic integrity is an essential part of the educational process, and all members of the GW community take these matters very seriously. As the instructor of record for this course, my role is to provide clear expectations and uphold them in all assessments. Violations of academic integrity occur when students fail to cite research sources properly, engage in unauthorized collaboration, falsify data, and otherwise violate the Code of Academic Integrity. If you have any questions about whether particular academic practices or resources are permitted, you should ask me for clarification. If you are reported for an academic integrity violation, you should contact Conflict Education and Student Accountability (CESA) to learn more about your rights and options. Consequences can range from failure of assignment to expulsion from the University and may include a transcript notation. More info: students.gwu.edu/code-academic-integrity or cesa@gwu.edu.\nUniversity policy on observance of religious holidays\nStudents must notify faculty during the first week of the semester, or as early as possible, but no later than three weeks prior to the absence, of their intention to be absent for religious observance. See details at provost.gwu.edu/policies-procedures-and-guidelines.\nUse of Electronic Course Materials and Class Recordings\nStudents are encouraged to use electronic course materials for private personal use in connection with their academic program of study. These materials should not be shared or used for non-course related purposes unless express permission is granted by the instructor.",
+    "crumbs": [
+      "Syllabus"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#academic-support",
+    "href": "syllabus.html#academic-support",
+    "title": "DATS 2102: Data Visualization for Data Science",
+    "section": "Academic Support",
+    "text": "Academic Support\nAcademic Commons\nAcademic Commons is the central location for academic support resources for GW students. To schedule a peer tutoring session for a variety of courses visit go.gwu.edu/tutoring. Visit academiccommons.gwu.edu for study skills tips, finding help with research, and connecting with other campus resources. For questions email academiccommons@gwu.edu.\nGW Writing Center\nGW Writing Center cultivates confident writers in the University community by facilitating collaborative, critical, and inclusive conversations at all stages of the writing process. Working alongside peer mentors, writers develop strategies to write independently in academic and public settings. Appointments can be booked online at gwu.mywconline.com.\nDisability Support Services (DSS)\nAny student who may need an accommodation based on the potential impact of a disability should contact Disability Support Services at disabilitysupport.gwu.edu to establish eligibility and coordinate reasonable accommodations.\nStudent Health Center\nThe Student Health Center (SHC) offers medical, counseling/psychological, and psychiatric services to GW students. More information about the SHC is available at healthcenter.gwu.edu. Students experiencing a medical or mental health emergency on campus should contact GW Emergency Services at 202-994-6111, or off campus at 911.",
+    "crumbs": [
+      "Syllabus"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#gw-campus-emergency-information",
+    "href": "syllabus.html#gw-campus-emergency-information",
+    "title": "DATS 2102: Data Visualization for Data Science",
+    "section": "GW Campus Emergency Information",
+    "text": "GW Campus Emergency Information\nGW Emergency Services: 202-994-6111\nFor situation-specific instructions, refer to GW’s Emergency Procedures guide.\nGW Alert\nGW Alert is an emergency notification system that sends alerts to the GW community. GW requests students, faculty, and staff maintain current contact information by logging on to alert.gwu.edu. Alerts are sent via email, text, social media, and other means, including the Guardian app.\nProtective Actions\nGW prescribes four protective actions that can be issued by university officials depending on the type of emergency. All GW community members are expected to follow directions according to the specified protective action: Shelter, Evacuate, Secure, and Lockdown. Learn more at safety.gwu.edu/gw-standard-emergency-statuses.",
+    "crumbs": [
+      "Syllabus"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_1_getting_started.html#homework",
+    "href": "weekly/module_week_1_getting_started.html#homework",
+    "title": "1  Week 1 — Getting Started",
+    "section": "1.8 🏠 Homework",
+    "text": "1.8 🏠 Homework\n\nSet up your environment and confirm you can open/run notebooks.\nImport a CSV of your choice and submit one notebook that includes:\n\nA short markdown description of the dataset (source, what, who, when).\nTop 5 rows, .info(), and .describe().\nOne bar or histogram plot, and one scatter plot.\nA brief paragraph reflecting on one insight + one limitation of the data.\n\nExport notebook to HTML (File → Save and Export Notebook As) and upload both .ipynb and .html.\n\nRubric (10 pts)\n\nReproducible environment & clean notebook structure (2)\nCorrect loading/inspection & basic EDA (3)\nTwo charts with sensible labels/titles (3)\nInsight + limitation reflection (2)",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Getting Started</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_2_language_of_graphs.html",
+    "href": "weekly/module_week_2_language_of_graphs.html",
+    "title": "2  Week 2 — Getting Started",
+    "section": "",
+    "text": "2.1 📖 Background & Motivation\nThe “language” of data visualization comes from how we map variables to visual elements: position, shape, color, size, and scale. Mastering these encodings allows you to choose the right chart type and present information clearly. This week also introduces the concept of tidy data, a standard way of structuring datasets to facilitate easier analysis and visualization.\nBeyond technical correctness, understanding these principles ensures that your work communicates insights effectively. Choosing the right encoding is about audience, purpose, and the kind of story you want your data to tell. For example, using color to differentiate categories can make a chart intuitive, but overusing it can lead to confusion. Similarly, reshaping data into tidy form streamlines your workflow and makes your notebooks reproducible and easier to understand for others. The combined skill set of visual encodings and tidy data practices represents the foundation for nearly every visualization you will create later in the course.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Language of Graphs</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_2_language_of_graphs.html#learning-objectives",
+    "href": "weekly/module_week_2_language_of_graphs.html#learning-objectives",
+    "title": "2  Week 2 — Getting Started",
+    "section": "2.2 🔎 Learning Objectives",
+    "text": "2.2 🔎 Learning Objectives\n\nIdentify and apply core visual encodings (position, color, shape, size).\nReshape datasets into tidy form for plotting.\nCreate multi-encoding plots using seaborn and Altair’s grammar of graphics.\nCritically evaluate when and why to use specific encodings.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Language of Graphs</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_2_language_of_graphs.html#readings-resources",
+    "href": "weekly/module_week_2_language_of_graphs.html#readings-resources",
+    "title": "2  Week 2 — Getting Started",
+    "section": "2.3 📚 Readings & Resources",
+    "text": "2.3 📚 Readings & Resources\n\nThe Grammar of Graphics (Wilkinson) — conceptual foundation for how data maps to visuals.\nSeaborn Categorical Plots — useful introduction to encoding categorical variables.\nAltair Tutorials — practice with grammar of graphics in Python.\nTidy Data by Hadley Wickham — essential reading for organizing datasets.\nggplot-style Visualization in Python (Real Python) — practical tutorial for using ggplot concepts in Python.\nColorBrewer2 — an interactive tool for choosing effective and accessible color schemes.\n\nSample Data Sources for Practice:\n\nSeaborn Tips Dataset — classic dataset for learning encodings.\nGapminder Data via Plotly Express — long-term country-level indicators.\nOur World in Data — a wide range of curated datasets.\nGapminder — global development indicators with interactive visualization resources.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Language of Graphs</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_2_language_of_graphs.html#setup-checklist",
+    "href": "weekly/module_week_2_language_of_graphs.html#setup-checklist",
+    "title": "2  Week 2 — Getting Started",
+    "section": "2.4 🛠️ Setup Checklist",
+    "text": "2.4 🛠️ Setup Checklist\nMake sure your environment includes:\npip install pandas numpy matplotlib seaborn altair plotly\nFirst make sure the virtual environment is properly created and activated. Then confirm you can import these libraries in a notebook and render a simple chart before class.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Language of Graphs</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_2_language_of_graphs.html#lecture-outline",
+    "href": "weekly/module_week_2_language_of_graphs.html#lecture-outline",
+    "title": "2  Week 2 — Getting Started",
+    "section": "2.5 🧭 Lecture Outline",
+    "text": "2.5 🧭 Lecture Outline\n\n2.5.1 Session 1 (75 min — Theory Focus)\n\nWhy tidy data matters in visualization workflows (10 min)\nCore visual encodings: position, shape, color, size, and scale, with conceptual discussion and examples from research/literature (25 min)\nGrammar of graphics overview: key ideas from Wilkinson and tidy data principles (20 min)\nClass discussion: When encodings clarify vs. when they clutter (20 min)\n\n\n\n2.5.2 Session 2 (75 min — Hands-on Focus)\n\nSeaborn’s approach to categorical vs. continuous data with live coding (20 min)\nAltair grammar of graphics in Python with interactive demos (25 min)\nGuided exercise: create multiple encodings in one chart, reflect on readability (20 min)\nWorkshop and Q&A: applying tidy reshaping and encodings to provided datasets (10 min)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Language of Graphs</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_2_language_of_graphs.html#notebook-snippets",
+    "href": "weekly/module_week_2_language_of_graphs.html#notebook-snippets",
+    "title": "2  Week 2 — Getting Started",
+    "section": "2.6 💻 Notebook Snippets",
+    "text": "2.6 💻 Notebook Snippets\n\n2.6.1 Load example dataset\n\n\n\n\n\n\n\n\n2.6.2 Seaborn scatterplot with multiple encodings\n\n\n\n\n\n\n\n\n2.6.3 Tidy data example\n\n\n\n\n\n\n\n\n2.6.4 Altair example",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Language of Graphs</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_2_language_of_graphs.html#in-class-activity",
+    "href": "weekly/module_week_2_language_of_graphs.html#in-class-activity",
+    "title": "2  Week 2 — Getting Started",
+    "section": "2.7 🧪 In-Class Activity",
+    "text": "2.7 🧪 In-Class Activity\n\nUsing the gapminder dataset (via plotly.express.data.gapminder()), create:\n\nA scatterplot of GDP per capita vs. life expectancy.\nEncode continent as color and year as an animation frame.\n\nDiscuss: \nWhat does each encoding reveal? \nWhich encoding is most effective at showing inequality? \nHow does animation enhance or hinder interpretation?\n\nHints",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Language of Graphs</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_2_language_of_graphs.html#homework",
+    "href": "weekly/module_week_2_language_of_graphs.html#homework",
+    "title": "2  Week 2 — Getting Started",
+    "section": "2.8 🏠 Homework",
+    "text": "2.8 🏠 Homework\n\nPick one dataset from the sample sources or bring your own.\nCreate three different charts using at least three distinct encodings.\nFor each chart, include:\n\nA brief description of what the chart shows.\n\nWhy did you choose those encodings, and how did they help interpretation?\n\nOne limitation or challenge in readability.\n\n\nSubmit .ipynb and .html to Blackboard (You can zip the files together).\n\nRubric (10 pts)\n\nCorrect application of tidy data principles (2)\nEffective and varied use of encodings (4)\nChart clarity, proper labeling, and interpretability (2)\nJustification of choices and discussion of limitations (2)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Language of Graphs</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_2_language_of_graphs.html#optional-extensions",
+    "href": "weekly/module_week_2_language_of_graphs.html#optional-extensions",
+    "title": "2  Week 2 — Getting Started",
+    "section": "2.9 🧩 Optional Extensions",
+    "text": "2.9 🧩 Optional Extensions\n\nUse Altair to add interactive tooltips for deeper exploration.\nCompare the same visualization in Seaborn and Altair and note trade-offs.\nExplore plotly.express for creating interactive dashboards.\nExperiment with using two vs. three encodings in the same chart; evaluate which is clearer.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Language of Graphs</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_2_language_of_graphs.html#submission-checklist",
+    "href": "weekly/module_week_2_language_of_graphs.html#submission-checklist",
+    "title": "2  Week 2 — Getting Started",
+    "section": "2.10 ✅ Submission Checklist",
+    "text": "2.10 ✅ Submission Checklist\nBefore submitting, make sure:\n\nYour assignment has fulfilled all the basic requirements listed above.\nUse Quarto to render the notebook into HTML and zip the files for submission.\nDouble-check the visualizations and your reflections in the HTML are properly organized and displayed.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Language of Graphs</span>"
     ]
   }
 ]

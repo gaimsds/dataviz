@@ -1,0 +1,14 @@
+---
+title: "Week 3 — Getting Started"
+format: live-html
+resources:
+  - data
+pyodide:
+  resources:
+    - data
+  packages:
+    - numpy
+    - matplotlib
+    - seaborn
+    - pandas
+---

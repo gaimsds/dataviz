@@ -4,18 +4,30 @@ project:
 book:
   title: "Data Visualization for Data Science"
   author: "Junjun Yin"
-  date: "12/29/2025"
+  date: "01/01/2026"
   chapters:
     - index.qmd
     - intro.qmd
-    - week1.qmd
-    - weekly/module_week_1_getting_started.qmd
+    - file: weekly/module_week_1_getting_started.qmd
+      text: "Getting Started"
+    - file: weekly/module_week_2_language_of_graphs.qmd
+      text: "Language of Graphs"
+    - file: weekly/module_week_3_distributions_variation.qmd
+      text: "Distributions and Variations"
     - summary.qmd
     - references.qmd
+    - file: syllabus.qmd
+      text: "Syllabus"
+
 
 bibliography: references.bib
 
-format: live-html
+format: 
+  live-html:
+    toc: true
+    grid:
+      sidebar-width: 280px
+
 ##  html:
 ##    theme:
 ##      - cosmo

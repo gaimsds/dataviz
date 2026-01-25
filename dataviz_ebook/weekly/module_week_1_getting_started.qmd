@@ -2,10 +2,10 @@
 title: "Week 1 — Getting Started"
 format: live-html
 resources:
-  - data
+  - week1
 pyodide:
   resources:
-    - data
+    - week1
   packages:
     - numpy
     - matplotlib
@@ -16,23 +16,6 @@ pyodide:
 > Welcome to DATS 2102. Let's get started with the setup of the environment and the first steps in data visualization.
 
 ------------------------------------------------------------------------
-
-```{pyodide}
-import seaborn as sns
-import matplotlib.pyplot as plt
-import pandas as pd
-from os import listdir
-
-print(listdir("data"))
-
-flights = pd.read_csv("data/flights.csv")
-sns.relplot(
-  data = flights,
-  x = "year",
-  y = "passengers"
-)
-plt.show()
-```
 
 ## 📖 Background & Motivation
 
@@ -134,8 +117,8 @@ As data science projects grow in size and complexity, the ability to craft clear
 2.  Notebook workflow: cells, markdown, restart & run all, saving (20 min)
 3.  Basic plotting: `matplotlib` bar/line; `seaborn` scatter/histogram (30 min)
 4.  Guided practice with `penguins` dataset: scatterplot, pairplot activity (15 min)
-5.  Sample data 1 ([customers_1000.csv](customers_1000.csv)); Sample data 2 ([life_journey_data.csv](life_journey_data.csv)), Sample data 3 ([unemployment-x](unemployment-x.csv))\
-6.  Check out the detailed instructions in a [Notebook](week1_session2.html) and download the [week1_session2.ipynb](week1_session2.ipynb)
+5.  Sample data 1 ([customers_1000.csv](week1/customers_1000.csv)); Sample data 2 ([life_journey_data.csv](week1/life_journey_data.csv)), Sample data 3 ([unemployment-x](week1/unemployment-x.csv))
+6.  Check out the detailed instructions in a [Notebook](week1/week1_session2.html) and download the [week1_session2.ipynb](week1/week1_session2.ipynb)
 
 ------------------------------------------------------------------------
 
@@ -144,24 +127,6 @@ As data science projects grow in size and complexity, the ability to craft clear
 ### Load a tiny dataset ([download the tab-separated file (tsv) version](cities.tsv))
 
 ```{pyodide}
-import seaborn as sns
-import matplotlib.pyplot as plt
-import pandas as pd
-from os import listdir
-
-print(listdir("data"))
-
-flights = pd.read_csv("data/flights.csv")
-sns.relplot(
-  data = flights,
-  x = "year",
-  y = "passengers"
-)
-plt.show()
-```
-
-````{=html}
-<!-- ```python
 import pandas as pd
 
 cities = pd.DataFrame({
@@ -170,13 +135,11 @@ cities = pd.DataFrame({
 })
 
 cities.head()
-``` -->
-````
+```
 
 ### First charts (matplotlib → seaborn)
 
-````{=html}
-<!-- ```python
+```{pyodide}
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -190,17 +153,14 @@ plt.show()
 sns.barplot(data=cities, x="city", y="population")
 plt.title("Population by City (Seaborn)")
 plt.show()
-``` -->
-````
+```
 
 ### Quick EDA helpers
 
-````{=html}
-<!-- ```python
+```{pyodide}
 cities.describe(include="all")
 print("Missing values by column:\n", cities.isna().sum())
-``` -->
-````
+```
 
 ------------------------------------------------------------------------
 
@@ -214,17 +174,16 @@ Using `seaborn.load_dataset("penguins")`:
 
 **Hints**
 
-````{=html}
-<!-- ```python
+```{pyodide}
 penguins = sns.load_dataset("penguins").dropna()
 ax = sns.scatterplot(data=penguins, x="flipper_length_mm", y="body_mass_g", hue="species")
 ax.set(title="Penguins: Flipper vs Body Mass", xlabel="Flipper length (mm)", ylabel="Body mass (g)")
-``` -->
-````
+plt.show()
+```
 
 ------------------------------------------------------------------------
 
-## 🏠 Homework (Due before Week 2)
+## 🏠 Homework
 
 1.  Set up your environment and confirm you can open/run notebooks.
 2.  Import a **CSV of your choice** and submit one notebook that includes:
@@ -253,6 +212,10 @@ ax.set(title="Penguins: Flipper vs Body Mass", xlabel="Flipper length (mm)", yla
 
 ## ✅ Submission Checklist
 
-This section, for example, lists everything you should verify before submitting your work for Week 1.
+Before submitting, make sure:
 
-------------------------------------------------------------------------
+- Your assignment has fulfilled all the basic requirements listed above.
+
+- Use Quarto to render the notebook into HTML and zip the files for submission.
+
+- Double-check the visualizations and your reflections in the HTML are properly organized and displayed.
