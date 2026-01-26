@@ -164,7 +164,7 @@
     "href": "intro.html#weekly-modules",
     "title": "Introduction",
     "section": "",
-    "text": "Week 1 - Getting Started\nWeek 2 - Language of Graphs\nWeek 3 - Distributions and Variations",
+    "text": "Week 1 - Getting Started\nWeek 2 - Language of Graphs\nWeek 3 - Distributions and Variations\nWeek 4 - Wrangling with Pandas\nWeek 5 - Perception and Principles\nWeek 6 - Comparisons\nMid-term - Mid-term Project\nWeek 7 - Text, Labels, and Tables\nWeek 8 - Mapping I & II\nWeek 9 - Color & Accessibility\nWeek 10 - Relationships & Modeling\nWeek 11 - Uncertainty & Error Visualization\nWeek 12 - Visualization for ML/NLP\nFinals - Final Project",
     "crumbs": [
       "Introduction"
     ]
@@ -174,7 +174,7 @@
     "href": "intro.html#data-sources",
     "title": "Introduction",
     "section": "Data Sources",
-    "text": "Data Sources",
+    "text": "Data Sources\n\nPlease find useful and recommended data sources from the data sources page",
     "crumbs": [
       "Introduction"
     ]
@@ -182,7 +182,7 @@
   {
     "objectID": "weekly/module_week_1_getting_started.html",
     "href": "weekly/module_week_1_getting_started.html",
-    "title": "1  Week 1 — Getting Started",
+    "title": "1  Getting Started",
     "section": "",
     "text": "1.1 📖 Background & Motivation\nData visualization is the bridge between raw data and human understanding. In data science, visualizations are not just decorative — they are powerful analytical tools that help reveal patterns, outliers, and trends that might remain hidden in tables or statistical summaries.\nWell-designed visualizations can:\nApplications span across domains:\nAs data science projects grow in size and complexity, the ability to craft clear, truthful, and impactful visuals becomes as important as building the models themselves.",
     "crumbs": [
@@ -192,7 +192,7 @@
   {
     "objectID": "weekly/module_week_1_getting_started.html#background-motivation",
     "href": "weekly/module_week_1_getting_started.html#background-motivation",
-    "title": "1  Week 1 — Getting Started",
+    "title": "1  Getting Started",
     "section": "",
     "text": "Tell compelling, evidence-based stories that influence decision-making.\nMake complex concepts easier to grasp for diverse audiences.\nIdentify and expose errors or inconsistencies in data during the exploratory stage.\nEnable collaboration between technical and non-technical stakeholders.\n\n\n\nPublic health: Tracking disease spread with interactive dashboards.\nClimate science: Mapping temperature anomalies over decades.\nBusiness analytics: Visualizing customer behavior or sales performance.\nMachine learning: Understanding model performance through ROC curves, feature importance charts, or clustering visualizations.",
     "crumbs": [
@@ -202,7 +202,7 @@
   {
     "objectID": "weekly/module_week_1_getting_started.html#learning-objectives",
     "href": "weekly/module_week_1_getting_started.html#learning-objectives",
-    "title": "1  Week 1 — Getting Started",
+    "title": "1  Getting Started",
     "section": "1.2 🔎 Learning Objectives",
     "text": "1.2 🔎 Learning Objectives\n\nSet up a reliable Python environment for data visualization.\nNavigate Jupyter Notebook/Lab and basic notebook hygiene (headings, code vs. markdown, restart & run all).\nLoad and inspect tabular data with pandas.\nProduce the first charts with matplotlib and seaborn.",
     "crumbs": [
@@ -212,7 +212,7 @@
   {
     "objectID": "weekly/module_week_1_getting_started.html#readings-resources",
     "href": "weekly/module_week_1_getting_started.html#readings-resources",
-    "title": "1  Week 1 — Getting Started",
+    "title": "1  Getting Started",
     "section": "1.3 📚 Readings & Resources",
     "text": "1.3 📚 Readings & Resources\n\nJupyterLab User Guide\nPython Tutorial\nPandas\nMatplotlib Pyplot\nSeaborn Tutorials\n\nSample Data Sources for Practice:\n\nSeaborn Built-in Datasets\nKaggle Datasets\nFiveThirtyEight Data\nOur World in Data\nOpen Data DC\nUCI Machine Learning Repository\ndata.gov\nGeoPandas Sample Datasets\nSocial Explorer",
     "crumbs": [
@@ -222,7 +222,7 @@
   {
     "objectID": "weekly/module_week_1_getting_started.html#setup-checklist",
     "href": "weekly/module_week_1_getting_started.html#setup-checklist",
-    "title": "1  Week 1 — Getting Started",
+    "title": "1  Getting Started",
     "section": "1.4 🛠️ Setup Checklist",
     "text": "1.4 🛠️ Setup Checklist\n\nInstall Anaconda or Miniconda.\nCreate/activate environment:\nconda create -n dataviz python=3.12 -y\nconda activate dataviz\nInstall libraries (CPU-friendly baseline):\npip install pandas numpy matplotlib seaborn plotly altair geopandas\nLaunch JupyterLab:\njupyter lab\n(Optional) IDEs you can use: VS Code, PyCharm, Sublime Text; or run in Google Colab.\n\nTroubleshooting\n\nIf geopandas fails on Windows, try conda install -c conda-forge geopandas.\nIf Jupyter can’t see the env, run: python -m ipykernel install --user --name dataviz --display-name \"Python (dataviz)\".",
     "crumbs": [
@@ -232,7 +232,7 @@
   {
     "objectID": "weekly/module_week_1_getting_started.html#lecture-outline",
     "href": "weekly/module_week_1_getting_started.html#lecture-outline",
-    "title": "1  Week 1 — Getting Started",
+    "title": "1  Getting Started",
     "section": "1.5 🧭 Lecture Outline",
     "text": "1.5 🧭 Lecture Outline\n\n1.5.1 Session 1 (75 minutes)\n\nCourse overview & syllabus tour (15 min)\nWhy visualization in data science? (truthfulness, clarity, audience) (15 min)\nEnvironment setup: conda + Jupyter walkthrough, troubleshooting (30 min)\nFirst dataset in pandas: load CSV → DataFrame → quick EDA (15 min)\n\n\n\n1.5.2 Session 2 (75 minutes)\n\nRecap + Q&A on environment setup (10 min)\nNotebook workflow: cells, markdown, restart & run all, saving (20 min)\nBasic plotting: matplotlib bar/line; seaborn scatter/histogram (30 min)\nGuided practice with penguins dataset: scatterplot, pairplot activity (15 min)\nSample data 1 (customers_1000.csv); Sample data 2 (life_journey_data.csv), Sample data 3 (unemployment-x)\nCheck out the detailed instructions in a Notebook and download the week1_session2.ipynb",
     "crumbs": [
@@ -242,7 +242,7 @@
   {
     "objectID": "weekly/module_week_1_getting_started.html#starter-notebook-snippets",
     "href": "weekly/module_week_1_getting_started.html#starter-notebook-snippets",
-    "title": "1  Week 1 — Getting Started",
+    "title": "1  Getting Started",
     "section": "1.6 💻 Starter Notebook Snippets",
     "text": "1.6 💻 Starter Notebook Snippets\n\n1.6.1 Load a tiny dataset (download the tab-separated file (tsv) version)\n\n\n\n\n\n\n\n\n1.6.2 First charts (matplotlib → seaborn)\n\n\n\n\n\n\n\n\n1.6.3 Quick EDA helpers",
     "crumbs": [
@@ -252,7 +252,7 @@
   {
     "objectID": "weekly/module_week_1_getting_started.html#in-class-activity",
     "href": "weekly/module_week_1_getting_started.html#in-class-activity",
-    "title": "1  Week 1 — Getting Started",
+    "title": "1  Getting Started",
     "section": "1.7 🧪 In-Class Activity",
     "text": "1.7 🧪 In-Class Activity\nUsing seaborn.load_dataset(\"penguins\"):\n\nMake a scatterplot of flipper_length_mm vs body_mass_g colored by species.\nAdd axis labels, a title, and a legend with a better title.\nTry a seaborn.pairplot to see relationships across multiple variables.\n\nHints",
     "crumbs": [
@@ -272,7 +272,7 @@
   {
     "objectID": "weekly/module_week_1_getting_started.html#optional-extensions",
     "href": "weekly/module_week_1_getting_started.html#optional-extensions",
-    "title": "1  Week 1 — Getting Started",
+    "title": "1  Getting Started",
     "section": "1.9 🧩 Optional Extensions",
     "text": "1.9 🧩 Optional Extensions\n\nTry the same chart in both matplotlib and seaborn; note the pros/cons you observe.\nInstall altair (a declarative statistical visualization library for Python, built on top of Vega-Lite, useful for creating interactive charts with minimal code) and create the same scatterplot with tooltips.\nIf you’re comfortable with maps, test your geopandas install (geopandas.datasets.get_path('naturalearth_lowres')).",
     "crumbs": [
@@ -282,7 +282,7 @@
   {
     "objectID": "weekly/module_week_1_getting_started.html#submission-checklist",
     "href": "weekly/module_week_1_getting_started.html#submission-checklist",
-    "title": "1  Week 1 — Getting Started",
+    "title": "1  Getting Started",
     "section": "1.10 ✅ Submission Checklist",
     "text": "1.10 ✅ Submission Checklist\nBefore submitting, make sure:\n\nYour assignment has fulfilled all the basic requirements listed above.\nUse Quarto to render the notebook into HTML and zip the files for submission.\nDouble-check the visualizations and your reflections in the HTML are properly organized and displayed.",
     "crumbs": [
@@ -402,7 +402,7 @@
   {
     "objectID": "weekly/module_week_1_getting_started.html#homework",
     "href": "weekly/module_week_1_getting_started.html#homework",
-    "title": "1  Week 1 — Getting Started",
+    "title": "1  Getting Started",
     "section": "1.8 🏠 Homework",
     "text": "1.8 🏠 Homework\n\nSet up your environment and confirm you can open/run notebooks.\nImport a CSV of your choice and submit one notebook that includes:\n\nA short markdown description of the dataset (source, what, who, when).\nTop 5 rows, .info(), and .describe().\nOne bar or histogram plot, and one scatter plot.\nA brief paragraph reflecting on one insight + one limitation of the data.\n\nExport notebook to HTML (File → Save and Export Notebook As) and upload both .ipynb and .html.\n\nRubric (10 pts)\n\nReproducible environment & clean notebook structure (2)\nCorrect loading/inspection & basic EDA (3)\nTwo charts with sensible labels/titles (3)\nInsight + limitation reflection (2)",
     "crumbs": [
@@ -412,7 +412,7 @@
   {
     "objectID": "weekly/module_week_2_language_of_graphs.html",
     "href": "weekly/module_week_2_language_of_graphs.html",
-    "title": "2  Week 2 — Getting Started",
+    "title": "2  Language of Graphs",
     "section": "",
     "text": "2.1 📖 Background & Motivation\nThe “language” of data visualization comes from how we map variables to visual elements: position, shape, color, size, and scale. Mastering these encodings allows you to choose the right chart type and present information clearly. This week also introduces the concept of tidy data, a standard way of structuring datasets to facilitate easier analysis and visualization.\nBeyond technical correctness, understanding these principles ensures that your work communicates insights effectively. Choosing the right encoding is about audience, purpose, and the kind of story you want your data to tell. For example, using color to differentiate categories can make a chart intuitive, but overusing it can lead to confusion. Similarly, reshaping data into tidy form streamlines your workflow and makes your notebooks reproducible and easier to understand for others. The combined skill set of visual encodings and tidy data practices represents the foundation for nearly every visualization you will create later in the course.",
     "crumbs": [
@@ -422,7 +422,7 @@
   {
     "objectID": "weekly/module_week_2_language_of_graphs.html#learning-objectives",
     "href": "weekly/module_week_2_language_of_graphs.html#learning-objectives",
-    "title": "2  Week 2 — Getting Started",
+    "title": "2  Language of Graphs",
     "section": "2.2 🔎 Learning Objectives",
     "text": "2.2 🔎 Learning Objectives\n\nIdentify and apply core visual encodings (position, color, shape, size).\nReshape datasets into tidy form for plotting.\nCreate multi-encoding plots using seaborn and Altair’s grammar of graphics.\nCritically evaluate when and why to use specific encodings.",
     "crumbs": [
@@ -432,7 +432,7 @@
   {
     "objectID": "weekly/module_week_2_language_of_graphs.html#readings-resources",
     "href": "weekly/module_week_2_language_of_graphs.html#readings-resources",
-    "title": "2  Week 2 — Getting Started",
+    "title": "2  Language of Graphs",
     "section": "2.3 📚 Readings & Resources",
     "text": "2.3 📚 Readings & Resources\n\nThe Grammar of Graphics (Wilkinson) — conceptual foundation for how data maps to visuals.\nSeaborn Categorical Plots — useful introduction to encoding categorical variables.\nAltair Tutorials — practice with grammar of graphics in Python.\nTidy Data by Hadley Wickham — essential reading for organizing datasets.\nggplot-style Visualization in Python (Real Python) — practical tutorial for using ggplot concepts in Python.\nColorBrewer2 — an interactive tool for choosing effective and accessible color schemes.\n\nSample Data Sources for Practice:\n\nSeaborn Tips Dataset — classic dataset for learning encodings.\nGapminder Data via Plotly Express — long-term country-level indicators.\nOur World in Data — a wide range of curated datasets.\nGapminder — global development indicators with interactive visualization resources.",
     "crumbs": [
@@ -442,7 +442,7 @@
   {
     "objectID": "weekly/module_week_2_language_of_graphs.html#setup-checklist",
     "href": "weekly/module_week_2_language_of_graphs.html#setup-checklist",
-    "title": "2  Week 2 — Getting Started",
+    "title": "2  Language of Graphs",
     "section": "2.4 🛠️ Setup Checklist",
     "text": "2.4 🛠️ Setup Checklist\nMake sure your environment includes:\npip install pandas numpy matplotlib seaborn altair plotly\nFirst make sure the virtual environment is properly created and activated. Then confirm you can import these libraries in a notebook and render a simple chart before class.",
     "crumbs": [
@@ -452,7 +452,7 @@
   {
     "objectID": "weekly/module_week_2_language_of_graphs.html#lecture-outline",
     "href": "weekly/module_week_2_language_of_graphs.html#lecture-outline",
-    "title": "2  Week 2 — Getting Started",
+    "title": "2  Language of Graphs",
     "section": "2.5 🧭 Lecture Outline",
     "text": "2.5 🧭 Lecture Outline\n\n2.5.1 Session 1 (75 min — Theory Focus)\n\nWhy tidy data matters in visualization workflows (10 min)\nCore visual encodings: position, shape, color, size, and scale, with conceptual discussion and examples from research/literature (25 min)\nGrammar of graphics overview: key ideas from Wilkinson and tidy data principles (20 min)\nClass discussion: When encodings clarify vs. when they clutter (20 min)\n\n\n\n2.5.2 Session 2 (75 min — Hands-on Focus)\n\nSeaborn’s approach to categorical vs. continuous data with live coding (20 min)\nAltair grammar of graphics in Python with interactive demos (25 min)\nGuided exercise: create multiple encodings in one chart, reflect on readability (20 min)\nWorkshop and Q&A: applying tidy reshaping and encodings to provided datasets (10 min)",
     "crumbs": [
@@ -462,7 +462,7 @@
   {
     "objectID": "weekly/module_week_2_language_of_graphs.html#notebook-snippets",
     "href": "weekly/module_week_2_language_of_graphs.html#notebook-snippets",
-    "title": "2  Week 2 — Getting Started",
+    "title": "2  Language of Graphs",
     "section": "2.6 💻 Notebook Snippets",
     "text": "2.6 💻 Notebook Snippets\n\n2.6.1 Load example dataset\n\n\n\n\n\n\n\n\n2.6.2 Seaborn scatterplot with multiple encodings\n\n\n\n\n\n\n\n\n2.6.3 Tidy data example\n\n\n\n\n\n\n\n\n2.6.4 Altair example",
     "crumbs": [
@@ -472,7 +472,7 @@
   {
     "objectID": "weekly/module_week_2_language_of_graphs.html#in-class-activity",
     "href": "weekly/module_week_2_language_of_graphs.html#in-class-activity",
-    "title": "2  Week 2 — Getting Started",
+    "title": "2  Language of Graphs",
     "section": "2.7 🧪 In-Class Activity",
     "text": "2.7 🧪 In-Class Activity\n\nUsing the gapminder dataset (via plotly.express.data.gapminder()), create:\n\nA scatterplot of GDP per capita vs. life expectancy.\nEncode continent as color and year as an animation frame.\n\nDiscuss: \nWhat does each encoding reveal? \nWhich encoding is most effective at showing inequality? \nHow does animation enhance or hinder interpretation?\n\nHints",
     "crumbs": [
@@ -482,7 +482,7 @@
   {
     "objectID": "weekly/module_week_2_language_of_graphs.html#homework",
     "href": "weekly/module_week_2_language_of_graphs.html#homework",
-    "title": "2  Week 2 — Getting Started",
+    "title": "2  Language of Graphs",
     "section": "2.8 🏠 Homework",
     "text": "2.8 🏠 Homework\n\nPick one dataset from the sample sources or bring your own.\nCreate three different charts using at least three distinct encodings.\nFor each chart, include:\n\nA brief description of what the chart shows.\n\nWhy did you choose those encodings, and how did they help interpretation?\n\nOne limitation or challenge in readability.\n\n\nSubmit .ipynb and .html to Blackboard (You can zip the files together).\n\nRubric (10 pts)\n\nCorrect application of tidy data principles (2)\nEffective and varied use of encodings (4)\nChart clarity, proper labeling, and interpretability (2)\nJustification of choices and discussion of limitations (2)",
     "crumbs": [
@@ -492,7 +492,7 @@
   {
     "objectID": "weekly/module_week_2_language_of_graphs.html#optional-extensions",
     "href": "weekly/module_week_2_language_of_graphs.html#optional-extensions",
-    "title": "2  Week 2 — Getting Started",
+    "title": "2  Language of Graphs",
     "section": "2.9 🧩 Optional Extensions",
     "text": "2.9 🧩 Optional Extensions\n\nUse Altair to add interactive tooltips for deeper exploration.\nCompare the same visualization in Seaborn and Altair and note trade-offs.\nExplore plotly.express for creating interactive dashboards.\nExperiment with using two vs. three encodings in the same chart; evaluate which is clearer.",
     "crumbs": [
@@ -502,11 +502,1321 @@
   {
     "objectID": "weekly/module_week_2_language_of_graphs.html#submission-checklist",
     "href": "weekly/module_week_2_language_of_graphs.html#submission-checklist",
-    "title": "2  Week 2 — Getting Started",
+    "title": "2  Language of Graphs",
     "section": "2.10 ✅ Submission Checklist",
     "text": "2.10 ✅ Submission Checklist\nBefore submitting, make sure:\n\nYour assignment has fulfilled all the basic requirements listed above.\nUse Quarto to render the notebook into HTML and zip the files for submission.\nDouble-check the visualizations and your reflections in the HTML are properly organized and displayed.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Language of Graphs</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_4_wrangling_with_pandas.html",
+    "href": "weekly/module_week_4_wrangling_with_pandas.html",
+    "title": "4  Wrangling with Pandas",
+    "section": "",
+    "text": "4.1 📖 Background & Motivation\nData visualization is only as good as the data behind it. Most real-world datasets are messy, requiring cleaning and transformation before they can be meaningfully visualized. Pandas is the cornerstone Python library for data wrangling, providing flexible tools to reshape, aggregate, and join datasets. This week introduces practical techniques for preparing data that will allow you to build more accurate and insightful visualizations.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Wrangling with Pandas</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_4_wrangling_with_pandas.html#learning-objectives",
+    "href": "weekly/module_week_4_wrangling_with_pandas.html#learning-objectives",
+    "title": "4  Wrangling with Pandas",
+    "section": "4.2 🔎 Learning Objectives",
+    "text": "4.2 🔎 Learning Objectives\n\nSelect, filter, group, summarize, and reshape data in pandas.\nWork with datetime and categorical data types.\nJoin and merge datasets for richer analysis.\nPrepare clean datasets ready for visualization.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Wrangling with Pandas</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_4_wrangling_with_pandas.html#readings-resources",
+    "href": "weekly/module_week_4_wrangling_with_pandas.html#readings-resources",
+    "title": "4  Wrangling with Pandas",
+    "section": "4.3 📚 Readings & Resources",
+    "text": "4.3 📚 Readings & Resources\n\nPandas User Guide\n10 Minutes to pandas\nWorking with Text Data\nTime Series / Date Functionality\n\nSample Data Sources:\n\nNYC Taxi trips sample (NYC Open Data)\nCOVID-19 data (Johns Hopkins University)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Wrangling with Pandas</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_4_wrangling_with_pandas.html#setup-checklist",
+    "href": "weekly/module_week_4_wrangling_with_pandas.html#setup-checklist",
+    "title": "4  Wrangling with Pandas",
+    "section": "4.4 🛠️ Setup Checklist",
+    "text": "4.4 🛠️ Setup Checklist\nEnsure you can run:\npip install pandas matplotlib seaborn",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Wrangling with Pandas</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_4_wrangling_with_pandas.html#lecture-outline",
+    "href": "weekly/module_week_4_wrangling_with_pandas.html#lecture-outline",
+    "title": "4  Wrangling with Pandas",
+    "section": "4.5 🧭 Lecture Outline",
+    "text": "4.5 🧭 Lecture Outline\n\n4.5.1 Session 1 (75 min — Theory Focus)\n\nIntroduction to pandas DataFrames & Series (15 min)\nSelection and filtering operations (20 min)\nGroupBy and aggregation (20 min)\nIntro to joining and merging: concepts and syntax (15 min)\nHands-on with NYC Taxi dataset (20 min). Download the files from here\n\n\n\n4.5.2 Session 2 (75 min - Hands-On)\n\nRecap & troubleshooting (10 min)\nReshaping data: pivot, melt, stack/unstack (25 min)\nWorking with datetime and categorical variables (20 min)\nMerging and joining multiple datasets (20 min)\nDownload the Jupyter Notebook and the additional population table for the session.\nDownload the complete Jupyter Notebook. Remember to have other files ready for the notebook.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Wrangling with Pandas</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_4_wrangling_with_pandas.html#starter-notebook-snippets",
+    "href": "weekly/module_week_4_wrangling_with_pandas.html#starter-notebook-snippets",
+    "title": "4  Wrangling with Pandas",
+    "section": "4.6 💻 Starter Notebook Snippets",
+    "text": "4.6 💻 Starter Notebook Snippets\nimport pandas as pd\n\n# Load dataset\ntrips = pd.read_csv(\"nyc_taxi_sample.csv\")\n\n# Filter rows\nfiltered = trips[trips[\"passenger_count\"] &gt; 2]\n\n# Group and aggregate\nagg = trips.groupby(\"passenger_count\")[\"fare_amount\"].mean()\n\n# Reshape with melt\ndf_wide = pd.DataFrame({\n    'id': [1, 2],\n    'math': [90, 80],\n    'english': [85, 78]\n})\ndf_tidy = df_wide.melt(id_vars='id', var_name='subject', value_name='score')\n\n# Parse dates\ntrips['pickup_datetime'] = pd.to_datetime(trips['pickup_datetime'])",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Wrangling with Pandas</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_4_wrangling_with_pandas.html#in-class-activity",
+    "href": "weekly/module_week_4_wrangling_with_pandas.html#in-class-activity",
+    "title": "4  Wrangling with Pandas",
+    "section": "4.7 🧪 In-Class Activity",
+    "text": "4.7 🧪 In-Class Activity\n\nUse the COVID-19 dataset to:\n\nFilter by one country and visualize new cases over time.\nGroup data by month and compare monthly averages.\nReshape the dataset to tidy form and create a plot.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Wrangling with Pandas</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_4_wrangling_with_pandas.html#homework-due-next-thursday-sept-25",
+    "href": "weekly/module_week_4_wrangling_with_pandas.html#homework-due-next-thursday-sept-25",
+    "title": "4  Wrangling with Pandas",
+    "section": "4.8 🏠 Homework (Due next Thursday, Sept 25)",
+    "text": "4.8 🏠 Homework (Due next Thursday, Sept 25)\n\nSelect a dataset with at least 5 columns.\nPerform the following in a notebook:\n\nClean and filter the dataset.\nApply at least 2 groupby operations with aggregations.\nReshape the dataset at least once (pivot, melt, etc.).\nCreate 3 visualizations from the cleaned dataset.\n\nSubmit .ipynb and .html.\n\nRubric (10 pts)\n\nCorrect wrangling operations applied (4)\nCreativity in reshaping & grouping (2)\nClear and readable plots (2)\nReproducibility (2)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Wrangling with Pandas</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_4_wrangling_with_pandas.html#optional-extensions",
+    "href": "weekly/module_week_4_wrangling_with_pandas.html#optional-extensions",
+    "title": "4  Wrangling with Pandas",
+    "section": "4.9 🧩 Optional Extensions",
+    "text": "4.9 🧩 Optional Extensions\n\nMerge two datasets to add richer context.\nExplore pandas string operations to clean messy text.\nCreate a time series plot with rolling averages.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Wrangling with Pandas</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_4_wrangling_with_pandas.html#submission-checklist",
+    "href": "weekly/module_week_4_wrangling_with_pandas.html#submission-checklist",
+    "title": "4  Wrangling with Pandas",
+    "section": "4.10 ✅ Submission Checklist",
+    "text": "4.10 ✅ Submission Checklist\nBefore submitting, make sure:\n\nYour assignment has fulfilled all the basic requirements listed above.\nThe operations and visualizations in the Jupyter notebook are correct.\nUse Quarto to render the notebook and ensure the content is displayed well.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Wrangling with Pandas</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_5_perception_principles.html",
+    "href": "weekly/module_week_5_perception_principles.html",
+    "title": "5  Perception & Principles",
+    "section": "",
+    "text": "5.1 📖 Background & Motivation\nEven when the data is clean and the chart type is appropriate, design decisions can make the difference between clarity and confusion. Human perception imposes limits on how well we can decode visual information. By understanding principles from perceptual psychology, we can design graphics that communicate more effectively and avoid misleading audiences.\nThis week introduces concepts like Cleveland & McGill’s hierarchy of graphical perception, preattentive attributes, Gestalt principles, and common pitfalls in chart design. These theoretical foundations provide guidance for making practical design decisions in your visualizations.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Perception & Principles</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_5_perception_principles.html#learning-objectives",
+    "href": "weekly/module_week_5_perception_principles.html#learning-objectives",
+    "title": "5  Perception & Principles",
+    "section": "5.2 🔎 Learning Objectives",
+    "text": "5.2 🔎 Learning Objectives\n\nUnderstand how human perception shapes data interpretation.\nApply the Cleveland–McGill perceptual rankings to select more effective encodings.\nIdentify and use preattentive features to guide viewer attention.\nRecognize and correct misleading design practices.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Perception & Principles</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_5_perception_principles.html#readings-resources",
+    "href": "weekly/module_week_5_perception_principles.html#readings-resources",
+    "title": "5  Perception & Principles",
+    "section": "5.3 📚 Readings & Resources",
+    "text": "5.3 📚 Readings & Resources\n\nCleveland & McGill (1984): Graphical Perception\nFundamentals of Data Visualization — Chapters on perception and design.\nData Visualization Society: Design Principles\nThe Gestalt Principles\n\nSample Data Sources:\n\nSimulated datasets designed to illustrate perception issues.\nAny dataset from previous weeks (for redesign exercises).",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Perception & Principles</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_5_perception_principles.html#setup-checklist",
+    "href": "weekly/module_week_5_perception_principles.html#setup-checklist",
+    "title": "5  Perception & Principles",
+    "section": "5.4 🛠️ Setup Checklist",
+    "text": "5.4 🛠️ Setup Checklist\nEnsure your environment includes:\npip install seaborn matplotlib pandas",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Perception & Principles</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_5_perception_principles.html#lecture-outline",
+    "href": "weekly/module_week_5_perception_principles.html#lecture-outline",
+    "title": "5  Perception & Principles",
+    "section": "5.5 🧭 Lecture Outline",
+    "text": "5.5 🧭 Lecture Outline\n\n5.5.1 Session 1 (75 min — Theory Focus)\n\nMotivation: Why perception matters in visualization (10 min)\nCleveland–McGill hierarchy of graphical perception (20 min)\nPreattentive attributes (color, shape, position, orientation) (20 min)\nGestalt principles and visual grouping (15 min)\nMisleading charts and design pitfalls (10 min)\n\n\n\n5.5.2 Session 2 (75 min — Hands-on Focus)\n\nRecap & discussion of theory (10 min)\nRedesign bad charts into effective versions (30 min)\nGuided exercise: compare encodings using simulated data (20 min)\nWorkshop: students bring prior homework plots and improve them (15 min)\n5.6 Download the Jupyter Notebook",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Perception & Principles</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_5_perception_principles.html#starter-notebook-snippets",
+    "href": "weekly/module_week_5_perception_principles.html#starter-notebook-snippets",
+    "title": "5  Perception & Principles",
+    "section": "5.7 💻 Starter Notebook Snippets",
+    "text": "5.7 💻 Starter Notebook Snippets\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\n# Example of a misleading bar chart\nvalues = [5, 10, 15]\nlabels = ['A', 'B', 'C']\n\nplt.bar(labels, values)\nplt.ylim(4, 16)  # Misleading y-axis range\nplt.title(\"Misleading Bar Chart\")\nplt.show()\n\n# Redesigned chart with zero baseline\nplt.bar(labels, values)\nplt.ylim(0, 16)\nplt.title(\"Improved Bar Chart\")\nplt.show()",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Perception & Principles</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_5_perception_principles.html#in-class-activity",
+    "href": "weekly/module_week_5_perception_principles.html#in-class-activity",
+    "title": "5  Perception & Principles",
+    "section": "5.8 🧪 In-Class Activity",
+    "text": "5.8 🧪 In-Class Activity\n\nCritique provided “poorly-designed” charts and redesign them.\nUse preattentive attributes to highlight important data points.\nCompare multiple encoding strategies for the same dataset.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Perception & Principles</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_5_perception_principles.html#homework-due-next-friday-oct-3",
+    "href": "weekly/module_week_5_perception_principles.html#homework-due-next-friday-oct-3",
+    "title": "5  Perception & Principles",
+    "section": "5.9 🏠 Homework (Due next Friday, Oct 3)",
+    "text": "5.9 🏠 Homework (Due next Friday, Oct 3)\n\nFind a poorly designed chart (for example, a truncated y-axis bar chart from a news article, a rainbow-colored heatmap in a research paper, or an infographic with distorted area encodings). \nRecreate the chart faithfully in Python.\nRedesign the chart applying perception & design principles.\nWrite a short reflection (200+ words) describing:\n\nWhy the original was misleading or ineffective.\nWhat principles guided your redesign?\nHow your redesign improves comprehension.\n\nSubmit .ipynb and .html.\n\nRubric (10 pts)\n\nAccurate reproduction of the original chart (2)\nEffective redesign applying principles (4)\nClear reflection linking to theory (2)\nVisual clarity and labeling (2)",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Perception & Principles</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_5_perception_principles.html#optional-extensions",
+    "href": "weekly/module_week_5_perception_principles.html#optional-extensions",
+    "title": "5  Perception & Principles",
+    "section": "5.10 🧩 Optional Extensions",
+    "text": "5.10 🧩 Optional Extensions\n\nExperiment with alternative encodings and compare effectiveness.\nConduct a quick peer survey: which design is easier to interpret?\nTry adding annotations or highlights using preattentive cues.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Perception & Principles</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_5_perception_principles.html#submission-checklist",
+    "href": "weekly/module_week_5_perception_principles.html#submission-checklist",
+    "title": "5  Perception & Principles",
+    "section": "5.11 ✅ Submission Checklist",
+    "text": "5.11 ✅ Submission Checklist\nBefore submitting, make sure:\n\nYour assignment has fulfilled all the basic requirements listed above.\nThe visualizations and your reflections in the Jupyter notebook are properly organized and displayed.\nUse Quarto to render the notebook into HTML and zip the files for submission.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Perception & Principles</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_8_mapping_i_ii.html",
+    "href": "weekly/module_week_8_mapping_i_ii.html",
+    "title": "8  Mapping I & II",
+    "section": "",
+    "text": "8.1 📖 Background & Motivation\nThis two‑session module builds a solid foundation for geographic data visualization and then applies it to real analytical workflows. In Mapping I, students learn core geospatial concepts (data types, formats, and coordinate systems) and produce clear choropleth maps with appropriate normalization, classification, and legends. In Mapping II, students connect maps to real analysis tasks by performing spatial and attribute joins, enriching with socio‑economic context, and delivering interactive maps for exploration and communication.",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Mapping I & II</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_8_mapping_i_ii.html#learning-objectives",
+    "href": "weekly/module_week_8_mapping_i_ii.html#learning-objectives",
+    "title": "8  Mapping I & II",
+    "section": "8.2 🔎 Learning Objectives",
+    "text": "8.2 🔎 Learning Objectives\n\nDistinguish vector vs. raster data; recognize common geospatial file formats (Shapefile, GeoJSON, TopoJSON, GeoPackage).\nExplain Coordinate Reference Systems (CRS) and projections; choose and document an appropriate CRS.\nCreate choropleths with sensible normalization, classification, color, and legends.\nPerform spatial joins (point‑in‑polygon, polygon overlaps) and attribute joins on stable keys (e.g., FIPS/GEOID).\nEnrich maps with socio‑economic variables (e.g., ACS) and build interactive web maps.",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Mapping I & II</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_8_mapping_i_ii.html#readings-resources",
+    "href": "weekly/module_week_8_mapping_i_ii.html#readings-resources",
+    "title": "8  Mapping I & II",
+    "section": "8.3 📚 Readings & Resources",
+    "text": "8.3 📚 Readings & Resources\n\nGeoPandas User Guide — geopandas.org\nPyGIS — Intro to GIS in Python — pygis.io/docs/a_intro.html\nFolium Quickstart — python-visualization.github.io/folium\nPlotly Express Choropleth — plotly.com/python/choropleth-maps\nClaus Wilke, Fundamentals of Data Visualization (Geospatial) — clauswilke.com/dataviz/geospatial.html\nColorBrewer 2.0 — colorbrewer2.org\nEPSG.io (CRS search) — epsg.io\nCensus/ACS data portal — data.census.gov ; Social Explorer — socialexplorer.com/home\nTopoJSON docs — github.com/topojson/topojson",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Mapping I & II</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_8_mapping_i_ii.html#setup",
+    "href": "weekly/module_week_8_mapping_i_ii.html#setup",
+    "title": "8  Mapping I & II",
+    "section": "8.4 🛠️ Setup",
+    "text": "8.4 🛠️ Setup\nInstall/verify:\npip install geopandas folium plotly mapclassify pyproj shapely pandas matplotlib\nNotes:\n\nIf computing areas/lengths, reproject to an appropriate projected CRS (e.g., equal‑area).\nInteractive HTML maps (Folium/Plotly) load tiles/scripts at view time.",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Mapping I & II</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_8_mapping_i_ii.html#session-1-mapping-i-foundations-choropleths-75-min",
+    "href": "weekly/module_week_8_mapping_i_ii.html#session-1-mapping-i-foundations-choropleths-75-min",
+    "title": "8  Mapping I & II",
+    "section": "8.5 🧭 Session 1 — Mapping I: Foundations & Choropleths (≈75 min)",
+    "text": "8.5 🧭 Session 1 — Mapping I: Foundations & Choropleths (≈75 min)\n\n8.5.1 1) Why map? When not to map\n\nUse maps when spatial structure matters (clusters, corridors, gradients).\nPrefer rates/ratios over raw counts; preview MAUP & ecological fallacy.\n\n\n\n8.5.2 2) Geographic data fundamentals\n\nVector (points/lines/polygons/multiparts) vs Raster (continuous/categorical); resolution, extent.\n\n\n\n8.5.3 3) File formats\n\nShapefile (.shp/.shx/.dbf/.prj) – common pitfalls: field name limits, encoding, missing .prj.\nGeoJSON (WGS84 lon/lat); TopoJSON (shared arcs, smaller web payloads); GeoPackage, Parquet+WKB.\n\n\n\n8.5.4 4) CRS & projections\n\nGeographic vs Projected CRS; angular vs linear units.\nWGS84 (EPSG:4326) vs Web Mercator (EPSG:3857) vs Equal‑Area (e.g., ESRI:102003 for CONUS).\nDistortions (area/distance/direction); document CRS in captions.\n\n\n\n8.5.5 5) Choropleths: principles\n\nAppropriate use: polygon‑level rates with clear denominators and time windows.\nClassification: Quantiles, Equal Interval, Natural Breaks (Jenks), Std‑Dev; 4–7 bins.\nColor: sequential for ordered magnitudes; diverging for centered (±mean); avoid rainbow; accessible palettes.\nLegends & captions: variable name + units, bin method, CRS, data period, source.\n\n\n\n8.5.6 6) Demos (brief)\n\nGeoPandas + Matplotlib: static choropleth; export PNG/SVG.\nPlotly Express: interactive choropleth with hover; export HTML.\nFolium: tile basemap, tooltips/popups, layer control; export HTML.\nDownload the Jupyter Notebook and Data\n\n\n\n8.5.7 7) Mini‑exercise (10–15 min)\n\nGiven polygons + counts + population: make two choropleths (quantiles vs equal‑interval).\nAdd a 3‑sentence note comparing how binning changes the story.",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Mapping I & II</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_8_mapping_i_ii.html#session-2-mapping-ii-spatial-joins-enrichment-interactivity-75-min",
+    "href": "weekly/module_week_8_mapping_i_ii.html#session-2-mapping-ii-spatial-joins-enrichment-interactivity-75-min",
+    "title": "8  Mapping I & II",
+    "section": "8.6 🧭 Session 2 — Mapping II: Spatial Joins, Enrichment & Interactivity (≈75 min)",
+    "text": "8.6 🧭 Session 2 — Mapping II: Spatial Joins, Enrichment & Interactivity (≈75 min)\n\n8.6.1 1) Spatial joins\n\nPoint‑in‑polygon (assign incidents/POIs to tracts), polygon‑to‑polygon (overlaps), nearest joins.\nGeoPandas sjoin predicates: within, contains, intersects; geometry validity & CRS alignment.\n\n\n\n8.6.2 2) Attribute joins & data hygiene\n\nJoin on stable keys (FIPS/GEOID). Handle types, leading zeros, whitespace, duplicates, missing keys.\n\n\n\n8.6.3 3) Aggregation, normalization, and stability\n\nDissolve/aggregate to analysis geography; per‑capita / per‑household / per‑area rates.\nConsider rate stabilization (mention: Empirical Bayes) for small populations.\n\n\n\n8.6.4 4) Socio‑economic enrichment\n\nTypical sources: ACS (income, education, housing, commute), CDC PLACES, BLS.\nTemporal alignment and definitional consistency.\n\n\n\n8.6.5 5) Interactive mapping patterns\n\nLayer toggles (choropleth + points), marker clustering, heatmaps (when appropriate).\nFilters (sliders/dropdowns), hover templates, annotations; geometry simplification & TopoJSON for performance.\n\n\n\n8.6.6 6) Demos (brief)\n\nDemo A: spatial join (points→polygons) → counts per polygon → normalized rate.\nDemo B: attribute join with ACS; compute indicator; classify & map.\nDemo C: interactive Folium (choropleth + proportional symbols, tooltips, layer control).\nDemo D: interactive Plotly/Mapbox; export standalone HTML.\n\n\n\n8.6.7 7) In‑class activity\n\nStart‑to‑finish pipeline:\n\nspatial join incidents → polygons,\nenrich with ACS denominator,\nbuild an interactive map with two layers,\n3–5 sentence reflection on design choices + limitations.\nDownload the Jupyter Notebook and Data",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Mapping I & II</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_8_mapping_i_ii.html#starter-code-snippets",
+    "href": "weekly/module_week_8_mapping_i_ii.html#starter-code-snippets",
+    "title": "8  Mapping I & II",
+    "section": "8.7 💻 Starter Code (snippets)",
+    "text": "8.7 💻 Starter Code (snippets)",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Mapping I & II</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_8_mapping_i_ii.html#inclass-activities-both-sessions",
+    "href": "weekly/module_week_8_mapping_i_ii.html#inclass-activities-both-sessions",
+    "title": "8  Mapping I & II",
+    "section": "8.8 🧪 In‑Class Activities (both sessions)",
+    "text": "8.8 🧪 In‑Class Activities (both sessions)\n\nWork in pairs. Use provided notebook or your own dataset.\nMaintain a caption block for each map (CRS, data period, binning, source, denominator).",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Mapping I & II</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_8_mapping_i_ii.html#homework-due-next-tuesday-oct-28",
+    "href": "weekly/module_week_8_mapping_i_ii.html#homework-due-next-tuesday-oct-28",
+    "title": "9  Mapping I & II",
+    "section": "9.9 🏠 Homework (Due next Tuesday, Oct 28)",
+    "text": "9.9 🏠 Homework (Due next Tuesday, Oct 28)\n\nPick a geographic unit (country/state/county/tract) + a topic.\nBuild a reproducible pipeline (notebook) that includes:\n\nOne static choropleth with clear legend + caption.\nOne interactive map (Folium or Plotly) with at least two layers (e.g., choropleth + points) and tooltips.\nAt least one join (spatial or attribute) and appropriate normalization.\nA 150–250 word reflection on design choices, denominators, classification, CRS, and limitations.\n\nSubmit .ipynb and .html.\n\nRubric (10 pts)\n\nCorrect joins & CRS handling (3)\nSound normalization + clear classification/legend (3)\nInteractive map quality (layers, tooltips, usability) (2)\nReflection clarity & critique of limitations (2)",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Mapping I & II</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_8_mapping_i_ii.html#submission-checklist",
+    "href": "weekly/module_week_8_mapping_i_ii.html#submission-checklist",
+    "title": "8  Mapping I & II",
+    "section": "8.10 ✅ Submission Checklist",
+    "text": "8.10 ✅ Submission Checklist\nBefore submitting, make sure:\n\nYour assignment has fulfilled all the basic requirements listed above.\nUse Quarto to render the notebook into HTML and zip the files for submission.\nDouble-check the visualizations and your reflections in the HTML are properly organized and displayed.",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Mapping I & II</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_6_comparisons.html",
+    "href": "weekly/module_week_6_comparisons.html",
+    "title": "6  Comparisons",
+    "section": "",
+    "text": "6.1 📖 Background & Motivation\nMost insight in data science comes from comparing things: groups, treatments, time periods, geographies, and models. Good comparison graphics make differences and similarities immediately legible without misleading the audience. This week focuses on selecting the right comparison design (bars, dot plots, slope charts, small multiples), aligning scales and baselines, and avoiding visual pitfalls that distort comparisons.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Comparisons</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_6_comparisons.html#learning-objectives",
+    "href": "weekly/module_week_6_comparisons.html#learning-objectives",
+    "title": "6  Comparisons",
+    "section": "6.2 🔎 Learning Objectives",
+    "text": "6.2 🔎 Learning Objectives\n\nChoose appropriate designs for category and time comparisons (grouped bars, dot plots, slope charts, small multiples).\nAlign scales, baselines, and axes to ensure fair comparisons.\nNormalize data (per capita, percent change, index to baseline) when appropriate.\nUse faceting and small multiples to reduce clutter and increase clarity.\nAdd clear annotations and ordering to emphasize key contrasts.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Comparisons</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_6_comparisons.html#readings-resources",
+    "href": "weekly/module_week_6_comparisons.html#readings-resources",
+    "title": "6  Comparisons",
+    "section": "6.3 📚 Readings & Resources",
+    "text": "6.3 📚 Readings & Resources\n\nFundamentals of Data Visualization — chapters on comparisons & small multiples.\nSeaborn: Categorical plots, FacetGrid\nMatplotlib: bar charts, subplots\nColorBrewer: Choosing palettes\n\nSample Data Sources:\n\nWorld Bank indicators (e.g., GDP per capita, life expectancy)\nGapminder (country-level indicators)\nSports/team statistics (season-by-season comparisons)",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Comparisons</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_6_comparisons.html#setup-checklist",
+    "href": "weekly/module_week_6_comparisons.html#setup-checklist",
+    "title": "6  Comparisons",
+    "section": "6.4 🛠️ Setup Checklist",
+    "text": "6.4 🛠️ Setup Checklist\nEnsure your environment includes:\npip install pandas numpy matplotlib seaborn plotly\nFirst, ensure that the virtual environment is properly created and activated. Then confirm you can import these libraries and render a simple chart before class.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Comparisons</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_6_comparisons.html#lecture-outline",
+    "href": "weekly/module_week_6_comparisons.html#lecture-outline",
+    "title": "6  Comparisons",
+    "section": "6.5 🧭 Lecture Outline",
+    "text": "6.5 🧭 Lecture Outline\n\n6.5.1 Session 1 (75 min — Theory Focus)\n\nWhen to compare? Framing questions and choosing the right comparison graphic (10 min)\nBars vs. dot plots: perceptual accuracy and overplotting concerns (15 min)\nSlope charts for before/after and rank changes (15 min)\nScale, baseline, and normalization (indexing to 100, percent change, per‑capita) (20 min)\nSmall multiples and faceting; ordering and labeling for clarity (15 min)\nDownload the Jupyter Notebook and data used in lecture from this webpage\n\n\n\n6.5.2 Session 2 (75 min — Hands-on Focus)\n\nLive coding: grouped bars → dot plot refactor (15 min)\nBuild a slope chart for a before/after dataset (20 min)\nCreate a small multiples view with FacetGrid (20 min)\nMini‑workshop: add annotations, reorder categories, and test alternative scales (20 min)\nDownload the Jupyter Notebook for this session.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Comparisons</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_6_comparisons.html#starter-notebook-snippets",
+    "href": "weekly/module_week_6_comparisons.html#starter-notebook-snippets",
+    "title": "6  Comparisons",
+    "section": "6.6 💻 Starter Notebook Snippets",
+    "text": "6.6 💻 Starter Notebook Snippets\n\n6.6.1 Dot plot vs. grouped bars\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\n\nsns.set_theme(style=\"whitegrid\")\n\n# toy data: mean score by group and condition\ndf = pd.DataFrame({\n    \"group\": [\"A\",\"A\",\"B\",\"B\",\"C\",\"C\"],\n    \"condition\": [\"Control\",\"Treatment\"]*3,\n    \"score\": [72, 78, 65, 74, 81, 85]\n})\n\n# Grouped bars\nsns.catplot(data=df, kind=\"bar\", x=\"group\", y=\"score\", hue=\"condition\")\nplt.title(\"Grouped Bars\")\n\n# Dot plot (often clearer for two conditions)\nsns.catplot(data=df, kind=\"point\", x=\"group\", y=\"score\", hue=\"condition\", dodge=True)\nplt.title(\"Dot Plot Comparison\")\n\n\n6.6.2 Slope chart (before/after)\nimport numpy as np\n\nbefore = pd.Series([72, 65, 81], index=[\"A\",\"B\",\"C\"]).rename(\"before\")\nafter = pd.Series([78, 74, 85], index=[\"A\",\"B\",\"C\"]).rename(\"after\")\nlong = pd.concat([before, after], axis=1).reset_index().melt(id_vars=\"index\", var_name=\"time\", value_name=\"score\")\nlong = long.rename(columns={\"index\":\"group\"})\n\nplt.figure(figsize=(6,4))\nfor g, sub in long.groupby(\"group\"):\n    xs = [0, 1]\n    ys = sub.sort_values(\"time\")[\"score\"].values\n    plt.plot(xs, ys, marker=\"o\")\n    plt.text(0-0.03, ys[0], g, ha=\"right\", va=\"center\")\nplt.xticks([0,1],[\"Before\",\"After\"])\nplt.title(\"Slope Chart — Before vs After\")\nplt.ylabel(\"Score\")\nplt.grid(axis='y', alpha=.3)\nplt.tight_layout()\n\n\n6.6.3 Small multiples with FacetGrid\n# Using Gapminder-like structure\npeng = sns.load_dataset(\"penguins\").dropna()\nfg = sns.FacetGrid(peng, col=\"species\", height=3, sharey=True)\nfg.map_dataframe(sns.scatterplot, x=\"flipper_length_mm\", y=\"body_mass_g\", alpha=.7)\nfg.set_axis_labels(\"Flipper length (mm)\", \"Body mass (g)\")\nfg.set_titles(col_template=\"{col_name}\")\n\n\n6.6.4 Normalization (indexing to a baseline)\n# Index each group to its first time value\nwide = pd.DataFrame({\"t\":[1,2,3,4], \"A\":[100,110,108,120], \"B\":[100,98,105,112]})\nbase = wide.loc[0, [\"A\",\"B\"]]\nindexed = wide[[\"A\",\"B\"]].divide(base) * 100\nindexed[\"t\"] = wide[\"t\"]\nindexed_m = indexed.melt(\"t\", var_name=\"series\", value_name=\"index\")\nsns.lineplot(data=indexed_m, x=\"t\", y=\"index\", hue=\"series\")\nplt.axhline(100, color=\"k\", lw=.8)\nplt.ylabel(\"Index (baseline=100)\")\nplt.title(\"Indexed Comparison\")",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Comparisons</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_6_comparisons.html#in-class-activity",
+    "href": "weekly/module_week_6_comparisons.html#in-class-activity",
+    "title": "6  Comparisons",
+    "section": "6.7 🧪 In-Class Activity",
+    "text": "6.7 🧪 In-Class Activity\n\nConvert a cluttered grouped‑bar chart into a dot plot and explain which communicates differences more clearly.\nBuild a slope chart for a before/after dataset and annotate the largest change.\nCreate small multiples with FacetGrid to compare subgroups on the same scale.\nTry at least one normalization (percent change or index to baseline) and discuss how it changes the interpretation.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Comparisons</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_6_comparisons.html#homework-due-next-thursday-oct-9",
+    "href": "weekly/module_week_6_comparisons.html#homework-due-next-thursday-oct-9",
+    "title": "6  Comparisons",
+    "section": "6.8 🏠 Homework (Due next Thursday, Oct 9)",
+    "text": "6.8 🏠 Homework (Due next Thursday, Oct 9)\n\nSelect a dataset with at least two groups and either two conditions or multiple time points.\nProduce the following:\n\nOne dot plot (or refactor from grouped bars) with thoughtful ordering and labels.\nOne slope chart showing before/after or the earliest vs. the latest comparison.\nOne small‑multiples chart (faceted) on a shared y‑scale.\nAt least one normalized view (percent change or index to baseline).\n\nAdd concise annotations and a brief (200–300 words) discussion of which design best supports your comparison question and why.\nSubmit .ipynb and .html.\n\nRubric (10 pts)\n\nAppropriate chart choices for comparison tasks (3)\nScale/baseline alignment and normalization where needed (3)\nClear labeling, ordering, and annotations (2)\nReproducibility and code quality (2)",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Comparisons</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_6_comparisons.html#optional-extensions",
+    "href": "weekly/module_week_6_comparisons.html#optional-extensions",
+    "title": "6  Comparisons",
+    "section": "6.9 🧩 Optional Extensions",
+    "text": "6.9 🧩 Optional Extensions\n\nUse plotly.express to build an interactive small multiples or animation (e.g., by year).\nExplore ranked dot plots (ordered by value) and slopegraphs with many categories.\nAdd confidence intervals or error bars for group comparisons.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Comparisons</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_6_comparisons.html#submission-checklist",
+    "href": "weekly/module_week_6_comparisons.html#submission-checklist",
+    "title": "6  Comparisons",
+    "section": "6.10 ✅ Submission Checklist",
+    "text": "6.10 ✅ Submission Checklist\nBefore submitting, make sure:\n\nYour assignment has fulfilled all the basic requirements listed above.\nThe visualizations and your reflections in the Jupyter notebook are properly organized and displayed.\nUse Quarto to render the notebook into HTML and zip the files for submission.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Comparisons</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/mid_term_project_module_page.html",
+    "href": "weekly/mid_term_project_module_page.html",
+    "title": "Mid-Term Project — DATS 2102: Data Visualization for Data Science",
+    "section": "",
+    "text": "🎯 Objectives\nBy mid-semester, you will:",
+    "crumbs": [
+      "Mid-Term Project"
+    ]
+  },
+  {
+    "objectID": "weekly/mid_term_project_module_page.html#objectives",
+    "href": "weekly/mid_term_project_module_page.html#objectives",
+    "title": "Mid-Term Project — DATS 2102: Data Visualization for Data Science",
+    "section": "",
+    "text": "Apply foundational data visualization techniques (Weeks 1–6).\nDemonstrate mastery of:\n\nenvironment setup & reproducible notebooks,\ntidy data principles & visual encodings,\ndistributions & variation,\nwrangling with pandas,\nperception-based design principles,\nfair and effective comparisons.\n\nProduce a mini data story using 2–3 datasets.",
+    "crumbs": [
+      "Mid-Term Project"
+    ]
+  },
+  {
+    "objectID": "weekly/mid_term_project_module_page.html#project-description",
+    "href": "weekly/mid_term_project_module_page.html#project-description",
+    "title": "Mid-Term Project — DATS 2102: Data Visualization for Data Science",
+    "section": "📖 Project Description",
+    "text": "📖 Project Description\nSelect a real-world dataset (from provided sources or external datasets of interest). Using the tools and concepts learned in the first six weeks, create a narrative notebook that:\n\nIntroduces the dataset and research question(s).\nCleans, reshapes, and prepares the data for visualization, demonstrating core pandas wrangling: selection/filtering, sorting, grouping + aggregation, joins/merges, and tidy reshaping.\nProduces at least 6–8 visualizations, including:\n\nAt least one distribution plot (histogram/KDE/boxplot/ECDF).\nAt least one comparison plot (dot plot, slope chart, or small multiples).\nAt least one of your own visualizations revised and improved by reflecting on perception principles, showing how thoughtful design choices enhance clarity and fairness.\nAt least one visualization with clear text/labels/annotations.\n\nApplies best practices for choice of color, scales, and labeling.\nProvides a written narrative explaining insights, choices, and design considerations.",
+    "crumbs": [
+      "Mid-Term Project"
+    ]
+  },
+  {
+    "objectID": "weekly/mid_term_project_module_page.html#deliverables",
+    "href": "weekly/mid_term_project_module_page.html#deliverables",
+    "title": "Mid-Term Project — DATS 2102: Data Visualization for Data Science",
+    "section": "📦 Deliverables",
+    "text": "📦 Deliverables\n\nJupyter Notebook with all code, markdown explanations, and charts.\nRendered HTML file (via Quarto).\nA short reflective essay (300–500 words) addressing:\n\nWhat challenges did you face in cleaning/visualizing the data?\nHow did perception/design principles guide your choices?\nWhich visualization best communicates your main insight, and why?",
+    "crumbs": [
+      "Mid-Term Project"
+    ]
+  },
+  {
+    "objectID": "weekly/mid_term_project_module_page.html#suggested-datasets",
+    "href": "weekly/mid_term_project_module_page.html#suggested-datasets",
+    "title": "Mid-Term Project — DATS 2102: Data Visualization for Data Science",
+    "section": "📊 Suggested Datasets",
+    "text": "📊 Suggested Datasets\n\nSeaborn sample datasets\nGapminder\nOur World in Data\nOpen Data DC\nFiveThirtyEight Data",
+    "crumbs": [
+      "Mid-Term Project"
+    ]
+  },
+  {
+    "objectID": "weekly/mid_term_project_module_page.html#timeline",
+    "href": "weekly/mid_term_project_module_page.html#timeline",
+    "title": "Mid-Term Project — DATS 2102: Data Visualization for Data Science",
+    "section": "🗓️ Timeline",
+    "text": "🗓️ Timeline\n\nFinal Submission Completed notebook, HTML export, and reflection.",
+    "crumbs": [
+      "Mid-Term Project"
+    ]
+  },
+  {
+    "objectID": "weekly/mid_term_project_module_page.html#grading-rubric-20-pts-total",
+    "href": "weekly/mid_term_project_module_page.html#grading-rubric-20-pts-total",
+    "title": "Mid-Term Project — DATS 2102: Data Visualization for Data Science",
+    "section": "🧾 Grading Rubric (20 pts total)",
+    "text": "🧾 Grading Rubric (20 pts total)\n\nData Wrangling & Preparation (4 pts): Appropriate cleaning, filtering, and reshaping.\nVariety of Visualizations (5 pts): Includes required chart types; demonstrates range.\nApplication of Principles (4 pts): Perception, scales, baselines, labeling.\nNarrative & Reflection (4 pts): Clear storyline; thoughtful discussion of design choices.\nTechnical Quality (3 pts): The notebook runs cleanly, is reproducible, and is well-organized.",
+    "crumbs": [
+      "Mid-Term Project"
+    ]
+  },
+  {
+    "objectID": "weekly/mid_term_project_module_page.html#submission-checklist",
+    "href": "weekly/mid_term_project_module_page.html#submission-checklist",
+    "title": "Mid-Term Project — DATS 2102: Data Visualization for Data Science",
+    "section": "✅ Submission Checklist",
+    "text": "✅ Submission Checklist\nBefore submitting, make sure:",
+    "crumbs": [
+      "Mid-Term Project"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_7_text_labels_tables.html",
+    "href": "weekly/module_week_7_text_labels_tables.html",
+    "title": "7  Text, Labels, & Tables",
+    "section": "",
+    "text": "7.1 📖 Background & Motivation\nNumbers and charts alone rarely tell the full story. Effective use of text, labels, annotations, and tables can direct attention, clarify meaning, and strengthen the narrative of your visualization. This week focuses on best practices for integrating words with visuals, so your charts are not only accurate but also understandable and memorable.\nWe also cover how to design tables that are clear, accessible, and complementary to visualizations. In many professional contexts (reports, dashboards, publications), tables remain a key medium for communicating precise values alongside visuals.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Text, Labels, & Tables</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_7_text_labels_tables.html#learning-objectives",
+    "href": "weekly/module_week_7_text_labels_tables.html#learning-objectives",
+    "title": "7  Text, Labels, & Tables",
+    "section": "7.2 🔎 Learning Objectives",
+    "text": "7.2 🔎 Learning Objectives\n\nAdd effective titles, axis labels, captions, and annotations to charts.\nUse direct labeling instead of or alongside legends.\nHighlight important data points with callouts and text placement.\nDesign tables for clarity and readability, including alignment and formatting.\nBalance text and visuals to create compelling data stories.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Text, Labels, & Tables</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_7_text_labels_tables.html#readings-resources",
+    "href": "weekly/module_week_7_text_labels_tables.html#readings-resources",
+    "title": "7  Text, Labels, & Tables",
+    "section": "7.3 📚 Readings & Resources",
+    "text": "7.3 📚 Readings & Resources\n\nFundamentals of Data Visualization — chapters on annotations and labeling.\nDatawrapper Academy: How to annotate your charts\nTable Design Tips (Evergreen Data)\nMatplotlib: text & annotation\nSeaborn: FacetGrid titles and labels\n\nSample Data Sources:\n\nSports statistics (e.g., player or team comparisons)\nElection results data\nFinancial performance tables (company revenue, expenses, profits)",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Text, Labels, & Tables</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_7_text_labels_tables.html#setup-checklist",
+    "href": "weekly/module_week_7_text_labels_tables.html#setup-checklist",
+    "title": "7  Text, Labels, & Tables",
+    "section": "7.4 🛠️ Setup Checklist",
+    "text": "7.4 🛠️ Setup Checklist\nEnsure your environment includes:\npip install pandas matplotlib seaborn\nFirst, make sure the virtual environment is properly created and activated. Then confirm you can import these libraries and render a simple chart before class.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Text, Labels, & Tables</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_7_text_labels_tables.html#lecture-outline",
+    "href": "weekly/module_week_7_text_labels_tables.html#lecture-outline",
+    "title": "7  Text, Labels, & Tables",
+    "section": "7.5 🧭 Lecture Outline",
+    "text": "7.5 🧭 Lecture Outline\n\n7.5.1 Session 1 (Theory Focus + Hands-on)\n\nWhy text matters: the role of words in data storytelling\nTitles, subtitles, and captions: framing interpretation\nLegends vs. direct labeling: when to use each\nAnnotation techniques: highlighting key values or trends\nPrinciples of clear table design\nAdding labels and annotations in Matplotlib & Seaborn\nRedesign a cluttered chart with better labeling\nCreate a table in pandas and format it for readability\nDownload the hands-on Jupyter Notebook\nDownload the extra Jupyter Notebook for table formatting",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Text, Labels, & Tables</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_7_text_labels_tables.html#starter-notebook-snippets",
+    "href": "weekly/module_week_7_text_labels_tables.html#starter-notebook-snippets",
+    "title": "7  Text, Labels, & Tables",
+    "section": "7.6 💻 Starter Notebook Snippets",
+    "text": "7.6 💻 Starter Notebook Snippets\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nimport pandas as pd\n\n# Example scatterplot with annotation\npenguins = sns.load_dataset(\"penguins\").dropna()\n\nsns.scatterplot(data=penguins, x=\"flipper_length_mm\", y=\"body_mass_g\", hue=\"species\")\nplt.title(\"Penguins: Flipper length vs Body mass\")\nplt.xlabel(\"Flipper length (mm)\")\nplt.ylabel(\"Body mass (g)\")\n\n# Annotate one point\nmax_penguin = penguins.loc[penguins['body_mass_g'].idxmax()]\nplt.annotate(\"Heaviest penguin\",\n             xy=(max_penguin['flipper_length_mm'], max_penguin['body_mass_g']),\n             xytext=(200, 6000),\n             arrowprops=dict(facecolor='black', shrink=0.05))\nplt.show()\n# Example formatted table in pandas\ndata = {\n    'Team': ['A','B','C'],\n    'Wins': [10, 12, 8],\n    'Losses': [5, 3, 7]\n}\ndf = pd.DataFrame(data)\n\n# Pretty print with alignment\ndf.style.set_table_styles([\n    {\"selector\": \"th\", \"props\": [(\"text-align\", \"center\")]},\n    {\"selector\": \"td\", \"props\": [(\"text-align\", \"center\")]}\n]).set_caption(\"Team Performance Summary\")",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Text, Labels, & Tables</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_7_text_labels_tables.html#in-class-activity",
+    "href": "weekly/module_week_7_text_labels_tables.html#in-class-activity",
+    "title": "7  Text, Labels, & Tables",
+    "section": "7.7 🧪 In-Class Activity",
+    "text": "7.7 🧪 In-Class Activity\n\nTake an unlabeled chart and add appropriate title, labels, and annotations.\nRecreate a sports statistics table and improve its formatting.\nCompare two versions of the same chart: one with only a legend, one with direct labeling.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Text, Labels, & Tables</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_7_text_labels_tables.html#homework-due-oct-19",
+    "href": "weekly/module_week_7_text_labels_tables.html#homework-due-oct-19",
+    "title": "8  Text, Labels, & Tables",
+    "section": "8.8 🏠 Homework (Due Oct 19)",
+    "text": "8.8 🏠 Homework (Due Oct 19)\n\nSelect a dataset (sports, election, or financial) and create:\n\nOne visualization with clear title, labels, and at least two annotations.\nOne directly-labeled chart (instead of legend-based).\nOne formatted table that complements your visualization.\n\nInclude a short reflection (200–300 words) explaining your labeling and table design choices.\nSubmit .ipynb and .html.\n\nRubric (10 pts)\n\nEffective use of titles, captions, and labels (3)\nClear and purposeful annotations (2)\nTable design clarity and readability (3)\nReflection quality (2)",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Text, Labels, & Tables</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_7_text_labels_tables.html#optional-extensions",
+    "href": "weekly/module_week_7_text_labels_tables.html#optional-extensions",
+    "title": "7  Text, Labels, & Tables",
+    "section": "7.9 🧩 Optional Extensions",
+    "text": "7.9 🧩 Optional Extensions\n\nExperiment with matplotlib.offsetbox or custom text placement.\nUse color and font variations to emphasize annotations.\nExport a styled pandas DataFrame as an image or LaTeX table.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Text, Labels, & Tables</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_7_text_labels_tables.html#submission-checklist",
+    "href": "weekly/module_week_7_text_labels_tables.html#submission-checklist",
+    "title": "7  Text, Labels, & Tables",
+    "section": "7.10 ✅ Submission Checklist",
+    "text": "7.10 ✅ Submission Checklist\nBefore submitting, make sure:\n\nYour assignment has fulfilled all the basic requirements listed above.\nThe visualizations and your reflections in the Jupyter notebook are properly organized and displayed.\nUse Quarto to render the notebook into HTML and zip the files for submission.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Text, Labels, & Tables</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_9_color_accessibility.html",
+    "href": "weekly/module_week_9_color_accessibility.html",
+    "title": "9  Color & Accessibility",
+    "section": "",
+    "text": "9.1 📖 Background & Motivation\nColor is one of the most powerful and expressive tools in visualization. It can highlight differences, show magnitude, encode categories, or evoke emotion—but it can also distort, confuse, or exclude if not used carefully. This module explores color theory, perceptual uniformity, and accessibility guidelines to ensure your visuals communicate effectively to all audiences.\nWe will discuss the use of color in sequential, diverging, and categorical scales, and how to design visualizations that remain interpretable for viewers with color vision deficiencies.",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Color & Accessibility</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_9_color_accessibility.html#learning-objectives",
+    "href": "weekly/module_week_9_color_accessibility.html#learning-objectives",
+    "title": "9  Color & Accessibility",
+    "section": "9.2 🔎 Learning Objectives",
+    "text": "9.2 🔎 Learning Objectives\n\nDistinguish between sequential, diverging, and categorical color schemes.\nSelect appropriate palettes based on data type and context.\nApply color theory concepts (hue, saturation, luminance) to improve legibility.\nUse color tools to ensure accessibility for all users.\nTest visualizations for color blindness and accessibility compliance.",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Color & Accessibility</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_9_color_accessibility.html#readings-resources",
+    "href": "weekly/module_week_9_color_accessibility.html#readings-resources",
+    "title": "9  Color & Accessibility",
+    "section": "9.3 📚 Readings & Resources",
+    "text": "9.3 📚 Readings & Resources\n\nFundamentals of Data Visualization — chapters on color and perception.\nColorBrewer2 — tool for choosing effective color schemes.\nColorcet - Perceptually accurate 256-color colormaps\nAdobe Color — create custom palettes.\nCoblis — Color Blindness Simulator\nAccessible Data Visualization Guide (W3C)\nSeaborn color palettes documentation\n\nSample Data Sources:\n\nGapminder dataset (for categorical and quantitative mapping)\nU.S. demographic data (for diverging and sequential maps)\nSimulated survey data (for categorical comparison)",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Color & Accessibility</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_9_color_accessibility.html#setup-checklist",
+    "href": "weekly/module_week_9_color_accessibility.html#setup-checklist",
+    "title": "9  Color & Accessibility",
+    "section": "9.4 🛠️ Setup Checklist",
+    "text": "9.4 🛠️ Setup Checklist\nEnsure your environment includes:\npip install seaborn matplotlib colorcet pandas\nConfirm you can load sample datasets and apply color palettes using Seaborn and Matplotlib.",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Color & Accessibility</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_9_color_accessibility.html#lecture-outline",
+    "href": "weekly/module_week_9_color_accessibility.html#lecture-outline",
+    "title": "9  Color & Accessibility",
+    "section": "9.5 🧭 Lecture Outline",
+    "text": "9.5 🧭 Lecture Outline\n\n9.5.1 Session 1 (Theory + Hands-on)\n\nIntroduction: Why color matters in visualization\nColor theory basics — hue, saturation, brightness\nTypes of color schemes — sequential, diverging, categorical\nColor perception & accessibility — common pitfalls\nExperiment with Seaborn and Matplotlib color palettes\nApply ColorBrewer and Colorcet palettes to the previous week’s map visualizations\nDownload the Jupyter Notebook and Data",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Color & Accessibility</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_9_color_accessibility.html#starter-notebook-snippets",
+    "href": "weekly/module_week_9_color_accessibility.html#starter-notebook-snippets",
+    "title": "9  Color & Accessibility",
+    "section": "9.6 💻 Starter Notebook Snippets",
+    "text": "9.6 💻 Starter Notebook Snippets\n\n9.6.1 Using Seaborn palettes\nimport seaborn as sns\nimport matplotlib.pyplot as plt\n\n# Sequential palette\nsns.palplot(sns.color_palette(\"Blues\", 8))\nplt.title(\"Sequential palette example\")\n\n# Diverging palette\nsns.palplot(sns.diverging_palette(220, 20, n=8))\nplt.title(\"Diverging palette example\")\n\n# Categorical palette\nsns.palplot(sns.color_palette(\"Set2\", 8))\nplt.title(\"Categorical palette example\")\nplt.show()\n\n\n9.6.2 Applying color palettes to a chart\npenguins = sns.load_dataset(\"penguins\").dropna()\nsns.scatterplot(data=penguins, x=\"flipper_length_mm\", y=\"body_mass_g\", hue=\"species\", palette=\"Set2\")\nplt.title(\"Categorical color palette example\")\nplt.show()\n\n\n9.6.3 Testing color palettes for accessibility\n# Example: simulate grayscale or color blindness\nimport matplotlib.colors as mcolors\nimport numpy as np\n\n# Convert to grayscale to check luminance contrast\nimg = np.linspace(0, 1, 256).reshape(1, -1)\nplt.imshow(img, cmap=\"viridis\", aspect=\"auto\")\nplt.title(\"Luminance contrast check (Viridis)\")\nplt.axis('off')\nplt.show()",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Color & Accessibility</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_9_color_accessibility.html#in-class-activity",
+    "href": "weekly/module_week_9_color_accessibility.html#in-class-activity",
+    "title": "9  Color & Accessibility",
+    "section": "9.7 🧪 In-Class Activity",
+    "text": "9.7 🧪 In-Class Activity\n\nCreate 3 mini visualizations (one sequential, one diverging, one categorical) using Seaborn.\nUse ColorBrewer to test and adjust color schemes.\nSimulate color blindness and discuss readability.\nRedesign a prior week’s map or chart with improved accessibility.",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Color & Accessibility</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_9_color_accessibility.html#homework-due-next-monday-nov-3",
+    "href": "weekly/module_week_9_color_accessibility.html#homework-due-next-monday-nov-3",
+    "title": "10  Color & Accessibility",
+    "section": "10.8 🏠 Homework (Due next Monday, Nov 3)",
+    "text": "10.8 🏠 Homework (Due next Monday, Nov 3)\n\nChoose one of your visualizations from a previous week and redesign it to improve color and accessibility.\nInclude:\n\nOne before-and-after comparison of color schemes.\nDiscussion (150–250 words) of how your new design improves clarity and inclusivity.\nVerification of color accessibility (using simulator or contrast tool).\n\nSubmit .ipynb and .html.\n\nRubric (10 pts)\n\nAppropriate use of color schemes (3)\nAccessibility testing and discussion (3)\nClarity and improvement of redesigned visual (2)\nReproducibility and documentation (2)",
+    "crumbs": [
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Color & Accessibility</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_9_color_accessibility.html#optional-extensions",
+    "href": "weekly/module_week_9_color_accessibility.html#optional-extensions",
+    "title": "9  Color & Accessibility",
+    "section": "9.9 🧩 Optional Extensions",
+    "text": "9.9 🧩 Optional Extensions\n\nExplore colorcet for perceptually uniform colormaps.\nCreate a color legend that works both in grayscale and color.\nCompare the performance of different palettes in color‑blind simulation.",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Color & Accessibility</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_9_color_accessibility.html#submission-checklist",
+    "href": "weekly/module_week_9_color_accessibility.html#submission-checklist",
+    "title": "9  Color & Accessibility",
+    "section": "9.10 ✅ Submission Checklist",
+    "text": "9.10 ✅ Submission Checklist\nBefore submitting, make sure:\n\nYour assignment has fulfilled all the basic requirements listed above.\nUse Quarto to render the notebook into HTML and zip the files for submission.\nDouble-check the visualizations and your reflections in the HTML are properly organized and displayed.",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Color & Accessibility</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_10_relationships_modeling.html",
+    "href": "weekly/module_week_10_relationships_modeling.html",
+    "title": "10  Relationships & Modeling",
+    "section": "",
+    "text": "10.1 📖 Background & Motivation\nBeyond distributions and comparisons, data visualization can help us understand relationships between variables and evaluate model performance. This week introduces how to visualize bivariate relationships, regression fits, residuals, and uncertainty, providing the foundation for interpreting linear and non‑linear trends.\nStudents will learn how to use scatterplots, trend lines, confidence intervals, and diagnostic plots to explore patterns and assess model fit, combining statistical modeling with visual storytelling.",
+    "crumbs": [
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relationships & Modeling</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_10_relationships_modeling.html#learning-objectives",
+    "href": "weekly/module_week_10_relationships_modeling.html#learning-objectives",
+    "title": "10  Relationships & Modeling",
+    "section": "10.2 🔎 Learning Objectives",
+    "text": "10.2 🔎 Learning Objectives\n\nCreate scatterplots to explore relationships between two or more variables.\nVisualize regression lines and confidence intervals.\nUnderstand correlation vs. causation and potential pitfalls.\nEvaluate model residuals visually to check fit and assumptions.\nCommunicate model performance and uncertainty through effective visualization.",
+    "crumbs": [
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relationships & Modeling</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_10_relationships_modeling.html#readings-resources",
+    "href": "weekly/module_week_10_relationships_modeling.html#readings-resources",
+    "title": "10  Relationships & Modeling",
+    "section": "10.3 📚 Readings & Resources",
+    "text": "10.3 📚 Readings & Resources\n\nFundamentals of Data Visualization — chapters on relationships & uncertainty.\nSeaborn: regplot and lmplot\nStatsmodels: OLS Regression\nVisualizing Statistical Models\n\nSample Data Sources:\n\nPenguins dataset (bill length vs. flipper length)\nHousing price dataset (price vs. area)\nGapminder (GDP vs. life expectancy)",
+    "crumbs": [
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relationships & Modeling</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_10_relationships_modeling.html#setup-checklist",
+    "href": "weekly/module_week_10_relationships_modeling.html#setup-checklist",
+    "title": "10  Relationships & Modeling",
+    "section": "10.4 🛠️ Setup Checklist",
+    "text": "10.4 🛠️ Setup Checklist\nEnsure your environment includes:\npip install seaborn matplotlib statsmodels pandas numpy\nConfirm you can run regression visualizations and calculate correlations using Seaborn and Statsmodels.",
+    "crumbs": [
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relationships & Modeling</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_10_relationships_modeling.html#lecture-outline",
+    "href": "weekly/module_week_10_relationships_modeling.html#lecture-outline",
+    "title": "10  Relationships & Modeling",
+    "section": "10.5 🧭 Lecture Outline",
+    "text": "10.5 🧭 Lecture Outline\n\n10.5.1 Session 1 (75 min — Theory Focus)\n\nUnderstanding relationships: correlation vs. causation (10 min)\nScatterplots and trend lines — visualizing associations (15 min)\nSimple regression and confidence intervals (20 min)\nInterpreting model fit and residuals visually (20 min)\nVisual pitfalls: spurious correlation, overfitting, and omitted variables (10 min)\nDownload the Jupyter Notebook\n\n\n\n10.5.2 Session 2 (75 min — Hands-on Focus)\n\nCreating scatterplots with regression fits in Seaborn (20 min)\nAdding confidence intervals and customizing aesthetics (15 min)\nBuilding an OLS regression model with Statsmodels (20 min)\nVisualizing residuals and diagnostic plots (15 min)\nMini‑workshop: interpret one key relationship in your dataset (5 min)\nDownload the Jupyter Notebook\nA Working version of linked plotly plot can be downloaded here",
+    "crumbs": [
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relationships & Modeling</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_10_relationships_modeling.html#starter-notebook-snippets",
+    "href": "weekly/module_week_10_relationships_modeling.html#starter-notebook-snippets",
+    "title": "10  Relationships & Modeling",
+    "section": "10.6 💻 Starter Notebook Snippets",
+    "text": "10.6 💻 Starter Notebook Snippets\n\n10.6.1 Scatterplot with regression fit\nimport seaborn as sns\nimport matplotlib.pyplot as plt\n\npenguins = sns.load_dataset(\"penguins\").dropna()\nsns.lmplot(data=penguins, x=\"flipper_length_mm\", y=\"body_mass_g\", hue=\"species\", height=5, aspect=1.2)\nplt.title(\"Flipper length vs Body mass with regression line\")\nplt.show()\n\n\n10.6.2 Correlation matrix heatmap\nimport pandas as pd\ncorr = penguins.select_dtypes('number').corr()\nsns.heatmap(corr, annot=True, cmap='coolwarm', center=0)\nplt.title(\"Correlation matrix of numeric features\")\nplt.show()\n\n\n10.6.3 Residual plot\nsns.residplot(data=penguins, x=\"flipper_length_mm\", y=\"body_mass_g\", lowess=True, color=\"#4e79a7\")\nplt.title(\"Residual plot: checking nonlinearity\")\nplt.show()\n\n\n10.6.4 Regression with Statsmodels\nimport statsmodels.api as sm\nX = penguins[[\"flipper_length_mm\"]]\ny = penguins[\"body_mass_g\"]\nX = sm.add_constant(X)\nmodel = sm.OLS(y, X).fit()\nprint(model.summary())\n\n# Add predictions and visualize\npenguins['pred'] = model.predict(X)\nplt.scatter(penguins['flipper_length_mm'], y, label='Observed')\nplt.plot(penguins['flipper_length_mm'], penguins['pred'], color='red', label='Fitted line')\nplt.legend()\nplt.title(\"OLS Regression Fit\")\nplt.show()",
+    "crumbs": [
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relationships & Modeling</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_10_relationships_modeling.html#in-class-activity",
+    "href": "weekly/module_week_10_relationships_modeling.html#in-class-activity",
+    "title": "10  Relationships & Modeling",
+    "section": "10.7 🧪 In-Class Activity",
+    "text": "10.7 🧪 In-Class Activity\n\nCreate scatterplots for multiple variable pairs and interpret patterns.\nBuild a simple regression model and visualize fit and residuals.\nDiscuss what model visualization reveals beyond summary statistics.\nExplore an example of spurious correlation and discuss implications.",
+    "crumbs": [
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relationships & Modeling</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_10_relationships_modeling.html#homework-due-next-thursday-nov-6",
+    "href": "weekly/module_week_10_relationships_modeling.html#homework-due-next-thursday-nov-6",
+    "title": "11  Relationships & Modeling",
+    "section": "11.8 🏠 Homework (Due next Thursday, Nov 6)",
+    "text": "11.8 🏠 Homework (Due next Thursday, Nov 6)\n\nSelect a dataset of your choice (or continue from a previous week).\nProduce the following:\n\nOne scatterplot with regression fit and confidence interval.\nOne correlation matrix heatmap.\nOne residual plot illustrating model fit or deviation.\n\nInclude a brief interpretation (200–300 words) explaining:\n\nWhat relationships you observed.\nHow visualization helped confirm or question your assumptions.\n\nSubmit .ipynb and .html.\n\nRubric (10 pts)\n\nCorrect implementation of regression and correlation plots (4)\nQuality of interpretation and insights (3)\nClarity of visualizations and labeling (2)\nCode reproducibility and documentation (1)",
+    "crumbs": [
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Relationships & Modeling</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_10_relationships_modeling.html#optional-extensions",
+    "href": "weekly/module_week_10_relationships_modeling.html#optional-extensions",
+    "title": "10  Relationships & Modeling",
+    "section": "10.9 🧩 Optional Extensions",
+    "text": "10.9 🧩 Optional Extensions\n\nAdd multiple regression and visualize partial effects.\nCompare linear vs. non-linear fits.\nVisualize prediction intervals and uncertainty bands.\nExplore pairplots for multivariate relationships.",
+    "crumbs": [
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relationships & Modeling</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_10_relationships_modeling.html#submission-checklist",
+    "href": "weekly/module_week_10_relationships_modeling.html#submission-checklist",
+    "title": "10  Relationships & Modeling",
+    "section": "10.10 ✅ Submission Checklist",
+    "text": "10.10 ✅ Submission Checklist\nBefore submitting, make sure:\n\nYour assignment has fulfilled all the basic requirements listed above.\nUse Quarto to render the notebook into HTML and zip the files for submission.\nDouble-check the visualizations and your reflections in the HTML are properly organized and displayed.",
+    "crumbs": [
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relationships & Modeling</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_11_uncertainty_error_visualization.html",
+    "href": "weekly/module_week_11_uncertainty_error_visualization.html",
+    "title": "11  Uncertainty & Error Visualization",
+    "section": "",
+    "text": "11.1 📖 Background & Motivation\nData visualizations often emphasize what is known—but communicating what is uncertain is equally critical for honest and transparent storytelling. This week explores how to represent statistical uncertainty, variability, and measurement error using visual design. Students will learn how to use error bars, confidence bands, sampling distributions, and bootstrap visualizations to convey uncertainty clearly and responsibly.",
+    "crumbs": [
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Uncertainty & Error</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_11_uncertainty_error_visualization.html#learning-objectives",
+    "href": "weekly/module_week_11_uncertainty_error_visualization.html#learning-objectives",
+    "title": "11  Uncertainty & Error Visualization",
+    "section": "11.2 🔎 Learning Objectives",
+    "text": "11.2 🔎 Learning Objectives\n\nUnderstand the sources of uncertainty in data and models.\nDifferentiate between standard deviation, standard error, and confidence interval.\nVisualize uncertainty with error bars, ribbons, and confidence bands.\nCommunicate uncertainty effectively without misleading interpretation.\nApply resampling or bootstrapping methods for visual inference.",
+    "crumbs": [
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Uncertainty & Error</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_11_uncertainty_error_visualization.html#readings-resources",
+    "href": "weekly/module_week_11_uncertainty_error_visualization.html#readings-resources",
+    "title": "11  Uncertainty & Error Visualization",
+    "section": "11.3 📚 Readings & Resources",
+    "text": "11.3 📚 Readings & Resources\n\nFundamentals of Data Visualization — Chapter on uncertainty.\nWhy We Should Visualize Uncertainty (Nature)\nSeaborn confidence intervals documentation\nVisualizing Uncertainty (Information is Beautiful)\n\nSample Data Sources:\n\nSimulated sample means and bootstraps\nGapminder GDP data (yearly changes)\nExperimental datasets (e.g., survey or sensor data)",
+    "crumbs": [
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Uncertainty & Error</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_11_uncertainty_error_visualization.html#setup-checklist",
+    "href": "weekly/module_week_11_uncertainty_error_visualization.html#setup-checklist",
+    "title": "11  Uncertainty & Error Visualization",
+    "section": "11.4 🛠️ Setup Checklist",
+    "text": "11.4 🛠️ Setup Checklist\nEnsure your environment includes:\npip install seaborn matplotlib numpy pandas scipy\nVerify that Seaborn is configured to display confidence intervals and that Matplotlib renders error bars correctly.",
+    "crumbs": [
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Uncertainty & Error</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_11_uncertainty_error_visualization.html#lecture-outline",
+    "href": "weekly/module_week_11_uncertainty_error_visualization.html#lecture-outline",
+    "title": "11  Uncertainty & Error Visualization",
+    "section": "11.5 🧭 Lecture Outline",
+    "text": "11.5 🧭 Lecture Outline\n\n11.5.1 Session 1 (Theory Focus)\n\nWhat is uncertainty? Sources in data collection and modeling\nStandard deviation, standard error, and confidence intervals\nVisual metaphors for uncertainty (error bars, ribbons, shaded regions)\nCommon pitfalls: false precision, overlapping intervals, and transparency\nCase studies: how media and research visualize uncertainty\n\n\n\n11.5.2 Session 2 (Hands-on Focus)\n\nPlotting error bars with Seaborn and Matplotlib\nAdding confidence bands around regression lines\nSimulating sampling distributions and bootstrap intervals\nImprove one of your previous plots by including uncertainty\n11.6 Download the hands-on Jupyter Notebook",
+    "crumbs": [
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Uncertainty & Error</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_11_uncertainty_error_visualization.html#starter-notebook-snippets",
+    "href": "weekly/module_week_11_uncertainty_error_visualization.html#starter-notebook-snippets",
+    "title": "11  Uncertainty & Error Visualization",
+    "section": "11.7 💻 Starter Notebook Snippets",
+    "text": "11.7 💻 Starter Notebook Snippets\n\n11.7.1 Adding error bars\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Simulated means and standard errors\ngroups = ['A','B','C','D']\nmeans = [20, 23, 25, 22]\nse = [1.5, 2.0, 1.2, 1.8]\n\nplt.bar(groups, means, yerr=se, capsize=5, color='#4e79a7')\nplt.title('Bar chart with error bars')\nplt.ylabel('Mean value')\nplt.show()\n\n\n11.7.2 Confidence intervals with Seaborn\nimport seaborn as sns\npenguins = sns.load_dataset('penguins').dropna()\nsns.lmplot(data=penguins, x='flipper_length_mm', y='body_mass_g', ci=95)\nplt.title('Regression with 95% confidence interval')\nplt.show()\n\n\n11.7.3 Bootstrap sampling visualization\nnp.random.seed(42)\ndata = np.random.normal(50, 10, 100)\nbootstrap_means = [np.mean(np.random.choice(data, size=100, replace=True)) for _ in range(1000)]\n\nsns.histplot(bootstrap_means, kde=True)\nplt.axvline(np.mean(data), color='red', linestyle='--', label='Observed mean')\nplt.title('Bootstrap sampling distribution of the mean')\nplt.legend()\nplt.show()",
+    "crumbs": [
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Uncertainty & Error</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_11_uncertainty_error_visualization.html#in-class-activity",
+    "href": "weekly/module_week_11_uncertainty_error_visualization.html#in-class-activity",
+    "title": "11  Uncertainty & Error Visualization",
+    "section": "11.8 🧪 In-Class Activity",
+    "text": "11.8 🧪 In-Class Activity\n\nCompare bar charts with and without error bars — what changes in interpretation?\nExplore how sample size affects confidence interval width.\nVisualize a bootstrap sampling distribution and discuss its meaning.\nRedesign a visualization from your earlier project to include uncertainty representation.",
+    "crumbs": [
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Uncertainty & Error</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_11_uncertainty_error_visualization.html#homework-due-next-thursday-nov-13",
+    "href": "weekly/module_week_11_uncertainty_error_visualization.html#homework-due-next-thursday-nov-13",
+    "title": "12  Uncertainty & Error Visualization",
+    "section": "12.9 🏠 Homework (Due next Thursday, Nov 13)",
+    "text": "12.9 🏠 Homework (Due next Thursday, Nov 13)\n\nSelect a dataset of your choice (or use one from a prior week).\nProduce:\n\nOne bar or line chart with error bars or confidence bands.\nOne bootstrap visualization or sampling distribution.\nA short (200–300 words) reflection on how uncertainty affects the interpretation of your results.\n\nSubmit .ipynb and .html.\n\nRubric (10 pts)\n\nCorrect calculation and visualization of uncertainty (4)\nClarity and labeling of intervals/bands (2)\nQuality of interpretation and reflection (3)\nReproducibility and documentation (1)",
+    "crumbs": [
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Uncertainty & Error</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_11_uncertainty_error_visualization.html#optional-extensions",
+    "href": "weekly/module_week_11_uncertainty_error_visualization.html#optional-extensions",
+    "title": "11  Uncertainty & Error Visualization",
+    "section": "11.10 🧩 Optional Extensions",
+    "text": "11.10 🧩 Optional Extensions\n\nCompare 68%, 90%, and 95% confidence intervals visually.\nAdd uncertainty bands to model predictions from Statsmodels.\nVisualize uncertainty in map-based data (e.g., population margins of error).",
+    "crumbs": [
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Uncertainty & Error</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_11_uncertainty_error_visualization.html#submission-checklist",
+    "href": "weekly/module_week_11_uncertainty_error_visualization.html#submission-checklist",
+    "title": "11  Uncertainty & Error Visualization",
+    "section": "11.11 ✅ Submission Checklist",
+    "text": "11.11 ✅ Submission Checklist\nBefore submitting, make sure:\n\nYour assignment has fulfilled all the basic requirements listed above.\nUse Quarto to render the notebook into HTML and zip the files for submission.\nDouble-check the visualizations and your reflections in the HTML are properly organized and displayed.",
+    "crumbs": [
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Uncertainty & Error</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_12_viz_ml_nlp.html",
+    "href": "weekly/module_week_12_viz_ml_nlp.html",
+    "title": "12  Visualization for ML/NLP",
+    "section": "",
+    "text": "12.1 📖 Background & Motivation\nModern machine learning and NLP models generate complex outputs — from feature importances and prediction probabilities to topic clusters and embeddings. Visualization provides the bridge between model mechanics and human understanding. This week focuses on how to visualize model performance, interpret model decisions, and explore textual data patterns.",
+    "crumbs": [
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Visualization for ML/NLP</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_12_viz_ml_nlp.html#learning-objectives",
+    "href": "weekly/module_week_12_viz_ml_nlp.html#learning-objectives",
+    "title": "12  Visualization for ML/NLP",
+    "section": "12.2 🔎 Learning Objectives",
+    "text": "12.2 🔎 Learning Objectives\n\nPlot feature importance for classification and regression models.\nVisualize model performance with confusion matrices and ROC curves.\nUse embeddings and clustering visualizations to interpret NLP models.\nGenerate word clouds and topic cluster plots using BERTopic.\nUnderstand visualization’s role in the ML workflow for interpretability and trust.",
+    "crumbs": [
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Visualization for ML/NLP</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_12_viz_ml_nlp.html#readings-resources",
+    "href": "weekly/module_week_12_viz_ml_nlp.html#readings-resources",
+    "title": "12  Visualization for ML/NLP",
+    "section": "12.3 📚 Readings & Resources",
+    "text": "12.3 📚 Readings & Resources\n\nHands-On Machine Learning with Scikit-Learn & TensorFlow — chapters on model evaluation.\nscikit-learn: Model Evaluation & Visualization\nBERTopic: Topic Modeling & Visualization\nWordCloud: Python WordCloud Library\nInterpretable ML Book by Christoph Molnar\n\nSample Datasets:\n\nIMDB Reviews (text sentiment classification)\nNews Categories or 20 Newsgroups dataset\nAny scikit-learn classification dataset (e.g., iris, digits)",
+    "crumbs": [
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Visualization for ML/NLP</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_12_viz_ml_nlp.html#setup-checklist",
+    "href": "weekly/module_week_12_viz_ml_nlp.html#setup-checklist",
+    "title": "12  Visualization for ML/NLP",
+    "section": "12.4 🛠️ Setup Checklist",
+    "text": "12.4 🛠️ Setup Checklist\nEnsure your environment includes:\npip install scikit-learn matplotlib seaborn wordcloud bertopic numpy pandas  \npip install jupyter_compare_view datasets umap-learn hdbscan sentence-transformers\nConfirm you can train a simple classifier, generate predictions, and render evaluation plots.",
+    "crumbs": [
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Visualization for ML/NLP</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_12_viz_ml_nlp.html#lecture-outline",
+    "href": "weekly/module_week_12_viz_ml_nlp.html#lecture-outline",
+    "title": "12  Visualization for ML/NLP",
+    "section": "12.5 🧭 Lecture Outline",
+    "text": "12.5 🧭 Lecture Outline\n\n12.5.1 Session 1 (75 min — Theory Focus)\n\nRole of visualization in the ML workflow (10 min)\nModel interpretability and explainability (10 min)\nFeature importance and coefficient visualization (20 min)\nModel evaluation plots: confusion matrix, ROC curve, precision-recall (20 min)\nDiscussion: visualization ethics and bias (15 min)\n\n\n\n12.5.2 Session 2 (75 min — Hands-on Focus)\n\nTrain and evaluate a classifier (IMDB reviews or scikit-learn dataset) (20 min)\nPlot confusion matrix and ROC curve (20 min)\nVisualize feature importances or SHAP-like explanations (15 min)\nGenerate word clouds and BERTopic clusters for NLP data (15 min)\nMini-workshop: interpret model predictions visually (5 min)\nDownload the demo files for ML classification here\nDownload the demo files NLP Topic Modeling here",
+    "crumbs": [
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Visualization for ML/NLP</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_12_viz_ml_nlp.html#starter-notebook-snippets",
+    "href": "weekly/module_week_12_viz_ml_nlp.html#starter-notebook-snippets",
+    "title": "12  Visualization for ML/NLP",
+    "section": "12.6 💻 Starter Notebook Snippets",
+    "text": "12.6 💻 Starter Notebook Snippets\n\n12.6.1 Feature Importance Plot\n\n\n\n\n\n\n\n\n12.6.2 Confusion Matrix and ROC Curve\n\n\n\n\n\n\n\n\n12.6.3 Word Cloud and Topic Clusters\n\n\n\n\n\n\nfrom bertopic import BERTopic\nfrom sklearn.datasets import fetch_20newsgroups\n\nnewsgroups = fetch_20newsgroups(subset='all')\ndocs = newsgroups.data[:200]\n\nmodel = BERTopic(verbose=True)\ntopics, probs = model.fit_transform(docs)\nmodel.visualize_topics()",
+    "crumbs": [
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Visualization for ML/NLP</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_12_viz_ml_nlp.html#in-class-activity",
+    "href": "weekly/module_week_12_viz_ml_nlp.html#in-class-activity",
+    "title": "12  Visualization for ML/NLP",
+    "section": "12.7 🧪 In-Class Activity",
+    "text": "12.7 🧪 In-Class Activity\n\nPlot feature importance and discuss which features drive predictions.\nEvaluate model performance visually using confusion matrix and ROC curve.\nGenerate a word cloud summarizing frequent terms from text data.\nUse BERTopic to visualize clusters of topics from IMDB reviews or news data.\nDiscuss visual explainability: how do these visualizations build model trust?",
+    "crumbs": [
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Visualization for ML/NLP</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_12_viz_ml_nlp.html#homework-due-monday-december-1st",
+    "href": "weekly/module_week_12_viz_ml_nlp.html#homework-due-monday-december-1st",
+    "title": "13  Visualization for ML/NLP",
+    "section": "13.8 🏠 Homework (Due Monday, December 1st)",
+    "text": "13.8 🏠 Homework (Due Monday, December 1st)\n\nChoose either a structured dataset (classification/regression) or an NLP text dataset from Hugging Face (ag = load_dataset(“ag_news”)).\n\nProduce:\n\nOne feature importance plot.\nOne model evaluation visualization (confusion matrix or ROC curve).\nOne text visualization (word cloud, BERTopic topic cluster, or BERTopic Topic Word Scores).\n\nInclude a 200–300 word reflection on how visualization supports model interpretability.\nSubmit .ipynb and .html.",
+    "crumbs": [
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Visualization for ML/NLP</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_12_viz_ml_nlp.html#optional-extensions",
+    "href": "weekly/module_week_12_viz_ml_nlp.html#optional-extensions",
+    "title": "12  Visualization for ML/NLP",
+    "section": "12.9 🧩 Optional Extensions",
+    "text": "12.9 🧩 Optional Extensions\n\nCreate animated confusion matrices or topic evolution plots.\nCompare the performance of different classifiers.",
+    "crumbs": [
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Visualization for ML/NLP</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_12_viz_ml_nlp.html#submission-checklist",
+    "href": "weekly/module_week_12_viz_ml_nlp.html#submission-checklist",
+    "title": "12  Visualization for ML/NLP",
+    "section": "12.10 ✅ Submission Checklist",
+    "text": "12.10 ✅ Submission Checklist\nBefore submitting, make sure:\n\nYour assignment has fulfilled all the basic requirements listed above.\nUse Quarto to render the notebook into HTML and zip the files for submission.\nDouble-check the visualizations and your reflections in the HTML are properly organized and displayed.",
+    "crumbs": [
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Visualization for ML/NLP</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/final_project_module_page.html",
+    "href": "weekly/final_project_module_page.html",
+    "title": "Final Project — DATS 2102: Data Visualization for Data Science",
+    "section": "",
+    "text": "🎯 Purpose & Scope\nThe final project synthesizes everything you’ve learned across the course. You will identify a compelling question, gather/curate data, apply rigorous wrangling, design effective visualizations (static and/or interactive), and communicate clear insights for a non‑expert audience.",
+    "crumbs": [
+      "Final Project"
+    ]
+  },
+  {
+    "objectID": "weekly/final_project_module_page.html#learning-objectives",
+    "href": "weekly/final_project_module_page.html#learning-objectives",
+    "title": "Final Project — DATS 2102: Data Visualization for Data Science",
+    "section": "✅ Learning Objectives",
+    "text": "✅ Learning Objectives\nBy the end, you will be able to:\n\nFrame an analytical question and select appropriate data sources.\nApply robust pandas wrangling (selection/filtering, sorting, groupby+aggregation, joins/merges, tidy reshaping).\nDesign visuals aligned to purpose: distributions, comparisons, relationships, uncertainty (Weeks 3–11).\nIntegrate specialized techniques as appropriate: mapping (Week 8), color & accessibility (Week 9), ML/NLP visualizations (Week 12).\nCommunicate a coherent data story with clear text, labels, and annotations (Week 7).\nEnsure reproducibility and ethical, accessible practice throughout.",
+    "crumbs": [
+      "Final Project"
+    ]
+  },
+  {
+    "objectID": "weekly/final_project_module_page.html#project-tracks-mix-thoughtfully",
+    "href": "weekly/final_project_module_page.html#project-tracks-mix-thoughtfully",
+    "title": "Final Project — DATS 2102: Data Visualization for Data Science",
+    "section": "🧵 Project Tracks (Mix thoughtfully)",
+    "text": "🧵 Project Tracks (Mix thoughtfully)\n\nA. Data Story (EDA to Insight): A narrative with 6–10 well‑designed figures revealing a substantive finding.\nB. Map‑Based Analysis: Spatial joins/classification; 2+ choropleths and at least one interactive map (Folium/Plotly). Discuss projection/CRS choices.\nC. Interactive Mini‑Dashboard: A focused multi‑view interface (Plotly, Panel, or simple Jupyter widgets) with linked visuals and annotations.\nD. ML/NLP Visualization: Train a simple model; show feature importance, confusion matrix/ROC, and an NLP visualization (word cloud or topic clusters).",
+    "crumbs": [
+      "Final Project"
+    ]
+  },
+  {
+    "objectID": "weekly/final_project_module_page.html#required-deliverables-submit-all",
+    "href": "weekly/final_project_module_page.html#required-deliverables-submit-all",
+    "title": "Final Project — DATS 2102: Data Visualization for Data Science",
+    "section": "📦 Required Deliverables (submit all)",
+    "text": "📦 Required Deliverables (submit all)\n\nJupyter Notebook(s) with narrative markdown and all figures.\nQuarto rendered HTML(s) of the notebook(s).\nA data folder or data access instructions (URLs, retrieval scripts). If restricted, include a synthetic sample and schema.\nData dictionary (variables, units, definitions, any transformations).\nSlide deck (7–8 minutes worth of slides, note that it is not the presentation time) for your presentation (PDF or PPTX).\nA recorded short video/audio (1 to 3 minutes) for demonstrating your work (e.g., using Zoom).\nOptional: publish your work via GitHub Pages or Quarto Pub and include the URL in the submission.",
+    "crumbs": [
+      "Final Project"
+    ]
+  },
+  {
+    "objectID": "weekly/final_project_module_page.html#milestones-timeline",
+    "href": "weekly/final_project_module_page.html#milestones-timeline",
+    "title": "Final Project — DATS 2102: Data Visualization for Data Science",
+    "section": "🗓️ Milestones & Timeline",
+    "text": "🗓️ Milestones & Timeline\n\nFinals Week: In‑class presentation + final submission of all artifacts.",
+    "crumbs": [
+      "Final Project"
+    ]
+  },
+  {
+    "objectID": "weekly/final_project_module_page.html#data-sources-suggested",
+    "href": "weekly/final_project_module_page.html#data-sources-suggested",
+    "title": "Final Project — DATS 2102: Data Visualization for Data Science",
+    "section": "🔍 Data Sources (suggested)",
+    "text": "🔍 Data Sources (suggested)\n\nOpen Data DC, Our World in Data, Gapminder, FiveThirtyEight, World Bank, BLS/BEA, NOAA, US DOT BTS, or vetted institutional repositories.\nYour own research/organizational data (ensure permission and anonymization if needed).\n\n\nCite all datasets with links and access dates in your README and slides.",
+    "crumbs": [
+      "Final Project"
+    ]
+  },
+  {
+    "objectID": "weekly/final_project_module_page.html#allowed-tools",
+    "href": "weekly/final_project_module_page.html#allowed-tools",
+    "title": "Final Project — DATS 2102: Data Visualization for Data Science",
+    "section": "🧰 Allowed Tools",
+    "text": "🧰 Allowed Tools\n\nCore: Python (pandas, numpy, matplotlib, seaborn, plotly), Jupyter/Quarto.\nSpatial (optional): geopandas, folium, mapclassify.\nML/NLP (optional): scikit‑learn, wordcloud, BERTopic (or similar).\nDesign & accessibility: ColorBrewer/Colorcet, contrast checkers; adhere to Week 9 guidance.",
+    "crumbs": [
+      "Final Project"
+    ]
+  },
+  {
+    "objectID": "weekly/final_project_module_page.html#quality-expectations",
+    "href": "weekly/final_project_module_page.html#quality-expectations",
+    "title": "Final Project — DATS 2102: Data Visualization for Data Science",
+    "section": "🧪 Quality Expectations",
+    "text": "🧪 Quality Expectations\n\nAudience‑appropriate explanations; avoid jargon without definitions.\nEffective encodings and color choices; legends/direct labels; informative titles and captions.\nUncertainty shown where appropriate (error bars, bands, bootstrap summaries).\nAccessibility: palette choices that remain interpretable with color‑vision deficiencies; sufficient contrast; alt text in slides where feasible.\nReproducibility: clean execution top‑to‑bottom; deterministic seeds; clear env instructions.\nEthics: respect license/terms; anonymize sensitive fields; discuss limitations and potential biases.",
+    "crumbs": [
+      "Final Project"
+    ]
+  },
+  {
+    "objectID": "weekly/final_project_module_page.html#grading-rubric-40-pts-total",
+    "href": "weekly/final_project_module_page.html#grading-rubric-40-pts-total",
+    "title": "Final Project — DATS 2102: Data Visualization for Data Science",
+    "section": "🧮 Grading Rubric (40 pts total)",
+    "text": "🧮 Grading Rubric (40 pts total)\n\nProblem Framing & Relevance (5 pts): Clear question, audience, and motivation.\nData Acquisition & Ethics (4 pts): Credible sources, citations, permissions/privacy considerations.\nWrangling & Reproducibility (6 pts): Correct, readable code using selection/sorting, groupby+agg, joins, tidy reshaping; runnable notebook & env notes.\nVisualization Quality & Variety (10 pts): Appropriate chart choices (distributions, comparisons, relationships, uncertainty; maps/ML/NLP as relevant), labeling/annotations, narrative flow.\nAnalysis & Insight (7 pts): Sound reasoning, limitations addressed, meaningful takeaways.\nCommunication & Writing (4 pts): Clarity of markdown narrative, captions, and organization; slide design.\nPresentation & Q&A (4 pts): Timing, delivery, visual clarity, ability to answer questions.",
+    "crumbs": [
+      "Final Project"
+    ]
+  },
+  {
+    "objectID": "weekly/final_project_module_page.html#presentation-guidelines-78-minutes",
+    "href": "weekly/final_project_module_page.html#presentation-guidelines-78-minutes",
+    "title": "Final Project — DATS 2102: Data Visualization for Data Science",
+    "section": "🗣️ Presentation Guidelines (7–8 minutes)",
+    "text": "🗣️ Presentation Guidelines (7–8 minutes)\n\nOpen with the problem and why it matters (≤ 60 seconds).\nShow 3–5 strongest visuals; narrate what the viewer should notice.\nInclude at least one slide on methods/wrangling (brief) and one on limitations & next steps.\nEnd with a single insight slide (one sentence + supporting figure).",
+    "crumbs": [
+      "Final Project"
+    ]
+  },
+  {
+    "objectID": "weekly/final_project_module_page.html#collaboration-ai-and-academic-integrity",
+    "href": "weekly/final_project_module_page.html#collaboration-ai-and-academic-integrity",
+    "title": "Final Project — DATS 2102: Data Visualization for Data Science",
+    "section": "🤝 Collaboration, AI, and Academic Integrity",
+    "text": "🤝 Collaboration, AI, and Academic Integrity\n\nFollow course AI policy: AI tools may assist with scaffolding (formatting code, minor debugging, grammar). They may not fabricate results or replace your own analysis/interpretation. Disclose any AI assistance in the README.\nCite all data, code snippets, and external visuals. Plagiarism or undisclosed AI‑generated work violates university policy.",
+    "crumbs": [
+      "Final Project"
+    ]
+  },
+  {
+    "objectID": "weekly/final_project_module_page.html#submission-checklist",
+    "href": "weekly/final_project_module_page.html#submission-checklist",
+    "title": "Final Project — DATS 2102: Data Visualization for Data Science",
+    "section": "✅ Submission Checklist",
+    "text": "✅ Submission Checklist\nBefore submitting on Blackboard, ensure:\n\nYour project has fulfilled all the basic requirements listed above.\nUsed Quarto to render the notebook into HTML and zip the files for submission.\nDouble-check the visualizations and your reflections in the HTML are properly organized and displayed.\nDo not forget the README file, the slides, and the short video/audio",
+    "crumbs": [
+      "Final Project"
+    ]
+  },
+  {
+    "objectID": "weekly/final_project_module_page.html#tips-for-success",
+    "href": "weekly/final_project_module_page.html#tips-for-success",
+    "title": "Final Project — DATS 2102: Data Visualization for Data Science",
+    "section": "💡 Tips for Success",
+    "text": "💡 Tips for Success\n\nStart with a sketch of your story and a list of figures you’ll need.\nIterate: rough plots → refine encodings/labels → polish.\nPrefer fewer, better figures over many similar ones.\nKeep code cells small and well‑commented; use functions where helpful.",
+    "crumbs": [
+      "Final Project"
+    ]
+  },
+  {
+    "objectID": "weekly/final_project_module_page.html#submission-deadline-monday-december-15-2025.-firm-deadline",
+    "href": "weekly/final_project_module_page.html#submission-deadline-monday-december-15-2025.-firm-deadline",
+    "title": "Final Project — DATS 2102: Data Visualization for Data Science",
+    "section": "🏠 Submission Deadline (Monday, December 15, 2025. Firm Deadline)",
+    "text": "🏠 Submission Deadline (Monday, December 15, 2025. Firm Deadline)",
+    "crumbs": [
+      "Final Project"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_3_distributions_variation.html",
+    "href": "weekly/module_week_3_distributions_variation.html",
+    "title": "3  Distributions & Variations",
+    "section": "",
+    "text": "3.1 📖 Background & Motivation\nUnderstanding how data is distributed is the foundation of exploratory data analysis. Whether we want to know if flight delays cluster around certain times or if iris flower species differ in petal length, distribution plots reveal the shape, spread, and potential outliers. Poorly chosen or misinterpreted plots can obscure variation and mislead conclusions.\nDistributions are more than just “shapes of data”. They tell us about central tendency (where the bulk of data lies), spread (how much variation exists), skewness (whether data is lopsided), and outliers (values that are unusual or extreme). These insights form the basis for both descriptive statistics and inferential modeling. For data scientists, knowing how to visualize distributions effectively is an essential skill for diagnosing problems, preparing data, and communicating results.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Distributions & Variations</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_3_distributions_variation.html#learning-objectives",
+    "href": "weekly/module_week_3_distributions_variation.html#learning-objectives",
+    "title": "3  Distributions & Variations",
+    "section": "3.2 🔎 Learning Objectives",
+    "text": "3.2 🔎 Learning Objectives\n\nChoose and interpret appropriate distribution plots.\nApply binning strategies and kernel density estimation.\nConstruct and read empirical cumulative distribution functions (ECDFs).\nCompare plots to understand spread, skewness, and outliers.\nCritically evaluate the strengths and weaknesses of each distribution visualization technique.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Distributions & Variations</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_3_distributions_variation.html#readings-resources",
+    "href": "weekly/module_week_3_distributions_variation.html#readings-resources",
+    "title": "3  Distributions & Variations",
+    "section": "3.3 📚 Readings & Resources",
+    "text": "3.3 📚 Readings & Resources\n\nSeaborn Distribution Plots — practical guide to histograms, KDEs, and more.\nMatplotlib Histograms — documentation for histogram basics.\nEDA Concepts — blog overview of exploratory data analysis.\nFundamentals of Data Visualization — chapter on histograms and density plots.\n\nSample Data Sources:\n\nFlight delay data (US DOT Bureau of Transportation Statistics)\nIris dataset (seaborn.load_dataset('iris'))\nTitanic dataset (Kaggle / Seaborn)\nCOVID-19 case data (Our World in Data)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Distributions & Variations</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_3_distributions_variation.html#setup-checklist",
+    "href": "weekly/module_week_3_distributions_variation.html#setup-checklist",
+    "title": "3  Distributions & Variations",
+    "section": "3.4 🛠️ Setup Checklist",
+    "text": "3.4 🛠️ Setup Checklist\nEnsure you can run:\npip install seaborn matplotlib pandas\nCheck that you can load the iris dataset and render a histogram before class.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Distributions & Variations</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_3_distributions_variation.html#lecture-outline",
+    "href": "weekly/module_week_3_distributions_variation.html#lecture-outline",
+    "title": "3  Distributions & Variations",
+    "section": "3.5 🧭 Lecture Outline",
+    "text": "3.5 🧭 Lecture Outline\n\n3.5.1 Session 1 (75 min)\n\nMotivation: Why study distributions? Examples from real-world datasets (10 min)\nHistograms & binning choices: impact of bin width on interpretation (20 min)\nKernel density estimation: intuition, bandwidth selection, pros/cons (25 min)\nHands-on with iris dataset: plot histograms and KDEs for sepal/petal features (20 min)\n\n\n\n3.5.2 Session 2 (75 min)\n\nRecap & troubleshooting from Session 1 (10 min)\nBoxplots & violin plots: comparing categories and visualizing spread (25 min)\nECDF: cumulative view of distributions, why it’s useful (20 min)\nWorkshop: students choose dataset, produce 2–3 distribution plots, peer feedback (20 min)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Distributions & Variations</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_3_distributions_variation.html#starter-notebook-snippets",
+    "href": "weekly/module_week_3_distributions_variation.html#starter-notebook-snippets",
+    "title": "3  Distributions & Variations",
+    "section": "3.6 💻 Starter Notebook Snippets",
+    "text": "3.6 💻 Starter Notebook Snippets\nimport seaborn as sns\nimport matplotlib.pyplot as plt\n\niris = sns.load_dataset('iris')\n\n# Histogram\nsns.histplot(iris['sepal_length'], bins=20, kde=False)\n\n# KDE\nsns.kdeplot(iris['sepal_length'], fill=True)\n\n# Boxplot by species\nsns.boxplot(data=iris, x='species', y='sepal_length')\n\n# ECDF\ndef ecdf(data):\n    x = np.sort(data)\n    y = np.arange(1, len(x)+1) / len(x)\n    return x, y\n\nimport numpy as np\nx, y = ecdf(iris['sepal_length'])\nplt.plot(x, y, marker='.', linestyle='none')\nplt.xlabel('Sepal length')\nplt.ylabel('ECDF')",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Distributions & Variations</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_3_distributions_variation.html#in-class-activity",
+    "href": "weekly/module_week_3_distributions_variation.html#in-class-activity",
+    "title": "3  Distributions & Variations",
+    "section": "3.7 🧪 In-Class Activity",
+    "text": "3.7 🧪 In-Class Activity\n\nCompare histogram vs. KDE of flight delay data. Which communicates central tendency more clearly? Which better shows multimodality?\nPlot boxplot of iris petal length by species. Discuss: how does this compare to histograms?\nConstruct ECDFs for sepal width. What does it reveal about spread and skewness?\nGroup work: each team selects a dataset and produces multiple distribution plots, then explains which is most effective.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Distributions & Variations</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_3_distributions_variation.html#homework",
+    "href": "weekly/module_week_3_distributions_variation.html#homework",
+    "title": "3  Distributions & Variations",
+    "section": "3.8 🏠 Homework",
+    "text": "3.8 🏠 Homework\n\nSelect one dataset (one from the Sample Data Sources or one of your choice).\nFor the dataset:\n\nProduce at least 3 distribution plots (histogram, KDE, ECDF, box/violin).\n\nInterpret shape, spread, skew, and outliers in markdown.\n\nReflect on the pros/cons of each visualization type.\n\nAdd at least one annotated chart highlighting a key pattern.\n\n\nUse Quarto to render your notebook and submit the zip file.\n\nRubric (10 pts)\n\nCorrect use of multiple plot types (4)\nClear interpretation and discussion (3)\nLabeling, annotations, and readability (2)\nReproducibility (1)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Distributions & Variations</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_3_distributions_variation.html#optional-extensions",
+    "href": "weekly/module_week_3_distributions_variation.html#optional-extensions",
+    "title": "3  Distributions & Variations",
+    "section": "3.9 🧩 Optional Extensions",
+    "text": "3.9 🧩 Optional Extensions\n\nExperiment with different bin sizes in histograms and compare results.\nOverlay histogram and KDE to show complementarity.\nUse sns.pairplot to examine multiple distributions and correlations.\nCompare distributions across groups using facet plots.\nTry violin plots with split by category.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Distributions & Variations</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_3_distributions_variation.html#submission-checklist",
+    "href": "weekly/module_week_3_distributions_variation.html#submission-checklist",
+    "title": "3  Distributions & Variations",
+    "section": "3.10 ✅ Submission Checklist",
+    "text": "3.10 ✅ Submission Checklist\nBefore submitting, make sure:\n\nYour assignment has fulfilled all the basic requirements listed above.\nUse Quarto to render the notebook into HTML and zip the files for submission.\nDouble-check the visualizations and your reflections in the HTML are properly organized and displayed.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Distributions & Variations</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_12_viz_ml_nlp.html#homework",
+    "href": "weekly/module_week_12_viz_ml_nlp.html#homework",
+    "title": "12  Visualization for ML/NLP",
+    "section": "12.8 🏠 Homework",
+    "text": "12.8 🏠 Homework\n\nChoose either a structured dataset (classification/regression) or an NLP text dataset from Hugging Face (ag = load_dataset(“ag_news”)).\n\nProduce:\n\nOne feature importance plot.\nOne model evaluation visualization (confusion matrix or ROC curve).\nOne text visualization (word cloud, BERTopic topic cluster, or BERTopic Topic Word Scores).\n\nInclude a 200–300 word reflection on how visualization supports model interpretability.\nSubmit .ipynb and .html.",
+    "crumbs": [
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Visualization for ML/NLP</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_4_wrangling_with_pandas.html#homework",
+    "href": "weekly/module_week_4_wrangling_with_pandas.html#homework",
+    "title": "4  Wrangling with Pandas",
+    "section": "4.8 🏠 Homework",
+    "text": "4.8 🏠 Homework\n\nSelect a dataset with at least 5 columns.\nPerform the following in a notebook:\n\nClean and filter the dataset.\nApply at least 2 groupby operations with aggregations.\nReshape the dataset at least once (pivot, melt, etc.).\nCreate 3 visualizations from the cleaned dataset.\n\nSubmit .ipynb and .html.\n\nRubric (10 pts)\n\nCorrect wrangling operations applied (4)\nCreativity in reshaping & grouping (2)\nClear and readable plots (2)\nReproducibility (2)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Wrangling with Pandas</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_5_perception_principles.html#homework",
+    "href": "weekly/module_week_5_perception_principles.html#homework",
+    "title": "5  Perception & Principles",
+    "section": "5.9 🏠 Homework",
+    "text": "5.9 🏠 Homework\n\nFind a poorly designed chart (for example, a truncated y-axis bar chart from a news article, a rainbow-colored heatmap in a research paper, or an infographic with distorted area encodings). \nRecreate the chart faithfully in Python.\nRedesign the chart applying perception & design principles.\nWrite a short reflection (200+ words) describing:\n\nWhy the original was misleading or ineffective.\nWhat principles guided your redesign?\nHow your redesign improves comprehension.\n\nSubmit .ipynb and .html.\n\nRubric (10 pts)\n\nAccurate reproduction of the original chart (2)\nEffective redesign applying principles (4)\nClear reflection linking to theory (2)\nVisual clarity and labeling (2)",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Perception & Principles</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_6_comparisons.html#homework",
+    "href": "weekly/module_week_6_comparisons.html#homework",
+    "title": "6  Comparisons",
+    "section": "6.8 🏠 Homework",
+    "text": "6.8 🏠 Homework\n\nSelect a dataset with at least two groups and either two conditions or multiple time points.\nProduce the following:\n\nOne dot plot (or refactor from grouped bars) with thoughtful ordering and labels.\nOne slope chart showing before/after or the earliest vs. the latest comparison.\nOne small‑multiples chart (faceted) on a shared y‑scale.\nAt least one normalized view (percent change or index to baseline).\n\nAdd concise annotations and a brief (200–300 words) discussion of which design best supports your comparison question and why.\nSubmit .ipynb and .html.\n\nRubric (10 pts)\n\nAppropriate chart choices for comparison tasks (3)\nScale/baseline alignment and normalization where needed (3)\nClear labeling, ordering, and annotations (2)\nReproducibility and code quality (2)",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Comparisons</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_7_text_labels_tables.html#homework",
+    "href": "weekly/module_week_7_text_labels_tables.html#homework",
+    "title": "7  Text, Labels, & Tables",
+    "section": "7.8 🏠 Homework",
+    "text": "7.8 🏠 Homework\n\nSelect a dataset (sports, election, or financial) and create:\n\nOne visualization with clear title, labels, and at least two annotations.\nOne directly-labeled chart (instead of legend-based).\nOne formatted table that complements your visualization.\n\nInclude a short reflection (200–300 words) explaining your labeling and table design choices.\nSubmit .ipynb and .html.\n\nRubric (10 pts)\n\nEffective use of titles, captions, and labels (3)\nClear and purposeful annotations (2)\nTable design clarity and readability (3)\nReflection quality (2)",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Text, Labels, & Tables</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_8_mapping_i_ii.html#homework",
+    "href": "weekly/module_week_8_mapping_i_ii.html#homework",
+    "title": "8  Mapping I & II",
+    "section": "8.9 🏠 Homework",
+    "text": "8.9 🏠 Homework\n\nPick a geographic unit (country/state/county/tract) + a topic.\nBuild a reproducible pipeline (notebook) that includes:\n\nOne static choropleth with clear legend + caption.\nOne interactive map (Folium or Plotly) with at least two layers (e.g., choropleth + points) and tooltips.\nAt least one join (spatial or attribute) and appropriate normalization.\nA 150–250 word reflection on design choices, denominators, classification, CRS, and limitations.\n\nSubmit .ipynb and .html.\n\nRubric (10 pts)\n\nCorrect joins & CRS handling (3)\nSound normalization + clear classification/legend (3)\nInteractive map quality (layers, tooltips, usability) (2)\nReflection clarity & critique of limitations (2)",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Mapping I & II</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_9_color_accessibility.html#homework",
+    "href": "weekly/module_week_9_color_accessibility.html#homework",
+    "title": "9  Color & Accessibility",
+    "section": "9.8 🏠 Homework",
+    "text": "9.8 🏠 Homework\n\nChoose one of your visualizations from a previous week and redesign it to improve color and accessibility.\nInclude:\n\nOne before-and-after comparison of color schemes.\nDiscussion (150–250 words) of how your new design improves clarity and inclusivity.\nVerification of color accessibility (using simulator or contrast tool).\n\nSubmit .ipynb and .html.\n\nRubric (10 pts)\n\nAppropriate use of color schemes (3)\nAccessibility testing and discussion (3)\nClarity and improvement of redesigned visual (2)\nReproducibility and documentation (2)",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Color & Accessibility</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_10_relationships_modeling.html#homework",
+    "href": "weekly/module_week_10_relationships_modeling.html#homework",
+    "title": "10  Relationships & Modeling",
+    "section": "10.8 🏠 Homework",
+    "text": "10.8 🏠 Homework\n\nSelect a dataset of your choice (or continue from a previous week).\nProduce the following:\n\nOne scatterplot with regression fit and confidence interval.\nOne correlation matrix heatmap.\nOne residual plot illustrating model fit or deviation.\n\nInclude a brief interpretation (200–300 words) explaining:\n\nWhat relationships you observed.\nHow visualization helped confirm or question your assumptions.\n\nSubmit .ipynb and .html.\n\nRubric (10 pts)\n\nCorrect implementation of regression and correlation plots (4)\nQuality of interpretation and insights (3)\nClarity of visualizations and labeling (2)\nCode reproducibility and documentation (1)",
+    "crumbs": [
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relationships & Modeling</span>"
+    ]
+  },
+  {
+    "objectID": "weekly/module_week_11_uncertainty_error_visualization.html#homework",
+    "href": "weekly/module_week_11_uncertainty_error_visualization.html#homework",
+    "title": "11  Uncertainty & Error Visualization",
+    "section": "11.9 🏠 Homework",
+    "text": "11.9 🏠 Homework\n\nSelect a dataset of your choice (or use one from a prior week).\nProduce:\n\nOne bar or line chart with error bars or confidence bands.\nOne bootstrap visualization or sampling distribution.\nA short (200–300 words) reflection on how uncertainty affects the interpretation of your results.\n\nSubmit .ipynb and .html.\n\nRubric (10 pts)\n\nCorrect calculation and visualization of uncertainty (4)\nClarity and labeling of intervals/bands (2)\nQuality of interpretation and reflection (3)\nReproducibility and documentation (1)",
+    "crumbs": [
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Uncertainty & Error</span>"
     ]
   }
 ]

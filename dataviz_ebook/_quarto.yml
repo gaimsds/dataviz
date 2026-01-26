@@ -13,9 +13,31 @@ book:
     - file: weekly/module_week_2_language_of_graphs.qmd
       text: "Language of Graphs"
     - file: weekly/module_week_3_distributions_variation.qmd
-      text: "Distributions and Variations"
-    - summary.qmd
-    - references.qmd
+      text: "Distributions & Variations"
+    - file: weekly/module_week_4_wrangling_with_pandas.qmd
+      text: "Wrangling with Pandas"
+    - file: weekly/module_week_5_perception_principles.qmd
+      text: "Perception & Principles"
+    - file: weekly/module_week_6_comparisons.qmd
+      text: "Comparisons"
+    - file: weekly/mid_term_project_module_page.qmd
+      text: "Mid-Term Project"
+    - file: weekly/module_week_7_text_labels_tables.qmd
+      text: "Text, Labels, & Tables"
+    - file: weekly/module_week_8_mapping_i_ii.qmd
+      text: "Mapping I & II"
+    - file: weekly/module_week_9_color_accessibility.qmd
+      text: "Color & Accessibility"
+    - file: weekly/module_week_10_relationships_modeling.qmd
+      text: "Relationships & Modeling"
+    - file: weekly/module_week_11_uncertainty_error_visualization.qmd
+      text: "Uncertainty & Error"
+    - file: weekly/module_week_12_viz_ml_nlp.qmd
+      text: "Visualization for ML/NLP"
+    - file: weekly/final_project_module_page.qmd
+      text: "Final Project"
+    # - summary.qmd
+    # - references.qmd
     - file: syllabus.qmd
       text: "Syllabus"
 

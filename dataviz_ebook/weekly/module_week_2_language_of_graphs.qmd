@@ -1,5 +1,5 @@
 ---
-title: "Week 2 — Getting Started"
+title: "Language of Graphs"
 format: live-html
 resources:
   - week2
@@ -14,7 +14,6 @@ pyodide:
     - plotly
     - altair
     - nbformat
-
 ---
 
 > Understanding encodings, tidy data, and the grammar of graphics with Python. This module will deepen your ability to think critically about how information is mapped visually and how choices in data structure affect the clarity of your analysis.

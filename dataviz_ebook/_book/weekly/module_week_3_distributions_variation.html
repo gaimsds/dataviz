@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; Week 3 — Getting Started – Data Visualization for Data Science</title>
+<title>3&nbsp; Distributions &amp; Variations – Data Visualization for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,7 +65,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../summary.html" rel="next">
+<link href="../weekly/module_week_4_wrangling_with_pandas.html" rel="next">
 <link href="../weekly/module_week_2_language_of_graphs.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -87,7 +122,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../weekly/module_week_3_distributions_variation.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Distributions and Variations</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../weekly/module_week_3_distributions_variation.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Distributions &amp; Variations</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -141,19 +176,73 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../weekly/module_week_3_distributions_variation.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Distributions and Variations</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Distributions &amp; Variations</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  <a href="../weekly/module_week_4_wrangling_with_pandas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Wrangling with Pandas</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">References</span></a>
+  <a href="../weekly/module_week_5_perception_principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Perception &amp; Principles</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../weekly/module_week_6_comparisons.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Comparisons</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../weekly/mid_term_project_module_page.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Mid-Term Project</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../weekly/module_week_7_text_labels_tables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Text, Labels, &amp; Tables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../weekly/module_week_8_mapping_i_ii.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Mapping I &amp; II</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../weekly/module_week_9_color_accessibility.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Color &amp; Accessibility</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../weekly/module_week_10_relationships_modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Relationships &amp; Modeling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../weekly/module_week_11_uncertainty_error_visualization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Uncertainty &amp; Error</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../weekly/module_week_12_viz_ml_nlp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Visualization for ML/NLP</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../weekly/final_project_module_page.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Final Project</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -167,15 +256,34 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#background-motivation" id="toc-background-motivation" class="nav-link active" data-scroll-target="#background-motivation"><span class="header-section-number">3.1</span> 📖 Background &amp; Motivation</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives"><span class="header-section-number">3.2</span> 🔎 Learning Objectives</a></li>
+  <li><a href="#readings-resources" id="toc-readings-resources" class="nav-link" data-scroll-target="#readings-resources"><span class="header-section-number">3.3</span> 📚 Readings &amp; Resources</a></li>
+  <li><a href="#setup-checklist" id="toc-setup-checklist" class="nav-link" data-scroll-target="#setup-checklist"><span class="header-section-number">3.4</span> 🛠️ Setup Checklist</a></li>
+  <li><a href="#lecture-outline" id="toc-lecture-outline" class="nav-link" data-scroll-target="#lecture-outline"><span class="header-section-number">3.5</span> 🧭 Lecture Outline</a>
+  <ul class="collapse">
+  <li><a href="#session-1-75-min" id="toc-session-1-75-min" class="nav-link" data-scroll-target="#session-1-75-min"><span class="header-section-number">3.5.1</span> Session 1 (75 min)</a></li>
+  <li><a href="#session-2-75-min" id="toc-session-2-75-min" class="nav-link" data-scroll-target="#session-2-75-min"><span class="header-section-number">3.5.2</span> Session 2 (75 min)</a></li>
+  </ul></li>
+  <li><a href="#starter-notebook-snippets" id="toc-starter-notebook-snippets" class="nav-link" data-scroll-target="#starter-notebook-snippets"><span class="header-section-number">3.6</span> 💻 Starter Notebook Snippets</a></li>
+  <li><a href="#in-class-activity" id="toc-in-class-activity" class="nav-link" data-scroll-target="#in-class-activity"><span class="header-section-number">3.7</span> 🧪 In-Class Activity</a></li>
+  <li><a href="#homework" id="toc-homework" class="nav-link" data-scroll-target="#homework"><span class="header-section-number">3.8</span> 🏠 Homework</a></li>
+  <li><a href="#optional-extensions" id="toc-optional-extensions" class="nav-link" data-scroll-target="#optional-extensions"><span class="header-section-number">3.9</span> 🧩 Optional Extensions</a></li>
+  <li><a href="#submission-checklist" id="toc-submission-checklist" class="nav-link" data-scroll-target="#submission-checklist"><span class="header-section-number">3.10</span> ✅ Submission Checklist</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Week 3 — Getting Started</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Distributions &amp; Variations</span></h1>
 </div>
 
 
@@ -192,6 +300,156 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<blockquote class="blockquote">
+<p>Exploring distributions, variation, and choices in single-variable visualization.</p>
+</blockquote>
+<hr>
+<section id="background-motivation" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="background-motivation"><span class="header-section-number">3.1</span> 📖 Background &amp; Motivation</h2>
+<p>Understanding how data is distributed is the foundation of exploratory data analysis. Whether we want to know if flight delays cluster around certain times or if iris flower species differ in petal length, distribution plots reveal the shape, spread, and potential outliers. Poorly chosen or misinterpreted plots can obscure variation and mislead conclusions.</p>
+<p>Distributions are more than just “shapes of data”. They tell us about <strong>central tendency</strong> (where the bulk of data lies), <strong>spread</strong> (how much variation exists), <strong>skewness</strong> (whether data is lopsided), and <strong>outliers</strong> (values that are unusual or extreme). These insights form the basis for both descriptive statistics and inferential modeling. For data scientists, knowing how to visualize distributions effectively is an essential skill for diagnosing problems, preparing data, and communicating results.</p>
+<hr>
+</section>
+<section id="learning-objectives" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">3.2</span> 🔎 Learning Objectives</h2>
+<ul>
+<li>Choose and interpret appropriate distribution plots.</li>
+<li>Apply binning strategies and kernel density estimation.</li>
+<li>Construct and read empirical cumulative distribution functions (ECDFs).</li>
+<li>Compare plots to understand spread, skewness, and outliers.</li>
+<li>Critically evaluate the strengths and weaknesses of each distribution visualization technique.</li>
+</ul>
+<hr>
+</section>
+<section id="readings-resources" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="readings-resources"><span class="header-section-number">3.3</span> 📚 Readings &amp; Resources</h2>
+<ul>
+<li><a href="https://seaborn.pydata.org/tutorial/distributions.html">Seaborn Distribution Plots</a> — practical guide to histograms, KDEs, and more.</li>
+<li><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html">Matplotlib Histograms</a> — documentation for histogram basics.</li>
+<li><a href="https://towardsdatascience.com/exploratory-data-analysis-8fc1cb20fd15">EDA Concepts</a> — blog overview of exploratory data analysis.</li>
+<li><a href="https://clauswilke.com/dataviz/histograms-density-plots.html">Fundamentals of Data Visualization</a> — chapter on histograms and density plots.</li>
+</ul>
+<p><strong>Sample Data Sources:</strong></p>
+<ul>
+<li>Flight delay data (US DOT Bureau of Transportation Statistics)</li>
+<li>Iris dataset (<code>seaborn.load_dataset('iris')</code>)</li>
+<li>Titanic dataset (Kaggle / Seaborn)</li>
+<li>COVID-19 case data (Our World in Data)</li>
+</ul>
+<hr>
+</section>
+<section id="setup-checklist" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="setup-checklist"><span class="header-section-number">3.4</span> 🛠️ Setup Checklist</h2>
+<p>Ensure you can run:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install seaborn matplotlib pandas</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Check that you can load the iris dataset and render a histogram before class.</p>
+<hr>
+</section>
+<section id="lecture-outline" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="lecture-outline"><span class="header-section-number">3.5</span> 🧭 Lecture Outline</h2>
+<section id="session-1-75-min" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="session-1-75-min"><span class="header-section-number">3.5.1</span> Session 1 (75 min)</h3>
+<ol type="1">
+<li>Motivation: Why study distributions? Examples from real-world datasets (10 min)</li>
+<li>Histograms &amp; binning choices: impact of bin width on interpretation (20 min)</li>
+<li>Kernel density estimation: intuition, bandwidth selection, pros/cons (25 min)</li>
+<li>Hands-on with iris dataset: plot histograms and KDEs for sepal/petal features (20 min)</li>
+</ol>
+</section>
+<section id="session-2-75-min" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="session-2-75-min"><span class="header-section-number">3.5.2</span> Session 2 (75 min)</h3>
+<ol type="1">
+<li>Recap &amp; troubleshooting from Session 1 (10 min)</li>
+<li>Boxplots &amp; violin plots: comparing categories and visualizing spread (25 min)</li>
+<li>ECDF: cumulative view of distributions, why it’s useful (20 min)</li>
+<li>Workshop: students choose dataset, produce 2–3 distribution plots, peer feedback (20 min)</li>
+</ol>
+</section>
+</section>
+<section id="starter-notebook-snippets" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="starter-notebook-snippets"><span class="header-section-number">3.6</span> 💻 Starter Notebook Snippets</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> sns.load_dataset(<span class="st">'iris'</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>sns.histplot(iris[<span class="st">'sepal_length'</span>], bins<span class="op">=</span><span class="dv">20</span>, kde<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># KDE</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>sns.kdeplot(iris[<span class="st">'sepal_length'</span>], fill<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Boxplot by species</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>sns.boxplot(data<span class="op">=</span>iris, x<span class="op">=</span><span class="st">'species'</span>, y<span class="op">=</span><span class="st">'sepal_length'</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># ECDF</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ecdf(data):</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> np.sort(data)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="bu">len</span>(x)<span class="op">+</span><span class="dv">1</span>) <span class="op">/</span> <span class="bu">len</span>(x)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x, y</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>x, y <span class="op">=</span> ecdf(iris[<span class="st">'sepal_length'</span>])</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y, marker<span class="op">=</span><span class="st">'.'</span>, linestyle<span class="op">=</span><span class="st">'none'</span>)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Sepal length'</span>)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'ECDF'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+<section id="in-class-activity" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="in-class-activity"><span class="header-section-number">3.7</span> 🧪 In-Class Activity</h2>
+<ul>
+<li>Compare histogram vs.&nbsp;KDE of flight delay data. Which communicates central tendency more clearly? Which better shows multimodality?</li>
+<li>Plot boxplot of iris petal length by species. Discuss: how does this compare to histograms?</li>
+<li>Construct ECDFs for sepal width. What does it reveal about spread and skewness?</li>
+<li>Group work: each team selects a dataset and produces multiple distribution plots, then explains which is most effective.</li>
+</ul>
+<hr>
+</section>
+<section id="homework" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="homework"><span class="header-section-number">3.8</span> 🏠 Homework</h2>
+<ol type="1">
+<li>Select <strong>one dataset</strong> (one from the Sample Data Sources or one of your choice).</li>
+<li>For the dataset:
+<ol type="a">
+<li>Produce at least 3 distribution plots (histogram, KDE, ECDF, box/violin).<br>
+</li>
+<li>Interpret shape, spread, skew, and outliers in markdown.<br>
+</li>
+<li>Reflect on the pros/cons of each visualization type.<br>
+</li>
+<li>Add at least one annotated chart highlighting a key pattern.<br>
+</li>
+</ol></li>
+<li>Use Quarto to render your notebook and submit the zip file.</li>
+</ol>
+<p><strong>Rubric (10 pts)</strong></p>
+<ul>
+<li>Correct use of multiple plot types (4)</li>
+<li>Clear interpretation and discussion (3)</li>
+<li>Labeling, annotations, and readability (2)</li>
+<li>Reproducibility (1)</li>
+</ul>
+<hr>
+</section>
+<section id="optional-extensions" class="level2" data-number="3.9">
+<h2 data-number="3.9" class="anchored" data-anchor-id="optional-extensions"><span class="header-section-number">3.9</span> 🧩 Optional Extensions</h2>
+<ul>
+<li>Experiment with different bin sizes in histograms and compare results.</li>
+<li>Overlay histogram and KDE to show complementarity.</li>
+<li>Use <code>sns.pairplot</code> to examine multiple distributions and correlations.</li>
+<li>Compare distributions across groups using facet plots.</li>
+<li>Try violin plots with split by category.</li>
+</ul>
+<hr>
+</section>
+<section id="submission-checklist" class="level2" data-number="3.10">
+<h2 data-number="3.10" class="anchored" data-anchor-id="submission-checklist"><span class="header-section-number">3.10</span> ✅ Submission Checklist</h2>
+<p>Before submitting, make sure:</p>
+<ul>
+<li><p>Your assignment has fulfilled all the basic requirements listed above.</p></li>
+<li><p>Use Quarto to render the notebook into HTML and zip the files for submission.</p></li>
+<li><p>Double-check the visualizations and your reflections in the HTML are properly organized and displayed.</p></li>
+</ul>
 
 
 <script type="ojs-module-contents">
@@ -206,8 +464,9 @@ eyJjb250ZW50cyI6W119
 </div>
 </div>
 <script type="vfs-file">
-WyJkYXRhIl0=
+WyJ3ZWVrMy93ZWVrM19oYW5kc19vbl90ZW1wbGF0ZS5pcHluYiJd
 </script>
+</section>
 
 </main> <!-- /main -->
 <script type="ojs-module-contents">
@@ -628,8 +887,8 @@ window._ojs.runtime.interpretFromScriptTags();
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../summary.html" class="pagination-link" aria-label="Summary">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../weekly/module_week_4_wrangling_with_pandas.html" class="pagination-link" aria-label="Wrangling with Pandas">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Wrangling with Pandas</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
