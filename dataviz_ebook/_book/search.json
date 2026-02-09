@@ -152,11 +152,11 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Data Visualization for Data Science",
+    "title": "DATS 2102: Data Visualization for Data Science",
     "section": "",
-    "text": "Preface\nThis is a Quarto book.\nTo learn more about Quarto books visit https://quarto.org/docs/books.",
+    "text": "About\nThis is the book used for the Data Visulization for Data Science (DATS 2102) at the George Washington Univeristy.",
     "crumbs": [
-      "Preface"
+      "About"
     ]
   },
   {

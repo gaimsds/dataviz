@@ -1,5 +1,3 @@
-# Preface {.unnumbered}
+# About {.unnumbered .unlisted}
 
-This is a Quarto book.
-
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+This is the book used for the Data Visulization for Data Science (DATS 2102) at the George Washington Univeristy.

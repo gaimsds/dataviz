@@ -208,6 +208,20 @@ counts = joined_pts.groupby('polygon_id').size().rename('count')
 result = polys.join(counts).fillna({'count':0})
 ```
 
+
+```{pyodide}
+import micropip
+# Install folium and its dependencies
+await micropip.install("folium")
+
+# Now you can import and use it
+import folium
+
+# Create a simple map
+m = folium.Map(location=[40.79, -77.86], zoom_start=13)
+m
+```
+
 ---
 
 ## 🧪 In‑Class Activities (both sessions)

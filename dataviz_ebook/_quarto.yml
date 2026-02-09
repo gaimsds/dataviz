@@ -2,7 +2,7 @@ project:
   type: book
 
 book:
-  title: "Data Visualization for Data Science"
+  title: "DATS 2102: \n Data Visualization for Data Science"
   author: "Junjun Yin"
   date: "01/01/2026"
   chapters:
