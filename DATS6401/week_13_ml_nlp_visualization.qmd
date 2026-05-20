@@ -1,0 +1,185 @@
+---
+title: "Week 13 — ML/NLP Visualization"
+---
+
+> Making models legible. This module visualizes what a model does and why — feature importance, performance, embeddings, explanations — and connects a Streamlit client to the model server from Week 12 to visualize *live* predictions.
+
+## 📖 Background & Motivation
+
+A trained model is a black box until you visualize it. This module is the payoff of the course's data-science orientation: it brings together the modality skills (text, images, tabular) and the client–server plumbing (Weeks 11–12) to *explain* machine-learning models visually. We cover the standard explanatory visuals — feature importance, confusion matrices, ROC and precision–recall curves, embedding projections (UMAP, building on Weeks 3 and 7) — and the discipline of communicating model uncertainty rather than a single confident number.
+
+The distinctive piece is wiring it together. The Streamlit client you wrote in Week 11 now calls the FastAPI model server you wrote in Week 12, sends real inputs, and visualizes the live response: the prediction, its confidence, and supporting explanation. This completes the **consume → serve → visualize** arc and is precisely the architecture the final project requires. By the end of the week you will have a working, end-to-end application in which a user interacts with a front-end that talks to a model behind an API and renders the result.
+
+---
+
+## 🔎 Learning Objectives
+
+- Visualize model performance: confusion matrix, ROC/PR curves, calibration.
+- Visualize model structure and behavior: feature importance, embeddings, explanations.
+- Communicate prediction uncertainty honestly.
+- Connect a Streamlit client to a model-serving endpoint and visualize live predictions.
+
+---
+
+## 📚 Readings & Resources
+
+- [scikit-learn — model evaluation & plotting](https://scikit-learn.org/stable/visualizations.html).
+- [UMAP Documentation](https://umap-learn.readthedocs.io/) — embedding projection (revisited).
+- [Wilke, *Fundamentals*, Ch. 16](https://clauswilke.com/dataviz/) — uncertainty visualization.
+- [What is explainable AI?](https://christophm.github.io/interpretable-ml-book/) — concepts of model explanation.
+
+**Sample Data / Materials:**
+
+- The model server from **Week 12** and the client from **Week 11**.
+- Any labeled dataset with predictions to evaluate.
+
+---
+
+## 🛠️ Setup Checklist
+
+Make sure your environment includes:
+
+```bash
+pip install scikit-learn matplotlib seaborn umap-learn requests streamlit
+```
+
+Have your Week 12 server runnable and your Week 11 client handy before class.
+
+---
+
+## 🧭 Two-Hour Session Outline
+
+> Single 2-hour block. This is the integrative week — it ties the arc together.
+
+### Block 1 — Concepts & Theory (~30 min, PowerPoint)
+
+1. Why visualize models: trust, debugging, communication (7 min)
+2. Performance visuals: confusion, ROC/PR, calibration — and their pitfalls (12 min)
+3. Behavior visuals: feature importance, embeddings, explanations (8 min)
+4. Discussion: a confident-but-wrong model and how a chart would catch it (3 min)
+
+### Block 2 — Guided Demonstration (~35 min, live coding)
+
+1. Confusion matrix + ROC/PR for a fitted model (12 min)
+2. Feature importance and an embedding projection of the data (10 min)
+3. **Connect the client to the server:** Streamlit → POST to FastAPI `/predict` → visualize the live result with its confidence (13 min)
+
+### ☕ Break (~10 min)
+
+### Block 3 — Hands-On Activity (~35 min, students working)
+
+1. Students produce a performance visualization for a model (12 min)
+2. Wire their Week 11 client to their Week 12 server and show a live prediction (18 min)
+3. Add an uncertainty/confidence visual to the live result (5 min)
+
+### Block 4 — Wrap-Up & Homework Preview (~10 min)
+
+1. Demo end-to-end apps; discuss what the explanation visuals revealed (6 min)
+2. Preview the final project (this *is* the architecture) (4 min)
+
+---
+
+### You can refer to the [Web page](#) and download the [Jupyter Notebook](#) / [Streamlit app](#)
+
+---
+
+{{< include _live_app_embed.qmd >}}
+
+## 💻 Notebook / App Snippets
+
+### Performance visuals
+
+```python
+from sklearn.metrics import ConfusionMatrixDisplay, RocCurveDisplay
+ConfusionMatrixDisplay.from_estimator(model, X_test, y_test)
+RocCurveDisplay.from_estimator(model, X_test, y_test)
+```
+
+### Feature importance
+
+```python
+import pandas as pd
+importances = pd.Series(model.feature_importances_, index=feature_names)
+importances.sort_values().plot.barh()
+```
+
+### Live prediction: Streamlit client → FastAPI server
+
+```python
+# app.py  (client)  — server from Week 12 must be running
+import streamlit as st, requests
+
+st.title("Live Model Predictions")
+flipper = st.slider("Flipper length (mm)", 170, 235, 200)
+mass = st.slider("Body mass (g)", 2700, 6300, 4200)
+
+if st.button("Predict"):
+    try:
+        r = requests.post("http://127.0.0.1:8000/predict",
+                          json={"flipper_length_mm": flipper, "body_mass_g": mass},
+                          timeout=5)
+        r.raise_for_status()
+        out = r.json()
+        st.success(f"Prediction: {out['prediction']}")
+        st.progress(out["confidence"])              # visualize confidence
+        st.caption(f"Confidence: {out['confidence']:.0%}")
+    except Exception as e:
+        st.error(f"Server error: {e}")
+```
+
+---
+
+## 🧪 In-Class Activity
+
+- Stand up the server, then use your Streamlit client to send inputs and visualize live predictions with confidence.
+- Discuss:
+
+What does the confusion matrix reveal that accuracy alone hides?
+
+How are you communicating uncertainty — and is it honest?
+
+What happens to the client when the server is down? Does it fail gracefully?
+
+**Hints**
+
+```python
+# Start the server first:  uvicorn app:app --reload   (Week 12 code)
+# Then run the client:     streamlit run app.py
+```
+
+---
+
+## 🏠 Homework
+
+1. Produce at least two model-explanation visuals (e.g., confusion matrix + feature importance or embedding).
+2. Connect a Streamlit client to your model server and visualize a live prediction with its confidence.
+3. Write a short interpretation: what do the visuals say about the model, and where is it weak?
+4. Submit the client + server code and the live URL (or a recording/screenshots) to Blackboard.
+
+**Rubric (10 pts)**
+
+- Correct, well-chosen performance/behavior visuals (4)
+- Working client↔server live prediction (4)
+- Honest uncertainty communication and interpretation (2)
+
+---
+
+## 🧩 Optional Extensions
+
+- Add a calibration plot and discuss whether confidences are trustworthy.
+- Color an embedding by correct/incorrect prediction to see where the model fails.
+- Add SHAP or permutation importance for per-prediction explanation.
+
+---
+
+## ✅ Submission Checklist
+
+Before submitting, make sure:
+
+- Your assignment fulfills all the basic requirements listed above.
+
+- The client successfully calls the running server and visualizes the response.
+
+- The client handles a server failure without crashing, and uncertainty is shown honestly.
+
+---

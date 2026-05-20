@@ -1,0 +1,182 @@
+---
+title: "Week 8 — Image Data"
+---
+
+> Pixels as data. This module covers visualizing image collections and the internals of image models — channels, montages, and the feature/attention maps that explain what a model "sees."
+
+## 📖 Background & Motivation
+
+Images are dense, high-dimensional data: a single modest photo is hundreds of thousands of numbers. Visualizing image *data* therefore splits into two related tasks. The first is making collections legible — montages, grids, and summaries that let you scan a dataset, spot label errors, and understand class balance, all of which matter enormously before any modeling. The second is visualizing what happens *inside* an image model: which pixels a classifier attends to, what intermediate feature maps look like, where a model is confidently wrong.
+
+This is one of the most data-science-oriented weeks, because visualization here is a debugging and explanation tool, not decoration. A saliency or attention map overlaid on an image can reveal that a "dog detector" is actually keying on grassy backgrounds. We treat image visualization as a window into both data quality and model behavior, which connects directly to the ML/NLP visualization module in Week 13 and to the explanation needs of the final project.
+
+---
+
+## 🔎 Learning Objectives
+
+- Load and display image collections as legible grids and montages.
+- Visualize image structure: channels, histograms, and intensity.
+- Produce and interpret a basic saliency/feature map over an image.
+- Use image visualization to diagnose data-quality and model-behavior issues.
+
+---
+
+## 📚 Readings & Resources
+
+- [Matplotlib — image tutorial](https://matplotlib.org/stable/tutorials/images.html).
+- [scikit-image — gallery](https://scikit-image.org/docs/stable/auto_examples/) — image handling in Python.
+- [Distill — feature visualization](https://distill.pub/2017/feature-visualization/) — what models see (conceptual).
+- [Grad-CAM (overview)](https://arxiv.org/abs/1610.02391) — saliency for CNNs (skim for intuition).
+
+**Sample Data Sources for Practice:**
+
+- [scikit-learn digits / Olivetti faces](https://scikit-learn.org/stable/datasets/toy_dataset.html) — small, fast image sets.
+- [CIFAR-10 / Fashion-MNIST](https://www.cs.toronto.edu/~kriz/cifar.html) — labeled image collections.
+
+---
+
+## 🛠️ Setup Checklist
+
+Make sure your environment includes:
+
+```bash
+pip install numpy matplotlib scikit-image scikit-learn pillow streamlit
+```
+
+Confirm you can load and display an image array in a notebook before class.
+
+---
+
+## 🧭 Two-Hour Session Outline
+
+> Single 2-hour block.
+
+### Block 1 — Concepts & Theory (~30 min, PowerPoint)
+
+1. An image is an array: shape, channels, intensity (8 min)
+2. Visualizing collections: grids, montages, and why they catch data problems (10 min)
+3. Looking inside models: feature maps and saliency (10 min)
+4. Discussion: a model that's "right for the wrong reason" (2 min)
+
+### Block 2 — Guided Demonstration (~30 min, live coding)
+
+1. Load an image set; build a labeled grid montage (10 min)
+2. Show per-channel and intensity histograms (8 min)
+3. Overlay a simple saliency map on a single prediction (12 min)
+
+### ☕ Break (~10 min)
+
+### Block 3 — Hands-On Activity (~40 min, students working)
+
+1. Students build a montage of a class and spot anomalies (12 min)
+2. Produce a channel/intensity visualization (8 min)
+3. Wrap an image browser into a Streamlit app (upload + display + summary) (20 min)
+
+### Block 4 — Wrap-Up & Homework Preview (~10 min)
+
+1. Share montages; what data issues surfaced? (6 min)
+2. Preview homework (4 min)
+
+---
+
+### You can refer to the [Web page](#) and download the [Jupyter Notebook](#) / [Streamlit app](#)
+
+---
+
+{{< include _live_app_embed.qmd >}}
+
+## 💻 Notebook / App Snippets
+
+### Montage grid
+
+```python
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_digits
+digits = load_digits()
+fig, axes = plt.subplots(3, 6, figsize=(8, 4))
+for ax, img, label in zip(axes.ravel(), digits.images, digits.target):
+    ax.imshow(img, cmap="gray"); ax.set_title(label); ax.axis("off")
+```
+
+### Channel / intensity view
+
+```python
+import numpy as np, matplotlib.pyplot as plt
+# img: HxWx3 array
+for i, name in enumerate(["R", "G", "B"]):
+    plt.hist(img[..., i].ravel(), bins=50, alpha=0.5, label=name)
+plt.legend()
+```
+
+### Image app in Streamlit
+
+```python
+# app.py
+import streamlit as st
+from PIL import Image
+import numpy as np
+
+st.title("Image Inspector")
+up = st.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
+if up:
+    img = Image.open(up)
+    st.image(img, caption=f"{img.size[0]}×{img.size[1]}")
+    arr = np.asarray(img)
+    st.write("Shape:", arr.shape, " Mean intensity:", round(arr.mean(), 1))
+```
+
+---
+
+## 🧪 In-Class Activity
+
+- Build a labeled montage of one class and a per-channel histogram.
+- Discuss:
+
+What does the montage reveal about label quality or class variety?
+
+What does the channel histogram tell you about exposure/color balance?
+
+If you had a saliency map, what would confirm the model is "looking" correctly?
+
+**Hints**
+
+```python
+# Mislabeled or oddly-cropped images jump out in a montage faster than in a table
+```
+
+---
+
+## 🏠 Homework
+
+1. Choose an image dataset.
+2. Produce a montage that reveals something about the data, plus one structural visualization (channels/intensity).
+3. If feasible, add a saliency or feature-map view for one example and interpret it.
+4. Submit as a Streamlit app (image browser) or `.ipynb` + `.html`.
+
+**Rubric (10 pts)**
+
+- Legible, informative montage (3)
+- Correct structural visualization (3)
+- Saliency/feature interpretation, or a strong data-quality finding (4)
+
+---
+
+## 🧩 Optional Extensions
+
+- Add a class-balance bar chart alongside the montage.
+- Let the Streamlit app overlay a saliency heatmap on the uploaded image.
+- Compare two classes' intensity distributions.
+
+---
+
+## ✅ Submission Checklist
+
+Before submitting, make sure:
+
+- Your assignment fulfills all the basic requirements listed above.
+
+- Any Streamlit app runs locally with no errors.
+
+- Your interpretation of what the visuals reveal is displayed.
+
+---

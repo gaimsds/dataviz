@@ -1,0 +1,176 @@
+---
+title: "Week 7 — Text Data"
+---
+
+> Visualizing language. This module covers how to turn unstructured text and NLP output into meaningful visuals — frequencies, topics, and embeddings — without falling into the traps of decorative-but-empty word art.
+
+## 📖 Background & Motivation
+
+Text is the least visually obvious modality: it has no natural x and y, no inherent shape. To visualize it we must first transform it into something countable or geometric — token frequencies, document-term structures, topic distributions, or high-dimensional embeddings. Each transformation makes a different aspect of the text visible, and each carries assumptions worth examining.
+
+The popular word cloud is a useful cautionary tale: it is eye-catching but encodes word importance on the perceptually weak channels of area and position-by-layout-algorithm, so it communicates far less than a simple sorted bar chart. This week we treat text visualization seriously: frequency and keyness done honestly, topic models (BERTopic) to summarize a corpus, and embedding projections (with UMAP, previewed here and revisited in Week 13) to lay documents out by semantic similarity. The throughline is that text visualization is really *the visualization of a model's view of text* — so understanding the transform is as important as the picture.
+
+---
+
+## 🔎 Learning Objectives
+
+- Transform raw text into countable structures (tokens, frequencies, document-term matrices).
+- Visualize text honestly, understanding why word clouds underperform sorted bars.
+- Summarize a corpus with a topic model (BERTopic) and visualize the topics.
+- Project document embeddings to 2D to reveal semantic structure.
+
+---
+
+## 📚 Readings & Resources
+
+- [BERTopic Documentation](https://maartengr.github.io/BERTopic/) — topic modeling and built-in visualizations.
+- ["Word clouds considered harmful"](https://www.niemanlab.org/2011/10/word-clouds-considered-harmful/) — the honesty critique.
+- [scikit-learn — text feature extraction](https://scikit-learn.org/stable/modules/feature_extraction.html#text-feature-extraction).
+- [UMAP Documentation](https://umap-learn.readthedocs.io/) — embedding projection.
+
+**Sample Data Sources for Practice:**
+
+- [20 Newsgroups](https://scikit-learn.org/stable/datasets/real_world.html#the-20-newsgroups-text-dataset) — labeled text corpus.
+- [Project Gutenberg](https://www.gutenberg.org/) — public-domain books.
+- Any collection of reviews, tweets, or abstracts.
+
+---
+
+## 🛠️ Setup Checklist
+
+Make sure your environment includes:
+
+```bash
+pip install scikit-learn bertopic umap-learn wordcloud matplotlib pandas streamlit
+```
+
+The first BERTopic run downloads a model — do this before class, not during.
+
+---
+
+## 🧭 Two-Hour Session Outline
+
+> Single 2-hour block.
+
+### Block 1 — Concepts & Theory (~30 min, PowerPoint)
+
+1. Text has no x/y: the transform problem (8 min)
+2. Frequencies and keyness done right; why word clouds mislead (8 min)
+3. Topic models and what they summarize (8 min)
+4. Embeddings as semantic geometry; UMAP preview (6 min)
+
+### Block 2 — Guided Demonstration (~30 min, live coding)
+
+1. Tokenize a corpus; sorted-bar frequency vs. word cloud, side by side (12 min)
+2. Fit BERTopic; use its topic visualization (12 min)
+3. Project document embeddings to 2D (6 min)
+
+### ☕ Break (~10 min)
+
+### Block 3 — Hands-On Activity (~40 min, students working)
+
+1. Students load a corpus and produce an honest frequency chart (12 min)
+2. Fit a topic model and visualize topics (18 min)
+3. Wrap topic exploration into a Streamlit app with a topic selector (10 min)
+
+### Block 4 — Wrap-Up & Homework Preview (~10 min)
+
+1. Share topic maps; discuss what the model "saw" (6 min)
+2. Preview homework (4 min)
+
+---
+
+### You can refer to the [Web page](#) and download the [Jupyter Notebook](#) / [Streamlit app](#)
+
+---
+
+{{< include _live_app_embed.qmd >}}
+
+## 💻 Notebook / App Snippets
+
+### Honest frequency vs. word cloud
+
+```python
+from sklearn.feature_extraction.text import CountVectorizer
+import pandas as pd
+
+cv = CountVectorizer(stop_words="english", max_features=20)
+counts = cv.fit_transform(docs)
+freq = pd.Series(counts.sum(axis=0).A1, index=cv.get_feature_names_out())
+freq.sort_values().plot.barh()   # sorted bar = honest; word cloud = decorative
+```
+
+### Topic model
+
+```python
+from bertopic import BERTopic
+topic_model = BERTopic(verbose=False)
+topics, probs = topic_model.fit_transform(docs)
+topic_model.get_topic_info().head()
+fig = topic_model.visualize_topics()   # interactive topic map
+```
+
+### Embedding projection
+
+```python
+import umap, matplotlib.pyplot as plt
+emb = topic_model.embedding_model.embed(docs)
+xy = umap.UMAP(n_components=2, random_state=42).fit_transform(emb)
+plt.scatter(xy[:, 0], xy[:, 1], c=topics, cmap="tab10", s=8)
+```
+
+---
+
+## 🧪 In-Class Activity
+
+- Take a corpus and show its top terms as a sorted bar chart and as a word cloud.
+- Discuss:
+
+Which lets you compare two words' importance accurately?
+
+What does the topic model add that frequencies cannot?
+
+Where might the embedding projection mislead (distances aren't literal)?
+
+**Hints**
+
+```python
+# UMAP distances are relative, not absolute — say so when you present them
+```
+
+---
+
+## 🏠 Homework
+
+1. Choose a text corpus.
+2. Produce: an honest frequency visualization, a topic-model visualization, and an embedding projection.
+3. Write a short note on what each view reveals and one way it could mislead.
+4. Submit as a Streamlit app (topic selector) or `.ipynb` + `.html`.
+
+**Rubric (10 pts)**
+
+- Correct text transform and honest frequency view (3)
+- Working topic model and visualization (4)
+- Embedding projection with appropriate caveats (3)
+
+---
+
+## 🧩 Optional Extensions
+
+- Add hierarchical topic visualization from BERTopic.
+- Color the embedding by document metadata (date, source) instead of topic.
+- Compare TF-IDF keyness against raw counts.
+
+---
+
+## ✅ Submission Checklist
+
+Before submitting, make sure:
+
+- Your assignment fulfills all the basic requirements listed above.
+
+- Any Streamlit app runs locally with no errors.
+
+- You explain the transform behind each visual and note its limits.
+
+---

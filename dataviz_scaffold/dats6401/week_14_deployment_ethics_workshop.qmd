@@ -1,0 +1,171 @@
+---
+title: "Week 14 — Deployment, Ethics & Final Workshop"
+---
+
+> Shipping responsibly. The closing module deploys the full client–server application to the web, confronts the ethics of visualization, and gives structured workshop time on the final project.
+
+## 📖 Background & Motivation
+
+A data-science application that only runs on your laptop isn't finished. This module closes the loop by deploying the complete client–server system — the Streamlit front-end and the model-serving backend — so that anyone with the URL can use it. Deployment surfaces real concerns the local environment hides: configuration and secrets, cold starts and latency, how the client finds the server, and reproducibility so a grader (or a future you) can run it.
+
+The week also steps back to the ethics of the whole enterprise. Across the term we have seen how easily visualizations mislead — truncated axes, count-vs-rate choropleths, hairball networks, decorative word clouds, overconfident model outputs. Here we make that explicit: distortion and manipulation, the false authority of a polished chart, bias and accessibility, and the special responsibilities of putting a *model's* output in front of users who may over-trust it. The remainder of the session is a workshop: you present prototypes, give and receive structured critique, and leave with a concrete plan to finish the final project.
+
+---
+
+## 🔎 Learning Objectives
+
+- Deploy a client–server application (Streamlit + model API) to the web.
+- Manage configuration, reproducibility, and the client–server connection in deployment.
+- Critically evaluate visualizations and applications for distortion, bias, and accessibility.
+- Give and incorporate structured design critique on a project prototype.
+
+---
+
+## 📚 Readings & Resources
+
+- [Streamlit Community Cloud — deploy](https://docs.streamlit.io/deploy/streamlit-community-cloud).
+- [FastAPI — deployment](https://fastapi.tiangolo.com/deployment/) — serving the backend.
+- [Wilke, *Fundamentals*, Ch. on common pitfalls](https://clauswilke.com/dataviz/).
+- [Data Feminism (intro)](https://data-feminism.mitpress.mit.edu/) — power, bias, and visualization ethics.
+
+**Provided Materials:**
+
+- A deployment checklist and the final-project rubric (on Blackboard).
+
+---
+
+## 🛠️ Setup Checklist
+
+Make sure your environment includes:
+
+```bash
+pip install streamlit fastapi uvicorn requests
+```
+
+Have a GitHub repo for your app and a free deployment account ready before class.
+
+---
+
+## 🧭 Two-Hour Session Outline
+
+> Single 2-hour block. Lighter lecture, then an extended workshop.
+
+### Block 1 — Concepts & Theory (~25 min, PowerPoint)
+
+1. Deploying client + server: where each runs, how they connect, secrets/config (12 min)
+2. Visualization ethics: distortion, false authority, bias, accessibility (10 min)
+3. The special case: putting model output in front of users who over-trust it (3 min)
+
+### Block 2 — Guided Demonstration (~25 min, live coding)
+
+1. Deploy the Streamlit client to the web (10 min)
+2. Point the client at a deployed backend; handle the URL/config cleanly (10 min)
+3. An accessibility/honesty pass on a finished app (5 min)
+
+### ☕ Break (~10 min)
+
+### Block 3 — Final Project Workshop (~50 min)
+
+1. Lightning prototype presentations (2–3 min each) with structured peer critique (35 min)
+2. Instructor office-hour-style circulation for blockers (15 min)
+
+### Block 4 — Wrap-Up (~10 min)
+
+1. Synthesize critique themes; confirm final deadlines and rubric (6 min)
+2. Course retrospective: what "visualizing complex data" came to mean (4 min)
+
+---
+
+### You can refer to the [Web page](#) and the [deployment checklist](#)
+
+---
+
+{{< include _live_app_embed.qmd >}}
+
+## 💻 Notebook / App Snippets
+
+### Configurable server URL (don't hard-code it)
+
+```python
+# client app.py
+import streamlit as st, requests, os
+
+API_URL = st.secrets.get("API_URL", os.getenv("API_URL", "http://127.0.0.1:8000"))
+
+r = requests.post(f"{API_URL}/predict", json=payload, timeout=10)
+```
+
+### A minimal deployment checklist (in code form)
+
+```text
+[ ] requirements.txt pins all dependencies
+[ ] No secrets in the repo (use st.secrets / env vars)
+[ ] Server has a /health endpoint and starts cleanly
+[ ] Client reads API_URL from config, not hard-coded localhost
+[ ] App handles server-down gracefully
+[ ] README explains how to run client + server
+```
+
+### Accessibility quick checks
+
+```python
+# Use colorblind-safe palettes; never encode meaning by color alone
+import seaborn as sns
+sns.set_palette("colorblind")
+# Add text/markers in addition to color; label axes; provide alt text in st.image(..., caption=)
+```
+
+---
+
+## 🧪 In-Class Activity (Workshop)
+
+- Present your prototype (2–3 min) and receive structured critique on:
+
+Accuracy & honesty — does anything mislead?
+
+Clarity & focus — is the main message obvious?
+
+The client–server piece — does it work end-to-end and fail gracefully?
+
+Accessibility — color, labels, alt text.
+
+**Critique format**
+
+```text
+1 thing that works well · 1 thing that's unclear · 1 concrete suggestion
+```
+
+---
+
+## 🏠 Final Project (due April 30)
+
+Deliver the **client–server ML application** described in the syllabus:
+
+1. A FastAPI/Flask endpoint serving a trained model (deployed or runnable with clear instructions).
+2. A Streamlit client that consumes the endpoint and visualizes the returned ML/NLP results.
+3. At least one ML/NLP visualization and honest communication of model behavior/uncertainty.
+4. A reproducible code base, deployment instructions, and a short in-class presentation/defense.
+
+**Rubric:** see the full final-project rubric on Blackboard (clarity, creativity, technical proficiency, adherence to visualization best practices, working end-to-end system).
+
+---
+
+## 🧩 Optional Extensions
+
+- Containerize both client and server with Docker Compose.
+- Add basic auth or rate limiting to the model endpoint.
+- Run a small accessibility audit (contrast, screen-reader labels) and document fixes.
+
+---
+
+## ✅ Submission Checklist
+
+Before submitting, make sure:
+
+- Your assignment fulfills all the basic requirements listed above.
+
+- Both client and server are deployed (or runnable from clear instructions) and connect successfully.
+
+- No secrets are committed; the app fails gracefully; visuals are honest and accessible.
+
+---
