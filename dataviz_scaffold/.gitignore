@@ -1,0 +1,27 @@
+# Quarto build output (do NOT commit the rendered site)
+/_site/
+**/_book/
+**/.quarto/
+
+# IMPORTANT: do NOT ignore _freeze/ — it caches executed cell results and
+# MUST be committed so the GitHub Action can publish without running Python.
+# (Intentionally not listing _freeze/ here.)
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Secrets — never commit deployment secrets / API keys
+.streamlit/secrets.toml
+*.env
+.env

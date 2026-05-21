@@ -41,8 +41,8 @@ jobs:
         run: quarto render dats6401 --output-dir ../_site/dats6401
 
       # When DATS 2102 is added, uncomment:
-      # - name: Render DATS 2102 book
-      #   run: quarto render dats2102 --output-dir ../_site/dats2102
+      - name: Render DATS 2102 book
+        run: quarto render dats2102 --output-dir ../_site/dats2102
 
       - name: Copy landing page
         run: cp index.html _site/index.html

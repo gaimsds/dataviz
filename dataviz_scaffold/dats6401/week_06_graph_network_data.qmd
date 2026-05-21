@@ -1,0 +1,239 @@
+---
+title: "Week 6 — Graph & Network Data"
+---
+
+> Visualizing relationships rather than records. This module covers how to represent and interpret network-structured data — nodes, edges, layouts, and structural measures — and the distinct perceptual challenges that graphs present compared with tabular charts.
+
+## 📖 Background & Motivation
+
+Much of the most interesting data in the world is relational: who follows whom, which papers cite which, how proteins interact, how money or messages flow. This data does not fit neatly into rows and columns — its meaning lives in the *connections*. A network (or graph) represents this directly as a set of nodes joined by edges, and visualizing it well lets us see structure that a table would hide: clusters, hubs, bridges, and bottlenecks.
+
+Network visualization is also where good design principles get tested hardest. Unlike a scatterplot, where position carries clear meaning, a node-link diagram's layout is the *output of an algorithm*, and different layout algorithms can make the same graph look completely different. Position no longer maps to a data variable; it maps to a force-simulation's idea of "closeness." This is powerful but treacherous — a "hairball" of thousands of overlapping edges can look impressive and communicate nothing. This week we learn to choose layouts deliberately, encode structural properties (like centrality and community) onto visual channels, and know when a node-link diagram is the wrong tool and a matrix or aggregated view would serve better.
+
+This builds directly on the encoding and perception principles from Weeks 2 and 5, and the techniques here recur later when we visualize embeddings (Week 13), which are themselves a way of laying out relational similarity in space.
+
+---
+
+## 🔎 Learning Objectives
+
+- Represent relational data as a graph and distinguish directed/undirected and weighted/unweighted structures.
+- Apply and compare common layout algorithms (force-directed, circular, bipartite) and explain what each does and does not preserve.
+- Encode structural measures — degree, centrality, community — onto visual channels (size, color, position).
+- Critically evaluate when a node-link diagram communicates and when an alternative (adjacency matrix, aggregation) is more honest.
+
+---
+
+## 📚 Readings & Resources
+
+- Munzner, *Visualization Analysis & Design*, Ch. 9 (Arrange Networks and Trees) — the conceptual foundation for network layout.
+- [NetworkX Tutorial](https://networkx.org/documentation/stable/tutorial.html) — building and analyzing graphs in Python.
+- [PyVis Documentation](https://pyvis.readthedocs.io/) — interactive network rendering for the web and Streamlit.
+- ["The Hairball" — why node-link diagrams fail at scale](https://www.data-to-viz.com/graph/network.html) — a practical caution.
+- [ColorBrewer2](https://colorbrewer2.org/) — accessible palettes for community/category coloring.
+
+**Sample Data Sources for Practice:**
+
+- [Stanford SNAP Datasets](https://snap.stanford.edu/data/) — social, citation, and web networks of varying size.
+- Zachary's Karate Club (`networkx.karate_club_graph()`) — the classic small community-structure example.
+- [Les Misérables co-occurrence network](https://networkx.org/documentation/stable/auto_examples/index.html) — character interactions, good for layout demos.
+
+---
+
+## 🛠️ Setup Checklist
+
+Make sure your environment includes:
+
+```bash
+pip install networkx pyvis matplotlib pandas streamlit
+```
+
+Confirm you can build a small graph in a notebook and render it, and that you can launch a Streamlit app with `streamlit run app.py` before class.
+
+---
+
+## 🧭 Two-Hour Session Outline
+
+> Single 2-hour block. Concepts and hands-on work are interleaved. This is a moderately tooling-heavy week, so the hands-on blocks run a little longer than the lecture.
+
+### Block 1 — Concepts & Theory (~30 min, PowerPoint)
+
+1. From records to relationships: when relational structure is the data (5 min)
+2. Anatomy of a graph: nodes, edges, direction, weight; the adjacency matrix as the dual representation (10 min)
+3. Layouts as algorithms, not facts: force-directed vs. circular vs. bipartite, and what position means (10 min)
+4. Discussion: reading a "hairball" — what it does and doesn't tell us (5 min)
+
+### Block 2 — Guided Demonstration (~30 min, live coding)
+
+1. Build a graph from an edge list in NetworkX; inspect degree and basic properties (10 min)
+2. Draw it with a force-directed layout; encode degree to node size and a computed community to color (15 min)
+3. Show the same graph as an adjacency matrix — when this reveals more than the node-link view (5 min)
+
+### ☕ Break (~10 min)
+
+### Block 3 — Hands-On Activity (~40 min, students working)
+
+1. Set up: each student loads the Les Misérables (or a SNAP) network (5 min)
+2. Independent work: compute a centrality measure, encode it visually, and try two different layouts; instructor circulates (25 min)
+3. Wrap the interactive PyVis graph into a small Streamlit app with a layout selector widget (10 min)
+
+### Block 4 — Wrap-Up & Homework Preview (~10 min)
+
+1. A few students share: which layout best revealed the community structure, and why? (7 min)
+2. Connect back to encoding theory; preview the homework (3 min)
+
+---
+
+### You can refer to the [Web page](#) and download the [Jupyter Notebook](#) / [Streamlit app](#)
+
+---
+
+{{< include _live_app_embed.qmd >}}
+
+## 💻 Notebook / App Snippets
+
+### Build a graph and inspect it
+
+```python
+import networkx as nx
+
+G = nx.karate_club_graph()
+print(G.number_of_nodes(), G.number_of_edges())
+
+# Degree as a structural measure
+degrees = dict(G.degree())
+```
+
+### Draw with a layout, encode degree and community
+
+```python
+import matplotlib.pyplot as plt
+import networkx as nx
+
+# Community detection (greedy modularity)
+from networkx.algorithms.community import greedy_modularity_communities
+communities = list(greedy_modularity_communities(G))
+color_map = {}
+for cid, comm in enumerate(communities):
+    for node in comm:
+        color_map[node] = cid
+
+pos = nx.spring_layout(G, seed=42)          # force-directed
+node_sizes = [degrees[n] * 80 for n in G.nodes()]
+node_colors = [color_map[n] for n in G.nodes()]
+
+nx.draw_networkx(
+    G, pos,
+    node_size=node_sizes,
+    node_color=node_colors,
+    cmap=plt.cm.Set2,
+    edge_color="#cccccc",
+    with_labels=False,
+)
+plt.axis("off")
+plt.show()
+```
+
+### The adjacency-matrix view (the honest alternative for dense graphs)
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+A = nx.to_numpy_array(G)
+plt.imshow(A, cmap="Blues")
+plt.title("Adjacency matrix")
+plt.colorbar(label="edge")
+plt.show()
+```
+
+### Interactive network inside a Streamlit app
+
+```python
+# app.py  —  run with:  streamlit run app.py
+import streamlit as st
+import networkx as nx
+from pyvis.network import Network
+import streamlit.components.v1 as components
+
+st.title("Network Explorer")
+
+layout = st.selectbox("Layout", ["force", "circular"])
+G = nx.karate_club_graph()
+
+net = Network(height="600px", width="100%")
+net.from_nx(G)
+if layout == "circular":
+    net.toggle_physics(False)
+net.save_graph("graph.html")
+
+with open("graph.html", "r", encoding="utf-8") as f:
+    components.html(f.read(), height=620)
+```
+
+---
+
+## 🧪 In-Class Activity
+
+- Using the Les Misérables co-occurrence network, create:
+- A node-link diagram with a force-directed layout, node size encoding degree.
+- The same graph re-colored by detected community.
+- Discuss:
+
+What structure does the force layout reveal that a table of edges would not?
+
+Which characters are "bridges" between communities, and how can you tell visually?
+
+At what graph size does the node-link view stop being readable — and what would you switch to?
+
+**Hints**
+
+```python
+import networkx as nx
+# NetworkX ships the Les Mis graph in its example gallery data;
+# or load any edge-list CSV with nx.from_pandas_edgelist(df, "source", "target")
+centrality = nx.betweenness_centrality(G)   # bridges show up as high betweenness
+```
+
+---
+
+## 🏠 Homework
+
+1. Pick a network dataset from the sample sources or bring your own (an edge list is enough).
+2. Build **one Streamlit app** that lets a user explore the network, including:
+- A node-link visualization with at least two structural encodings (e.g., size = degree, color = community).
+- A widget that changes something meaningful (layout, a centrality threshold, or a community filter).
+3. In a short markdown cell or app text panel, include:
+a. A description of what the network represents.
+b. Why you chose those encodings and what they reveal.
+c. One limitation — where the visualization breaks down or could mislead.
+4. Submit the runnable Streamlit app (and any data files or a download script) to Blackboard.
+
+**Rubric (10 pts)**
+
+- Correct graph construction and use of a structural measure (3)
+- Effective, accessible encodings of network structure (3)
+- A meaningful, working interactive control in the app (2)
+- Justification of choices and honest discussion of limitations (2)
+
+---
+
+## 🧩 Optional Extensions
+
+- Add a second view (adjacency matrix) linked to the node-link diagram and compare readability.
+- Compare a force-directed layout against a circular or bipartite layout on the same data; document the trade-offs.
+- Filter the graph interactively by a centrality threshold and observe how the "story" changes.
+- Try a larger SNAP network and confront the hairball problem — what aggregation makes it legible?
+
+---
+
+## ✅ Submission Checklist
+
+Before submitting, make sure:
+
+- Your assignment fulfills all the basic requirements listed above.
+
+- Your Streamlit app runs locally with `streamlit run app.py` with no errors, and any required data is included or downloadable.
+
+- Double-check that the visualization, the interactive control, and your written reflections are properly organized and displayed.
+
+---

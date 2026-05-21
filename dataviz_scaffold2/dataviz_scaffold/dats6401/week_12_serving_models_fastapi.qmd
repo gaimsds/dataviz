@@ -1,0 +1,189 @@
+---
+title: "Week 12 — Serving Models with FastAPI / Flask"
+---
+
+> The server side. This module teaches how to wrap a trained machine-learning model behind an HTTP endpoint that a Streamlit client can call — the second step of the consume → serve → visualize arc.
+
+## 📖 Background & Motivation
+
+Last week you consumed endpoints that someone else built. This week you become that someone. Serving a model means taking a trained estimator — a scikit-learn classifier, say — and putting it behind a small web server so that any client can send it inputs and receive predictions over HTTP. This is the standard way models are deployed in practice: the model lives in one place, and many front-ends (web apps, mobile apps, other services) consume it through a stable API.
+
+We use **FastAPI** as the primary framework (with Flask shown as the lightweight alternative) because it is fast to write, validates inputs automatically, and generates interactive documentation for free. The work is mostly about *interface design*: what does a prediction request look like, what does the response contain, how do you load the model once rather than on every request, and how do you handle bad input. Crucially, this week is scaffolded — you start from a provided trained model and a skeleton server — so the two hours go to the meaningful parts (request/response design, testing the endpoint) rather than boilerplate. Next week, your Streamlit client from Week 11 connects to *this* server, and you visualize what it returns.
+
+---
+
+## 🔎 Learning Objectives
+
+- Wrap a trained model behind a FastAPI (or Flask) endpoint.
+- Design clear request and response schemas for predictions.
+- Load the model once and serve it efficiently; handle invalid input.
+- Test the endpoint locally (interactive docs, `requests`) before connecting a client.
+
+---
+
+## 📚 Readings & Resources
+
+- [FastAPI — first steps](https://fastapi.tiangolo.com/tutorial/first-steps/) and [request body](https://fastapi.tiangolo.com/tutorial/body/).
+- [Flask — quickstart](https://flask.palletsprojects.com/en/latest/quickstart/) — the lightweight alternative.
+- [scikit-learn — model persistence](https://scikit-learn.org/stable/model_persistence.html) — saving/loading models.
+- [Uvicorn](https://www.uvicorn.org/) — the server that runs FastAPI.
+
+**Provided Materials (on Blackboard):**
+
+- A **pre-trained model file** (`model.joblib`) and the training script that produced it.
+- A **skeleton FastAPI server** with TODOs to complete in class.
+
+---
+
+## 🛠️ Setup Checklist
+
+Make sure your environment includes:
+
+```bash
+pip install fastapi uvicorn scikit-learn joblib pydantic requests streamlit
+```
+
+Confirm you can run `uvicorn app:app --reload` on the skeleton and open the `/docs` page before class.
+
+---
+
+## 🧭 Two-Hour Session Outline
+
+> Single 2-hour block. Scaffolded so boilerplate doesn't eat the session.
+
+### Block 1 — Concepts & Theory (~25 min, PowerPoint)
+
+1. What "serving a model" means; the deployment picture (8 min)
+2. Request/response schema design; why validation matters (10 min)
+3. Load-once vs. load-per-request; statelessness and performance (7 min)
+
+### Block 2 — Guided Demonstration (~40 min, live coding)
+
+1. Load the provided model; define a Pydantic request schema (12 min)
+2. Write the `/predict` endpoint; return a structured JSON response (15 min)
+3. Run with uvicorn; test via the auto-generated `/docs` and via `requests` (13 min)
+
+### ☕ Break (~10 min)
+
+### Block 3 — Hands-On Activity (~35 min, students working)
+
+1. Students complete the skeleton server's TODOs to serve the model (20 min)
+2. Test their endpoint with `requests` and the `/docs` UI (10 min)
+3. Add input validation / a friendly error for bad input (5 min)
+
+### Block 4 — Wrap-Up & Homework Preview (~10 min)
+
+1. Compare request/response designs across the room (6 min)
+2. Preview Week 13 — your Week 11 client will call this server (4 min)
+
+---
+
+### You can refer to the [Web page](#) and download the [skeleton server & model](#)
+
+---
+
+## 💻 Notebook / App Snippets
+
+### FastAPI model-serving endpoint
+
+```python
+# app.py  —  run with:  uvicorn app:app --reload
+from fastapi import FastAPI
+from pydantic import BaseModel
+import joblib, numpy as np
+
+app = FastAPI()
+model = joblib.load("model.joblib")          # load ONCE at startup
+
+class Features(BaseModel):
+    flipper_length_mm: float
+    body_mass_g: float
+
+@app.post("/predict")
+def predict(x: Features):
+    X = np.array([[x.flipper_length_mm, x.body_mass_g]])
+    pred = model.predict(X)[0]
+    proba = model.predict_proba(X)[0].max()
+    return {"prediction": str(pred), "confidence": float(proba)}
+```
+
+### Flask alternative (same idea)
+
+```python
+from flask import Flask, request, jsonify
+import joblib, numpy as np
+
+app = Flask(__name__)
+model = joblib.load("model.joblib")
+
+@app.post("/predict")
+def predict():
+    data = request.get_json()
+    X = np.array([[data["flipper_length_mm"], data["body_mass_g"]]])
+    return jsonify(prediction=str(model.predict(X)[0]))
+```
+
+### Test the endpoint
+
+```python
+import requests
+r = requests.post("http://127.0.0.1:8000/predict",
+                  json={"flipper_length_mm": 200, "body_mass_g": 4200}, timeout=5)
+print(r.status_code, r.json())
+```
+
+---
+
+## 🧪 In-Class Activity
+
+- Complete the skeleton server so `/predict` returns a prediction and confidence.
+- Discuss:
+
+What does your request schema require, and what happens on missing/bad fields?
+
+Is the model loaded once or per request? Why does it matter?
+
+What belongs in the response — just a label, or probabilities and metadata?
+
+**Hints**
+
+```python
+# FastAPI + Pydantic validates types automatically and returns a 422 on bad input
+```
+
+---
+
+## 🏠 Homework
+
+1. Serve a trained model (the provided one, or your own) behind a FastAPI/Flask `/predict` endpoint.
+2. Define a clear request schema and a structured response (prediction + confidence/metadata).
+3. Handle invalid input gracefully.
+4. Submit the server code plus a short test script (or `/docs` screenshot showing a successful call) to Blackboard.
+
+**Rubric (10 pts)**
+
+- Working endpoint that returns correct predictions (4)
+- Clear request/response schema design (3)
+- Model loaded efficiently; invalid input handled (3)
+
+---
+
+## 🧩 Optional Extensions
+
+- Add a `/health` and a `/model-info` endpoint (version, features, classes).
+- Containerize the server with a simple Dockerfile.
+- Add batch prediction (accept a list of inputs).
+
+---
+
+## ✅ Submission Checklist
+
+Before submitting, make sure:
+
+- Your assignment fulfills all the basic requirements listed above.
+
+- The server runs with `uvicorn app:app` (or `flask run`) and `/predict` returns valid JSON.
+
+- A bad request returns a sensible error, not a crash.
+
+---

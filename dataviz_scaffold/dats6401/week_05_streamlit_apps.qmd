@@ -1,0 +1,182 @@
+---
+title: "Week 5 — Building Interactive Apps with Streamlit"
+---
+
+> From notebook to application. This module is the hinge of the course: students learn to turn analyses into interactive Streamlit apps, the delivery format used for both projects and all later modules.
+
+## 📖 Background & Motivation
+
+A notebook is a great place to *develop* a visualization, but a poor place to *deliver* one to someone who isn't a programmer. Streamlit closes that gap: with a few lines of pure Python, a script becomes an interactive web app with widgets, layout, and live-updating charts. For a data-science course, this is more than convenience — it is the difference between a static figure and a tool someone can explore.
+
+This week is deliberately tooling-heavy. We cover Streamlit's execution model (the script re-runs top-to-bottom on every interaction), the widget set, layout primitives (columns, tabs, sidebar), and — crucially — caching, which is what keeps an app responsive when it loads data or fits a model. We also deploy a first app to the web. Everything after this week assumes Streamlit fluency: the modality modules end in small apps, and the final project is a deployed client–server Streamlit application. Getting comfortable now is what makes the client–server weeks (11–13) feasible in a two-hour block.
+
+---
+
+## 🔎 Learning Objectives
+
+- Explain Streamlit's re-run execution model and use `st.session_state` and caching appropriately.
+- Build apps with widgets, layout (columns/tabs/sidebar), and live charts.
+- Convert an existing notebook analysis into an interactive app.
+- Deploy a Streamlit app to the web.
+
+---
+
+## 📚 Readings & Resources
+
+- [Streamlit — Main concepts](https://docs.streamlit.io/get-started/fundamentals/main-concepts) — the execution model.
+- [Streamlit — API reference](https://docs.streamlit.io/develop/api-reference) — widgets and layout.
+- [Streamlit — Caching](https://docs.streamlit.io/develop/concepts/architecture/caching) — `@st.cache_data`.
+- [Streamlit Community Cloud — Deploy](https://docs.streamlit.io/deploy/streamlit-community-cloud) — free deployment.
+
+**Sample Data Sources for Practice:**
+
+- Any dataset from earlier weeks — the point this week is the *app*, not the data.
+
+---
+
+## 🛠️ Setup Checklist
+
+Make sure your environment includes:
+
+```bash
+pip install streamlit pandas altair
+```
+
+Have a free Streamlit Community Cloud (or equivalent) account ready, and a GitHub repo you can deploy from.
+
+---
+
+## 🧭 Two-Hour Session Outline
+
+> Single 2-hour block. Tooling week — hands-on dominates.
+
+### Block 1 — Concepts & Theory (~20 min, PowerPoint)
+
+1. Why apps, not just notebooks: delivery and exploration (5 min)
+2. The re-run model: how Streamlit executes, and why caching matters (10 min)
+3. Layout and state: columns, tabs, sidebar, `session_state` (5 min)
+
+### Block 2 — Guided Demonstration (~35 min, live coding)
+
+1. Build an app with a sidebar, widgets, and a live chart (15 min)
+2. Add caching to a slow data load; see the speedup (10 min)
+3. Push to GitHub and deploy to Streamlit Community Cloud (10 min)
+
+### ☕ Break (~10 min)
+
+### Block 3 — Hands-On Activity (~45 min, students working)
+
+1. Each student takes a notebook from Weeks 2–4 and converts it to an app (25 min)
+2. Add at least two widgets and a layout element (10 min)
+3. Deploy it and share the URL (10 min)
+
+### Block 4 — Wrap-Up & Homework Preview (~10 min)
+
+1. Walk through a few deployed apps (6 min)
+2. Preview homework and the mid-term project (4 min)
+
+---
+
+### You can refer to the [Web page](#) and download the [Streamlit app](#)
+
+---
+
+{{< include _live_app_embed.qmd >}}
+
+## 💻 Notebook / App Snippets
+
+### App skeleton with widgets and layout
+
+```python
+# app.py
+import streamlit as st
+import seaborn as sns
+
+st.title("Penguins Explorer")
+species = st.sidebar.multiselect("Species", ["Adelie", "Gentoo", "Chinstrap"],
+                                 default=["Adelie"])
+df = sns.load_dataset("penguins").dropna()
+df = df[df["species"].isin(species)]
+
+col1, col2 = st.columns(2)
+col1.metric("Rows", len(df))
+col2.metric("Avg mass (g)", round(df["body_mass_g"].mean(), 1))
+st.scatter_chart(df, x="flipper_length_mm", y="body_mass_g", color="species")
+```
+
+### Caching a slow load
+
+```python
+import streamlit as st, pandas as pd
+
+@st.cache_data
+def load_data(path):
+    return pd.read_csv(path)   # only runs once per unique path
+
+df = load_data("big_file.csv")
+```
+
+### Session state (remember across re-runs)
+
+```python
+import streamlit as st
+if "count" not in st.session_state:
+    st.session_state.count = 0
+if st.button("Increment"):
+    st.session_state.count += 1
+st.write(st.session_state.count)
+```
+
+---
+
+## 🧪 In-Class Activity
+
+- Convert one earlier notebook chart into an app with a widget that filters the data.
+- Discuss:
+
+What re-runs when you move the widget, and what should be cached?
+
+Where does layout (columns/sidebar) improve readability?
+
+**Hints**
+
+```python
+# Anything expensive (load, fit) → wrap in @st.cache_data / @st.cache_resource
+```
+
+---
+
+## 🏠 Homework
+
+1. Take an analysis from Weeks 2–4 and turn it into a deployed Streamlit app.
+2. Include at least: a sidebar, two widgets, a layout element (columns or tabs), and caching.
+3. Deploy it and submit the live URL plus the repo link to Blackboard.
+
+**Rubric (10 pts)**
+
+- App runs and is deployed (3)
+- Effective widgets and layout (3)
+- Correct use of caching / state (2)
+- Clarity and usefulness of the app (2)
+
+---
+
+## 🧩 Optional Extensions
+
+- Add tabs separating "data" and "chart" views.
+- Use `st.download_button` to export filtered data.
+- Theme the app and add a short "About" panel.
+
+---
+
+## ✅ Submission Checklist
+
+Before submitting, make sure:
+
+- Your assignment fulfills all the basic requirements listed above.
+
+- Your app is deployed and the live URL works.
+
+- Expensive operations are cached and the app stays responsive.
+
+---

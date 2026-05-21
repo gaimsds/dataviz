@@ -1,0 +1,59 @@
+project:
+  type: book
+  output-dir: _book
+  resources:
+    - weekly/      # per-week notebooks and data, served as linked downloads
+
+# Code executes LOCALLY when you run `quarto render`; results are cached in
+# _freeze/ and committed to git. The GitHub Action then only assembles the
+# frozen HTML (no Python in CI). Some executable cells fetch data via
+# seaborn.load_dataset / plotly.express at render time, so render with a
+# network connection on your machine.
+execute:
+  freeze: auto
+
+book:
+  title: "Data Visualization for Data Science"
+  subtitle: "DATS 2102 — Undergraduate Course"
+  author: "Junjun Yin"
+  date: today
+  search: true
+  repo-url: https://github.com/gaimsds/dataviz
+  repo-actions: [edit, issue]
+  page-footer:
+    left: "DATS 2102 · George Washington University"
+    right: "Built with [Quarto](https://quarto.org)"
+  chapters:
+    - index.qmd
+    - part: "Foundations"
+      chapters:
+        - week_01_getting_started.qmd
+        - week_02_language_of_graphs.qmd
+        - week_03_distributions_variation.qmd
+        - week_04_wrangling_with_pandas.qmd
+    - part: "Design & Comparison"
+      chapters:
+        - week_05_perception_principles.qmd
+        - week_06_comparisons.qmd
+        - week_07_text_labels_tables.qmd
+    - part: "Maps, Color & Models"
+      chapters:
+        - week_08_mapping_i_ii.qmd
+        - week_09_color_accessibility.qmd
+        - week_10_relationships_modeling.qmd
+        - week_11_uncertainty_error.qmd
+        - week_12_viz_ml_nlp.qmd
+    - part: "Projects"
+      chapters:
+        - project_midterm.qmd
+        - project_final.qmd
+
+format:
+  html:
+    theme:
+      - cosmo
+    code-copy: true
+    code-overflow: wrap
+    toc: true
+    toc-depth: 3
+    number-sections: false

@@ -3,7 +3,7 @@
 Source for two Quarto-book course sites, published to GitHub Pages:
 
 - **DATS 6401 — Visualization of Complex Data** (graduate) → `dats6401/`
-- **DATS 2102 — Data Visualization for Data Science** (undergraduate) → `dats2102/` *(to be added)*
+- **DATS 2102 — Data Visualization for Data Science** (undergraduate) → `dats2102/`
 
 Live site: `https://gaimsds.github.io/dataviz/`
 (→ `…/dataviz/dats6401/` and, once added, `…/dataviz/dats2102/`)

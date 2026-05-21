@@ -1,0 +1,13 @@
+::: {.callout-tip title="Live app"}
+Once you deploy this week's Streamlit app, embed the **running app** here by replacing the placeholder URL below. The page will show the live, interactive app instead of static code.
+
+```{=html}
+<iframe
+  src="https://YOUR-APP-NAME.streamlit.app/?embed=true"
+  width="100%" height="600" style="border:1px solid #ddd; border-radius:8px;"
+  loading="lazy">
+</iframe>
+```
+
+To embed a Streamlit Community Cloud app, append `?embed=true` to its URL (this hides Streamlit's chrome). Until an app is deployed, leave this commented out or point it at a shared course demo.
+:::
