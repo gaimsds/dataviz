@@ -49,7 +49,7 @@ book:
         - project_final.qmd
 
 format:
-  html:
+  live-html:
     theme:
       - cosmo
     code-copy: true
@@ -57,3 +57,9 @@ format:
     toc: true
     toc-depth: 3
     number-sections: false
+pyodide:
+  packages:
+    - numpy
+    - matplotlib
+    - seaborn
+    - pandas

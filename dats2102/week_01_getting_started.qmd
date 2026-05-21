@@ -1,5 +1,12 @@
 ---
 title: "Week 1 — Getting Started"
+format: live-html
+pyodide:
+  packages:
+    - numpy
+    - matplotlib
+    - seaborn
+    - pandas
 ---
 
 > Welcome to DATS 2102. Let's get started with the setup of the environment and the first steps in data visualization.
@@ -103,7 +110,7 @@ As data science projects grow in size and complexity, the ability to craft clear
 
 ### Load a tiny dataset ([download the tab-separated file (tsv) version](week1/cities.tsv))
 
-```{python}
+```{pyodide}
 import pandas as pd
 
 cities = pd.DataFrame({
@@ -116,7 +123,7 @@ cities.head()
 
 ### First charts (matplotlib → seaborn)
 
-```{python}
+```{pyodide}
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -134,7 +141,7 @@ plt.show()
 
 ### Quick EDA helpers
 
-```{python}
+```{pyodide}
 cities.describe(include="all")
 print("Missing values by column:\n", cities.isna().sum())
 ```
@@ -151,10 +158,11 @@ Using `seaborn.load_dataset("penguins")`:
 
 **Hints**
 
-```{python}
+```{pyodide}
 penguins = sns.load_dataset("penguins").dropna()
 ax = sns.scatterplot(data=penguins, x="flipper_length_mm", y="body_mass_g", hue="species")
 ax.set(title="Penguins: Flipper vs Body Mass", xlabel="Flipper length (mm)", ylabel="Body mass (g)")
+plt.show()
 ```
 
 ---
