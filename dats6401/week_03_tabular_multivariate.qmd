@@ -44,6 +44,12 @@ pip install pandas numpy seaborn matplotlib scikit-learn streamlit
 
 **Block 4 — Wrap-Up (~10 min).** Share PCA projections; what clustered and why? (6) · preview homework (4).
 
+---
+
+### Materials: [Block 2 demo](weekly/week3/week03_block2_demo.ipynb) · [hands-on](weekly/week3/week03_block3_handson.ipynb) · [PCA app starter](weekly/week3/app_pca_starter.py)
+
+---
+
 ## 💻 Live Code
 
 We use the Wine dataset (ships with scikit-learn): 13 numeric chemical measurements across three cultivars — a genuinely multivariate problem.

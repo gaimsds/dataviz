@@ -78,7 +78,7 @@ Confirm you can run `uvicorn app:app --reload` on the skeleton and open the `/do
 
 ---
 
-### You can refer to the [Web page](#) and download the [skeleton server & model](#)
+### Materials: [training script](weekly/week12/train_model.py) · [server skeleton](weekly/week12/server_skeleton.py) · [endpoint test](weekly/week12/test_endpoint.py)
 
 ---
 

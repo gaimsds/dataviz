@@ -80,7 +80,7 @@ GeoPandas can be finicky to install — confirm `import geopandas` works in your
 
 ---
 
-### You can refer to the [Web page](#) and download the [Jupyter Notebook](#) / [Streamlit app](#)
+### Materials: [Block 2 demo](weekly/week9/week09_block2_demo.ipynb) · [hands-on](weekly/week9/week09_block3_handson.ipynb) · [counties.geojson](weekly/week9/data/counties.geojson) · [county_stats.csv](weekly/week9/data/county_stats.csv)
 
 ---
 
