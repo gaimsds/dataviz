@@ -1,0 +1,153 @@
+---
+title: "Text Data"
+subtitle: "Week 7 · Visualizing language"
+author: "DATS 6401 — Visualization of Complex Data · Junjun Yin"
+format: revealjs
+---
+
+## Today's session {.smaller}
+
+| | | |
+|---|---|---|
+| **Block 1** | Concepts & Theory — *this deck* | ~30 min |
+| **Block 2** | Guided demo: frequencies → topics → embeddings | ~30 min |
+| ☕ | Break | ~10 min |
+| **Block 3** | Hands-on: your corpus, topic model, Streamlit topic explorer | ~40 min |
+| **Block 4** | Wrap-up & homework preview | ~10 min |
+
+::: {.gw-box}
+**Today's problem:** text has no x and no y. Every text visualization is really a visualization of a **transform** of text — so understanding the transform is half the work.
+:::
+
+# Text has no natural axes {background-color="#2E6E8E"}
+
+## The transform problem
+
+To visualize language we must first make it **countable or geometric**:
+
+| Transform | What becomes visible |
+|---|---|
+| Token counts | What's frequent |
+| TF–IDF | What's *distinctive* |
+| Topic models | What themes organize the corpus |
+| Embeddings | What's *semantically near* what |
+
+Each transform makes assumptions. The chart inherits all of them.
+
+## Counting: from corpus to numbers
+
+```{python}
+#| echo: false
+#| fig-align: center
+docs = [
+    "the model trains on data and the data shapes the model",
+    "visualization turns data into pictures people can read",
+    "a topic model finds themes hiding in a corpus of text",
+    "embeddings place similar text near similar text in space",
+    "people read pictures faster than they read tables of data",
+    "text needs a transform before any visualization can begin",
+]
+from sklearn.feature_extraction.text import CountVectorizer
+import pandas as pd
+import matplotlib.pyplot as plt
+cv = CountVectorizer(stop_words="english")
+counts = cv.fit_transform(docs)
+freq = pd.Series(counts.sum(axis=0).A1, index=cv.get_feature_names_out()).sort_values()
+fig, ax = plt.subplots(figsize=(7.5, 4))
+freq.tail(10).plot.barh(ax=ax, color="#2E6E8E")
+ax.set_title("A 6-document corpus → sorted term frequencies (stop words removed)")
+plt.tight_layout(); plt.show()
+```
+
+The humble **sorted bar chart**: position + length, our two most accurate channels.
+
+# The word-cloud problem {background-color="#2E6E8E"}
+
+## Why word clouds underperform
+
+A word cloud encodes frequency on **area** (weak channel, per Cleveland–McGill) and position on **a packing algorithm** (no meaning at all). Plus: long words look bigger at equal frequency.
+
+::: {.gw-box}
+**Test:** in a word cloud, can you tell whether the 3rd-most-frequent word beats the 5th? In a sorted bar chart you answer instantly. Word clouds are *invitations to look*, not tools to compare. Use them as posters, never as evidence.
+:::
+
+## Distinctive vs. frequent: TF–IDF
+
+Raw counts surface what's common *everywhere* ("data"). Often the real question is what makes **this** document different:
+
+$$\text{tf–idf}(t, d) = \underbrace{\text{tf}(t,d)}_{\text{frequent here}} \times \underbrace{\log\frac{N}{\text{df}(t)}}_{\text{rare elsewhere}}$$
+
+Same bar chart, different transform, different — usually better — story.
+
+# Topics & embeddings {background-color="#2E6E8E"}
+
+## Topic models: themes from structure
+
+A topic model groups documents by shared vocabulary patterns — no labels needed (compare: Week 6's community detection, the same unsupervised instinct).
+
+Modern pipeline (**BERTopic**): embed documents → cluster the embeddings → describe each cluster by its distinctive terms. Its built-in visualizations (topic map, term bars, hierarchy) come almost free:
+
+```python
+from bertopic import BERTopic
+model = BERTopic()
+topics, probs = model.fit_transform(docs)
+model.visualize_topics()       # interactive topic map
+```
+
+*(Static here — BERTopic downloads a language model; you'll run it in Block 2.)*
+
+## Embeddings: text as geometry
+
+An embedding maps each document to a high-dimensional vector where **semantic similarity ≈ proximity**. To see it, we project to 2D — Week 3's PCA instinct again:
+
+```{python}
+#| echo: false
+#| fig-align: center
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import PCA
+import numpy as np
+tf = TfidfVectorizer(stop_words="english")
+Xt = tf.fit_transform(docs).toarray()
+pcs = PCA(n_components=2).fit_transform(Xt)
+fig, ax = plt.subplots(figsize=(7.5, 4))
+ax.scatter(pcs[:, 0], pcs[:, 1], s=120, color="#2E6E8E")
+for i, (x_, y_) in enumerate(pcs):
+    ax.annotate(f"doc {i+1}", (x_, y_), textcoords="offset points", xytext=(8, 5), fontsize=9)
+ax.set_title("6 documents as TF–IDF vectors, projected to 2D — neighbors share vocabulary")
+ax.set_xlabel("PC1"); ax.set_ylabel("PC2")
+plt.tight_layout(); plt.show()
+```
+
+## Reading projections honestly {.smaller}
+
+In Block 2 we'll use **UMAP** on real sentence embeddings — far better neighborhoods than this toy PCA. But every projection shares the caveats:
+
+- **Distances are relative**, not metric — "twice as far" means nothing
+- Cluster *shapes and sizes* are artifacts of the projection
+- Different seeds/parameters → different pictures (Week 6's layout lesson again)
+
+::: {.gw-box}
+Caption discipline: name the embedding, the projection, and the parameters. "UMAP of MiniLM embeddings (n_neighbors=15)" is honest; "semantic map" is marketing.
+:::
+
+## Discussion {.gw-discussion}
+
+**1.** Your stakeholder loves the word cloud on the report cover. Keep it, replace it, or both — and where?
+
+**2.** A topic model returns 14 topics. What visual evidence would convince you they're *real* rather than algorithmic confetti?
+
+*(5 minutes — then the demo.)*
+
+## Coming up next — Block 2 {.smaller}
+
+Live demo:
+
+1. Corpus → sorted frequency bars vs. the word cloud, side by side
+2. Fit **BERTopic**; tour its topic map and term bars
+3. Project document embeddings to 2D; spot the structure
+
+**Then Block 3:** your corpus, your topic model, a Streamlit topic explorer with a topic selector.
+
+**Readings:** BERTopic docs · "Word clouds considered harmful" · sklearn text features guide
+
+**Homework preview:** honest frequency view + topic visualization + embedding projection, each with one stated limitation.

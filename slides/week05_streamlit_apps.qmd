@@ -1,0 +1,150 @@
+---
+title: "Building Interactive Apps with Streamlit"
+subtitle: "Week 5 · From notebook to application"
+author: "DATS 6401 — Visualization of Complex Data · Junjun Yin"
+format: revealjs
+---
+
+## Today's session {.smaller}
+
+| | | |
+|---|---|---|
+| **Block 1** | Concepts & Theory — *this deck* | ~20 min |
+| **Block 2** | Guided demo: build, lay out, cache, deploy | ~35 min |
+| ☕ | Break | ~10 min |
+| **Block 3** | Hands-on: convert YOUR Weeks 2–4 notebook to a deployed app | ~45 min |
+| **Block 4** | Wrap-up & homework preview | ~10 min |
+
+::: {.gw-box}
+**The hinge week.** Everything after today is delivered as an app. Both your projects are apps. Get comfortable now.
+:::
+
+# Why apps {background-color="#2E6E8E"}
+
+## Notebooks explore; apps deliver
+
+A notebook is **for you**: messy, sequential, requires Python.
+
+An app is **for them**: a stakeholder, a grader, the public — people who will *never* run your cells.
+
+| | Notebook | Streamlit app |
+|---|---|---|
+| Audience | you | others |
+| Interaction | edit & re-run | widgets |
+| Requires | Python env | a URL |
+| Question style | fixed | *their* question |
+
+## Streamlit's bet: an app is just a script
+
+```python
+import streamlit as st
+import plotly.express as px
+
+st.title("Tips Explorer")
+df = px.data.tips()
+day = st.selectbox("Day", sorted(df["day"].unique()))
+st.scatter_chart(df[df["day"] == day], x="total_bill", y="tip")
+```
+
+No HTML, no JavaScript, no callbacks. The price of that simplicity is one unusual idea — the execution model.
+
+# The re-run model {background-color="#2E6E8E"}
+
+## The whole script re-runs on every interaction
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+import matplotlib.patches as mp
+fig, ax = plt.subplots(figsize=(9.5, 3.4))
+boxes = [("user moves\na widget", "#EAF2F6"), ("ENTIRE script\nre-runs top→bottom", "#2E6E8E"),
+         ("new outputs\nrendered", "#EAF2F6")]
+for i, (txt, col) in enumerate(boxes):
+    fc = col; tc = "white" if col == "#2E6E8E" else "#1a1a1a"
+    ax.add_patch(mp.FancyBboxPatch((i*3.3, 0.5), 2.6, 1.6, boxstyle="round,pad=0.1", fc=fc, ec="#2E6E8E"))
+    ax.text(i*3.3+1.3, 1.3, txt, ha="center", va="center", fontsize=11, color=tc)
+    if i < 2:
+        ax.annotate("", xy=(i*3.3+3.1, 1.3), xytext=(i*3.3+2.8, 1.3),
+                    arrowprops=dict(arrowstyle="->", lw=2, color="#5a6672"))
+ax.annotate("", xy=(1.3, 0.45), xytext=(7.9, 0.45),
+            arrowprops=dict(arrowstyle="->", lw=1.5, color="#d9534f",
+                            connectionstyle="arc3,rad=0.25"))
+ax.text(4.6, -0.45, "…and again on the next interaction", ha="center", fontsize=10, color="#d9534f")
+ax.set_xlim(-0.4, 10.3); ax.set_ylim(-0.8, 2.6); ax.axis("off")
+plt.tight_layout(); plt.show()
+```
+
+Three consequences: it's why the code stays simple, why **plain variables reset** every interaction, and why **slow code becomes unbearable**.
+
+## Consequence 1: state needs `session_state`
+
+```python
+count = 0                      # ← resets to 0 on EVERY re-run: useless
+if st.button("Click"): count += 1   # forever prints 1
+
+if "count" not in st.session_state:  # ← survives re-runs
+    st.session_state.count = 0
+if st.button("Click"):
+    st.session_state.count += 1
+```
+
+Rule of thumb: anything that must **survive an interaction** lives in `st.session_state`.
+
+## Consequence 2: slow code needs caching
+
+```python
+@st.cache_data            # cache key = the function's arguments
+def load_data(path):
+    return pd.read_csv(path)        # runs ONCE per unique path
+
+df = load_data("big.csv")           # instant on every later re-run
+```
+
+- `@st.cache_data` — dataframes, results, anything copyable
+- `@st.cache_resource` — models, DB connections (shared, not copied)
+
+In Block 2 you'll *feel* the difference: a 3-second load, with and without.
+
+# Layout & deployment {background-color="#2E6E8E"}
+
+## Layout vocabulary {.smaller}
+
+- `st.sidebar` — controls live here; content stays clean
+- `st.columns(n)` — metrics and side-by-side charts
+- `st.tabs([...])` — alternate views without scrolling
+- `st.metric` — the big-number-with-delta pattern dashboards love
+
+::: {.gw-box}
+Design principle from Week 2 still rules: the *reader's* main comparison gets the best real estate, controls get the sidebar.
+:::
+
+## Deployment: from laptop to URL
+
+1. Push `app.py` + `requirements.txt` to a **GitHub repo**
+2. share.streamlit.io → **New app** → pick the repo
+3. Share the URL
+
+That's Streamlit Community Cloud (free). Caveats worth knowing: apps **sleep** when idle, resources are modest, and secrets go in app settings — never in the repo. (Weeks 12–14: the same idea for your model server.)
+
+## Discussion {.gw-discussion}
+
+**1.** Your Week 3 PCA notebook — which *one* widget would make it most useful to someone else?
+
+**2.** What in that notebook must be cached, and what must become `session_state`?
+
+*(4 minutes — then the live build.)*
+
+## Coming up next — Block 2 {.smaller}
+
+Live build, three apps in sequence (files provided in this week's materials):
+
+1. `demo_1_basic.py` — first app + watching the re-run model
+2. `demo_2_widgets_layout.py` — sidebar, columns, tabs, `session_state`
+3. `demo_3_caching.py` — the 3-second load, before/after caching — then deploy live
+
+**Then Block 3:** convert **your own** Weeks 2–4 notebook into a deployed app (template provided if needed).
+
+**Readings:** Streamlit main concepts · caching guide · Community Cloud deploy docs
+
+**Homework preview:** a deployed app — sidebar, two widgets, a layout element, caching. Submit the live URL.

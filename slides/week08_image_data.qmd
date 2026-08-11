@@ -1,0 +1,162 @@
+---
+title: "Image Data"
+subtitle: "Week 8 · Pixels as data"
+author: "DATS 6401 — Visualization of Complex Data · Junjun Yin"
+format: revealjs
+---
+
+## Today's session {.smaller}
+
+| | | |
+|---|---|---|
+| **Block 1** | Concepts & Theory — *this deck* | ~30 min |
+| **Block 2** | Guided demo: montages, channels, a saliency overlay | ~30 min |
+| ☕ | Break | ~10 min |
+| **Block 3** | Hands-on: montage + structure view + Streamlit image browser | ~40 min |
+| **Block 4** | Wrap-up & homework preview | ~10 min |
+
+::: {.gw-box}
+**Today's claim:** image visualization is a **debugging tool** — for the data *and* for the model — not decoration. Running example: the handwritten-digits dataset (1,797 8×8 images, ships with sklearn).
+:::
+
+# An image is an array {background-color="#2E6E8E"}
+
+## Pixels, channels, shape
+
+- Grayscale image: a 2-D array, `(height, width)`, values = intensity
+- Color image: 3-D, `(height, width, 3)` — R, G, B channels
+- A *collection*: 4-D. A "small" dataset is millions of numbers
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_digits
+digits = load_digits()
+fig, axes = plt.subplots(1, 2, figsize=(8, 3.2))
+axes[0].imshow(digits.images[0], cmap="gray")
+axes[0].set_title(f"One digit: an {digits.images[0].shape} array")
+im = axes[1].imshow(digits.images[0], cmap="gray")
+for (i, j), v in __import__("numpy").ndenumerate(digits.images[0]):
+    axes[1].text(j, i, int(v), ha="center", va="center",
+                 color="red" if v > 8 else "#2E6E8E", fontsize=7)
+axes[1].set_title("…and the numbers it actually is")
+for a in axes: a.axis("off")
+plt.tight_layout(); plt.show()
+```
+
+## Two visualization jobs
+
+1. **Making collections legible** — can a human scan the dataset? (data quality, class balance, label errors)
+2. **Looking inside models** — what is the classifier actually responding to? (saliency, feature maps)
+
+Both are pre-modeling and post-modeling *due diligence* — the image analog of `df.head()` and the confusion matrix.
+
+# Job 1: collections {background-color="#2E6E8E"}
+
+## The montage: df.head() for images
+
+```{python}
+#| echo: false
+#| fig-align: center
+fig, axes = plt.subplots(4, 10, figsize=(9, 4))
+for ax, img, label in zip(axes.ravel(), digits.images, digits.target):
+    ax.imshow(img, cmap="gray"); ax.set_title(label, fontsize=8); ax.axis("off")
+plt.suptitle("First 40 digits — mislabels and weird crops jump out HERE, not in a table")
+plt.tight_layout(); plt.show()
+```
+
+Ten seconds of montage-scanning catches what no summary statistic will: rotated scans, label mistakes, duplicate frames, watermarks.
+
+## Summarizing a class: the mean image
+
+```{python}
+#| echo: false
+#| fig-align: center
+import numpy as np
+fig, axes = plt.subplots(1, 10, figsize=(9.5, 1.6))
+for d, ax in enumerate(axes):
+    ax.imshow(digits.images[digits.target == d].mean(axis=0), cmap="gray")
+    ax.set_title(d, fontsize=9); ax.axis("off")
+plt.suptitle("Per-class mean images: the 'prototype' each label converges to")
+plt.tight_layout(); plt.show()
+```
+
+Blurry mean = high within-class variety. Two classes with similar means (3 vs 8, 4 vs 9) predict exactly where a classifier will struggle.
+
+## Structure: intensity & channels
+
+```{python}
+#| echo: false
+#| fig-align: center
+fig, ax = plt.subplots(figsize=(8, 3))
+for d, color in [(0, "#2E6E8E"), (1, "#d9534f")]:
+    vals = digits.images[digits.target == d].ravel()
+    ax.hist(vals, bins=17, alpha=0.55, label=f"digit {d}", color=color, density=True)
+ax.set_xlabel("pixel intensity"); ax.legend()
+ax.set_title("Intensity distributions: '1' uses far less ink than '0'")
+plt.tight_layout(); plt.show()
+```
+
+For color photos, the same idea per **R/G/B channel** diagnoses exposure and color-balance problems across a dataset — before they silently bias a model.
+
+# Job 2: inside the model {background-color="#2E6E8E"}
+
+## What is the model looking at?
+
+A **saliency map** highlights the pixels that most influence a prediction — overlaid on the image itself:
+
+- Bright saliency on the object → reassuring
+- Bright saliency on the *background* → the classic "right for the wrong reason" (the dog detector that learned to detect grass)
+
+Methods range from gradient-based (vanilla saliency) to **Grad-CAM** for CNNs; in Block 2 we build a simple occlusion-based one — no deep-learning stack required.
+
+## Occlusion saliency: the idea {.smaller}
+
+1. Train any classifier
+2. Slide a small blank patch across the image
+3. Where hiding pixels **hurts the prediction most** → those pixels mattered
+
+```{python}
+#| echo: false
+#| fig-align: center
+from sklearn.linear_model import LogisticRegression
+X, y = digits.data, digits.target
+clf = LogisticRegression(max_iter=2000).fit(X, y)
+img = digits.images[0].copy()
+base = clf.predict_proba([img.ravel()])[0][0]
+sal = np.zeros((8, 8))
+for i in range(8):
+    for j in range(8):
+        t = img.copy(); t[i, j] = 0
+        sal[i, j] = base - clf.predict_proba([t.ravel()])[0][0]
+fig, axes = plt.subplots(1, 2, figsize=(7, 3))
+axes[0].imshow(img, cmap="gray"); axes[0].set_title("a '0'")
+axes[1].imshow(sal, cmap="hot"); axes[1].set_title("pixels whose removal hurts P(0)")
+for a in axes: a.axis("off")
+plt.tight_layout(); plt.show()
+```
+
+The hot ring follows the stroke — this model earns some trust. (Week 13 generalizes this instinct to any model.)
+
+## Discussion {.gw-discussion}
+
+**1.** Your montage of class "cat" includes three obvious dogs. What does that do to every downstream metric — and who should have caught it?
+
+**2.** A saliency map shows the model keying on a corner watermark. Is the model wrong? Is the *data*?
+
+*(5 minutes — then the demo.)*
+
+## Coming up next — Block 2 {.smaller}
+
+Live demo:
+
+1. Build a labeled montage; hunt anomalies together
+2. Per-class means + intensity histograms
+3. The occlusion-saliency overlay, step by step
+
+**Then Block 3:** your image set — montage, one structure view, and a Streamlit image browser (upload → display → stats).
+
+**Readings:** matplotlib image tutorial · scikit-image gallery · Distill, *Feature Visualization*
+
+**Homework preview:** a montage that reveals something + a structural view + (if feasible) a saliency interpretation.

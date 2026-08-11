@@ -84,6 +84,24 @@ replace the placeholder URL with your deployed app URL plus `?embed=true`.
 
 ---
 
+## Lecture slides
+
+`slides/` is a **separate Quarto project** (revealjs, not a book) holding the 14
+DATS 6401 lecture decks. It follows the same execution model as the books:
+figures execute locally and are cached in `slides/_freeze/`, which is committed,
+so CI publishes without running Python.
+
+```bash
+quarto render slides                      # all 14 decks -> slides/_output/
+quarto preview slides/week06_graph_network_data.qmd   # live reload, one deck
+```
+
+The publish workflow renders it to `_site/dats6401/slides/`, so a deck lands at
+`…/dataviz/dats6401/slides/week06_graph_network_data.html`. Note `slides/_output/`
+is git-ignored — commit the `.qmd` and `_freeze/`, never the rendered decks.
+
+---
+
 ## Adding the undergraduate course later
 
 1. Create a `dats2102/` folder with its own `_quarto.yml` (copy `dats6401/_quarto.yml`

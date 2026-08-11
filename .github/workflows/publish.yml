@@ -44,6 +44,11 @@ jobs:
       - name: Render DATS 2102 book
         run: quarto render dats2102 --output-dir ../_site/dats2102
 
+      # Lecture decks (revealjs), published under the 6401 book as /slides/.
+      # Same execution model: figures are frozen locally, so no Python here.
+      - name: Render DATS 6401 slides
+        run: quarto render slides --output-dir ../_site/dats6401/slides
+
       - name: Copy landing page
         run: cp index.html _site/index.html
 

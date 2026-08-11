@@ -1,0 +1,141 @@
+---
+title: "Serving Models with FastAPI / Flask"
+subtitle: "Week 12 · The server side"
+author: "DATS 6401 — Visualization of Complex Data · Junjun Yin"
+format: revealjs
+---
+
+## Today's session {.smaller}
+
+| | | |
+|---|---|---|
+| **Block 1** | Concepts & Theory — *this deck* | ~25 min |
+| **Block 2** | Guided demo: schema → endpoint → /docs → test | ~40 min |
+| ☕ | Break | ~10 min |
+| **Block 3** | Hands-on: complete the skeleton server, prove it with the test script | ~35 min |
+| **Block 4** | Wrap-up & homework preview | ~10 min |
+
+::: {.gw-box}
+**Last week you were the client. Today you're the server.** A trained model goes behind an HTTP endpoint — the standard shape of a deployed model, and the back half of your final project.
+:::
+
+# What "serving a model" means {background-color="#2E6E8E"}
+
+## From pickle to product
+
+A trained model in a `.joblib` file helps no one. **Serving** it means:
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+import matplotlib.patches as mp
+fig, ax = plt.subplots(figsize=(9.5, 3.4))
+steps = [("model.joblib\n(trained, saved)", "#EAF2F6"),
+         ("FastAPI app\nloads it ONCE", "#9ab8c9"),
+         ("uvicorn serves\nHTTP on :8000", "#2E6E8E"),
+         ("ANY client\nPOSTs /predict", "#EAF2F6")]
+for i, (txt, col) in enumerate(steps):
+    tc = "white" if col == "#2E6E8E" else "#1a1a1a"
+    ax.add_patch(mp.FancyBboxPatch((i*2.5, 0.6), 2.0, 1.5, boxstyle="round,pad=0.08", fc=col, ec="#2E6E8E"))
+    ax.text(i*2.5+1.0, 1.35, txt, ha="center", va="center", fontsize=10, color=tc)
+    if i < 3:
+        ax.annotate("", xy=(i*2.5+2.4, 1.35), xytext=(i*2.5+2.1, 1.35),
+                    arrowprops=dict(arrowstyle="->", lw=2, color="#5a6672"))
+ax.set_xlim(-0.3, 10.2); ax.set_ylim(0.2, 2.5); ax.axis("off")
+ax.set_title("One model, one server — many clients: web apps, notebooks, other services")
+plt.tight_layout(); plt.show()
+```
+
+The model trains **once**, loads **once**, predicts **many times** — and every client speaks the same language: HTTP + JSON.
+
+## Why FastAPI (and where Flask fits) {.smaller}
+
+| | FastAPI | Flask |
+|---|---|---|
+| Input validation | **automatic** (Pydantic) | manual |
+| Interactive docs | **free** (`/docs`) | add-on |
+| Style | typed, modern | minimal, classic |
+
+We teach FastAPI for the validation + docs; Flask appears in the materials as the lighter alternative. Both produce the same thing: a URL that predicts.
+
+# Design the contract first {background-color="#2E6E8E"}
+
+## The schema IS the API
+
+Before any logic: what does a request look like, and what comes back?
+
+```python
+class Flower(BaseModel):          # the REQUEST contract
+    sepal_length: float
+    sepal_width: float
+    petal_length: float
+    petal_width: float
+```
+
+```json
+// the RESPONSE contract
+{"prediction": "versicolor",
+ "confidence": 0.91,
+ "probabilities": {"setosa": 0.0, "versicolor": 0.91, "virginica": 0.09}}
+```
+
+::: {.gw-box}
+**Return the full distribution, not just the winner.** Week 13 needs those probabilities to visualize uncertainty honestly — design the contract for the client you'll build next week.
+:::
+
+## Pydantic: validation you don't write
+
+Declare `sepal_length: float` and FastAPI **rejects** `"oops"` with a **422** — before your code runs:
+
+```text
+POST /predict  {"sepal_length": "oops"}
+→ 422 Unprocessable Entity
+   {"detail": [{"loc": ["body", "sepal_length"],
+                "msg": "Input should be a valid number"}]}
+```
+
+The error names the field and the reason. That's the difference between an API and a script with a URL.
+
+## The two server rules {.smaller}
+
+**1. Load once, at startup** — never inside the endpoint:
+
+```python
+bundle = joblib.load("model.joblib")     # module level: runs ONCE
+model = bundle["model"]
+
+@app.post("/predict")
+def predict(x: Flower):                  # called PER REQUEST: must be fast
+    ...
+```
+
+**2. Stay stateless** — each request is independent. No globals that accumulate per-user state; that's what databases (and, client-side, `session_state`) are for. Stateless servers scale by simply running more copies.
+
+## The wow moment: /docs
+
+Run `uvicorn server:app --reload`, open **`http://127.0.0.1:8000/docs`** — FastAPI generated **interactive documentation from your type hints**: every endpoint, every field, a *Try it out* button.
+
+This is your manual test bench in Block 3, and the de facto spec you hand a teammate. (`test_endpoint.py` then automates the same checks: a good 200, a bad 422.)
+
+## Discussion {.gw-discussion}
+
+**1.** Why is `joblib.load` inside the endpoint a disaster at 100 requests/min — and what *else* should load once? (Think Week 13: scalers, label encoders…)
+
+**2.** Your model needs 30 features. Is a 30-field Pydantic schema right, or would you accept a list? What does each choice do to the 422 errors your client sees?
+
+*(4 minutes — then we build it.)*
+
+## Coming up next — Block 2 {.smaller}
+
+Live build (materials provided in this week's folder):
+
+1. `python train_model.py` → `model.joblib` (regenerate per machine — pickles are version-sensitive!)
+2. Schema first, then `/predict`, narrating the two rules
+3. `uvicorn ... --reload` → tour **/docs** → `python test_endpoint.py` (the 200 and the 422)
+
+**Then Block 3:** complete `server_skeleton.py`'s four TODOs; prove it with the test script; add `/model-info` if you finish early.
+
+**Readings:** FastAPI first steps & request body · sklearn model persistence · uvicorn docs
+
+**Homework preview:** your served model, documented request/response design, graceful bad-input handling. Week 13 wires your client to it.

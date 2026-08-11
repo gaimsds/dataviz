@@ -1,0 +1,158 @@
+---
+title: "Foundations & Setup"
+subtitle: "Week 1 · What makes data complex, and how we'll work"
+author: "DATS 6401 — Visualization of Complex Data · Junjun Yin"
+format: revealjs
+---
+
+## Today's session {.smaller}
+
+| | | |
+|---|---|---|
+| **Block 1** | Concepts & Theory — *this deck* | ~35 min |
+| **Block 2** | Guided demo: environment, first chart, first Streamlit app | ~30 min |
+| ☕ | Break | ~10 min |
+| **Block 3** | Hands-on: your environment, your chart, your app | ~30 min |
+| **Block 4** | Wrap-up & homework preview | ~10 min |
+
+::: {.gw-box}
+**Goal today:** everyone leaves with a working environment, a first chart, and a first running Streamlit app.
+:::
+
+# What this course is {background-color="#2E6E8E"}
+
+## A course organized by data *modality*
+
+Most visualization courses are organized by **chart type**: bar week, scatter week, pie week.
+
+This course is organized by **what the data is**:
+
+| Weeks | Modality |
+|---|---|
+| 3–4 | Tabular & time-series (the "conventional" shapes) |
+| 6 | Graphs & networks |
+| 7 | Text |
+| 8 | Images |
+| 9–10 | Maps & geographic data |
+| 11–13 | **Live model output** — client–server ML |
+
+## What makes data "complex"?
+
+- **Structure**: relationships (networks), order (time), geometry (maps), pixels (images) — meaning that doesn't fit rows × columns
+- **Scale**: more rows, columns, nodes, or pixels than the eye can hold
+- **Liveness**: data that arrives from an API or a model, not a file
+
+::: {.gw-box}
+The recurring question of this course: **what does this modality's structure demand of the visualization?** A bar chart of a network throws away the network.
+:::
+
+## The end of the road (so you know where we're going)
+
+By Week 14 you will have built a **client–server ML application**:
+
+1. A trained model served behind a **FastAPI** endpoint
+2. A **Streamlit** front-end that sends inputs and **visualizes** live predictions
+3. Deployed, reproducible, and defended in class
+
+Every week's skills feed that capstone — and your **mid-term** (multi-modality Streamlit app) is the halfway checkpoint.
+
+# How we'll work {background-color="#2E6E8E"}
+
+## Notebooks for exploring, apps for delivering
+
+- **Jupyter notebooks**: where analysis happens — messy, iterative, yours
+- **Streamlit apps**: where results live — interactive, shareable, for *others*
+
+This split mirrors real data-science practice: you explore in a notebook, you ship an app. From Week 5 onward, homework increasingly means **a running app**, not a rendered document.
+
+## Tidy data: the shape everything assumes
+
+```{python}
+#| echo: false
+#| fig-align: center
+import plotly.express as px
+df = px.data.tips()
+df.head(6)
+```
+
+One row = one observation. One column = one variable. Every library this semester — pandas, seaborn, altair, plotly — assumes it.
+
+## A first chart, and its anatomy
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots(figsize=(8, 4.2))
+ax.scatter(df["total_bill"], df["tip"], alpha=0.6, color="#2E6E8E")
+ax.set_xlabel("Total bill ($)  ← axis label: units!")
+ax.set_ylabel("Tip ($)")
+ax.set_title("Tips vs. total bill — a title states the relationship")
+ax.annotate("each mark = one party", xy=(40, 9), fontsize=9, color="#5a6672")
+plt.tight_layout(); plt.show()
+```
+
+Figure → axes → marks → labels → title. We name the parts now so we can argue about them all semester.
+
+## Good vs. bad: what are we optimizing?
+
+A visualization is **good** when the reader decodes the right conclusion, *quickly* and *accurately*.
+
+- Not beauty (though it helps)
+- Not data density (though it can)
+- Not effort
+
+::: {.gw-box}
+**Discussion (3 min):** think of a chart you've seen that *looked* great and told you nothing — what failed?
+:::
+
+# The toolchain {background-color="#2E6E8E"}
+
+## Your environment this semester
+
+```bash
+pip install pandas numpy matplotlib seaborn altair plotly streamlit
+```
+
+- **Python 3.10+** (Anaconda fine) · JupyterLab or VS Code
+- **Streamlit** — today you'll run your first app
+- Weeks 11+: `fastapi`, `uvicorn`, `requests`
+
+Setup checklist is in the Week 1 chapter of the course book; we verify everyone's environment in Block 3.
+
+## A Streamlit app is just a script
+
+```python
+# app.py  —  run with:  streamlit run app.py
+import streamlit as st
+import plotly.express as px
+
+st.title("My First App")
+df = px.data.tips()
+st.dataframe(df)
+st.scatter_chart(df, x="total_bill", y="tip")
+```
+
+Four lines of logic → an interactive web app. (How that works — the re-run model — is Week 5's whole story. Today: just make it run.)
+
+## Discussion {.gw-discussion}
+
+**1.** What datasets do you work with (or want to)? Which modality bucket do they fall in?
+
+**2.** Think of one tool/dashboard you use that delivers data interactively. What makes it usable — or not?
+
+*(5 minutes — then we set up environments.)*
+
+## Coming up next — Block 2 {.smaller}
+
+Live, you follow along:
+
+1. Environment sanity check — imports, versions
+2. Load a dataset, first chart, anatomy labels
+3. The two-line Streamlit app, running
+
+**Then Block 3:** your machine, your dataset, your app.
+
+**Readings:** Wilke Ch. 1–2 · Streamlit Get Started · Wickham, *Tidy Data* (links in the course book)
+
+**Homework preview:** a small Streamlit app — load data, show a preview, one labeled chart, short description.

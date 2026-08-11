@@ -1,0 +1,164 @@
+---
+title: "ML/NLP Visualization"
+subtitle: "Week 13 · Making models legible — and wiring it all together"
+author: "DATS 6401 — Visualization of Complex Data · Junjun Yin"
+format: revealjs
+---
+
+## Today's session {.smaller}
+
+| | | |
+|---|---|---|
+| **Block 1** | Concepts & Theory — *this deck* | ~30 min |
+| **Block 2** | Guided demo: performance & behavior visuals → the live wire | ~35 min |
+| ☕ | Break | ~10 min |
+| **Block 3** | Hands-on: your visuals; your client ↔ your server | ~35 min |
+| **Block 4** | Wrap-up — this IS the final-project architecture | ~10 min |
+
+::: {.gw-box}
+**The arc completes:** Week 11 you consumed, Week 12 you served — today you **visualize live model output**, and the consume→serve→visualize loop becomes one running system.
+:::
+
+# Why visualize models {background-color="#2E6E8E"}
+
+## Accuracy is one number; behavior is a landscape
+
+"94% accurate" hides everything that matters:
+
+- *Which* classes get confused, and in which direction?
+- Is the model **confident** when wrong?
+- *Where* in feature space do the errors live?
+- What is it actually **using** to decide?
+
+Model visualization answers these — it's how models earn trust, get debugged, and get explained to people who'll never read the code.
+
+## The confusion matrix: errors have structure
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import ConfusionMatrixDisplay
+iris = load_iris(as_frame=True)
+X, y = iris.data, iris.target
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.3, random_state=42)
+model = RandomForestClassifier(n_estimators=100, random_state=42).fit(X_tr, y_tr)
+fig, ax = plt.subplots(figsize=(5.5, 4.4))
+ConfusionMatrixDisplay.from_estimator(model, X_te, y_te,
+                                      display_labels=iris.target_names, ax=ax, colorbar=False)
+ax.set_title("Off-diagonal cells are the story — and they're not symmetric")
+plt.tight_layout(); plt.show()
+```
+
+Setosa is never confused; versicolor↔virginica is the *only* battleground. One picture replaces a paragraph of metrics.
+
+## ROC: the threshold made visible
+
+A classifier outputs probabilities; **you** choose the cutoff. ROC shows every cutoff at once (binary problems — here, versicolor vs. virginica):
+
+```{python}
+#| echo: false
+#| fig-align: center
+from sklearn.metrics import RocCurveDisplay
+mask = y.isin([1, 2])
+Xb, yb = X[mask], (y[mask] == 2).astype(int)
+Xb_tr, Xb_te, yb_tr, yb_te = train_test_split(Xb, yb, test_size=0.3, random_state=42)
+bmodel = RandomForestClassifier(random_state=42).fit(Xb_tr, yb_tr)
+fig, ax = plt.subplots(figsize=(5.2, 4.2))
+RocCurveDisplay.from_estimator(bmodel, Xb_te, yb_te, ax=ax)
+ax.plot([0, 1], [0, 1], "--", color="#999999", label="chance")
+ax.set_title("Every point = one threshold's trade-off")
+ax.legend(); plt.tight_layout(); plt.show()
+```
+
+For imbalanced problems, the precision–recall curve tells the truer story — same idea, harsher mirror.
+
+# Behavior: what the model uses, where it fails {background-color="#2E6E8E"}
+
+## Feature importance
+
+```{python}
+#| echo: false
+#| fig-align: center
+import pandas as pd
+fig, ax = plt.subplots(figsize=(7.5, 3.2))
+pd.Series(model.feature_importances_, index=X.columns).sort_values().plot.barh(ax=ax, color="#2E6E8E")
+ax.set_title("The petal measurements do almost all the work")
+plt.tight_layout(); plt.show()
+```
+
+Sorted bars — Week 2's most accurate channels, again. Caveats worth saying aloud: importances are model-specific, and correlated features **share** credit unpredictably (permutation importance is the sturdier cousin).
+
+## The error map: WHERE does it fail?
+
+```{python}
+#| echo: false
+#| fig-align: center
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+import numpy as np
+pcs = PCA(n_components=2).fit_transform(StandardScaler().fit_transform(X))
+preds = model.predict(X)
+correct = preds == y
+fig, ax = plt.subplots(figsize=(7.2, 4.4))
+ax.scatter(pcs[correct, 0], pcs[correct, 1], c=y[correct], cmap="Set2", s=28, label="correct")
+ax.scatter(pcs[~correct, 0], pcs[~correct, 1], c="red", marker="x", s=90, label="wrong")
+ax.set_xlabel("PC1"); ax.set_ylabel("PC2"); ax.legend()
+ax.set_title("Errors (✗) cluster on the class boundary — no accuracy number shows this")
+plt.tight_layout(); plt.show()
+```
+
+Project the data (PCA here; UMAP for embeddings), mark the errors. The model isn't randomly wrong — it's wrong **somewhere specific**. For NLP: same picture, dots = documents (Week 7's projection, now diagnosing a model).
+
+## Uncertainty: the honest display {.smaller}
+
+Your Week 12 server returns the **full probability distribution** — use it:
+
+- A 99% prediction and a 51% prediction must **look different** in the client
+- A progress bar shows the winner's share but hides the runner-up — for borderline cases, the **bar chart of all classes** is the honest view
+- There exists a flower (you'll meet it in Block 3) where the model says **exactly 50/50** — what should an app *show* for that?
+
+::: {.gw-box}
+Principle: confidence is data. Visualize it with the same care as the prediction itself.
+:::
+
+# The live wire {background-color="#2E6E8E"}
+
+## Three terminals, one system
+
+```text
+Terminal 1:  uvicorn server_solution:app --reload      # Week 12: the model server
+Terminal 2:  streamlit run app_live_predictions.py     # the client, sliders → POST
+Browser:     prediction + confidence + full distribution, live
+```
+
+The client holds **no model** — every prediction is a round trip. We'll kill the server mid-demo and watch the client fail *gracefully* (Week 11's discipline, graded).
+
+This loop — *inputs → API → model → JSON → visualization* — **is your final project**, with your model in the middle.
+
+## Discussion {.gw-discussion}
+
+**1.** Your confusion matrix and your feature importances — what would it mean if they told *inconsistent* stories?
+
+**2.** For the 50/50 flower: what should the app display? Argue against the progress bar.
+
+**3.** What's the equivalent "error map" for *your* final-project model?
+
+*(5 minutes — then the demo.)*
+
+## Coming up next — Block 2 {.smaller}
+
+Live demo (notebook provided):
+
+1. Confusion matrix, binary-subset ROC, feature importance
+2. The PCA error map — red ✗ where the model fails
+3. **The live wire:** server up → notebook-as-client → the Streamlit app with sliders, confidence, and the full distribution — then we kill the server
+
+**Then Block 3:** your visuals, your client ↔ **your Week 12 server**, plus one honest-uncertainty improvement (the 50/50 flower awaits: sepal 5.5/2.8, petal 4.3/1.8).
+
+**Readings:** sklearn visualization APIs · UMAP docs · Wilke Ch. 16
+
+**Homework preview:** two model-explanation visuals + the working live loop + an interpretation of where your model is weak.

@@ -1,0 +1,117 @@
+---
+title: "Map Visualization — Module II"
+subtitle: "Week 10 · Maps people can touch"
+author: "DATS 6401 — Visualization of Complex Data · Junjun Yin"
+format: revealjs
+---
+
+## Today's session {.smaller}
+
+| | | |
+|---|---|---|
+| **Block 1** | Concepts & Theory — *this deck* | ~20 min |
+| **Block 2** | Guided demo: folium → Streamlit embed → coordinated filter | ~35 min |
+| ☕ | Break | ~10 min |
+| **Block 3** | Hands-on: your interactive geospatial dashboard | ~45 min |
+| **Block 4** | Wrap-up & homework preview | ~10 min |
+
+::: {.gw-box}
+**Last week:** the honest static choropleth. **This week:** the same map, interactive and inside a Streamlit dashboard — because map readers always want to zoom to *their* place.
+:::
+
+# Why interactive maps {background-color="#2E6E8E"}
+
+## Static answers one question; interactive lets them ask
+
+Geographic data has a property no other modality matches: **every reader has a personal location**. They will try to zoom. Interaction supplies:
+
+- **Zoom/pan** — overview first, *their* region on demand
+- **Hover/popup** — exact values without legend-squinting
+- **Layer toggles** — points over polygons, optional context
+- **Filters** — time, category, threshold
+
+But interaction is a budget: every control adds cognitive load. Shneiderman's mantra orders it: *overview first, zoom and filter, details on demand.*
+
+## The web-map model: tiles + layers
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+import matplotlib.patches as mp
+fig, ax = plt.subplots(figsize=(8.5, 3.8))
+layers = [("Basemap tiles (Leaflet fetches per zoom level)", "#EAF2F6"),
+          ("Your data layer: choropleth / markers (GeoJSON)", "#9ab8c9"),
+          ("Interaction layer: popups, tooltips, toggles", "#2E6E8E")]
+for i, (txt, col) in enumerate(layers):
+    tc = "white" if i == 2 else "#1a1a1a"
+    ax.add_patch(mp.FancyBboxPatch((0.4 + i*0.55, 0.35 + i*0.7), 6.4, 0.95,
+                 boxstyle="round,pad=0.08", fc=col, ec="#2E6E8E"))
+    ax.text(0.7 + i*0.55, 0.82 + i*0.7, txt, fontsize=10.5, va="center", color=tc)
+ax.set_xlim(0, 8.6); ax.set_ylim(0, 3.1); ax.axis("off")
+ax.set_title("A web map is a stack — tiles you rent, data you bring, interaction you design")
+plt.tight_layout(); plt.show()
+```
+
+**folium** wraps Leaflet (the web-standard tile map) in Python; **plotly** offers `scatter_mapbox`/`choropleth_mapbox`. Both speak GeoJSON.
+
+# Into Streamlit: the geospatial dashboard {background-color="#2E6E8E"}
+
+## The coordination pattern
+
+One filter drives **both** the map and a companion chart — this is the dashboard's whole trick:
+
+```python
+metric = st.sidebar.selectbox("Metric", ["rate", "count"])   # ONE control
+
+m = folium.Map(location=[39, -98], zoom_start=4)
+folium.Choropleth(geo_data=geojson, data=df,
+                  columns=["region_id", metric], ...).add_to(m)
+st_folium(m, width=700)                                      # view 1: the map
+
+top = df.nlargest(10, metric)
+st.bar_chart(top.set_index("region_name")[metric])           # view 2: same filter
+```
+
+*(Static — runs live in Block 2.)* The bar chart isn't decoration: maps are bad at **ranking** (Week 2: area/color < position). The pair covers each other's weaknesses.
+
+## Performance: the hidden constraint {.smaller}
+
+Interactive maps choke quietly. The usual suspects and fixes:
+
+- **Too many vertices** → simplify geometry: `gdf.geometry.simplify(tolerance)`
+- **Too many markers** → cluster (`MarkerCluster`) or aggregate to hex bins
+- **Re-fetching on every widget change** → `@st.cache_data` around loads (Week 5 paying off)
+- **A full re-render per interaction** → keep layers lean; one map, not four
+
+Test on the *biggest* layer you'll ship, not the demo subset.
+
+## Restraint is a feature
+
+Five toggles, three basemaps, popups with twelve fields — each defensible, together unusable.
+
+::: {.gw-box}
+Design check for every control: **what question does this let the reader answer?** No answer → cut it. Your Week 9 honesty rules (rates, classification, disclosed schemes) all still apply — interactivity doesn't license a dishonest layer.
+:::
+
+## Discussion {.gw-discussion}
+
+**1.** Your county map has 3,000 polygons and scrolls like molasses. Rank the fixes you'd try, cheapest first.
+
+**2.** What's one filter that would make *your* Week 9 choropleth genuinely more useful — and one toggle you'd be tempted to add but shouldn't?
+
+*(4 minutes — then the live build.)*
+
+## Coming up next — Block 2 {.smaller}
+
+Live build:
+
+1. Last week's choropleth → interactive folium with hover/popups
+2. Embed in Streamlit via `streamlit-folium`
+3. Add the coordinated filter: map + ranking bar chart, one control
+
+**Then Block 3:** your interactive geospatial dashboard — map, ≥1 filter, one coordinated chart — deployed.
+
+**Readings:** folium quickstart · streamlit-folium · plotly maps guide
+
+**Homework preview:** the deployed dashboard + a note on one performance or legibility decision. This pattern is your mid-term project's backbone.

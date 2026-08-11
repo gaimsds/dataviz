@@ -1,6 +1,8 @@
 # Quarto build output (do NOT commit the rendered site)
 /_site/
 **/_book/
+# slides/ renders here locally; CI rebuilds it from source
+**/_output/
 **/.quarto/
 
 # IMPORTANT: do NOT ignore _freeze/ — it caches executed cell results and

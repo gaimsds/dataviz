@@ -1,0 +1,145 @@
+---
+title: "Tabular & Multivariate Data"
+subtitle: "Week 3 · Seeing structure across many variables"
+author: "DATS 6401 — Visualization of Complex Data · Junjun Yin"
+format: revealjs
+---
+
+## Today's session {.smaller}
+
+| | | |
+|---|---|---|
+| **Block 1** | Concepts & Theory — *this deck* | ~30 min |
+| **Block 2** | Guided demo: wrangle → heatmap → PCA | ~30 min |
+| ☕ | Break | ~10 min |
+| **Block 3** | Hands-on: your multivariate dataset, PCA in Streamlit | ~40 min |
+| **Block 4** | Wrap-up & homework preview | ~10 min |
+
+::: {.gw-box}
+**Running example:** the Wine dataset — 178 wines, **13** chemical measurements, 3 cultivars. Too many columns to eyeball: exactly the problem.
+:::
+
+# The multivariate problem {background-color="#2E6E8E"}
+
+## More columns ≠ more clarity
+
+With 2 variables: a scatter plot. With 3: add color. With **13**?
+
+- Pairwise plots: $\binom{13}{2} = 78$ panels — nobody reads 78 panels
+- The structure we want: which variables **move together**, which observations **cluster**, where the **outliers** hide
+
+Today's two tools: **correlation heatmaps** (variable structure) and **PCA** (observation structure).
+
+## First: wrangling is the gateway
+
+Every multivariate chart assumes tidy, typed, joined data:
+
+- `melt` / `pivot` — reshape between wide and long
+- `groupby` — aggregate to the right unit of analysis
+- `merge` — bring in the variables you actually need
+
+::: {.gw-box}
+**Aggregation warning:** group means can *reverse* relationships visible in the raw rows (Simpson's paradox). Always look at both levels before you believe either.
+:::
+
+# Variable structure: correlation {background-color="#2E6E8E"}
+
+## The correlation heatmap
+
+```{python}
+#| echo: false
+#| fig-align: center
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_wine
+wine = load_wine(as_frame=True)
+fig, ax = plt.subplots(figsize=(7.5, 5.2))
+sns.heatmap(wine.data.corr(), cmap="vlag", center=0, square=True,
+            cbar_kws={"shrink": 0.6}, ax=ax)
+ax.set_title("13×13 pairwise correlations in one view")
+plt.tight_layout(); plt.show()
+```
+
+Diverging colormap, centered on 0 — blue blocks = variables that travel together.
+
+## Reading it honestly
+
+- A heatmap shows **linear** association only — curved relationships hide at r ≈ 0
+- Correlation ≠ causation (you knew; the heatmap makes forgetting easy)
+- Cluster of correlated variables → they may carry **one** underlying signal
+
+That last observation is the doorway to PCA: if 5 columns say the same thing, maybe the data has fewer *real* dimensions than columns.
+
+# Observation structure: PCA {background-color="#2E6E8E"}
+
+## PCA as a visualization tool
+
+We use Principal Component Analysis not for modeling but to **project 13 dimensions onto the 2 that matter most**:
+
+- PC1 = the direction of **greatest variance** in the data
+- PC2 = the next greatest, perpendicular to PC1
+- Plot PC1 vs PC2 → the eye sees grouping no single pair of columns reveals
+
+One non-negotiable: **standardize first**, or large-unit variables (proline: hundreds) drown small ones (hue: ~1).
+
+## The payoff
+
+```{python}
+#| echo: false
+#| fig-align: center
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+X = StandardScaler().fit_transform(wine.data)
+pca = PCA(n_components=2)
+pcs = pca.fit_transform(X)
+fig, ax = plt.subplots(figsize=(7.5, 4.6))
+sc = ax.scatter(pcs[:, 0], pcs[:, 1], c=wine.target, cmap="Set2", s=35)
+ax.set_xlabel(f"PC1 ({pca.explained_variance_ratio_[0]:.0%} of variance)")
+ax.set_ylabel(f"PC2 ({pca.explained_variance_ratio_[1]:.0%})")
+ax.set_title("Three cultivars separate cleanly — in 2 of 13 dimensions")
+ax.legend(*sc.legend_elements(), title="cultivar")
+plt.tight_layout(); plt.show()
+```
+
+No pairwise plot of the 13 features separates the cultivars this well. PCA *found the viewing angle*.
+
+## How much did we keep?
+
+```{python}
+#| echo: false
+#| fig-align: center
+import numpy as np
+evr = PCA().fit(X).explained_variance_ratio_
+fig, ax = plt.subplots(figsize=(7.5, 3.2))
+ax.bar(range(1, 14), evr, color="#2E6E8E")
+ax.plot(range(1, 14), np.cumsum(evr), "o-", color="#d9534f", label="cumulative")
+ax.set_xlabel("component"); ax.set_ylabel("variance explained")
+ax.set_title("Scree plot: 2 components ≈ 55% — honest, and worth saying on the chart")
+ax.legend(); plt.tight_layout(); plt.show()
+```
+
+::: {.gw-box}
+Always report explained variance on the axes. A PCA scatter without it implies the 2D picture *is* the data. It isn't — it's the best 2D shadow.
+:::
+
+## Discussion {.gw-discussion}
+
+**1.** Your PCA scatter shows two clean clusters — but PC1+PC2 explain 38% of variance. What can you honestly claim?
+
+**2.** A colleague says "just plot the two most correlated variables instead of PCA." When are they right?
+
+*(5 minutes — then the demo.)*
+
+## Coming up next — Block 2 {.smaller}
+
+Live demo:
+
+1. Wrangle: reshape + groupby + merge on the wine data
+2. Pair plot and correlation heatmap — reading them together
+3. Standardize → PCA → the projection, with explained variance on the axes
+
+**Then Block 3:** your dataset (≥6 numeric variables), your heatmap + PCA, wrapped in a Streamlit app with a color-by selector.
+
+**Readings:** Wilke Ch. 12 · pandas reshaping guide · sklearn PCA docs
+
+**Homework preview:** heatmap + PCA projection + a short interpretation of what PC1/PC2 *mean* for your data.
