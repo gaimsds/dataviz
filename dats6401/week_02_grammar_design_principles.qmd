@@ -44,6 +44,12 @@ pip install pandas seaborn altair matplotlib streamlit
 
 **Block 4 — Wrap-Up (~10 min).** Share competing designs; vote on the most readable (6) · preview homework (4).
 
+---
+
+### Materials: [Block 2 demo](weekly/week2/week02_block2_demo.ipynb) · [hands-on](weekly/week2/week02_block3_handson.ipynb) · [app starter](weekly/week2/app_compare_starter.py)
+
+---
+
 ## 💻 Live Code
 
 ### Seaborn multi-encoding

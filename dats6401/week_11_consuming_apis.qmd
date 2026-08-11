@@ -79,7 +79,7 @@ Confirm you can `requests.get(...)` a public endpoint and print the JSON before 
 
 ---
 
-### You can refer to the [Web page](#) and download the [Streamlit app](#)
+### Materials: [Block 2 demo](weekly/week11/week11_block2_demo.ipynb) · [hands-on](weekly/week11/week11_block3_handson.ipynb) · [client starter](weekly/week11/client_starter.py) · [course endpoint](weekly/week11/course_endpoint.py)
 
 ---
 

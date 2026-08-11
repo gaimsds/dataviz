@@ -77,7 +77,7 @@ Have a free Streamlit Community Cloud (or equivalent) account ready, and a GitHu
 
 ---
 
-### You can refer to the [Web page](#) and download the [Streamlit app](#)
+### Materials: [demo 1 — basics](weekly/week5/demo_1_basic.py) · [demo 2 — widgets & layout](weekly/week5/demo_2_widgets_layout.py) · [demo 3 — caching](weekly/week5/demo_3_caching.py) · [starter template](weekly/week5/starter_template.py) · [hands-on instructions](weekly/week5/handson_INSTRUCTIONS.md)
 
 ---
 

@@ -1,6 +1,8 @@
 project:
   type: book
   output-dir: _book
+  resources:
+    - weekly/      # per-week notebooks and data, served as linked downloads
 
 # IMPORTANT: freeze means code is executed LOCALLY (when you run `quarto render`)
 # and the computed results are cached in _freeze/ and committed to git.
@@ -8,6 +10,11 @@ project:
 # This keeps the build fast and avoids installing heavy libs (geopandas, bertopic) in the runner.
 execute:
   freeze: auto
+
+# Pin the kernel. Without this, Quarto auto-discovers a Python kernelspec and can
+# pick a stale one (a kernel whose conda env has since been deleted), which fails
+# the render with a confusing FileNotFoundError.
+jupyter: python3
 
 book:
   title: "Visualization of Complex Data"

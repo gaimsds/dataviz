@@ -48,6 +48,12 @@ Create and activate a virtual environment, confirm the imports work, and verify 
 
 **Block 4 — Wrap-Up (~10 min).** Troubleshooting round-up (5) · preview homework and the data-sources page (5).
 
+---
+
+### Materials: [Block 2 demo](weekly/week1/week01_block2_demo.ipynb) · [hands-on](weekly/week1/week01_block3_handson.ipynb) · [app starter](weekly/week1/app_starter.py)
+
+---
+
 ## 💻 Live Code
 
 The cells below **execute when this book is rendered** — the output you see was produced by running the code. They use a dataset that ships with Plotly, so nothing is downloaded.

@@ -79,7 +79,9 @@ Confirm `streamlit-folium` renders a folium map inside a small app before class.
 
 ---
 
-### You can refer to the [Web page](#) and download the [Streamlit app](#)
+### Materials: [Block 2 demo](weekly/week10/week10_block2_demo.ipynb) · [hands-on](weekly/week10/week10_block3_handson.ipynb) · [dashboard starter](weekly/week10/dashboard_starter.py)
+
+Uses the Week 9 dataset — keep `week9/data/` alongside `week10/`.
 
 ---
 

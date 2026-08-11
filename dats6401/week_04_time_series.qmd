@@ -43,6 +43,12 @@ pip install pandas numpy matplotlib seaborn statsmodels streamlit
 
 **Block 4 — Wrap-Up (~10 min).** Share charts; how did resolution change the story? (6) · preview homework (4).
 
+---
+
+### Materials: [Block 2 demo](weekly/week4/week04_block2_demo.ipynb) · [hands-on](weekly/week4/week04_block3_handson.ipynb) · [resolution app starter](weekly/week4/app_resolution_starter.py)
+
+---
+
 ## 💻 Live Code
 
 We use the Mauna Loa atmospheric CO₂ series (ships with statsmodels): a textbook example of a strong upward trend with clear annual seasonality.
