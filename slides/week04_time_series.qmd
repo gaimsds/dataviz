@@ -1,0 +1,160 @@
+---
+title: "Time-Series Data"
+subtitle: "Week 4 · Data with a direction"
+author: "DATS 6401 — Visualization of Complex Data · Junjun Yin"
+format: revealjs
+---
+
+## Today's session {.smaller}
+
+| | | |
+|---|---|---|
+| **Block 1** | Concepts & Theory — *this deck* | ~30 min |
+| **Block 2** | Guided demo: resample → trend → band → decompose | ~30 min |
+| ☕ | Break | ~10 min |
+| **Block 3** | Hands-on: your series, trend + uncertainty, in Streamlit | ~40 min |
+| **Block 4** | Wrap-up & homework preview | ~10 min |
+
+::: {.gw-box}
+**Running example:** Mauna Loa atmospheric CO₂ — 40+ years of monthly measurements, the textbook trend-plus-seasonality series.
+:::
+
+# What's special about time {background-color="#2E6E8E"}
+
+## Order is information
+
+Tabular rows are exchangeable; time-series observations are **not**. Order creates:
+
+- **Trend** — long-run direction
+- **Seasonality** — repeating cycles (daily, weekly, annual)
+- **Autocorrelation** — today resembles yesterday
+
+And practical headaches: gaps, irregular sampling, time zones, and the choice that changes everything — **resolution**.
+
+## Resolution changes the story
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+co2 = sm.datasets.co2.load_pandas().data.dropna()
+weekly = co2["co2"]
+yearly = weekly.resample("YS").mean()
+fig, axes = plt.subplots(1, 2, figsize=(10, 3.6), sharey=True)
+weekly.loc["1990":"1995"].plot(ax=axes[0], color="#2E6E8E")
+axes[0].set_title("Weekly, 1990–95: the seasonal sawtooth dominates")
+yearly.plot(ax=axes[1], color="#2E6E8E")
+axes[1].set_title("Yearly means: only the trend survives")
+for a in axes: a.set_ylabel("CO₂ (ppm)")
+plt.tight_layout(); plt.show()
+```
+
+Neither is wrong. **The resolution is an editorial choice — make it consciously, state it on the chart.**
+
+# Trend & seasonality {background-color="#2E6E8E"}
+
+## Smoothing reveals trend
+
+```{python}
+#| echo: false
+#| fig-align: center
+monthly = co2["co2"].resample("MS").mean().dropna()
+fig, ax = plt.subplots(figsize=(9, 3.8))
+monthly.plot(ax=ax, alpha=0.35, label="monthly")
+monthly.rolling(12).mean().plot(ax=ax, linewidth=2, label="12-month rolling mean")
+ax.set_ylabel("CO₂ (ppm)"); ax.legend()
+ax.set_title("A 12-month window averages out exactly one seasonal cycle")
+plt.tight_layout(); plt.show()
+```
+
+Window length is a tuning knob: too short keeps noise, too long erases real turns. Matching the window to the **seasonal period** is the principled default.
+
+## Decomposition: three series hiding in one
+
+```{python}
+#| echo: false
+#| fig-align: center
+from statsmodels.tsa.seasonal import seasonal_decompose
+res = seasonal_decompose(monthly, period=12)
+fig = res.plot()
+fig.set_size_inches(8.5, 5)
+plt.tight_layout(); plt.show()
+```
+
+Trend + seasonal + residual. The **residual panel is the diagnostic**: structure left there means the model missed something.
+
+# Uncertainty {background-color="#2E6E8E"}
+
+## A single line is a confident lie
+
+Real series are measured with error, smoothed with choices, and forecast with doubt. Showing only the line hides all three.
+
+```{python}
+#| echo: false
+#| fig-align: center
+roll = monthly.rolling(12)
+mean, std = roll.mean(), roll.std()
+fig, ax = plt.subplots(figsize=(9, 3.6))
+mean.plot(ax=ax, label="12-mo mean", color="#2E6E8E")
+ax.fill_between(mean.index, mean - 2*std, mean + 2*std, alpha=0.2, color="#2E6E8E", label="±2σ band")
+ax.set_ylabel("CO₂ (ppm)"); ax.legend()
+ax.set_title("The band says: values routinely range this far around the smooth line")
+plt.tight_layout(); plt.show()
+```
+
+Bands, error bars, and intervals return in Week 13 — visualizing **model** uncertainty uses the same vocabulary.
+
+# Honesty on the time axis {background-color="#2E6E8E"}
+
+## The truncated-axis trick
+
+```{python}
+#| echo: false
+#| fig-align: center
+seg = monthly.loc["1984":"1989"]
+fig, axes = plt.subplots(1, 2, figsize=(10, 3.6))
+seg.plot(ax=axes[0], color="#d9534f")
+axes[0].set_ylim(seg.min()-0.5, seg.max()+0.5)
+axes[0].set_title("Truncated axis: 'CO₂ EXPLODES!'")
+seg.plot(ax=axes[1], color="#2E6E8E")
+axes[1].set_ylim(0, seg.max()*1.1)
+axes[1].set_title("Zero baseline: steady ~1.5 ppm/yr rise")
+plt.tight_layout(); plt.show()
+```
+
+Same data. Truncation isn't always wrong (small real changes can matter!) — but it must be **visible and stated**, never silent.
+
+## The honesty checklist for temporal charts {.smaller}
+
+- Y-axis: zero-based, or truncation **flagged**
+- Resolution: stated, chosen for the question
+- Smoothing: window disclosed
+- Aspect ratio: not stretched to dramatize slope
+- Dual axes: almost never — they manufacture correlation
+
+::: {.gw-box}
+Week 14 returns to ethics in full; the time axis is where most everyday chart crimes happen.
+:::
+
+## Discussion {.gw-discussion}
+
+**1.** A news chart shows unemployment over 18 months, y-axis from 3.6% to 4.1%. Defensible or deceptive — and what one change would settle it?
+
+**2.** When is showing the raw series *more* honest than the smoothed trend?
+
+*(5 minutes — then the demo.)*
+
+## Coming up next — Block 2 {.smaller}
+
+Live demo:
+
+1. Parse dates, set the index, resample monthly vs yearly
+2. Rolling-mean trend; seasonal decomposition
+3. Add the ±2σ band
+
+**Then Block 3:** your series, trend + uncertainty band, Streamlit app with a resolution selector.
+
+**Readings:** Wilke Ch. 13 & 16 · pandas time-series guide · statsmodels seasonal docs
+
+**Homework preview:** trend + seasonality + one uncertainty visual, plus a note on the honesty choice you made.

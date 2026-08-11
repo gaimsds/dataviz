@@ -1,0 +1,127 @@
+---
+title: "Consuming APIs & Data Endpoints"
+subtitle: "Week 11 · The client side of client–server"
+author: "DATS 6401 — Visualization of Complex Data · Junjun Yin"
+format: revealjs
+---
+
+## Today's session {.smaller}
+
+| | | |
+|---|---|---|
+| **Block 1** | Concepts & Theory — *this deck* | ~25 min |
+| **Block 2** | Worked examples: public API + the course endpoint | ~35 min |
+| ☕ | Break | ~10 min |
+| **Block 3** | Hands-on: your API, your Streamlit client | ~40 min |
+| **Block 4** | Wrap-up & homework preview | ~10 min |
+
+::: {.gw-box}
+**The three-week arc starts now:** this week you **consume** endpoints someone else built → next week you **serve** your own model → Week 13 you **visualize** its live output. Today is deliberately client-only.
+:::
+
+# Client and server {background-color="#2E6E8E"}
+
+## Why separate them at all?
+
+So far: data and computation live *inside* your app. Real systems split them:
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+import matplotlib.patches as mp
+fig, ax = plt.subplots(figsize=(9.5, 3.2))
+ax.add_patch(mp.FancyBboxPatch((0.3, 0.8), 2.8, 1.5, boxstyle="round,pad=0.1", fc="#EAF2F6", ec="#2E6E8E"))
+ax.text(1.7, 1.55, "CLIENT\n(your Streamlit app)", ha="center", va="center", fontsize=11)
+ax.add_patch(mp.FancyBboxPatch((6.5, 0.8), 2.8, 1.5, boxstyle="round,pad=0.1", fc="#2E6E8E", ec="#2E6E8E"))
+ax.text(7.9, 1.55, "SERVER\n(data / model)", ha="center", va="center", fontsize=11, color="white")
+ax.annotate("", xy=(6.4, 1.8), xytext=(3.2, 1.8), arrowprops=dict(arrowstyle="->", lw=2, color="#5a6672"))
+ax.text(4.8, 2.05, "HTTP request (URL + params)", ha="center", fontsize=9.5)
+ax.annotate("", xy=(3.2, 1.25), xytext=(6.4, 1.25), arrowprops=dict(arrowstyle="->", lw=2, color="#d9534f"))
+ax.text(4.8, 0.95, "response (status code + JSON)", ha="center", fontsize=9.5, color="#d9534f")
+ax.set_xlim(0, 9.8); ax.set_ylim(0.4, 2.6); ax.axis("off")
+plt.tight_layout(); plt.show()
+```
+
+Why: the data is **too big/live/private** to ship; the model should run **once, for many clients**; the front-end should stay **thin**.
+
+## Anatomy of an HTTP request {.smaller}
+
+| Piece | Example | Your lever |
+|---|---|---|
+| Method | `GET` (read) / `POST` (send a body) | matches the action |
+| URL | `https://api.open-meteo.com/v1/forecast` | *which* resource |
+| Query params | `?latitude=38.9&hourly=temperature_2m` | parameterize the ask |
+| Status code | `200` ok · `404` not found · `422` bad input · `500` server bug | **read it before the body** |
+| Body | JSON | the payload |
+
+The discipline of the week: **timeout on every call, check the status, then parse.**
+
+# JSON to DataFrame {background-color="#2E6E8E"}
+
+## The four-step pattern (memorize this one)
+
+```python
+import requests, pandas as pd
+
+r = requests.get(url, params={...}, timeout=10)   # 1 request (ALWAYS timeout)
+r.raise_for_status()                              # 2 4xx/5xx -> exception
+payload = r.json()                                # 3 JSON -> dicts/lists
+df = pd.DataFrame(payload["records"])             # 4 the part you need
+```
+
+Everything else this week is a variation. JSON is nested dicts and lists — your job is finding **which slice** is the table.
+
+## Failure is a feature to design for
+
+Networks drop. Servers nap. Parameters typo. The graceful client:
+
+```python
+@st.cache_data(ttl=300)                 # don't hammer the API on re-runs
+def fetch(url, params):
+    r = requests.get(url, params=params, timeout=10)
+    r.raise_for_status()
+    return r.json()
+
+try:
+    data = fetch(URL, params)
+except requests.RequestException as e:
+    st.error(f"Request failed: {e}")    # the app SURVIVES
+    st.stop()
+```
+
+::: {.gw-box}
+A Streamlit client that crashes with a traceback when the server is down **fails the homework**. `st.error` + `st.stop()` is the graceful path — and we'll kill the server live to prove yours works.
+:::
+
+## Caching API calls: the ttl decision {.smaller}
+
+Week 5's `@st.cache_data` gains a knob: **`ttl`** (time-to-live).
+
+- Country lists, historical data → cache for hours
+- Weather forecast → minutes
+- Live scores / model predictions → **don't cache** (staleness = wrongness)
+
+The question is always: *how wrong can a stale answer be, and for how long?*
+
+## Discussion {.gw-discussion}
+
+**1.** Your client calls a paid API at \$0.001/request. A user drags a slider 50 times. What happens — and which of today's tools prevents the bill?
+
+**2.** The course endpoint 404s on an unknown species. Should it instead return an empty list with a 200? Argue both sides.
+
+*(4 minutes — then the worked examples.)*
+
+## Coming up next — Block 2 {.smaller}
+
+The two worked examples, live (notebook provided):
+
+1. **Example A:** Open-Meteo (public, no key) → params → JSON → DataFrame → chart
+2. **Example B:** the **course endpoint** — status codes, the deliberate 404, caching
+3. Both inside a Streamlit client (`client_starter.py`) — then we kill the server and watch it degrade *gracefully*
+
+**Then Block 3:** pick an API, fetch in a notebook first, then build your client: a widget that changes a **request parameter**, caching, graceful failure.
+
+**Readings:** MDN HTTP overview · requests quickstart · Streamlit caching guide
+
+**Homework preview:** the robust client — next week, you build the server it talks to.

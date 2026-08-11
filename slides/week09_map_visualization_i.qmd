@@ -1,0 +1,149 @@
+---
+title: "Map Visualization — Module I"
+subtitle: "Week 9 · Putting data on the Earth, correctly"
+author: "DATS 6401 — Visualization of Complex Data · Junjun Yin"
+format: revealjs
+---
+
+## Today's session {.smaller}
+
+| | | |
+|---|---|---|
+| **Block 1** | Concepts & Theory — *this deck* | ~30 min |
+| **Block 2** | Guided demo: load geometry → reproject → join → choropleth | ~30 min |
+| ☕ | Break | ~10 min |
+| **Block 3** | Hands-on: your rate-based choropleth, defensibly classified | ~40 min |
+| **Block 4** | Wrap-up & homework preview | ~10 min |
+
+::: {.gw-box}
+**Today's claim:** a map is the most *trusted-looking* chart there is — which is exactly why the foundations (projections, normalization, classification) matter more here than anywhere.
+:::
+
+# The Earth is not flat {background-color="#2E6E8E"}
+
+## Every projection lies about something
+
+Flattening a sphere **must** distort. Each projection chooses what to preserve:
+
+| Projection family | Preserves | Sacrifices |
+|---|---|---|
+| Conformal (Mercator) | local shapes/angles | **area** (Greenland ≈ Africa?!) |
+| Equal-area (Albers, Mollweide) | area | shapes |
+| Equidistant | distances from a point | most else |
+
+::: {.gw-box}
+**Rule:** comparing *how much* across regions (a choropleth)? Use an **equal-area** projection — otherwise the projection itself biases the visual weight of every region.
+:::
+
+## CRS: the coordinate contract
+
+A **Coordinate Reference System** says what the numbers mean:
+
+- `EPSG:4326` — raw lat/lon degrees (GPS); fine for storage, *not* a flat map
+- `EPSG:3857` — Web Mercator (every web tile map); fine for navigation, **not** for area comparison
+- `EPSG:5070` — Albers equal-area (continental US analysis)
+
+The #1 geospatial bug: combining layers in different CRSs. In geopandas: check `gdf.crs`, convert with `gdf.to_crs(...)` — *before* any spatial join.
+
+# The choropleth, done honestly {background-color="#2E6E8E"}
+
+## Counts lie; rates compare
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+import matplotlib.patches as mp
+import numpy as np
+# A synthetic 4x4 "state grid": population varies hugely; per-capita rate is flat-ish
+rng = np.random.default_rng(2)
+pop = rng.integers(1, 40, (4, 4)) * 100_000
+events = (pop * rng.uniform(0.008, 0.012, (4, 4))).astype(int)   # ~1% everywhere
+rate = events / pop * 1000
+fig, axes = plt.subplots(1, 2, figsize=(9.5, 3.9))
+for ax, M, title in [(axes[0], events, "COUNTS: 'crisis' in big regions"),
+                     (axes[1], rate, "RATES per 1,000: …actually uniform")]:
+    im = ax.imshow(M, cmap="OrRd")
+    for (i, j), v in np.ndenumerate(M):
+        ax.text(j, i, f"{v:,.0f}" if M is events else f"{v:.1f}",
+                ha="center", va="center", fontsize=8)
+    ax.set_title(title); ax.set_xticks([]); ax.set_yticks([])
+plt.suptitle("Same synthetic events on a region grid — normalization flips the story")
+plt.tight_layout(); plt.show()
+```
+
+A count choropleth is usually a **population map in disguise**. Map the *rate* (per capita, per km², per 1,000) unless the count itself is the story.
+
+## Classification: how you bin is what they see
+
+```{python}
+#| echo: false
+#| fig-align: center
+vals = np.sort(rng.lognormal(2, 0.8, 16)).reshape(4, 4)
+flat = np.sort(vals.ravel())
+def classify(M, edges):
+    return np.digitize(M, edges)
+q_edges = np.quantile(flat, [0.2, 0.4, 0.6, 0.8])
+e_edges = np.linspace(flat.min(), flat.max(), 6)[1:-1]
+fig, axes = plt.subplots(1, 2, figsize=(9.5, 3.9))
+for ax, edges, title in [(axes[0], q_edges, "Quantiles: every class ~equally full"),
+                          (axes[1], e_edges, "Equal interval: skew piles regions in class 1")]:
+    ax.imshow(classify(vals, edges), cmap="OrRd", vmin=0, vmax=4)
+    ax.set_title(title); ax.set_xticks([]); ax.set_yticks([])
+plt.suptitle("Identical (skewed) values, two classification schemes — two different 'maps'")
+plt.tight_layout(); plt.show()
+```
+
+Quantiles, equal-interval, natural breaks (Jenks): each is defensible **somewhere**. The dishonest move is not *choosing* — it's not *disclosing*. State the scheme in the legend.
+
+## Sequential color, and the gray problem {.smaller}
+
+- Rates/intensities → **sequential** palette (light→dark, one hue)
+- Diverging only when a meaningful midpoint exists (± change)
+- Missing data → **gray, labeled** — never silently the lightest class
+
+::: {.gw-box}
+Week 2's effectiveness rule, geographically: color *lightness* is doing the quantitative work on a choropleth — that's why we classify into 5–7 bins the eye can actually distinguish.
+:::
+
+# The toolchain {background-color="#2E6E8E"}
+
+## The Python geospatial stack (Block 2's pipeline)
+
+```python
+import geopandas as gpd
+gdf = gpd.read_file("regions.geojson")     # geometry + attributes
+gdf = gdf.to_crs(epsg=5070)                # equal-area BEFORE analysis
+
+joined = gdf.merge(data, on="region_id")   # attach your data
+joined["rate"] = joined["cases"] / joined["pop"] * 100_000
+
+joined.plot(column="rate", scheme="quantiles", k=5,
+            cmap="OrRd", legend=True)       # mapclassify under the hood
+```
+
+*(Static here — geopandas needs real geometry files; Block 2 runs this live on US data.)*
+
+Spatial **joins** (`gpd.sjoin`) attach points to polygons — "which district is each incident in" — the geometric cousin of `merge`.
+
+## Discussion {.gw-discussion}
+
+**1.** A viral map shows COVID cases by county, raw counts, Web Mercator, equal-interval bins. List every fix — in priority order.
+
+**2.** When is a *count* map the honest choice?
+
+*(5 minutes — then the demo.)*
+
+## Coming up next — Block 2 {.smaller}
+
+Live demo:
+
+1. Load geometry; inspect and fix the CRS
+2. Join attribute data; compute a rate
+3. Choropleth with a disclosed classification scheme + basemap (contextily)
+
+**Then Block 3:** your dataset with a geographic key → a rate-based, defensibly classified choropleth, with your projection/normalization/classification choices written down.
+
+**Readings:** GeoPandas user guide · "The problem with choropleth maps" · mapclassify docs
+
+**Homework preview:** the justified choropleth — Module II makes it interactive next week.

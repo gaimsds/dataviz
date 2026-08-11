@@ -1,0 +1,421 @@
+---
+title: "Graph & Network Data"
+subtitle: "Week 6 · Visualizing relationships rather than records"
+author: "DATS 6401 — Visualization of Complex Data · Junjun Yin"
+format: revealjs
+---
+
+## Today's session {.smaller}
+
+| | | |
+|---|---|---|
+| **Block 1** | Concepts & Theory — *this deck* | ~30 min |
+| **Block 2** | Guided demo: build & draw a graph in networkx | ~30 min |
+| ☕ | Break | ~10 min |
+| **Block 3** | Hands-on: centrality, layouts, PyVis → Streamlit | ~40 min |
+| **Block 4** | Wrap-up & homework preview | ~10 min |
+
+::: {.gw-box}
+**Where we are:** you can build Streamlit apps (Week 5). Today: the first *complex* modality — data whose meaning lives in the **connections**.
+:::
+
+# From records to relationships {background-color="#2E6E8E"}
+
+## Most data we've seen looks like this
+
+| customer | age | city | spend |
+|---|---|---|---|
+| A | 34 | DC | 120 |
+| B | 28 | NYC | 85 |
+| C | 41 | DC | 230 |
+
+Rows = independent observations. Columns = variables.
+
+**Every chart so far assumed the rows don't care about each other.**
+
+## But much of the world's most interesting data is *relational*
+
+- Who follows whom · who emails whom
+- Papers citing papers · proteins interacting
+- Money flowing between accounts
+- Roads connecting intersections
+
+::: {.gw-box}
+The *table* view loses the story. The meaning **is the connections** — and that requires a different data structure and a different visual vocabulary.
+:::
+
+## The network view
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+import networkx as nx
+
+G = nx.karate_club_graph()
+pos = nx.spring_layout(G, seed=42)
+fig, ax = plt.subplots(figsize=(8, 4.5))
+nx.draw_networkx(G, pos, ax=ax, with_labels=False,
+                 node_color="#2E6E8E", node_size=120,
+                 edge_color="#bbbbbb")
+ax.set_title("Zachary's Karate Club — 34 people, 78 friendships", fontsize=11)
+ax.axis("off")
+plt.tight_layout()
+plt.show()
+```
+
+::: {.notes}
+The classic example: a university karate club that famously split into two factions after a dispute between the instructor and the president. The split is *visible* in the structure — no table of members would show it. We'll use this graph all session.
+:::
+
+# Anatomy of a graph {background-color="#2E6E8E"}
+
+## The vocabulary
+
+- **Node** (vertex): an entity — a person, paper, account, place
+- **Edge** (link): a relationship between two nodes
+- A **graph** $G = (V, E)$ — a set of nodes and a set of edges. That's it.
+
+```{python}
+#| echo: false
+#| fig-align: center
+fig, ax = plt.subplots(figsize=(7, 2.6))
+mini = nx.Graph([("Ana","Ben"),("Ben","Cal"),("Ana","Cal"),("Cal","Dee")])
+mpos = nx.spring_layout(mini, seed=3)
+nx.draw_networkx(mini, mpos, ax=ax, node_color="#2E6E8E",
+                 font_color="white", node_size=1500, font_size=9,
+                 edge_color="#888888", width=2)
+ax.axis("off"); plt.tight_layout(); plt.show()
+```
+
+## Edges carry meaning
+
+**Direction** — does the relationship point one way?
+
+- Friendship: usually *undirected*
+- "Follows", "cites", "pays": *directed* (arrows matter)
+
+**Weight** — how strong is the tie?
+
+- Number of emails exchanged, dollars transferred, co-occurrences
+
+::: {.gw-box}
+Before visualizing any network, ask: **directed or not? weighted or not?** The answers change both the analysis and the drawing.
+:::
+
+## The same graph, two representations {.smaller}
+
+:::: {.columns}
+::: {.column width="55%"}
+```{python}
+#| echo: false
+#| fig-align: center
+fig, ax = plt.subplots(figsize=(4.6, 4.2))
+nx.draw_networkx(G, pos, ax=ax, with_labels=False,
+                 node_color="#2E6E8E", node_size=80, edge_color="#cccccc")
+ax.set_title("Node–link diagram", fontsize=11)
+ax.axis("off"); plt.tight_layout(); plt.show()
+```
+:::
+::: {.column width="45%"}
+```{python}
+#| echo: false
+#| fig-align: center
+import numpy as np
+A = nx.to_numpy_array(G)
+fig, ax = plt.subplots(figsize=(3.8, 4.2))
+ax.imshow(A, cmap="Blues")
+ax.set_title("Adjacency matrix", fontsize=11)
+ax.set_xlabel("node j"); ax.set_ylabel("node i")
+plt.tight_layout(); plt.show()
+```
+:::
+::::
+
+Same 78 edges. $A_{ij}=1$ when an edge connects $i$ and $j$. The node–link view shows *shape*; the matrix shows *density* and scales better.
+
+# Layouts are algorithms, not facts {background-color="#2E6E8E"}
+
+## Where do the node positions come from?
+
+In every chart you've made so far, **position encoded data**: x was a variable, y was a variable.
+
+In a node–link diagram, position comes from a **layout algorithm**.
+
+::: {.gw-box}
+**The single most important idea today:** the same graph can be drawn infinitely many ways. The layout is a *choice* — and different choices tell different stories.
+:::
+
+## One graph, three layouts
+
+```{python}
+#| echo: false
+#| fig-align: center
+fig, axes = plt.subplots(1, 3, figsize=(10.5, 3.6))
+layouts = [
+    (nx.spring_layout(G, seed=42), "Force-directed (spring)"),
+    (nx.circular_layout(G), "Circular"),
+    (nx.random_layout(G, seed=1), "Random"),
+]
+for ax, (lpos, name) in zip(axes, layouts):
+    nx.draw_networkx(G, lpos, ax=ax, with_labels=False,
+                     node_color="#2E6E8E", node_size=60, edge_color="#cccccc")
+    ax.set_title(name, fontsize=11)
+    ax.axis("off")
+plt.tight_layout(); plt.show()
+```
+
+Identical data in all three panels. Only the force-directed layout *suggests* the club's two factions.
+
+## How force-directed layout works (intuition)
+
+- Edges act like **springs** pulling connected nodes together
+- All nodes **repel** each other like charged particles
+- A physics simulation runs until the system settles
+
+So in the final picture:
+
+- Tightly connected groups end up **near each other**
+- Distance ≈ "structural closeness" — **not** a measured quantity
+- Different runs give different pictures → **fix the random seed**
+
+# Measuring structure: centrality {background-color="#2E6E8E"}
+
+## Which nodes matter?
+
+**Centrality** = a family of measures that score how *important* a node is — where "important" depends on the question you're asking:
+
+- Who has the most connections? → **degree**
+- Who sits *between* groups? → **betweenness**
+- Who can reach everyone fastest? → **closeness**
+
+These give **different answers on the same graph** — choosing one is an analytical decision, not a default.
+
+## Degree: count the connections
+
+The simplest measure: a node's **degree** $k_v$ is its number of edges.
+(Directed graphs split this into *in-degree* and *out-degree*.)
+
+```{python}
+#| echo: false
+#| fig-align: center
+degd = dict(G.degree())
+top2 = sorted(degd, key=degd.get, reverse=True)[:2]
+fig, ax = plt.subplots(figsize=(8, 3.9))
+nx.draw_networkx(G, pos, ax=ax, with_labels=False,
+                 node_size=[degd[n]*40 for n in G.nodes()],
+                 node_color=["#d9534f" if n in top2 else "#2E6E8E" for n in G.nodes()],
+                 edge_color="#dddddd")
+for n in top2:
+    ax.annotate(f"degree {degd[n]}", pos[n], textcoords="offset points",
+                xytext=(10, 10), fontsize=10, fontweight="bold")
+ax.set_title("Node size = degree. The two red hubs: the instructor and the club president.",
+             fontsize=11)
+ax.axis("off"); plt.tight_layout(); plt.show()
+```
+
+::: {.notes}
+Pedagogical gift of this dataset: the two highest-degree nodes are exactly the two people the club split between. Degree alone already finds the protagonists.
+:::
+
+## Betweenness: who bridges?
+
+Intuition first — in this graph, **every** path between the two cliques passes through one node:
+
+```{python}
+#| echo: false
+#| fig-align: center
+B = nx.barbell_graph(5, 1)
+bpos = nx.spring_layout(B, seed=5)
+btw_b = nx.betweenness_centrality(B)
+bridge = max(btw_b, key=btw_b.get)
+fig, ax = plt.subplots(figsize=(8, 3.2))
+nx.draw_networkx(B, bpos, ax=ax, with_labels=False, node_size=320,
+                 node_color=["#d9534f" if n == bridge else "#2E6E8E" for n in B.nodes()],
+                 edge_color="#999999")
+ax.set_title(f"The bridge (red) lies on every inter-group shortest path — betweenness = {btw_b[bridge]:.2f}",
+             fontsize=11)
+ax.axis("off"); plt.tight_layout(); plt.show()
+```
+
+Remove that node and the network falls apart: it's a **broker** — and a **bottleneck**.
+
+## Betweenness: how it's computed {.smaller}
+
+$$C_B(v) \;=\; \sum_{s \neq v \neq t} \frac{\sigma_{st}(v)}{\sigma_{st}}$$
+
+In words:
+
+1. Take every pair of nodes $(s, t)$
+2. Find all **shortest paths** between them ($\sigma_{st}$ of them)
+3. Count the fraction that pass **through** $v$
+4. Sum over all pairs
+
+::: {.gw-box}
+Naïvely this is expensive; in practice **Brandes' algorithm** computes it in roughly $O(N \cdot M)$ for unweighted graphs — and `nx.betweenness_centrality(G)` is one line.
+:::
+
+## Closeness: who reaches everyone fastest? {.smaller}
+
+$$C_C(v) \;=\; \frac{N - 1}{\sum_{u \neq v} d(v, u)}$$
+
+where $d(v, u)$ is the shortest-path distance. A node with **small total distance** to everyone has **high closeness** — think: best location for spreading information.
+
+Three measures, three different questions:
+
+| Measure | Question | High score means |
+|---|---|---|
+| Degree | How connected? | A hub |
+| Betweenness | How much of a broker? | A bridge / bottleneck |
+| Closeness | How reachable is everyone? | A center of gravity |
+
+## The measures disagree — and that's the point
+
+```{python}
+#| echo: false
+#| fig-align: center
+deg_c = nx.degree_centrality(G)
+bet_c = nx.betweenness_centrality(G)
+clo_c = nx.closeness_centrality(G)
+fig, axes = plt.subplots(1, 3, figsize=(11, 3.4))
+for ax, (m, name) in zip(axes, [(deg_c, "Degree"), (bet_c, "Betweenness"), (clo_c, "Closeness")]):
+    vals = [m[n] for n in G.nodes()]
+    nx.draw_networkx(G, pos, ax=ax, with_labels=False,
+                     node_color=vals, cmap=plt.cm.viridis,
+                     node_size=[v*900 + 30 for v in vals], edge_color="#dddddd")
+    ax.set_title(name, fontsize=11); ax.axis("off")
+plt.tight_layout(); plt.show()
+```
+
+Same graph, same layout — different nodes light up. **Color/size = centrality** is our first real encoding of *data* onto the network picture.
+
+# Finding groups: community detection {background-color="#2E6E8E"}
+
+## What is a community?
+
+A **community** is a set of nodes with **many edges inside** the group and **few edges to the outside**.
+
+```{python}
+#| echo: false
+#| fig-align: center
+from networkx.algorithms.community import greedy_modularity_communities, modularity
+comms = list(greedy_modularity_communities(G))
+cmap = {}
+for cid, c in enumerate(comms):
+    for n in c: cmap[n] = cid
+within = [(u, v) for u, v in G.edges() if cmap[u] == cmap[v]]
+between = [(u, v) for u, v in G.edges() if cmap[u] != cmap[v]]
+Q = modularity(G, comms)
+fig, ax = plt.subplots(figsize=(8, 3.9))
+nx.draw_networkx_nodes(G, pos, ax=ax, node_color=[cmap[n] for n in G.nodes()],
+                       cmap=plt.cm.Set2, node_size=140)
+nx.draw_networkx_edges(G, pos, ax=ax, edgelist=within, edge_color="#2E6E8E", width=1.6)
+nx.draw_networkx_edges(G, pos, ax=ax, edgelist=between, edge_color="#bbbbbb", style="dashed")
+ax.set_title(f"{len(within)} edges within communities (teal) · {len(between)} between (dashed) · Q = {Q:.2f}",
+             fontsize=11)
+ax.axis("off"); plt.tight_layout(); plt.show()
+```
+
+No labels were used — the algorithm found the factions **from structure alone**.
+
+## Modularity: scoring a grouping {.smaller}
+
+How do we know a proposed grouping is good? **Modularity**:
+
+$$Q \;=\; \frac{1}{2m} \sum_{ij} \left[ A_{ij} - \frac{k_i k_j}{2m} \right] \delta(c_i, c_j)$$
+
+In plain words:
+
+$$Q \;=\; (\text{fraction of edges inside communities}) \;-\; (\text{expected fraction if edges were random})$$
+
+- $Q \approx 0$: no better than random
+- $Q \gtrsim 0.3$: meaningful community structure
+- Our karate-club grouping: $Q = 0.41$ ✓
+
+## The algorithm we used: greedy modularity {.smaller}
+
+**Clauset–Newman–Moore (greedy modularity)** — what `greedy_modularity_communities()` runs:
+
+1. Start: every node is its **own** community
+2. Find the **pair of communities** whose merge increases $Q$ the most
+3. Merge them; repeat
+4. Stop when **no merge improves** $Q$
+
+::: {.gw-box}
+Worth knowing: **Louvain** (and its successor **Leiden**) follow the same modularity-maximization idea but scale to millions of nodes — the default choice in practice. All are *heuristics*: community detection has no single "correct" answer.
+:::
+
+## Putting it together: encode structure onto the picture
+
+The layout consumed x/y. The remaining channels carry **computed structure**:
+
+```{python}
+#| echo: false
+#| fig-align: center
+fig, ax = plt.subplots(figsize=(8, 4.1))
+nx.draw_networkx(G, pos, ax=ax, with_labels=False,
+                 node_size=[degd[n]*45 for n in G.nodes()],
+                 node_color=[cmap[n] for n in G.nodes()],
+                 cmap=plt.cm.Set2, edge_color="#dddddd")
+ax.set_title("Size = degree · Color = detected community — the picture now answers questions",
+             fontsize=11)
+ax.axis("off"); plt.tight_layout(); plt.show()
+```
+
+*Who are the hubs? Where are the factions? Who bridges them?* — all visible at once.
+
+# When the picture fails {background-color="#2E6E8E"}
+
+## The hairball problem
+
+```{python}
+#| echo: false
+#| fig-align: center
+H = nx.barabasi_albert_graph(450, 3, seed=7)
+hpos = nx.spring_layout(H, seed=7)
+fig, ax = plt.subplots(figsize=(7.5, 4.2))
+nx.draw_networkx(H, hpos, ax=ax, with_labels=False,
+                 node_color="#2E6E8E", node_size=14,
+                 edge_color="#bbbbbb", width=0.4, alpha=0.7)
+ax.set_title("450 nodes, ~1,340 edges — impressive, and nearly unreadable", fontsize=11)
+ax.axis("off"); plt.tight_layout(); plt.show()
+```
+
+Node–link diagrams stop communicating somewhere in the **hundreds of nodes**. More data ≠ more insight.
+
+## Escaping the hairball {.smaller}
+
+- **Filter** — show a subgraph that matters (top-k by centrality, one community)
+- **Aggregate** — collapse communities into super-nodes
+- **Switch representations** — adjacency matrix, arc diagram, edge bundling
+- **Add interaction** — zoom, hover, select (PyVis → Streamlit, in Block 3)
+
+::: {.gw-box}
+A network visualization that shows *everything* usually shows **nothing**. Design for the question, not the dataset. And note that today's measures are exactly the filters: "top 20 by betweenness" is a principled subgraph.
+:::
+
+## Discussion {.gw-discussion}
+
+Look back at the hairball.
+
+**1.** What, honestly, *can* you conclude from it?
+
+**2.** Your stakeholder says "just show the whole network." Which of today's tools (centrality filters, communities, the matrix) do you reach for first — and what do you ask the stakeholder?
+
+**3.** Degree, betweenness, and closeness picked different "important" nodes. For a disease-spread network, which matters most? For an org chart?
+
+*(5 minutes — then we open the notebook.)*
+
+## Coming up next — Block 2 {.smaller}
+
+Live demo, you follow along:
+
+1. Build a graph from an edge list in **networkx**
+2. Compute today's measures: degree, betweenness, communities — one line each
+3. Draw it: spring layout, degree → size, community → color
+4. The matrix view in two lines
+5. Then Block 3: **your turn** — centrality, layouts, and an interactive PyVis network inside a **Streamlit** app
+
+**Readings:** Munzner Ch. 9 · networkx tutorial · "The Hairball" (links in the course book)
+
+**Homework preview:** an interactive network-explorer Streamlit app — details in the Week 6 chapter.

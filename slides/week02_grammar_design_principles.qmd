@@ -1,0 +1,166 @@
+---
+title: "Grammar of Graphics & Design Principles"
+subtitle: "Week 2 · How data becomes a picture"
+author: "DATS 6401 — Visualization of Complex Data · Junjun Yin"
+format: revealjs
+---
+
+## Today's session {.smaller}
+
+| | | |
+|---|---|---|
+| **Block 1** | Concepts & Theory — *this deck* | ~40 min |
+| **Block 2** | Guided demo: same data, four encodings; Altair grammar | ~25 min |
+| ☕ | Break | ~10 min |
+| **Block 3** | Hands-on: multi-encoding charts, side-by-side in Streamlit | ~35 min |
+| **Block 4** | Wrap-up & homework preview | ~10 min |
+
+::: {.gw-box}
+**Today's claim:** charts aren't types to memorize — they're **encodings to compose**. And perception science tells us which encodings work.
+:::
+
+# The grammar of graphics {background-color="#2E6E8E"}
+
+## Every chart is a mapping
+
+$$\text{data variables} \;\longrightarrow\; \text{visual channels}$$
+
+- **Marks**: points, lines, bars, areas — the geometric objects
+- **Channels**: position, length, angle, area, color, shape — the properties that carry data
+
+A "scatter plot" is just: *point marks, two variables on position*. Name the mapping and the chart-type zoo collapses into a system.
+
+## Four channels at once
+
+```{python}
+#| echo: false
+#| fig-align: center
+import seaborn as sns
+import plotly.express as px
+import matplotlib.pyplot as plt
+tips = px.data.tips()
+fig, ax = plt.subplots(figsize=(8.5, 4.2))
+sns.scatterplot(data=tips, x="total_bill", y="tip", hue="day", style="time", size="size", ax=ax)
+ax.set_title("position (x, y) + color (day) + shape (time) + size (party)")
+plt.tight_layout(); plt.show()
+```
+
+Five variables in one chart. Question for the room: **which can you actually read?**
+
+# Perception: not all channels are equal {background-color="#2E6E8E"}
+
+## Cleveland & McGill (1984)
+
+Showed people the same comparisons encoded differently and **measured decoding error**. The accuracy ranking, top to bottom:
+
+1. **Position** on a common scale
+2. Position on non-aligned scales
+3. **Length**
+4. Angle / slope
+5. **Area**
+6. Color saturation / volume
+
+::: {.gw-box}
+This is why pie charts (angle) lose to bar charts (position/length) for comparison — not taste, **measured human error**.
+:::
+
+## See it yourself
+
+```{python}
+#| echo: false
+#| fig-align: center
+import numpy as np
+vals = [23, 19, 27, 17, 14]
+labels = list("ABCDE")
+fig, axes = plt.subplots(1, 2, figsize=(9.5, 3.8))
+axes[0].bar(labels, vals, color="#2E6E8E")
+axes[0].set_title("Position/length: is C or A bigger? Instant.")
+axes[1].pie(vals, labels=labels, startangle=90)
+axes[1].set_title("Angle: is B or D bigger? ...slower, less sure.")
+plt.tight_layout(); plt.show()
+```
+
+Same five numbers. The decoding effort difference is the Cleveland–McGill result, live.
+
+## Gestalt: how the eye groups
+
+- **Proximity** — near things read as a group
+- **Similarity** — same color/shape reads as a group
+- **Enclosure & connection** — boxes and lines bind harder than color
+- **Continuity** — the eye follows smooth paths
+
+You're already using these (every legend relies on similarity). Design = using them **on purpose**.
+
+## Preattentive features
+
+Some properties pop out **before** conscious attention — in < 250 ms, regardless of how many distractors:
+
+```{python}
+#| echo: false
+#| fig-align: center
+rng = np.random.default_rng(3)
+xs, ys = rng.uniform(0, 10, 60), rng.uniform(0, 4, 60)
+fig, ax = plt.subplots(figsize=(8.5, 2.8))
+ax.scatter(xs, ys, color="#9ab8c9", s=60)
+ax.scatter([6.2], [2.1], color="#d9534f", s=90)
+ax.set_title("You found the red dot before you decided to look for it.")
+ax.axis("off"); plt.tight_layout(); plt.show()
+```
+
+Color, size, orientation pop out. **One** popout works; several at once cancel each other.
+
+# Expressiveness & effectiveness {background-color="#2E6E8E"}
+
+## Two rules for choosing encodings {.smaller}
+
+**Expressiveness** — the encoding should show *all and only* the data's structure:
+
+- Don't encode an unordered category on an ordered channel (a rainbow for species implies an order that doesn't exist)
+
+**Effectiveness** — put the *most important* variable on the *most accurate* channel:
+
+- The variable your reader must compare precisely → **position**
+- Grouping/context variables → color, shape
+
+::: {.gw-box}
+These two rules + the accuracy ranking = a *procedure* for designing a chart. No memorized chart types required.
+:::
+
+## Cost of a wrong channel
+
+```{python}
+#| echo: false
+#| fig-align: center
+sub = tips.groupby("day", as_index=False)["tip"].mean()
+fig, axes = plt.subplots(1, 2, figsize=(9.5, 3.6))
+axes[0].bar(sub["day"], sub["tip"], color="#2E6E8E")
+axes[0].set_title("Comparison variable on POSITION: differences obvious")
+axes[1].scatter([1]*len(sub), range(len(sub)), s=sub["tip"]*900, color="#2E6E8E", alpha=0.7)
+for i, (d, t) in enumerate(zip(sub["day"], sub["tip"])):
+    axes[1].annotate(d, (1.02, i), fontsize=9, va="center")
+axes[1].set_title("Same data on AREA: can you rank them?")
+axes[1].axis("off")
+plt.tight_layout(); plt.show()
+```
+
+## Discussion {.gw-discussion}
+
+**1.** A stakeholder insists on a pie chart of 12 categories. Using today's vocabulary (channels, accuracy, expressiveness), make the case for an alternative — without saying "pies are bad."
+
+**2.** When *is* color the right channel for the most important variable?
+
+*(5 minutes — then the demo.)*
+
+## Coming up next — Block 2 {.smaller}
+
+Live demo:
+
+1. The same relationship, four different encodings — comparing what each reveals
+2. Altair's grammar: `mark_*().encode(...)` as the rules made executable
+3. Layering and faceting
+
+**Then Block 3:** you build three encodings of one question and defend the channels you chose — side-by-side in Streamlit.
+
+**Readings:** Munzner Ch. 5 · Wilke Ch. 5–6 · Altair grammar overview
+
+**Homework preview:** three charts of one question, each encoding justified by perceptual accuracy.

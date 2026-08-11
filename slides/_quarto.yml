@@ -1,0 +1,32 @@
+# Slides for DATS 6401 — rendered separately from the course books.
+#
+# Render all decks:    quarto render slides
+# Render one deck:     quarto render slides/week06_graph_network_data.qmd
+# Preview while editing: quarto preview slides/week06_graph_network_data.qmd
+#
+# Output goes to slides/_output/. To publish on the course site, the GitHub
+# workflow can copy slides/_output into _site/dats6401/slides/ (see README).
+
+project:
+  type: default
+  output-dir: _output
+
+execute:
+  freeze: auto   # figures execute locally at render; cached in _freeze/
+
+# Pin the kernel. Without this, Quarto auto-discovers a Python kernelspec and can
+# pick a stale one (a kernel whose conda env has since been deleted), which fails
+# the render with a confusing FileNotFoundError.
+jupyter: python3
+
+format:
+  revealjs:
+    theme: [default, theme-gw.scss]
+    slide-number: c/t
+    width: 1280
+    height: 720
+    margin: 0.08
+    transition: fade
+    code-line-numbers: false
+    highlight-style: github
+    footer: "DATS 6401 · Visualization of Complex Data · GWU"

@@ -1,0 +1,63 @@
+/*-- scss:defaults --*/
+
+// DATS 6401 — GW teal identity, matched to the course syllabus & book
+$gw-teal: #2E6E8E;
+$gw-teal-dark: #235670;
+$gw-teal-light: #EAF2F6;
+$gw-ink: #1a1a1a;
+$gw-muted: #5a6672;
+
+$body-bg: #ffffff;
+$body-color: $gw-ink;
+$link-color: $gw-teal;
+$presentation-heading-color: $gw-teal;
+$presentation-heading-font-weight: 600;
+$presentation-font-size-root: 36px;
+$presentation-h1-font-size: 1.6em;
+$presentation-h2-font-size: 1.25em;
+$code-block-font-size: 0.62em;
+
+/*-- scss:rules --*/
+
+// Title slide
+.reveal .quarto-title-block .title {
+  color: $gw-teal;
+  font-weight: 650;
+  border-bottom: 4px solid $gw-teal;
+  padding-bottom: 0.25em;
+}
+.reveal .quarto-title-block .subtitle { color: $gw-muted; }
+.reveal .quarto-title-block .quarto-title-authors { color: $gw-muted; }
+
+// Section divider slides (level-1 headings)
+.reveal .slide section h1 { color: $gw-teal; }
+
+// Accent for emphasis
+.reveal strong { color: $gw-teal-dark; }
+
+// Callout-ish boxes
+.reveal .gw-box {
+  background: $gw-teal-light;
+  border-left: 6px solid $gw-teal;
+  border-radius: 6px;
+  padding: 0.5em 0.8em;
+  margin-top: 0.6em;
+}
+
+// Discussion slide styling
+.reveal .gw-discussion {
+  background: $gw-teal;
+  color: white;
+  border-radius: 10px;
+  padding: 0.8em 1em;
+}
+.reveal .gw-discussion h2, .reveal .gw-discussion strong { color: white; }
+
+// Footer / slide numbers subtle
+.reveal .slide-number { color: $gw-muted; }
+
+// Tighter lists
+.reveal ul li { margin-bottom: 0.35em; }
+
+// Figure captions
+.reveal .figure-caption { color: $gw-muted; font-size: 0.55em; }
