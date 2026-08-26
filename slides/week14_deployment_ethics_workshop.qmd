@@ -9,11 +9,11 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~25 min |
-| **Block 2** | Guided demo: deploy client + server; an honesty pass | ~25 min |
-| ☕ | Break | ~10 min |
-| **Block 3** | **Final project workshop**: lightning demos + structured critique | ~50 min |
-| **Block 4** | Wrap-up & course retrospective | ~10 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~30 min |
+| **Block 2** | Guided demo: deploy client + server; an honesty pass | ~30 min |
+| ☕ | Break | ~15 min |
+| **Block 3** | **Final project workshop**: lightning demos + structured critique | ~60 min |
+| **Block 4** | Wrap-up & course retrospective | ~15 min |
 
 ::: {.gw-box}
 **Last session.** Two jobs: get your client–server system **onto the web**, and step back to the responsibility that comes with charts people believe.

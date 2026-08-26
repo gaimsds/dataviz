@@ -30,17 +30,17 @@ But a correct encoding is not automatically an effective one. Perceptual researc
 pip install pandas seaborn altair matplotlib streamlit
 ```
 
-## 🧭 Two-Hour Session Outline
+## 🧭 Session Outline (2.5 hours)
 
-> Single 2-hour block. Theory-leaning week — Block 1 runs a bit longer.
+> Single 2.5-hour block, 6:10-8:40 PM. Theory-leaning week — Block 1 runs a bit longer.
 
-**Block 1 — Concepts & Theory (~40 min).** Marks and channels (10) · perceptual accuracy: why position beats length beats angle beats color (12) · Gestalt and preattentive features (12) · redesigning a misleading chart (6).
+**Block 1 — Concepts & Theory (~50 min).** Marks and channels (13) · perceptual accuracy: why position beats length beats angle beats color (15) · Gestalt and preattentive features (15) · redesigning a misleading chart (7).
 
-**Block 2 — Guided Demonstration (~25 min).** The same data, four encodings (12) · layering and faceting in Altair (13).
+**Block 2 — Guided Demonstration (~30 min).** The same data, four encodings (14) · layering and faceting in Altair (16).
 
-**☕ Break (~10 min).**
+**☕ Break (~15 min).**
 
-**Block 3 — Hands-On (~35 min).** Build a multi-encoding chart, choosing channels by accuracy (25) · two competing versions side-by-side in Streamlit (10).
+**Block 3 — Hands-On (~45 min).** Build a multi-encoding chart, choosing channels by accuracy (32) · two competing versions side-by-side in Streamlit (13).
 
 **Block 4 — Wrap-Up (~10 min).** Share competing designs; vote on the most readable (6) · preview homework (4).
 

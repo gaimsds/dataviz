@@ -47,35 +47,35 @@ Confirm you can load and display an image array in a notebook before class.
 
 ---
 
-## 🧭 Two-Hour Session Outline
+## 🧭 Session Outline (2.5 hours)
 
-> Single 2-hour block.
+> Single 2.5-hour block, 6:10-8:40 PM.
 
-### Block 1 — Concepts & Theory (~30 min, PowerPoint)
+### Block 1 — Concepts & Theory (~35 min, PowerPoint)
 
-1. An image is an array: shape, channels, intensity (8 min)
-2. Visualizing collections: grids, montages, and why they catch data problems (10 min)
-3. Looking inside models: feature maps and saliency (10 min)
+1. An image is an array: shape, channels, intensity (9 min)
+2. Visualizing collections: grids, montages, and why they catch data problems (12 min)
+3. Looking inside models: feature maps and saliency (12 min)
 4. Discussion: a model that's "right for the wrong reason" (2 min)
 
-### Block 2 — Guided Demonstration (~30 min, live coding)
+### Block 2 — Guided Demonstration (~35 min, live coding)
 
-1. Load an image set; build a labeled grid montage (10 min)
-2. Show per-channel and intensity histograms (8 min)
-3. Overlay a simple saliency map on a single prediction (12 min)
+1. Load an image set; build a labeled grid montage (12 min)
+2. Show per-channel and intensity histograms (9 min)
+3. Overlay a simple saliency map on a single prediction (14 min)
 
-### ☕ Break (~10 min)
+### ☕ Break (~15 min)
 
-### Block 3 — Hands-On Activity (~40 min, students working)
+### Block 3 — Hands-On Activity (~50 min, students working)
 
-1. Students build a montage of a class and spot anomalies (12 min)
-2. Produce a channel/intensity visualization (8 min)
-3. Wrap an image browser into a Streamlit app (upload + display + summary) (20 min)
+1. Students build a montage of a class and spot anomalies (15 min)
+2. Produce a channel/intensity visualization (10 min)
+3. Wrap an image browser into a Streamlit app (upload + display + summary) (25 min)
 
-### Block 4 — Wrap-Up & Homework Preview (~10 min)
+### Block 4 — Wrap-Up & Homework Preview (~15 min)
 
-1. Share montages; what data issues surfaced? (6 min)
-2. Preview homework (4 min)
+1. Share montages; what data issues surfaced? (9 min)
+2. Preview homework (6 min)
 
 ---
 

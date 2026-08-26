@@ -29,19 +29,19 @@ Time is also where some of the most common visual dishonesty appears: truncated 
 pip install pandas numpy matplotlib seaborn statsmodels streamlit
 ```
 
-## 🧭 Two-Hour Session Outline
+## 🧭 Session Outline (2.5 hours)
 
-> Single 2-hour block.
+> Single 2.5-hour block, 6:10-8:40 PM.
 
-**Block 1 — Concepts & Theory (~30 min).** What's special about time (8) · trend vs. seasonality; decomposition (10) · visualizing uncertainty (10) · the truncated-axis problem (2).
+**Block 1 — Concepts & Theory (~35 min).** What's special about time (9) · trend vs. seasonality; decomposition (12) · visualizing uncertainty (12) · the truncated-axis problem (2).
 
-**Block 2 — Guided Demonstration (~30 min).** Parse dates, resample (10) · trend with a rolling mean; decompose seasonality (12) · add a confidence band (8).
+**Block 2 — Guided Demonstration (~35 min).** Parse dates, resample (12) · trend with a rolling mean; decompose seasonality (14) · add a confidence band (9).
 
-**☕ Break (~10 min).**
+**☕ Break (~15 min).**
 
-**Block 3 — Hands-On (~40 min).** Load and resample a series (10) · trend + uncertainty band (20) · wrap into a Streamlit app with a resolution selector (10).
+**Block 3 — Hands-On (~50 min).** Load and resample a series (13) · trend + uncertainty band (25) · wrap into a Streamlit app with a resolution selector (12).
 
-**Block 4 — Wrap-Up (~10 min).** Share charts; how did resolution change the story? (6) · preview homework (4).
+**Block 4 — Wrap-Up (~15 min).** Share charts; how did resolution change the story? (9) · preview homework (6).
 
 ---
 

@@ -48,35 +48,35 @@ GeoPandas can be finicky to install — confirm `import geopandas` works in your
 
 ---
 
-## 🧭 Two-Hour Session Outline
+## 🧭 Session Outline (2.5 hours)
 
-> Single 2-hour block.
+> Single 2.5-hour block, 6:10-8:40 PM.
 
-### Block 1 — Concepts & Theory (~30 min, PowerPoint)
+### Block 1 — Concepts & Theory (~35 min, PowerPoint)
 
-1. CRS and projections: why flat maps distort (10 min)
-2. Spatial joins: attaching data to geometry (8 min)
-3. Choropleths done right: rates, classification, color (10 min)
+1. CRS and projections: why flat maps distort (12 min)
+2. Spatial joins: attaching data to geometry (9 min)
+3. Choropleths done right: rates, classification, color (12 min)
 4. Discussion: a famous misleading map (2 min)
 
-### Block 2 — Guided Demonstration (~30 min, live coding)
+### Block 2 — Guided Demonstration (~35 min, live coding)
 
-1. Load geometry, set/reproject CRS (8 min)
-2. Spatial-join attribute data; build a choropleth with a classification scheme (15 min)
-3. Add a basemap with contextily (7 min)
+1. Load geometry, set/reproject CRS (9 min)
+2. Spatial-join attribute data; build a choropleth with a classification scheme (18 min)
+3. Add a basemap with contextily (8 min)
 
-### ☕ Break (~10 min)
+### ☕ Break (~15 min)
 
-### Block 3 — Hands-On Activity (~40 min, students working)
+### Block 3 — Hands-On Activity (~50 min, students working)
 
-1. Students load geometry + data and reproject correctly (10 min)
-2. Build a rate-based choropleth with a defensible classification (20 min)
-3. Save the figure into a simple Streamlit display app (10 min)
+1. Students load geometry + data and reproject correctly (13 min)
+2. Build a rate-based choropleth with a defensible classification (25 min)
+3. Save the figure into a simple Streamlit display app (12 min)
 
-### Block 4 — Wrap-Up & Homework Preview (~10 min)
+### Block 4 — Wrap-Up & Homework Preview (~15 min)
 
-1. Compare choropleths using counts vs. rates — the story changes (6 min)
-2. Preview homework and Module II (4 min)
+1. Compare choropleths using counts vs. rates — the story changes (9 min)
+2. Preview homework and Module II (6 min)
 
 ---
 

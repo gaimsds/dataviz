@@ -9,10 +9,10 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~30 min |
-| **Block 2** | Guided demo: performance & behavior visuals → the live wire | ~35 min |
-| ☕ | Break | ~10 min |
-| **Block 3** | Hands-on: your visuals; your client ↔ your server | ~35 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~35 min |
+| **Block 2** | Guided demo: performance & behavior visuals → the live wire | ~45 min |
+| ☕ | Break | ~15 min |
+| **Block 3** | Hands-on: your visuals; your client ↔ your server | ~45 min |
 | **Block 4** | Wrap-up — this IS the final-project architecture | ~10 min |
 
 ::: {.gw-box}

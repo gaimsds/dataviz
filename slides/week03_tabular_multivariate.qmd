@@ -9,11 +9,11 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~30 min |
-| **Block 2** | Guided demo: wrangle → heatmap → PCA | ~30 min |
-| ☕ | Break | ~10 min |
-| **Block 3** | Hands-on: your multivariate dataset, PCA in Streamlit | ~40 min |
-| **Block 4** | Wrap-up & homework preview | ~10 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~35 min |
+| **Block 2** | Guided demo: wrangle → heatmap → PCA | ~35 min |
+| ☕ | Break | ~15 min |
+| **Block 3** | Hands-on: your multivariate dataset, PCA in Streamlit | ~50 min |
+| **Block 4** | Wrap-up & homework preview | ~15 min |
 
 ::: {.gw-box}
 **Running example:** the Wine dataset — 178 wines, **13** chemical measurements, 3 cultivars. Too many columns to eyeball: exactly the problem.

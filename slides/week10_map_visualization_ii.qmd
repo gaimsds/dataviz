@@ -9,10 +9,10 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~20 min |
-| **Block 2** | Guided demo: folium → Streamlit embed → coordinated filter | ~35 min |
-| ☕ | Break | ~10 min |
-| **Block 3** | Hands-on: your interactive geospatial dashboard | ~45 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~25 min |
+| **Block 2** | Guided demo: folium → Streamlit embed → coordinated filter | ~45 min |
+| ☕ | Break | ~15 min |
+| **Block 3** | Hands-on: your interactive geospatial dashboard | ~55 min |
 | **Block 4** | Wrap-up & homework preview | ~10 min |
 
 ::: {.gw-box}

@@ -30,19 +30,19 @@ This week builds wrangling fluency, then moves to multivariate visualization: pa
 pip install pandas numpy seaborn matplotlib scikit-learn streamlit
 ```
 
-## 🧭 Two-Hour Session Outline
+## 🧭 Session Outline (2.5 hours)
 
-> Single 2-hour block.
+> Single 2.5-hour block, 6:10-8:40 PM.
 
-**Block 1 — Concepts & Theory (~30 min).** The multivariate problem (8) · pairwise structure: scatter matrices and correlation heatmaps (10) · PCA as a visualization tool (10) · aggregation vs. detail; Simpson's paradox (2).
+**Block 1 — Concepts & Theory (~35 min).** The multivariate problem (9) · pairwise structure: scatter matrices and correlation heatmaps (12) · PCA as a visualization tool (12) · aggregation vs. detail; Simpson's paradox (2).
 
-**Block 2 — Guided Demonstration (~30 min).** Wrangle: reshape + groupby + merge (10) · pair plot and correlation heatmap (10) · fit PCA, plot the first two components (10).
+**Block 2 — Guided Demonstration (~35 min).** Wrangle: reshape + groupby + merge (12) · pair plot and correlation heatmap (12) · fit PCA, plot the first two components (11).
 
-**☕ Break (~10 min).**
+**☕ Break (~15 min).**
 
-**Block 3 — Hands-On (~40 min).** Wrangle into tidy form (10) · correlation heatmap + PCA projection (20) · wrap the PCA scatter into a Streamlit app with a color-by selector (10).
+**Block 3 — Hands-On (~50 min).** Wrangle into tidy form (13) · correlation heatmap + PCA projection (25) · wrap the PCA scatter into a Streamlit app with a color-by selector (12).
 
-**Block 4 — Wrap-Up (~10 min).** Share PCA projections; what clustered and why? (6) · preview homework (4).
+**Block 4 — Wrap-Up (~15 min).** Share PCA projections; what clustered and why? (9) · preview homework (6).
 
 ---
 

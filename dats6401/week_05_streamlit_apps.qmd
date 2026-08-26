@@ -8,7 +8,7 @@ title: "Week 5 — Building Interactive Apps with Streamlit"
 
 A notebook is a great place to *develop* a visualization, but a poor place to *deliver* one to someone who isn't a programmer. Streamlit closes that gap: with a few lines of pure Python, a script becomes an interactive web app with widgets, layout, and live-updating charts. For a data-science course, this is more than convenience — it is the difference between a static figure and a tool someone can explore.
 
-This week is deliberately tooling-heavy. We cover Streamlit's execution model (the script re-runs top-to-bottom on every interaction), the widget set, layout primitives (columns, tabs, sidebar), and — crucially — caching, which is what keeps an app responsive when it loads data or fits a model. We also deploy a first app to the web. Everything after this week assumes Streamlit fluency: the modality modules end in small apps, and the final project is a deployed client–server Streamlit application. Getting comfortable now is what makes the client–server weeks (11–13) feasible in a two-hour block.
+This week is deliberately tooling-heavy. We cover Streamlit's execution model (the script re-runs top-to-bottom on every interaction), the widget set, layout primitives (columns, tabs, sidebar), and — crucially — caching, which is what keeps an app responsive when it loads data or fits a model. We also deploy a first app to the web. Everything after this week assumes Streamlit fluency: the modality modules end in small apps, and the final project is a deployed client–server Streamlit application. Getting comfortable now is what makes the client–server weeks (11–13) feasible in a single session.
 
 ---
 
@@ -46,29 +46,29 @@ Have a free Streamlit Community Cloud (or equivalent) account ready, and a GitHu
 
 ---
 
-## 🧭 Two-Hour Session Outline
+## 🧭 Session Outline (2.5 hours)
 
-> Single 2-hour block. Tooling week — hands-on dominates.
+> Single 2.5-hour block, 6:10-8:40 PM. Tooling week — hands-on dominates.
 
-### Block 1 — Concepts & Theory (~20 min, PowerPoint)
+### Block 1 — Concepts & Theory (~25 min, PowerPoint)
 
-1. Why apps, not just notebooks: delivery and exploration (5 min)
-2. The re-run model: how Streamlit executes, and why caching matters (10 min)
-3. Layout and state: columns, tabs, sidebar, `session_state` (5 min)
+1. Why apps, not just notebooks: delivery and exploration (6 min)
+2. The re-run model: how Streamlit executes, and why caching matters (13 min)
+3. Layout and state: columns, tabs, sidebar, `session_state` (6 min)
 
-### Block 2 — Guided Demonstration (~35 min, live coding)
+### Block 2 — Guided Demonstration (~45 min, live coding)
 
-1. Build an app with a sidebar, widgets, and a live chart (15 min)
-2. Add caching to a slow data load; see the speedup (10 min)
-3. Push to GitHub and deploy to Streamlit Community Cloud (10 min)
+1. Build an app with a sidebar, widgets, and a live chart (19 min)
+2. Add caching to a slow data load; see the speedup (13 min)
+3. Push to GitHub and deploy to Streamlit Community Cloud (13 min)
 
-### ☕ Break (~10 min)
+### ☕ Break (~15 min)
 
-### Block 3 — Hands-On Activity (~45 min, students working)
+### Block 3 — Hands-On Activity (~55 min, students working)
 
-1. Each student takes a notebook from Weeks 2–4 and converts it to an app (25 min)
-2. Add at least two widgets and a layout element (10 min)
-3. Deploy it and share the URL (10 min)
+1. Each student takes a notebook from Weeks 2–4 and converts it to an app (31 min)
+2. Add at least two widgets and a layout element (12 min)
+3. Deploy it and share the URL (12 min)
 
 ### Block 4 — Wrap-Up & Homework Preview (~10 min)
 

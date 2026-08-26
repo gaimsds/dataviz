@@ -9,11 +9,11 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~30 min |
-| **Block 2** | Guided demo: frequencies → topics → embeddings | ~30 min |
-| ☕ | Break | ~10 min |
-| **Block 3** | Hands-on: your corpus, topic model, Streamlit topic explorer | ~40 min |
-| **Block 4** | Wrap-up & homework preview | ~10 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~35 min |
+| **Block 2** | Guided demo: frequencies → topics → embeddings | ~35 min |
+| ☕ | Break | ~15 min |
+| **Block 3** | Hands-on: your corpus, topic model, Streamlit topic explorer | ~50 min |
+| **Block 4** | Wrap-up & homework preview | ~15 min |
 
 ::: {.gw-box}
 **Today's problem:** text has no x and no y. Every text visualization is really a visualization of a **transform** of text — so understanding the transform is half the work.

@@ -46,33 +46,33 @@ Have a GitHub repo for your app and a free deployment account ready before class
 
 ---
 
-## 🧭 Two-Hour Session Outline
+## 🧭 Session Outline (2.5 hours)
 
-> Single 2-hour block. Lighter lecture, then an extended workshop.
+> Single 2.5-hour block, 6:10-8:40 PM. Lighter lecture, then an extended workshop.
 
-### Block 1 — Concepts & Theory (~25 min, PowerPoint)
+### Block 1 — Concepts & Theory (~30 min, PowerPoint)
 
-1. Deploying client + server: where each runs, how they connect, secrets/config (12 min)
-2. Visualization ethics: distortion, false authority, bias, accessibility (10 min)
-3. The special case: putting model output in front of users who over-trust it (3 min)
+1. Deploying client + server: where each runs, how they connect, secrets/config (14 min)
+2. Visualization ethics: distortion, false authority, bias, accessibility (12 min)
+3. The special case: putting model output in front of users who over-trust it (4 min)
 
-### Block 2 — Guided Demonstration (~25 min, live coding)
+### Block 2 — Guided Demonstration (~30 min, live coding)
 
-1. Deploy the Streamlit client to the web (10 min)
-2. Point the client at a deployed backend; handle the URL/config cleanly (10 min)
-3. An accessibility/honesty pass on a finished app (5 min)
+1. Deploy the Streamlit client to the web (12 min)
+2. Point the client at a deployed backend; handle the URL/config cleanly (12 min)
+3. An accessibility/honesty pass on a finished app (6 min)
 
-### ☕ Break (~10 min)
+### ☕ Break (~15 min)
 
-### Block 3 — Final Project Workshop (~50 min)
+### Block 3 — Final Project Workshop (~60 min)
 
-1. Lightning prototype presentations (2–3 min each) with structured peer critique (35 min)
-2. Instructor office-hour-style circulation for blockers (15 min)
+1. Lightning prototype presentations (2–3 min each) with structured peer critique (42 min)
+2. Instructor office-hour-style circulation for blockers (18 min)
 
-### Block 4 — Wrap-Up (~10 min)
+### Block 4 — Wrap-Up (~15 min)
 
-1. Synthesize critique themes; confirm final deadlines and rubric (6 min)
-2. Course retrospective: what "visualizing complex data" came to mean (4 min)
+1. Synthesize critique themes; confirm final deadlines and rubric (9 min)
+2. Course retrospective: what "visualizing complex data" came to mean (6 min)
 
 ---
 

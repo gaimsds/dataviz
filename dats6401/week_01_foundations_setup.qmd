@@ -34,17 +34,17 @@ pip install pandas numpy matplotlib seaborn altair plotly streamlit
 
 Create and activate a virtual environment, confirm the imports work, and verify you can run `streamlit hello` before class.
 
-## 🧭 Two-Hour Session Outline
+## 🧭 Session Outline (2.5 hours)
 
-> Single 2-hour block. The first meeting is lighter on hands-on and heavier on orientation, but we still end with everyone running code.
+> Single 2.5-hour block, 6:10-8:40 PM. The first meeting is lighter on hands-on and heavier on orientation, but we still end with everyone running code.
 
-**Block 1 — Concepts & Theory (~35 min, PowerPoint).** Course overview and modality-driven structure (10) · what makes data "complex" (10) · the workflow: tidy data, reproducibility, notebooks vs. apps (10) · discussion: good vs. bad charts (5).
+**Block 1 — Concepts & Theory (~45 min, PowerPoint).** Course overview and modality-driven structure (13) · what makes data "complex" (13) · the workflow: tidy data, reproducibility, notebooks vs. apps (13) · discussion: good vs. bad charts (6).
 
-**Block 2 — Guided Demonstration (~30 min).** Environment check + load a dataset (10) · first chart and the anatomy of a figure (10) · a two-line Streamlit app (10).
+**Block 2 — Guided Demonstration (~40 min).** Environment check + load a dataset (14) · first chart and the anatomy of a figure (13) · a two-line Streamlit app (13).
 
-**☕ Break (~10 min).**
+**☕ Break (~15 min).**
 
-**Block 3 — Hands-On (~30 min).** Get the environment running and load a dataset (10) · produce one chart and drop it into a minimal Streamlit app (20).
+**Block 3 — Hands-On (~40 min).** Get the environment running and load a dataset (13) · produce one chart and drop it into a minimal Streamlit app (27).
 
 **Block 4 — Wrap-Up (~10 min).** Troubleshooting round-up (5) · preview homework and the data-sources page (5).
 
