@@ -1,0 +1,50 @@
+---
+title: "Lecture Slides"
+subtitle: "DATS 6401 — Visualization of Complex Data"
+# The project format is revealjs (every other .qmd here is a deck). This one
+# page is an ordinary HTML index, so it overrides the format explicitly.
+format:
+  html:
+    theme: cosmo
+    toc: false
+    page-layout: article
+---
+
+The Block 1 lecture deck for each week. Decks are [reveal.js]{.text-nowrap}
+presentations — press **F** for full screen, **S** for speaker notes, **O** for
+an overview of all slides, and **?** for the full list of shortcuts.
+
+## Foundations
+
+| | Deck | |
+|---|---|---|
+| **1** | [Foundations & Setup](week01_foundations_setup.html) | What makes data complex, and how we'll work |
+| **2** | [Grammar of Graphics & Design Principles](week02_grammar_design_principles.html) | How data becomes a picture |
+| **3** | [Tabular & Multivariate Data](week03_tabular_multivariate.html) | Seeing structure across many variables |
+| **4** | [Time-Series Data](week04_time_series.html) | Data with a direction |
+
+## Interactive Apps & Complex Modalities
+
+| | Deck | |
+|---|---|---|
+| **5** | [Building Interactive Apps with Streamlit](week05_streamlit_apps.html) | From notebook to application |
+| **6** | [Graph & Network Data](week06_graph_network_data.html) | Visualizing relationships rather than records |
+| **7** | [Text Data](week07_text_data.html) | Visualizing language |
+| **8** | [Image Data](week08_image_data.html) | Pixels as data |
+| **9** | [Map Visualization — Module I](week09_map_visualization_i.html) | Putting data on the Earth, correctly |
+| **10** | [Map Visualization — Module II](week10_map_visualization_ii.html) | Maps people can touch |
+
+## Client–Server & Machine Learning
+
+| | Deck | |
+|---|---|---|
+| **11** | [Consuming APIs & Data Endpoints](week11_consuming_apis.html) | The client side of client–server |
+| **12** | [Serving Models with FastAPI / Flask](week12_serving_models_fastapi.html) | The server side |
+| **13** | [ML/NLP Visualization](week13_ml_nlp_visualization.html) | Making models legible — and wiring it all together |
+| **14** | [Deployment, Ethics & Final Workshop](week14_deployment_ethics_workshop.html) | Shipping responsibly |
+
+---
+
+The slides accompany the course book, [Visualization of Complex
+Data](../), where each week's chapter carries the readings, the session
+outline, and the downloadable notebooks and starter apps.
