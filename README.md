@@ -100,6 +100,11 @@ The publish workflow renders it to `_site/dats6401/slides/`, so a deck lands at
 `…/dataviz/dats6401/slides/week06_graph_network_data.html`. Note `slides/_output/`
 is git-ignored — commit the `.qmd` and `_freeze/`, never the rendered decks.
 
+`slides/index.qmd` is the landing page listing all 14 decks, served at
+`…/dataviz/dats6401/slides/`. It is the one file here that is **not** a deck —
+it overrides the project's revealjs format to plain HTML in its own front
+matter. Add a row to its table whenever a deck is added.
+
 ---
 
 ## Adding the undergraduate course later
