@@ -48,29 +48,29 @@ Confirm you can `requests.get(...)` a public endpoint and print the JSON before 
 
 ---
 
-## 🧭 Two-Hour Session Outline
+## 🧭 Session Outline (2.5 hours)
 
-> Single 2-hour block. The two worked examples you asked for live in Block 2.
+> Single 2.5-hour block, 6:10-8:40 PM. The two worked examples you asked for live in Block 2.
 
-### Block 1 — Concepts & Theory (~25 min, PowerPoint)
+### Block 1 — Concepts & Theory (~30 min, PowerPoint)
 
-1. Client vs. server: why we separate them (8 min)
-2. Anatomy of an HTTP request: method, URL, params, headers, status codes (10 min)
-3. JSON as the lingua franca; latency and failure as design realities (7 min)
+1. Client vs. server: why we separate them (10 min)
+2. Anatomy of an HTTP request: method, URL, params, headers, status codes (12 min)
+3. JSON as the lingua franca; latency and failure as design realities (8 min)
 
-### Block 2 — Guided Demonstration (~35 min, live coding) — **Worked Examples**
+### Block 2 — Guided Demonstration (~45 min, live coding) — **Worked Examples**
 
-1. **Example A:** call a public no-key API (Open-Meteo), parse JSON → pandas, chart it (15 min)
-2. **Example B:** call the course-provided endpoint, handle a non-200 status, cache the call (12 min)
-3. Wrap both into a Streamlit app with a fetch button and error handling (8 min)
+1. **Example A:** call a public no-key API (Open-Meteo), parse JSON → pandas, chart it (19 min)
+2. **Example B:** call the course-provided endpoint, handle a non-200 status, cache the call (16 min)
+3. Wrap both into a Streamlit app with a fetch button and error handling (10 min)
 
-### ☕ Break (~10 min)
+### ☕ Break (~15 min)
 
-### Block 3 — Hands-On Activity (~40 min, students working)
+### Block 3 — Hands-On Activity (~50 min, students working)
 
-1. Students pick a public API and successfully fetch + parse it (15 min)
-2. Visualize the response in Streamlit with caching (15 min)
-3. Add graceful error handling for a bad request (10 min)
+1. Students pick a public API and successfully fetch + parse it (19 min)
+2. Visualize the response in Streamlit with caching (19 min)
+3. Add graceful error handling for a bad request (12 min)
 
 ### Block 4 — Wrap-Up & Homework Preview (~10 min)
 

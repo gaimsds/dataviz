@@ -9,11 +9,11 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~30 min |
-| **Block 2** | Guided demo: build & draw a graph in networkx | ~30 min |
-| ☕ | Break | ~10 min |
-| **Block 3** | Hands-on: centrality, layouts, PyVis → Streamlit | ~40 min |
-| **Block 4** | Wrap-up & homework preview | ~10 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~35 min |
+| **Block 2** | Guided demo: build & draw a graph in networkx | ~35 min |
+| ☕ | Break | ~15 min |
+| **Block 3** | Hands-on: centrality, layouts, PyVis → Streamlit | ~50 min |
+| **Block 4** | Wrap-up & homework preview | ~15 min |
 
 ::: {.gw-box}
 **Where we are:** you can build Streamlit apps (Week 5). Today: the first *complex* modality — data whose meaning lives in the **connections**.

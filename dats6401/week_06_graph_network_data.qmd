@@ -51,35 +51,35 @@ Confirm you can build a small graph in a notebook and render it, and that you ca
 
 ---
 
-## 🧭 Two-Hour Session Outline
+## 🧭 Session Outline (2.5 hours)
 
-> Single 2-hour block. Concepts and hands-on work are interleaved. This is a moderately tooling-heavy week, so the hands-on blocks run a little longer than the lecture.
+> Single 2.5-hour block, 6:10-8:40 PM. Concepts and hands-on work are interleaved. This is a moderately tooling-heavy week, so the hands-on blocks run a little longer than the lecture.
 
-### Block 1 — Concepts & Theory (~30 min, PowerPoint)
+### Block 1 — Concepts & Theory (~35 min, PowerPoint)
 
-1. From records to relationships: when relational structure is the data (5 min)
-2. Anatomy of a graph: nodes, edges, direction, weight; the adjacency matrix as the dual representation (10 min)
-3. Layouts as algorithms, not facts: force-directed vs. circular vs. bipartite, and what position means (10 min)
-4. Discussion: reading a "hairball" — what it does and doesn't tell us (5 min)
+1. From records to relationships: when relational structure is the data (6 min)
+2. Anatomy of a graph: nodes, edges, direction, weight; the adjacency matrix as the dual representation (12 min)
+3. Layouts as algorithms, not facts: force-directed vs. circular vs. bipartite, and what position means (11 min)
+4. Discussion: reading a "hairball" — what it does and doesn't tell us (6 min)
 
-### Block 2 — Guided Demonstration (~30 min, live coding)
+### Block 2 — Guided Demonstration (~35 min, live coding)
 
-1. Build a graph from an edge list in NetworkX; inspect degree and basic properties (10 min)
-2. Draw it with a force-directed layout; encode degree to node size and a computed community to color (15 min)
-3. Show the same graph as an adjacency matrix — when this reveals more than the node-link view (5 min)
+1. Build a graph from an edge list in NetworkX; inspect degree and basic properties (12 min)
+2. Draw it with a force-directed layout; encode degree to node size and a computed community to color (17 min)
+3. Show the same graph as an adjacency matrix — when this reveals more than the node-link view (6 min)
 
-### ☕ Break (~10 min)
+### ☕ Break (~15 min)
 
-### Block 3 — Hands-On Activity (~40 min, students working)
+### Block 3 — Hands-On Activity (~50 min, students working)
 
-1. Set up: each student loads the Les Misérables (or a SNAP) network (5 min)
-2. Independent work: compute a centrality measure, encode it visually, and try two different layouts; instructor circulates (25 min)
-3. Wrap the interactive PyVis graph into a small Streamlit app with a layout selector widget (10 min)
+1. Set up: each student loads the Les Misérables (or a SNAP) network (6 min)
+2. Independent work: compute a centrality measure, encode it visually, and try two different layouts; instructor circulates (31 min)
+3. Wrap the interactive PyVis graph into a small Streamlit app with a layout selector widget (13 min)
 
-### Block 4 — Wrap-Up & Homework Preview (~10 min)
+### Block 4 — Wrap-Up & Homework Preview (~15 min)
 
-1. A few students share: which layout best revealed the community structure, and why? (7 min)
-2. Connect back to encoding theory; preview the homework (3 min)
+1. A few students share: which layout best revealed the community structure, and why? (11 min)
+2. Connect back to encoding theory; preview the homework (4 min)
 
 ---
 

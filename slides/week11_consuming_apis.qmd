@@ -9,10 +9,10 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~25 min |
-| **Block 2** | Worked examples: public API + the course endpoint | ~35 min |
-| ☕ | Break | ~10 min |
-| **Block 3** | Hands-on: your API, your Streamlit client | ~40 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~30 min |
+| **Block 2** | Worked examples: public API + the course endpoint | ~45 min |
+| ☕ | Break | ~15 min |
+| **Block 3** | Hands-on: your API, your Streamlit client | ~50 min |
 | **Block 4** | Wrap-up & homework preview | ~10 min |
 
 ::: {.gw-box}

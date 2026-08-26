@@ -9,11 +9,11 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~30 min |
-| **Block 2** | Guided demo: resample → trend → band → decompose | ~30 min |
-| ☕ | Break | ~10 min |
-| **Block 3** | Hands-on: your series, trend + uncertainty, in Streamlit | ~40 min |
-| **Block 4** | Wrap-up & homework preview | ~10 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~35 min |
+| **Block 2** | Guided demo: resample → trend → band → decompose | ~35 min |
+| ☕ | Break | ~15 min |
+| **Block 3** | Hands-on: your series, trend + uncertainty, in Streamlit | ~50 min |
+| **Block 4** | Wrap-up & homework preview | ~15 min |
 
 ::: {.gw-box}
 **Running example:** Mauna Loa atmospheric CO₂ — 40+ years of monthly measurements, the textbook trend-plus-seasonality series.

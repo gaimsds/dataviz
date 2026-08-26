@@ -9,10 +9,10 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~25 min |
-| **Block 2** | Guided demo: schema → endpoint → /docs → test | ~40 min |
-| ☕ | Break | ~10 min |
-| **Block 3** | Hands-on: complete the skeleton server, prove it with the test script | ~35 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~30 min |
+| **Block 2** | Guided demo: schema → endpoint → /docs → test | ~50 min |
+| ☕ | Break | ~15 min |
+| **Block 3** | Hands-on: complete the skeleton server, prove it with the test script | ~45 min |
 | **Block 4** | Wrap-up & homework preview | ~10 min |
 
 ::: {.gw-box}

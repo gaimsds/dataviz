@@ -9,10 +9,10 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~40 min |
-| **Block 2** | Guided demo: same data, four encodings; Altair grammar | ~25 min |
-| ☕ | Break | ~10 min |
-| **Block 3** | Hands-on: multi-encoding charts, side-by-side in Streamlit | ~35 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~50 min |
+| **Block 2** | Guided demo: same data, four encodings; Altair grammar | ~30 min |
+| ☕ | Break | ~15 min |
+| **Block 3** | Hands-on: multi-encoding charts, side-by-side in Streamlit | ~45 min |
 | **Block 4** | Wrap-up & homework preview | ~10 min |
 
 ::: {.gw-box}

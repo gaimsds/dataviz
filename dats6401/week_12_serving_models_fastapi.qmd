@@ -8,7 +8,7 @@ title: "Week 12 — Serving Models with FastAPI / Flask"
 
 Last week you consumed endpoints that someone else built. This week you become that someone. Serving a model means taking a trained estimator — a scikit-learn classifier, say — and putting it behind a small web server so that any client can send it inputs and receive predictions over HTTP. This is the standard way models are deployed in practice: the model lives in one place, and many front-ends (web apps, mobile apps, other services) consume it through a stable API.
 
-We use **FastAPI** as the primary framework (with Flask shown as the lightweight alternative) because it is fast to write, validates inputs automatically, and generates interactive documentation for free. The work is mostly about *interface design*: what does a prediction request look like, what does the response contain, how do you load the model once rather than on every request, and how do you handle bad input. Crucially, this week is scaffolded — you start from a provided trained model and a skeleton server — so the two hours go to the meaningful parts (request/response design, testing the endpoint) rather than boilerplate. Next week, your Streamlit client from Week 11 connects to *this* server, and you visualize what it returns.
+We use **FastAPI** as the primary framework (with Flask shown as the lightweight alternative) because it is fast to write, validates inputs automatically, and generates interactive documentation for free. The work is mostly about *interface design*: what does a prediction request look like, what does the response contain, how do you load the model once rather than on every request, and how do you handle bad input. Crucially, this week is scaffolded — you start from a provided trained model and a skeleton server — so the session goes to the meaningful parts (request/response design, testing the endpoint) rather than boilerplate. Next week, your Streamlit client from Week 11 connects to *this* server, and you visualize what it returns.
 
 ---
 
@@ -47,29 +47,29 @@ Confirm you can run `uvicorn app:app --reload` on the skeleton and open the `/do
 
 ---
 
-## 🧭 Two-Hour Session Outline
+## 🧭 Session Outline (2.5 hours)
 
-> Single 2-hour block. Scaffolded so boilerplate doesn't eat the session.
+> Single 2.5-hour block, 6:10-8:40 PM. Scaffolded so boilerplate doesn't eat the session.
 
-### Block 1 — Concepts & Theory (~25 min, PowerPoint)
+### Block 1 — Concepts & Theory (~30 min, PowerPoint)
 
-1. What "serving a model" means; the deployment picture (8 min)
-2. Request/response schema design; why validation matters (10 min)
-3. Load-once vs. load-per-request; statelessness and performance (7 min)
+1. What "serving a model" means; the deployment picture (10 min)
+2. Request/response schema design; why validation matters (12 min)
+3. Load-once vs. load-per-request; statelessness and performance (8 min)
 
-### Block 2 — Guided Demonstration (~40 min, live coding)
+### Block 2 — Guided Demonstration (~50 min, live coding)
 
-1. Load the provided model; define a Pydantic request schema (12 min)
-2. Write the `/predict` endpoint; return a structured JSON response (15 min)
-3. Run with uvicorn; test via the auto-generated `/docs` and via `requests` (13 min)
+1. Load the provided model; define a Pydantic request schema (15 min)
+2. Write the `/predict` endpoint; return a structured JSON response (19 min)
+3. Run with uvicorn; test via the auto-generated `/docs` and via `requests` (16 min)
 
-### ☕ Break (~10 min)
+### ☕ Break (~15 min)
 
-### Block 3 — Hands-On Activity (~35 min, students working)
+### Block 3 — Hands-On Activity (~45 min, students working)
 
-1. Students complete the skeleton server's TODOs to serve the model (20 min)
-2. Test their endpoint with `requests` and the `/docs` UI (10 min)
-3. Add input validation / a friendly error for bad input (5 min)
+1. Students complete the skeleton server's TODOs to serve the model (26 min)
+2. Test their endpoint with `requests` and the `/docs` UI (13 min)
+3. Add input validation / a friendly error for bad input (6 min)
 
 ### Block 4 — Wrap-Up & Homework Preview (~10 min)
 

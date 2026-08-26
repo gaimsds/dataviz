@@ -9,10 +9,10 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~20 min |
-| **Block 2** | Guided demo: build, lay out, cache, deploy | ~35 min |
-| ☕ | Break | ~10 min |
-| **Block 3** | Hands-on: convert YOUR Weeks 2–4 notebook to a deployed app | ~45 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~25 min |
+| **Block 2** | Guided demo: build, lay out, cache, deploy | ~45 min |
+| ☕ | Break | ~15 min |
+| **Block 3** | Hands-on: convert YOUR Weeks 2–4 notebook to a deployed app | ~55 min |
 | **Block 4** | Wrap-up & homework preview | ~10 min |
 
 ::: {.gw-box}

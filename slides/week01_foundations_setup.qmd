@@ -9,10 +9,10 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~35 min |
-| **Block 2** | Guided demo: environment, first chart, first Streamlit app | ~30 min |
-| ☕ | Break | ~10 min |
-| **Block 3** | Hands-on: your environment, your chart, your app | ~30 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~45 min |
+| **Block 2** | Guided demo: environment, first chart, first Streamlit app | ~40 min |
+| ☕ | Break | ~15 min |
+| **Block 3** | Hands-on: your environment, your chart, your app | ~40 min |
 | **Block 4** | Wrap-up & homework preview | ~10 min |
 
 ::: {.gw-box}

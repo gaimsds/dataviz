@@ -48,35 +48,35 @@ The first BERTopic run downloads a model — do this before class, not during.
 
 ---
 
-## 🧭 Two-Hour Session Outline
+## 🧭 Session Outline (2.5 hours)
 
-> Single 2-hour block.
+> Single 2.5-hour block, 6:10-8:40 PM.
 
-### Block 1 — Concepts & Theory (~30 min, PowerPoint)
+### Block 1 — Concepts & Theory (~35 min, PowerPoint)
 
-1. Text has no x/y: the transform problem (8 min)
-2. Frequencies and keyness done right; why word clouds mislead (8 min)
-3. Topic models and what they summarize (8 min)
-4. Embeddings as semantic geometry; UMAP preview (6 min)
+1. Text has no x/y: the transform problem (10 min)
+2. Frequencies and keyness done right; why word clouds mislead (9 min)
+3. Topic models and what they summarize (9 min)
+4. Embeddings as semantic geometry; UMAP preview (7 min)
 
-### Block 2 — Guided Demonstration (~30 min, live coding)
+### Block 2 — Guided Demonstration (~35 min, live coding)
 
-1. Tokenize a corpus; sorted-bar frequency vs. word cloud, side by side (12 min)
-2. Fit BERTopic; use its topic visualization (12 min)
-3. Project document embeddings to 2D (6 min)
+1. Tokenize a corpus; sorted-bar frequency vs. word cloud, side by side (14 min)
+2. Fit BERTopic; use its topic visualization (14 min)
+3. Project document embeddings to 2D (7 min)
 
-### ☕ Break (~10 min)
+### ☕ Break (~15 min)
 
-### Block 3 — Hands-On Activity (~40 min, students working)
+### Block 3 — Hands-On Activity (~50 min, students working)
 
-1. Students load a corpus and produce an honest frequency chart (12 min)
-2. Fit a topic model and visualize topics (18 min)
-3. Wrap topic exploration into a Streamlit app with a topic selector (10 min)
+1. Students load a corpus and produce an honest frequency chart (15 min)
+2. Fit a topic model and visualize topics (23 min)
+3. Wrap topic exploration into a Streamlit app with a topic selector (12 min)
 
-### Block 4 — Wrap-Up & Homework Preview (~10 min)
+### Block 4 — Wrap-Up & Homework Preview (~15 min)
 
-1. Share topic maps; discuss what the model "saw" (6 min)
-2. Preview homework (4 min)
+1. Share topic maps; discuss what the model "saw" (9 min)
+2. Preview homework (6 min)
 
 ---
 

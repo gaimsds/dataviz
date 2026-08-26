@@ -48,29 +48,29 @@ Confirm `streamlit-folium` renders a folium map inside a small app before class.
 
 ---
 
-## 🧭 Two-Hour Session Outline
+## 🧭 Session Outline (2.5 hours)
 
-> Single 2-hour block. Tooling/interactive week — hands-on dominates.
+> Single 2.5-hour block, 6:10-8:40 PM. Tooling/interactive week — hands-on dominates.
 
-### Block 1 — Concepts & Theory (~20 min, PowerPoint)
+### Block 1 — Concepts & Theory (~25 min, PowerPoint)
 
-1. Static vs. interactive: when interactivity earns its cost (6 min)
-2. Tile maps and the web map model (folium/Leaflet, plotly) (8 min)
-3. Coordinated dashboards: map + filter + chart updating together (6 min)
+1. Static vs. interactive: when interactivity earns its cost (8 min)
+2. Tile maps and the web map model (folium/Leaflet, plotly) (10 min)
+3. Coordinated dashboards: map + filter + chart updating together (7 min)
 
-### Block 2 — Guided Demonstration (~35 min, live coding)
+### Block 2 — Guided Demonstration (~45 min, live coding)
 
-1. Build an interactive choropleth in folium with hover/popups (12 min)
-2. Embed it in Streamlit with `streamlit-folium` (10 min)
-3. Add a region filter that updates both the map and a side chart (13 min)
+1. Build an interactive choropleth in folium with hover/popups (15 min)
+2. Embed it in Streamlit with `streamlit-folium` (13 min)
+3. Add a region filter that updates both the map and a side chart (17 min)
 
-### ☕ Break (~10 min)
+### ☕ Break (~15 min)
 
-### Block 3 — Hands-On Activity (~45 min, students working)
+### Block 3 — Hands-On Activity (~55 min, students working)
 
-1. Students build an interactive map of their Module I data (15 min)
-2. Embed it in a Streamlit dashboard with at least one filter (20 min)
-3. Add a coordinated chart that responds to the same filter (10 min)
+1. Students build an interactive map of their Module I data (18 min)
+2. Embed it in a Streamlit dashboard with at least one filter (25 min)
+3. Add a coordinated chart that responds to the same filter (12 min)
 
 ### Block 4 — Wrap-Up & Homework Preview (~10 min)
 

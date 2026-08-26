@@ -6,7 +6,7 @@ The course is organized around **data modalities** — the idea that "complex da
 
 ## How this book works
 
-Each chapter corresponds to one **two-hour class session** that interleaves concept lecture with hands-on work. Within a chapter you'll find background and motivation, learning objectives, readings, a session outline with timings, code, an in-class activity, and homework.
+Each chapter corresponds to one **2.5-hour class session** that interleaves concept lecture with hands-on work. Within a chapter you'll find background and motivation, learning objectives, readings, a session outline with timings, code, an in-class activity, and homework.
 
 A note on the code in this book:
 
