@@ -274,12 +274,34 @@ plt.tight_layout(); plt.show()
 
 Colour separates faster; shape survives greyscale printing and colour-blindness. **Redundant encoding** costs a channel but buys robustness.
 
+## When the colormap invents structure
+
+```{python}
+#| echo: false
+#| fig-align: center
+gx = np.linspace(0, 1, 300); gy = np.linspace(0, 1, 200)
+GX, GY = np.meshgrid(gx, gy)
+Z = GX + 0.22 * np.sin(5 * GY)          # perfectly smooth, no edges anywhere
+fig, axes = plt.subplots(1, 2, figsize=(9.8, 2.9))
+for ax, cm, t in zip(axes, ["jet", "viridis"],
+                     ["'jet': bands and edges the data does not contain",
+                      "viridis: uniform — reads as the smooth ramp it is"]):
+    ax.imshow(Z, cmap=cm, aspect="auto", origin="lower")
+    ax.set_title(t, fontsize=9.5); ax.set_xticks([]); ax.set_yticks([])
+plt.tight_layout(); plt.show()
+```
+
+The underlying field is a **smooth ramp**. Rainbow scales aren't perceptually uniform, so equal steps in data become unequal steps in perceived lightness — inventing boundaries a reader will interpret as real.
+
+Same failure family: **3D bars and pies**, where perspective makes near values look larger than far ones.
+
 ## Gestalt: how the eye groups
 
 - **Proximity** — near things read as a group
 - **Similarity** — same color/shape reads as a group
 - **Enclosure & connection** — boxes and lines bind harder than color
 - **Continuity** — the eye follows smooth paths
+- **Closure** — the eye completes partial shapes (a dashed outline still reads as a box)
 
 You're already using these (every legend relies on similarity). Design = using them **on purpose**.
 
@@ -299,7 +321,9 @@ ax.set_title("You found the red dot before you decided to look for it.")
 ax.axis("off"); plt.tight_layout(); plt.show()
 ```
 
-Color, size, orientation pop out. **One** popout works; several at once cancel each other.
+Color, size, orientation — and **motion**, the strongest of all, which is why a single animated element will dominate an interactive dashboard whether you meant it to or not.
+
+**One** popout works; several at once cancel each other.
 
 # Expressiveness & effectiveness {background-color="#2E6E8E"}
 
