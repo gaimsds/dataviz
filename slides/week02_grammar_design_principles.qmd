@@ -19,6 +19,89 @@ format: revealjs
 **Today's claim:** charts aren't types to memorize — they're **encodings to compose**. And perception science tells us which encodings work.
 :::
 
+# First, the data has to have a shape {background-color="#2E6E8E"}
+
+## The grammar assumes tidy input
+
+Every mapping we write today — `x=`, `color=`, `size=` — assumes one thing: **each variable you want to map is already a column.**
+
+::: {.gw-box}
+Most "I can't make this chart" problems are **data-shape problems**, not plotting problems.
+:::
+
+::: {.columns}
+::: {.column width="48%"}
+**Wide (messy for plotting)**
+
+| name | math | english |
+|---|---|---|
+| Alice | 90 | 85 |
+| Bob | 80 | 78 |
+
+*"subject" is a variable — but it's spread across column headers.*
+:::
+::: {.column width="48%"}
+**Long (tidy)**
+
+| name | subject | score |
+|---|---|---|
+| Alice | math | 90 |
+| Alice | english | 85 |
+| Bob | math | 80 |
+| Bob | english | 78 |
+
+*Now `subject` is a column you can map.*
+:::
+:::
+
+## Wickham's three rules {.smaller}
+
+Tidy data (Wickham, *JSS* 2014, [doi:10.18637/jss.v059.i10](https://doi.org/10.18637/jss.v059.i10)):
+
+1. Each **variable** is a column
+2. Each **observation** is a row
+3. Each **type of observational unit** is a table
+
+```python
+df_tidy = df_wide.melt(id_vars="name", var_name="subject", value_name="score")
+```
+
+Why this matters beyond neatness:
+
+- **Consistency** — any tidy table works with any grammar-based library
+- **Flexibility** — a variable in a column can be mapped to *any* channel
+- **Reproducibility** — the same shape ports across pandas, R, SQL
+
+## One tidy table, three questions
+
+```{python}
+#| echo: false
+#| fig-align: center
+import pandas as pd
+import matplotlib.pyplot as plt
+
+tidy = pd.DataFrame({
+    "year":    [2021, 2022, 2023] * 3,
+    "region":  ["North"] * 3 + ["South"] * 3 + ["West"] * 3,
+    "sales":   [12, 15, 19, 9, 14, 13, 21, 20, 26],
+    "staff":   [4, 5, 6, 3, 5, 4, 7, 7, 8],
+})
+
+fig, axes = plt.subplots(1, 3, figsize=(10.5, 3.1))
+tot = tidy.groupby("region", as_index=False)["sales"].sum()
+axes[0].bar(tot["region"], tot["sales"], color="#2E6E8E")
+axes[0].set_title("compare categories", fontsize=10)
+for r, g in tidy.groupby("region"):
+    axes[1].plot(g["year"], g["sales"], marker="o", label=r)
+axes[1].set_title("trend over time", fontsize=10)
+axes[1].legend(fontsize=7)
+axes[2].scatter(tidy["staff"], tidy["sales"], color="#2E6E8E", s=45)
+axes[2].set_title("relationship", fontsize=10)
+plt.tight_layout(); plt.show()
+```
+
+Three charts, **one dataframe, zero reshaping**. That is what tidy buys you.
+
 # The grammar of graphics {background-color="#2E6E8E"}
 
 ## Every chart is a mapping
@@ -30,14 +113,77 @@ $$\text{data variables} \;\longrightarrow\; \text{visual channels}$$
 
 A "scatter plot" is just: *point marks, two variables on position*. Name the mapping and the chart-type zoo collapses into a system.
 
+## Four components, not two {.smaller}
+
+Marks and channels are only half of it. A full grammar specification also fixes:
+
+| Component | Question it answers | Example |
+|---|---|---|
+| **Marks** | What geometric object? | point, bar, line |
+| **Channels** | Which variable to which property? | `x=gdp`, `color=continent` |
+| **Coordinates** | What space are marks placed in? | Cartesian, polar, geographic |
+| **Scales** | How do data values become channel values? | linear, log, ordinal |
+
+::: {.gw-box}
+Change **one** component and you get a different chart — without touching the data.
+:::
+
+## Coordinates: the pie chart, explained
+
+```{python}
+#| echo: false
+#| fig-align: center
+import numpy as np
+vals = [23, 19, 27, 17, 14]
+labels = list("ABCDE")
+
+fig = plt.figure(figsize=(9.5, 3.4))
+ax1 = fig.add_subplot(1, 2, 1)
+ax1.bar(labels, vals, color="#2E6E8E")
+ax1.set_title("Bar marks, Cartesian coordinates", fontsize=10)
+
+ax2 = fig.add_subplot(1, 2, 2, projection="polar")
+theta = np.concatenate([[0], np.cumsum(vals) / sum(vals) * 2 * np.pi])
+ax2.bar(theta[:-1], [1] * len(vals), width=np.diff(theta), align="edge",
+        color=["#2E6E8E", "#4a89a8", "#6aa4bf", "#9ab8c9", "#c3d5de"])
+# label the wedges so the same five categories are traceable across both panels
+for lab, t0, t1 in zip(labels, theta[:-1], theta[1:]):
+    ax2.text((t0 + t1) / 2, 0.62, lab, ha="center", va="center", fontsize=9)
+ax2.set_yticks([]); ax2.set_xticks([])
+ax2.set_title("Same marks, polar coordinates", fontsize=10)
+plt.tight_layout(); plt.show()
+```
+
+A pie chart **is** a stacked bar chart in polar coordinates. Same data, same marks — one component changed.
+
+## Scales: the axis is a decision
+
+```{python}
+#| echo: false
+#| fig-align: center
+import plotly.express as px
+gap = px.data.gapminder()
+g07 = gap[gap["year"] == 2007]
+
+fig, axes = plt.subplots(1, 2, figsize=(9.8, 3.5))
+for ax, logx in zip(axes, [False, True]):
+    ax.scatter(g07["gdpPercap"], g07["lifeExp"], s=18, alpha=0.65, color="#2E6E8E")
+    if logx:
+        ax.set_xscale("log")
+    ax.set_title("log scale: structure appears" if logx else "linear scale: everything piles up",
+                 fontsize=10)
+    ax.set_xlabel("GDP per capita"); ax.set_ylabel("life expectancy")
+plt.tight_layout(); plt.show()
+```
+
+Identical data and encoding. **The scale is doing the analytical work** — and it must be labelled, or the reader is misled.
+
 ## Four channels at once
 
 ```{python}
 #| echo: false
 #| fig-align: center
 import seaborn as sns
-import plotly.express as px
-import matplotlib.pyplot as plt
 tips = px.data.tips()
 fig, ax = plt.subplots(figsize=(8.5, 4.2))
 sns.scatterplot(data=tips, x="total_bill", y="tip", hue="day", style="time", size="size", ax=ax)
@@ -69,9 +215,6 @@ This is why pie charts (angle) lose to bar charts (position/length) for comparis
 ```{python}
 #| echo: false
 #| fig-align: center
-import numpy as np
-vals = [23, 19, 27, 17, 14]
-labels = list("ABCDE")
 fig, axes = plt.subplots(1, 2, figsize=(9.5, 3.8))
 axes[0].bar(labels, vals, color="#2E6E8E")
 axes[0].set_title("Position/length: is C or A bigger? Instant.")
@@ -81,6 +224,55 @@ plt.tight_layout(); plt.show()
 ```
 
 Same five numbers. The decoding effort difference is the Cleveland–McGill result, live.
+
+## Color carries two different jobs {.smaller}
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib as mpl
+fig, axes = plt.subplots(2, 1, figsize=(9.5, 2.2))
+cat = plt.get_cmap("tab10")
+for i in range(6):
+    axes[0].add_patch(mpl.patches.Rectangle((i, 0), 0.92, 1, color=cat(i)))
+axes[0].set_xlim(0, 6); axes[0].set_ylim(0, 1); axes[0].axis("off")
+axes[0].set_title("Hue → unordered categories (no colour is 'more' than another)", fontsize=9)
+
+seq = plt.get_cmap("Blues")
+for i in range(6):
+    axes[1].add_patch(mpl.patches.Rectangle((i, 0), 0.92, 1, color=seq(0.15 + i * 0.17)))
+axes[1].set_xlim(0, 6); axes[1].set_ylim(0, 1); axes[1].axis("off")
+axes[1].set_title("Lightness → ordered magnitude (darker reads as 'more')", fontsize=9)
+plt.tight_layout(); plt.show()
+```
+
+Using **hue** for a quantity implies categories; using **lightness** for categories implies a ranking. Pick the one that matches your variable's type.
+
+[ColorBrewer](https://colorbrewer2.org) exists precisely to make that choice for you — sequential, diverging, qualitative.
+
+## Colour vs. shape for categories
+
+```{python}
+#| echo: false
+#| fig-align: center
+rng = np.random.default_rng(7)
+n = 40
+gx = rng.uniform(0, 10, n * 3); gy = rng.uniform(0, 6, n * 3)
+grp = np.repeat([0, 1, 2], n)
+cols = ["#2E6E8E", "#d9534f", "#6aa84f"]; marks = ["o", "s", "^"]
+
+fig, axes = plt.subplots(1, 3, figsize=(10.5, 2.9))
+for k in range(3):
+    m = grp == k
+    axes[0].scatter(gx[m], gy[m], color=cols[k], s=28)
+    axes[1].scatter(gx[m], gy[m], color="#555555", marker=marks[k], s=28)
+    axes[2].scatter(gx[m], gy[m], color=cols[k], marker=marks[k], s=28)
+for ax, t in zip(axes, ["colour only", "shape only", "colour + shape (redundant)"]):
+    ax.set_title(t, fontsize=10); ax.set_xticks([]); ax.set_yticks([])
+plt.tight_layout(); plt.show()
+```
+
+Colour separates faster; shape survives greyscale printing and colour-blindness. **Redundant encoding** costs a channel but buys robustness.
 
 ## Gestalt: how the eye groups
 
@@ -143,6 +335,36 @@ axes[1].axis("off")
 plt.tight_layout(); plt.show()
 ```
 
+# Reading a chart critically {background-color="#2E6E8E"}
+
+## The truncated axis
+
+```{python}
+#| echo: false
+#| fig-align: center
+q = ["Q1", "Q2", "Q3", "Q4"]; v = [98, 99, 101, 103]
+fig, axes = plt.subplots(1, 2, figsize=(9.5, 3.3))
+axes[0].bar(q, v, color="#d9534f"); axes[0].set_ylim(97, 104)
+axes[0].set_title("y starts at 97: 'explosive growth'", fontsize=10)
+axes[1].bar(q, v, color="#2E6E8E"); axes[1].set_ylim(0, 110)
+axes[1].set_title("y starts at 0: a 5% drift", fontsize=10)
+plt.tight_layout(); plt.show()
+```
+
+Identical numbers. With **bar marks, length encodes value** — so the baseline must be zero, or the encoding lies. (For line marks on a common scale, truncation can be legitimate.)
+
+## Three questions for any chart
+
+**1. What is actually being compared?** — name the marks and the channel carrying the comparison.
+
+**2. Are the scales honest?** — zero baseline for length; log scales labelled; consistent axes across small multiples.
+
+**3. Does the encoding match the variable type?** — ordered channel for ordered data, unordered for categories.
+
+::: {.gw-box}
+These are the same three rules you just learned, run **backwards** — as a reader instead of an author.
+:::
+
 ## Discussion {.gw-discussion}
 
 **1.** A stakeholder insists on a pie chart of 12 categories. Using today's vocabulary (channels, accuracy, expressiveness), make the case for an alternative — without saying "pies are bad."
@@ -155,12 +377,12 @@ plt.tight_layout(); plt.show()
 
 Live demo:
 
-1. The same relationship, four different encodings — comparing what each reveals
-2. Altair's grammar: `mark_*().encode(...)` as the rules made executable
-3. Layering and faceting
+1. Reshaping a wide table to tidy, then plotting it without further wrangling
+2. The same relationship, four different encodings — comparing what each reveals
+3. Altair's grammar: `mark_*().encode(...)` as the rules made executable
 
 **Then Block 3:** you build three encodings of one question and defend the channels you chose — side-by-side in Streamlit.
 
-**Readings:** Munzner Ch. 5 · Wilke Ch. 5–6 · Altair grammar overview
+**Readings:** Wickham (2014), *Tidy Data* · Munzner Ch. 5 · Wilke Ch. 5–6 · Altair grammar overview
 
 **Homework preview:** three charts of one question, each encoding justified by perceptual accuracy.
