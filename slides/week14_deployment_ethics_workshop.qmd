@@ -108,7 +108,39 @@ for a in axes: a.set_xlabel("month")
 plt.tight_layout(); plt.show()
 ```
 
+A truncated axis on a *line* chart isn't automatically dishonest (Week 2) — the sin here is truncation **plus** an unlabelled axis **plus** the word "surging". Framing and encoding mislead together.
+
 A polished chart *looks* objective — that's precisely its persuasive power, and your responsibility. Especially when the thing visualized is **a model's opinion** that users will over-trust.
+
+## Misleading without lying {.smaller}
+
+```{python}
+#| echo: false
+#| fig-align: center
+t = np.arange(0, 60)
+series = 100 - 0.55 * t + 6 * np.sin(t / 5.5) + rng.normal(0, 1.1, 60)
+win = slice(28, 43)                      # a window that rises inside a falling record
+fig, axes = plt.subplots(1, 2, figsize=(10, 3.3))
+axes[0].plot(t[win], series[win], color="#d9534f", lw=2)
+axes[0].set_title("The window they showed you: 'recovery'", fontsize=10)
+axes[1].plot(t, series, color="#2E6E8E", lw=2)
+axes[1].axvspan(t[win][0], t[win][-1], color="#d9534f", alpha=0.15)
+axes[1].set_title("The full record: a steady decline", fontsize=10)
+for a in axes: a.set_xlabel("week")
+plt.tight_layout(); plt.show()
+```
+
+Every number on the left is true. **Selection is an encoding decision** — and an undisclosed one is the easiest way to mislead while staying factually correct.
+
+## Three quiet distortions {.smaller}
+
+- **Cherry-picking** — the time window, the subgroup, the baseline year. *Disclose the range and why.*
+- **Scale games** — truncated bars, dual axes tuned until two lines "correlate", inconsistent axes across small multiples.
+- **Overdecoration** — 3D perspective, gradients, drop shadows. Decoration adds ink but no information, and 3D actively distorts: near values read larger than far ones.
+
+::: {.gw-box}
+Test: could you state, in one sentence, a **defensible reason** for every design choice? If not, that choice is decoration or distortion — cut it.
+:::
 
 ## Accessibility is part of honesty {.smaller}
 
