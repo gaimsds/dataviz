@@ -30,6 +30,26 @@ With 2 variables: a scatter plot. With 3: add color. With **13**?
 
 Today's two tools: **correlation heatmaps** (variable structure) and **PCA** (observation structure).
 
+## What 78 panels looks like — for 4 of 13
+
+```{python}
+#| echo: false
+#| fig-align: center
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_wine
+wine = load_wine(as_frame=True)
+cols = ["alcohol", "flavanoids", "color_intensity", "proline"]
+sub = wine.data[cols].copy()
+sub["cultivar"] = wine.target
+g = sns.pairplot(sub, hue="cultivar", palette="Set2", corner=True,
+                 height=1.15, plot_kws={"s": 9, "alpha": 0.7})
+g.figure.suptitle("4 of 13 features — 6 of 78 panels", y=1.02, fontsize=10)
+plt.show()
+```
+
+The scatter-plot matrix is the honest baseline: **nothing is hidden**. It just doesn't scale — and your eye must integrate 78 panels into one mental model.
+
 ## First: wrangling is the gateway
 
 Every multivariate chart assumes tidy, typed, joined data:
@@ -106,6 +126,37 @@ Same 120 observations. The sign **flips** — because age drives both how much p
 On a correlation heatmap you only ever see the **left panel**. One number per pair, every subgroup pooled.
 :::
 
+## One number, four different datasets
+
+```{python}
+#| echo: false
+#| fig-align: center
+# Anscombe's quartet (1973), hard-coded so the deck renders with no network.
+ax_ = [10, 8, 13, 9, 11, 14, 6, 4, 12, 7, 5]
+quartet = [
+    (ax_, [8.04, 6.95, 7.58, 8.81, 8.33, 9.96, 7.24, 4.26, 10.84, 4.82, 5.68], "roughly linear"),
+    (ax_, [9.14, 8.14, 8.74, 8.77, 9.26, 8.10, 6.13, 3.10, 9.13, 7.26, 4.74], "clearly curved"),
+    (ax_, [7.46, 6.77, 12.74, 7.11, 7.81, 8.84, 6.08, 5.39, 8.15, 6.42, 5.73], "one outlier"),
+    ([8, 8, 8, 8, 8, 8, 8, 19, 8, 8, 8],
+     [6.58, 5.76, 7.71, 8.84, 8.47, 7.04, 5.25, 12.50, 5.56, 7.91, 6.89], "one point makes it"),
+]
+fig, axes = plt.subplots(1, 4, figsize=(10.5, 2.7), sharex=True, sharey=True)
+for a, (xq, yq, note) in zip(axes, quartet):
+    a.scatter(xq, yq, color="#2E6E8E", s=22)
+    m_, b_ = np.polyfit(xq, yq, 1)
+    xr = np.array([3.5, 19.5])
+    a.plot(xr, m_ * xr + b_, color="#d9534f", lw=1.6)
+    a.set_title(f"r = {np.corrcoef(xq, yq)[0, 1]:.2f}\n{note}", fontsize=9)
+    a.set_xticks([]); a.set_yticks([])
+plt.tight_layout(); plt.show()
+```
+
+Identical correlation, identical fitted line, **four completely different datasets**. Anscombe (1973) built these to make exactly one point:
+
+::: {.gw-box}
+A heatmap is 78 of these numbers with the pictures thrown away. Compute correlation; then **go look**.
+:::
+
 ## Reading it honestly
 
 - A heatmap shows **linear** association only — curved relationships hide at r ≈ 0
@@ -166,6 +217,57 @@ ax.legend(); plt.tight_layout(); plt.show()
 ::: {.gw-box}
 Always report explained variance on the axes. A PCA scatter without it implies the 2D picture *is* the data. It isn't — it's the best 2D shadow.
 :::
+
+## But what *is* PC1?
+
+```{python}
+#| echo: false
+#| fig-align: center
+comp = pca.components_
+feat = list(wine.data.columns)
+order = np.argsort(comp[0])
+yy = np.arange(len(feat))
+fig, ax = plt.subplots(figsize=(8.6, 3.9))
+ax.barh(yy - 0.2, comp[0][order], height=0.4, color="#2E6E8E", label="PC1")
+ax.barh(yy + 0.2, comp[1][order], height=0.4, color="#d9534f", label="PC2")
+ax.set_yticks(yy); ax.set_yticklabels([feat[i] for i in order], fontsize=7)
+ax.axvline(0, color="#999999", lw=0.8)
+ax.set_xlabel("loading"); ax.legend(fontsize=8)
+ax.set_title("Each component is a weighted recipe over all 13 features", fontsize=10)
+plt.tight_layout(); plt.show()
+```
+
+A component is a **direction**, written as weights on the original columns. PC1 here sets *flavanoids, total phenols and OD280* against *nonflavanoid phenols, malic acid and alkalinity* — a phenolic-richness axis. That is a sentence you can say out loud.
+
+::: {.gw-box}
+If you can't name your components, you have a projection, not an explanation. Show loadings before you claim meaning.
+:::
+
+## Scaling is not optional {.smaller}
+
+```{python}
+#| echo: false
+#| fig-align: center
+raw = wine.data.values
+p_raw = PCA(n_components=2).fit(raw)
+Z = p_raw.transform(raw)
+fig, axes = plt.subplots(1, 2, figsize=(9.8, 3.4))
+axes[0].scatter(Z[:, 0], Z[:, 1], c=wine.target, cmap="Set2", s=22)
+axes[0].set_title(f"Unscaled — PC1 = {p_raw.explained_variance_ratio_[0]:.1%} of variance",
+                  fontsize=9.5)
+axes[1].scatter(pcs[:, 0], pcs[:, 1], c=wine.target, cmap="Set2", s=22)
+axes[1].set_title(f"Standardized — PC1 = {pca.explained_variance_ratio_[0]:.0%}", fontsize=9.5)
+for a in axes: a.set_xlabel("PC1"); a.set_ylabel("PC2")
+plt.tight_layout(); plt.show()
+```
+
+```{python}
+#| echo: false
+r_pro = np.corrcoef(Z[:, 0], wine.data["proline"])[0, 1]
+print(f"Unscaled PC1 vs. proline alone:  r = {r_pro:+.3f}")
+```
+
+PCA maximizes **variance**, and variance has units. `proline` runs in the hundreds while `hue` runs 0–2, so unscaled PCA simply rediscovers proline. Standardize first — unless the units are already comparable and you mean to keep them.
 
 ## Discussion {.gw-discussion}
 
