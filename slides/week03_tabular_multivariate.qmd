@@ -62,10 +62,55 @@ plt.tight_layout(); plt.show()
 
 Diverging colormap, centered on 0 — blue blocks = variables that travel together.
 
+## When the aggregate reverses: Simpson's paradox
+
+```{python}
+#| echo: false
+#| fig-align: center
+import numpy as np
+rng = np.random.default_rng(4)
+xs, ys, gs = [], [], []
+for k, (cx, cy) in enumerate([(2.0, 175), (4.5, 200), (7.0, 225)]):
+    x = rng.normal(cx, 0.55, 40)
+    y = cy - 7.5 * (x - cx) + rng.normal(0, 4.0, 40)
+    xs.append(x); ys.append(y); gs.append(np.full(40, k))
+X, Y, G = np.concatenate(xs), np.concatenate(ys), np.concatenate(gs)
+
+fig, axes = plt.subplots(1, 2, figsize=(9.8, 3.4))
+axes[0].scatter(X, Y, color="#808080", s=20)
+m, b = np.polyfit(X, Y, 1)
+xx = np.linspace(X.min(), X.max(), 2)
+axes[0].plot(xx, m * xx + b, color="#d9534f", lw=2.5)
+axes[0].set_title(f"Pooled:  r = {np.corrcoef(X, Y)[0, 1]:+.2f}  (exercise looks harmful)",
+                  fontsize=9.5)
+
+cols = ["#2E6E8E", "#6aa84f", "#b07aa1"]
+rs = []
+for k, lab in enumerate(["30s", "50s", "70s"]):
+    mk = G == k
+    rs.append(np.corrcoef(X[mk], Y[mk])[0, 1])
+    axes[1].scatter(X[mk], Y[mk], color=cols[k], s=20, label=lab)
+    mm, bb = np.polyfit(X[mk], Y[mk], 1)
+    xk = np.linspace(X[mk].min(), X[mk].max(), 2)
+    axes[1].plot(xk, mm * xk + bb, color=cols[k], lw=2.5)
+axes[1].legend(title="age band", fontsize=7, title_fontsize=7)
+axes[1].set_title(f"Within each band:  r ≈ {np.mean(rs):+.2f}  (it helps)", fontsize=9.5)
+for a in axes:
+    a.set_xlabel("exercise (hrs/week)"); a.set_ylabel("cholesterol")
+plt.tight_layout(); plt.show()
+```
+
+Same 120 observations. The sign **flips** — because age drives both how much people exercise and their cholesterol.
+
+::: {.gw-box}
+On a correlation heatmap you only ever see the **left panel**. One number per pair, every subgroup pooled.
+:::
+
 ## Reading it honestly
 
 - A heatmap shows **linear** association only — curved relationships hide at r ≈ 0
 - Correlation ≠ causation (you knew; the heatmap makes forgetting easy)
+- One r per pair **pools every subgroup** — always ask what a grouping variable would do
 - Cluster of correlated variables → they may carry **one** underlying signal
 
 That last observation is the doorway to PCA: if 5 columns say the same thing, maybe the data has fewer *real* dimensions than columns.

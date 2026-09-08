@@ -34,7 +34,7 @@ pip install pandas numpy seaborn matplotlib scikit-learn streamlit
 
 > Single 2.5-hour block, 6:10-8:40 PM.
 
-**Block 1 — Concepts & Theory (~35 min).** The multivariate problem (9) · pairwise structure: scatter matrices and correlation heatmaps (12) · PCA as a visualization tool (12) · aggregation vs. detail; Simpson's paradox (2).
+**Block 1 — Concepts & Theory (~35 min).** The multivariate problem (8) · pairwise structure: scatter matrices and correlation heatmaps (11) · aggregation vs. detail: Simpson's paradox (5) · PCA as a visualization tool (11).
 
 **Block 2 — Guided Demonstration (~35 min).** Wrangle: reshape + groupby + merge (12) · pair plot and correlation heatmap (12) · fit PCA, plot the first two components (11).
 
