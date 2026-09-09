@@ -69,14 +69,54 @@ Every multivariate chart assumes tidy, typed, joined data:
 ```{python}
 #| echo: false
 #| fig-align: center
-fig, ax = plt.subplots(figsize=(7.5, 5.2))
-sns.heatmap(wine.data.corr(), cmap="vlag", center=0, square=True,
+# Three names are long enough to eat half the figure height when rotated.
+short = {"od280/od315_of_diluted_wines": "od280/od315",
+         "nonflavanoid_phenols": "nonflav_phenols",
+         "alcalinity_of_ash": "alcalinity_ash"}
+corr_disp = wine.data.corr().rename(index=short, columns=short)
+
+fig, ax = plt.subplots(figsize=(7.6, 4.3))
+sns.heatmap(corr_disp, cmap="vlag", center=0, square=True,
             cbar_kws={"shrink": 0.6}, ax=ax)
+ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right", fontsize=7.5)
+ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=7.5)
 ax.set_title("13×13 pairwise correlations in one view")
 plt.tight_layout(); plt.show()
 ```
 
-Diverging colormap, centered on 0 — blue blocks = variables that travel together.
+Diverging colormap centered on 0: **red = move together**, blue = move oppositely. Now find the *blocks* of mutually correlated variables… **the row order is fighting you.**
+
+## Row order is an encoding choice
+
+```{python}
+#| echo: false
+#| fig-align: center
+from scipy.cluster.hierarchy import linkage, leaves_list
+from scipy.spatial.distance import squareform
+
+# Distance on |r|: variables that move together — either sign — sit close.
+dist = 1 - corr_disp.abs()
+link = linkage(squareform(dist.values, checks=False), method="average")
+leaf_order = leaves_list(link)
+corr_ord = corr_disp.iloc[leaf_order, leaf_order]
+
+fig, ax = plt.subplots(figsize=(7.6, 4.3))
+sns.heatmap(corr_ord, cmap="vlag", center=0, square=True,
+            cbar_kws={"shrink": 0.6}, ax=ax)
+ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right", fontsize=7.5)
+ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=7.5)
+ax.set_title("Same 13×13 matrix, rows and columns reordered by similarity")
+plt.tight_layout(); plt.show()
+```
+
+Identical numbers, identical colormap. **Only the order changed** — and two blocks that were always in the data become visible:
+
+- **Phenolics**: proanthocyanins · od280/od315 · total_phenols · flavanoids
+- **Body**: color_intensity · alcohol · proline
+
+::: {.gw-box}
+Reordering is *seriation* — the cheapest analysis in this deck, and the one most often skipped. Hold onto these two blocks: when we get to PCA, watch what PC1 turns out to be.
+:::
 
 ## When the aggregate reverses: Simpson's paradox
 
@@ -232,7 +272,9 @@ ax.set_title("Each component is a weighted recipe over all 13 features", fontsiz
 plt.tight_layout(); plt.show()
 ```
 
-A component is a **direction**, written as weights on the original columns. PC1 here sets *flavanoids, total phenols and OD280* against *nonflavanoid phenols, malic acid and alkalinity* — a phenolic-richness axis. That is a sentence you can say out loud.
+A component is a **direction**, written as weights on the original columns. PC1 sets *flavanoids, total phenols and OD280* against *nonflavanoid phenols, malic acid and alkalinity* — a phenolic-richness axis. That is a sentence you can say out loud.
+
+**And you saw it coming**: that is the phenolics block from the reordered heatmap. PCA didn't discover something new here — it found the strongest block and made it an axis.
 
 ::: {.gw-box}
 If you can't name your components, you have a projection, not an explanation. Show loadings before you claim meaning.
