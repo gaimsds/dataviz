@@ -50,7 +50,7 @@ plt.show()
 
 The scatter-plot matrix is the honest baseline: **nothing is hidden**. It just doesn't scale — and your eye must integrate 78 panels into one mental model.
 
-## First: wrangling is the gateway
+## Wrangling is the gateway
 
 Every multivariate chart assumes tidy, typed, joined data:
 
@@ -59,7 +59,7 @@ Every multivariate chart assumes tidy, typed, joined data:
 - `merge` — bring in the variables you actually need
 
 ::: {.gw-box}
-**Aggregation warning:** group means can *reverse* relationships visible in the raw rows (Simpson's paradox). Always look at both levels before you believe either.
+`groupby` is the dangerous one. **Aggregation is not neutral** — the unit you choose changes what the chart can say, and sometimes reverses it. We'll see that happen shortly.
 :::
 
 # Variable structure: correlation {background-color="#2E6E8E"}
@@ -69,10 +69,6 @@ Every multivariate chart assumes tidy, typed, joined data:
 ```{python}
 #| echo: false
 #| fig-align: center
-import seaborn as sns
-import matplotlib.pyplot as plt
-from sklearn.datasets import load_wine
-wine = load_wine(as_frame=True)
 fig, ax = plt.subplots(figsize=(7.5, 5.2))
 sns.heatmap(wine.data.corr(), cmap="vlag", center=0, square=True,
             cbar_kws={"shrink": 0.6}, ax=ax)
@@ -104,15 +100,15 @@ axes[0].plot(xx, m * xx + b, color="#d9534f", lw=2.5)
 axes[0].set_title(f"Pooled:  r = {np.corrcoef(X, Y)[0, 1]:+.2f}  (exercise looks harmful)",
                   fontsize=9.5)
 
-cols = ["#2E6E8E", "#6aa84f", "#b07aa1"]
+pal = ["#2E6E8E", "#6aa84f", "#b07aa1"]
 rs = []
 for k, lab in enumerate(["30s", "50s", "70s"]):
     mk = G == k
     rs.append(np.corrcoef(X[mk], Y[mk])[0, 1])
-    axes[1].scatter(X[mk], Y[mk], color=cols[k], s=20, label=lab)
+    axes[1].scatter(X[mk], Y[mk], color=pal[k], s=20, label=lab)
     mm, bb = np.polyfit(X[mk], Y[mk], 1)
     xk = np.linspace(X[mk].min(), X[mk].max(), 2)
-    axes[1].plot(xk, mm * xk + bb, color=cols[k], lw=2.5)
+    axes[1].plot(xk, mm * xk + bb, color=pal[k], lw=2.5)
 axes[1].legend(title="age band", fontsize=7, title_fontsize=7)
 axes[1].set_title(f"Within each band:  r ≈ {np.mean(rs):+.2f}  (it helps)", fontsize=9.5)
 for a in axes:
@@ -176,7 +172,7 @@ We use Principal Component Analysis not for modeling but to **project 13 dimensi
 - PC2 = the next greatest, perpendicular to PC1
 - Plot PC1 vs PC2 → the eye sees grouping no single pair of columns reveals
 
-One non-negotiable: **standardize first**, or large-unit variables (proline: hundreds) drown small ones (hue: ~1).
+One preprocessing step is doing more work than it looks: we **standardize first**. Hold onto that — we'll come back and see exactly what happens without it.
 
 ## The payoff
 
@@ -204,13 +200,12 @@ No pairwise plot of the 13 features separates the cultivars this well. PCA *foun
 ```{python}
 #| echo: false
 #| fig-align: center
-import numpy as np
 evr = PCA().fit(X).explained_variance_ratio_
 fig, ax = plt.subplots(figsize=(7.5, 3.2))
 ax.bar(range(1, 14), evr, color="#2E6E8E")
 ax.plot(range(1, 14), np.cumsum(evr), "o-", color="#d9534f", label="cumulative")
 ax.set_xlabel("component"); ax.set_ylabel("variance explained")
-ax.set_title("Scree plot: 2 components ≈ 55% — honest, and worth saying on the chart")
+ax.set_title(f"Scree plot: 2 components ≈ {evr[:2].sum():.0%} — honest, and worth saying on the chart")
 ax.legend(); plt.tight_layout(); plt.show()
 ```
 
@@ -271,7 +266,7 @@ PCA maximizes **variance**, and variance has units. `proline` runs in the hundre
 
 ## Discussion {.gw-discussion}
 
-**1.** Your PCA scatter shows two clean clusters — but PC1+PC2 explain 38% of variance. What can you honestly claim?
+**1.** On *your* homework dataset — not the wine — the PCA scatter shows two clean clusters, but PC1+PC2 explain only 38% of variance. What can you honestly claim?
 
 **2.** A colleague says "just plot the two most correlated variables instead of PCA." When are they right?
 
