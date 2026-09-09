@@ -75,7 +75,7 @@ short = {"od280/od315_of_diluted_wines": "od280/od315",
          "alcalinity_of_ash": "alcalinity_ash"}
 corr_disp = wine.data.corr().rename(index=short, columns=short)
 
-fig, ax = plt.subplots(figsize=(7.6, 4.3))
+fig, ax = plt.subplots(figsize=(6.0, 4.4))
 sns.heatmap(corr_disp, cmap="vlag", center=0, square=True,
             cbar_kws={"shrink": 0.6}, ax=ax)
 ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right", fontsize=7.5)
@@ -86,7 +86,7 @@ plt.tight_layout(); plt.show()
 
 Diverging colormap centered on 0: **red = move together**, blue = move oppositely. Now find the *blocks* of mutually correlated variables… **the row order is fighting you.**
 
-## Row order is an encoding choice
+## Row order is an encoding choice {.smaller}
 
 ```{python}
 #| echo: false
@@ -100,23 +100,18 @@ link = linkage(squareform(dist.values, checks=False), method="average")
 leaf_order = leaves_list(link)
 corr_ord = corr_disp.iloc[leaf_order, leaf_order]
 
-fig, ax = plt.subplots(figsize=(7.6, 4.3))
+# square=True binds the matrix to the figure HEIGHT, so extra width is dead
+# margin — keep the figure near-square to render the matrix as large as possible.
+fig, ax = plt.subplots(figsize=(5.6, 4.1))
 sns.heatmap(corr_ord, cmap="vlag", center=0, square=True,
             cbar_kws={"shrink": 0.6}, ax=ax)
-ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right", fontsize=7.5)
-ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=7.5)
-ax.set_title("Same 13×13 matrix, rows and columns reordered by similarity")
+ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right", fontsize=7)
+ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=7)
+ax.set_title("Same 13×13 matrix, reordered by similarity", fontsize=10)
 plt.tight_layout(); plt.show()
 ```
 
-Identical numbers, identical colormap. **Only the order changed** — and two blocks that were always in the data become visible:
-
-- **Phenolics**: proanthocyanins · od280/od315 · total_phenols · flavanoids
-- **Body**: color_intensity · alcohol · proline
-
-::: {.gw-box}
-Reordering is *seriation* — the cheapest analysis in this deck, and the one most often skipped. Hold onto these two blocks: when we get to PCA, watch what PC1 turns out to be.
-:::
+Same numbers, same colormap — **only the order changed**. Two blocks appear: **phenolics** (proanthocyanins → flavanoids) and **body** (color_intensity, alcohol, proline). This is *seriation* — hold onto those blocks and watch what PC1 turns out to be.
 
 ## When the aggregate reverses: Simpson's paradox
 
@@ -132,7 +127,7 @@ for k, (cx, cy) in enumerate([(2.0, 175), (4.5, 200), (7.0, 225)]):
     xs.append(x); ys.append(y); gs.append(np.full(40, k))
 X, Y, G = np.concatenate(xs), np.concatenate(ys), np.concatenate(gs)
 
-fig, axes = plt.subplots(1, 2, figsize=(9.8, 3.4))
+fig, axes = plt.subplots(1, 2, figsize=(9.8, 3.1))
 axes[0].scatter(X, Y, color="#808080", s=20)
 m, b = np.polyfit(X, Y, 1)
 xx = np.linspace(X.min(), X.max(), 2)
@@ -253,31 +248,29 @@ ax.legend(); plt.tight_layout(); plt.show()
 Always report explained variance on the axes. A PCA scatter without it implies the 2D picture *is* the data. It isn't — it's the best 2D shadow.
 :::
 
-## But what *is* PC1?
+## But what *is* PC1? {.smaller}
 
 ```{python}
 #| echo: false
 #| fig-align: center
 comp = pca.components_
-feat = list(wine.data.columns)
+feat = [short.get(c, c) for c in wine.data.columns]   # same shortened labels as the heatmaps
 order = np.argsort(comp[0])
 yy = np.arange(len(feat))
-fig, ax = plt.subplots(figsize=(8.6, 3.9))
+fig, ax = plt.subplots(figsize=(8.4, 3.1))
 ax.barh(yy - 0.2, comp[0][order], height=0.4, color="#2E6E8E", label="PC1")
 ax.barh(yy + 0.2, comp[1][order], height=0.4, color="#d9534f", label="PC2")
-ax.set_yticks(yy); ax.set_yticklabels([feat[i] for i in order], fontsize=7)
+ax.set_yticks(yy); ax.set_yticklabels([feat[i] for i in order], fontsize=7.5)
 ax.axvline(0, color="#999999", lw=0.8)
-ax.set_xlabel("loading"); ax.legend(fontsize=8)
-ax.set_title("Each component is a weighted recipe over all 13 features", fontsize=10)
+ax.set_xlabel("loading"); ax.legend(fontsize=7)
+ax.set_title("Each component is a weighted recipe over all 13 features", fontsize=9.5)
 plt.tight_layout(); plt.show()
 ```
 
-A component is a **direction**, written as weights on the original columns. PC1 sets *flavanoids, total phenols and OD280* against *nonflavanoid phenols, malic acid and alkalinity* — a phenolic-richness axis. That is a sentence you can say out loud.
-
-**And you saw it coming**: that is the phenolics block from the reordered heatmap. PCA didn't discover something new here — it found the strongest block and made it an axis.
+A component is a **direction** — weights on the original columns. PC1 sets *flavanoids, total phenols, OD280* against *nonflavanoid phenols, malic acid, alkalinity*: a phenolic-richness axis. **You saw it coming** — that is the phenolics block from the reordered heatmap.
 
 ::: {.gw-box}
-If you can't name your components, you have a projection, not an explanation. Show loadings before you claim meaning.
+If you can't name your components, you have a projection, not an explanation.
 :::
 
 ## Scaling is not optional {.smaller}
