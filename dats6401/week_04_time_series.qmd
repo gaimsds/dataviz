@@ -35,11 +35,11 @@ pip install pandas numpy matplotlib seaborn statsmodels streamlit
 
 **Block 1 — Concepts & Theory (~35 min).** What's special about time (9) · trend vs. seasonality; decomposition (12) · visualizing uncertainty (12) · the truncated-axis problem (2).
 
-**Block 2 — Guided Demonstration (~35 min).** Parse dates, resample (12) · trend with a rolling mean; decompose seasonality (14) · add a confidence band (9).
+**Block 2 — Guided Demonstration (~35 min).** Getting dates into pandas: `to_datetime`, DatetimeIndex, time-based vs row-based windows (6) · resample and resolution (7) · ACF, reading the period, comparing rolling windows (8) · decompose; additive vs multiplicative from the residual (8) · uncertainty bands (6).
 
 **☕ Break (~15 min).**
 
-**Block 3 — Hands-On (~50 min).** Load and resample a series (13) · trend + uncertainty band (25) · wrap into a Streamlit app with a resolution selector (12).
+**Block 3 — Hands-On (~50 min).** Parse dates into a DatetimeIndex; two resolutions (12) · ACF for the period, then compare three rolling windows (13) · decomposition and the additive/multiplicative choice (13) · wrap into a Streamlit app with a resolution selector (12).
 
 **Block 4 — Wrap-Up (~15 min).** Share charts; how did resolution change the story? (9) · preview homework (6).
 
