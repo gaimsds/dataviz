@@ -45,7 +45,7 @@ pip install pandas numpy matplotlib seaborn statsmodels streamlit
 
 ---
 
-### Materials: [Block 2 demo](weekly/week4/week04_block2_demo.ipynb) · [hands-on](weekly/week4/week04_block3_handson.ipynb) · [resolution app starter](weekly/week4/app_resolution_starter.py)
+### Materials: [Block 2 demo](weekly/week4/week04_block2_demo.ipynb) · [hands-on](weekly/week4/week04_block3_handson.ipynb) · [resolution app starter](weekly/week4/app_resolution_starter.py) · [rolling-window animation](weekly/week4/app_rolling_animation.py)
 
 ---
 

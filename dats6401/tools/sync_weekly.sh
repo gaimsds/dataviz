@@ -32,6 +32,9 @@ mkdir -p "$DEST"
 rsync -a --delete-excluded --itemize-changes \
   --exclude='.DS_Store' \
   --exclude='INTEGRATION.md' \
+  --exclude='__pycache__/' \
+  --exclude='*.pyc' \
+  --exclude='.ipynb_checkpoints/' \
   --exclude='*_[Ss][Oo][Ll][Uu][Tt][Ii][Oo][Nn]*' \
   "$SRC/" "$DEST/"
 

@@ -267,6 +267,27 @@ Press play. Every other chart today puts time on an **axis**. This one uses anim
 A useful rule: animate when the goal is to **engage**, and use small multiples or an overlay when the goal is to **compare**. A question such as "how much did this change between 1980 and 2000" is easier to answer from a static chart.
 :::
 
+## Animating in your own app {.smaller}
+
+Plotly builds the frames for you. In Streamlit you write the loop yourself: draw into a placeholder, then overwrite it.
+
+```python
+frame = st.empty()                      # a slot you can redraw
+for upto in range(window, len(s) + 1, step):
+    fig = draw_up_to(upto)
+    frame.pyplot(fig)                   # replaces what was there
+    plt.close(fig)                      # or the figures pile up
+```
+
+Two things that catch people out:
+
+- Each frame re-renders the figure and sends an image to the browser, so **redraw cost sets the pace**. Use fewer, larger steps rather than adding a `sleep`.
+- A button click reruns the whole script, and Streamlit leaves the previous chart on screen, greyed out, for the whole animation. Put the loop inside an `@st.fragment` so only that part reruns.
+
+::: {.gw-box}
+`weekly/week4/app_rolling_animation.py` animates the window sliding along the CO₂ series, with window length as a slider. Run it, set the window to 3, then 12, then 60, and watch what each one keeps.
+:::
+
 # Honesty on the time axis {background-color="#2E6E8E"}
 
 ## Truncated axes
