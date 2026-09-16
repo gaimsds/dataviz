@@ -97,7 +97,7 @@ Neither chart is wrong. **Resolution is a choice you make, so choose it delibera
 #| echo: false
 #| fig-align: center
 from statsmodels.graphics.tsaplots import plot_acf
-fig, axes = plt.subplots(1, 2, figsize=(9.6, 2.9))
+fig, axes = plt.subplots(1, 2, figsize=(9.6, 2.05))
 plot_acf(monthly, lags=36, ax=axes[0], title="")
 axes[0].set_title("Raw series: trend dominates — everything correlates", fontsize=9.5)
 plot_acf(monthly.diff().dropna(), lags=36, ax=axes[1], title="")
@@ -106,10 +106,14 @@ for a in axes: a.set_xlabel("lag (months)")
 plt.tight_layout(); plt.show()
 ```
 
-The **ACF** plots correlation of the series with itself at each lag. Left: slow decay is the signature of a **trend** — every month resembles the last simply because the whole thing is rising. Right: remove the trend by differencing and the **seasonality** appears as a spike at lag 12, with echoes at 24 and 36.
+The **ACF** plots the correlation of the series with itself at each lag.
+
+**Left** — the raw series. Correlation stays high at every lag because the whole series is rising, so the trend hides everything else.
+
+**Right** — the same series after **differencing**, which is what `.diff()` does: each value is replaced by the change since the previous month. The trend drops out, and the month-to-month movement that remains shows **seasonality** as a spike at lag 12, repeating at 24 and 36.
 
 ::: {.gw-box}
-Autocorrelation is not just a description. It is a quantity you can measure, and the ACF is the standard way to plot it.
+**Differencing, concretely.** `s.diff()` turns `421.0, 422.4, 423.1` into `1.4, 0.7` — changes instead of levels. One `.diff()` removes a straight-line trend. `s.diff(12)` subtracts the value from twelve months earlier, which removes an annual cycle instead.
 :::
 
 # Trend & seasonality {background-color="#2E6E8E"}
