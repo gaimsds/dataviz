@@ -104,20 +104,34 @@ plt.show()
 
 The decomposition separates the long-run **trend**, the repeating annual **seasonal** cycle, and the **residual** — three views that a single line would blur together.
 
-### Wrap into a Streamlit app (copy-and-run)
+### Animate it in a Streamlit app
+
+A rolling mean is easier to understand when you watch the window move. The full
+app is in this week's materials — [`app_rolling_animation.py`](weekly/week4/app_rolling_animation.py):
+
+```bash
+streamlit run app_rolling_animation.py
+```
+
+It slides the window along the CO₂ series and draws the smoothed value as it
+goes, with window length as a slider. Set the window to 3, then 12, then 60, and
+watch what each one keeps.
+
+The transferable part is the loop: draw into a placeholder, then overwrite it.
 
 ```python
-# app.py  —  run with:  streamlit run app.py
-import streamlit as st
-import statsmodels.api as sm
-
-co2 = sm.datasets.co2.load_pandas().data.dropna()
-freq = st.selectbox("Resolution", {"Monthly": "MS", "Quarterly": "QS", "Yearly": "YS"})
-series = co2["co2"].resample({"Monthly": "MS", "Quarterly": "QS", "Yearly": "YS"}[freq]).mean()
-
-st.title("CO₂ Trend Explorer")
-st.line_chart(series)
+frame = st.empty()                      # a slot you can redraw
+for upto in range(window, len(s) + 1, step):
+    fig = draw_up_to(upto)
+    frame.pyplot(fig)                   # replaces what was there
+    plt.close(fig)                      # or the figures pile up
 ```
+
+Two practical notes. **Redraw cost sets the pace** — each frame re-renders the
+figure and sends an image to the browser — so use fewer, larger steps rather than
+adding a `sleep`. And put the loop inside an **`@st.fragment`**: otherwise a
+button click reruns the whole script, and Streamlit leaves the previous chart on
+screen, greyed out, for the entire animation.
 
 ## 🧪 In-Class Activity
 
