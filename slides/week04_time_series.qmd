@@ -31,6 +31,44 @@ In a normal table you can shuffle the rows without losing anything. In a time se
 
 It also creates practical problems: gaps, irregular sampling, time zones, and the choice of **resolution** — how finely you slice time before plotting.
 
+## First, make the dates real dates {.smaller}
+
+A column of dates read from a CSV is text, not time. Convert it with `pd.to_datetime`:
+
+```{python}
+#| echo: true
+import pandas as pd
+raw = pd.DataFrame({"when": ["2024-01-05", "2024-02-05", "2024-03-05"],
+                    "ppm":  [421.0, 422.4, 423.1]})
+print("before:", raw["when"].dtype)
+raw["when"] = pd.to_datetime(raw["when"])
+print("after: ", raw["when"].dtype)
+```
+
+Until you convert, pandas treats the values as strings. That means they sort alphabetically, you cannot subtract them, and `resample` and `rolling` are unavailable.
+
+::: {.gw-box}
+`"03/04/2024"` is 3 April in most of the world and 4 March in the US. Pandas has to guess unless you tell it: pass `format="%d/%m/%Y"`, or `dayfirst=True`. Add `errors="coerce"` to turn unparseable values into `NaT` instead of stopping with an error.
+:::
+
+## What a DatetimeIndex gives you {.smaller}
+
+Once the dates are the **index**, pandas understands the calendar:
+
+```{python}
+#| echo: true
+d = pd.Series(range(90), index=pd.date_range("2024-01-01", periods=90, freq="D"))
+
+print(d.loc["2024-02"].head(2))          # slice a whole month by name
+print(d.resample("MS").mean().round(1))  # month-start averages
+print(d.index.day_name()[:3].tolist())   # calendar parts
+```
+
+- **Slicing by string** — `d.loc["2024-02"]` or `d.loc["2024-02":"2024-03"]`, no masks needed
+- **`resample`** — change the resolution: `"D"` day, `"W"` week, `"MS"` month-start, `"YS"` year-start
+- **`.index` accessors** — `.year`, `.month`, `.dayofweek`, `.day_name()` for grouping by calendar parts
+- **Time-aware `rolling`** — `d.rolling("30D")` uses a 30-*day* window, which is not the same as `d.rolling(30)` when rows are unevenly spaced
+
 ## Resolution changes what you see
 
 ```{python}
