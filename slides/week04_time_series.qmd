@@ -21,17 +21,17 @@ format: revealjs
 
 # What's special about time {background-color="#2E6E8E"}
 
-## Order is information
+## Why order matters
 
-Tabular rows are exchangeable; time-series observations are **not**. Order creates:
+In a normal table you can shuffle the rows without losing anything. In a time series you cannot: the order carries information. It gives you three things:
 
 - **Trend** — long-run direction
 - **Seasonality** — repeating cycles (daily, weekly, annual)
 - **Autocorrelation** — today resembles yesterday
 
-And practical headaches: gaps, irregular sampling, time zones, and the choice that changes everything — **resolution**.
+It also creates practical problems: gaps, irregular sampling, time zones, and the choice of **resolution** — how finely you slice time before plotting.
 
-## Resolution changes the story
+## Resolution changes what you see
 
 ```{python}
 #| echo: false
@@ -51,7 +51,7 @@ for a in axes: a.set_ylabel("CO₂ (ppm)")
 plt.tight_layout(); plt.show()
 ```
 
-Neither is wrong. **The resolution is an editorial choice — make it consciously, state it on the chart.**
+Neither chart is wrong. **Resolution is a choice you make, so choose it deliberately and state it on the chart.**
 
 ## Autocorrelation, made visible {.smaller}
 
@@ -71,7 +71,7 @@ plt.tight_layout(); plt.show()
 The **ACF** plots correlation of the series with itself at each lag. Left: slow decay is the signature of a **trend** — every month resembles the last simply because the whole thing is rising. Right: remove the trend by differencing and the **seasonality** appears as a spike at lag 12, with echoes at 24 and 36.
 
 ::: {.gw-box}
-"Today resembles yesterday" is not a vibe — it is a measurable quantity with its own standard plot.
+Autocorrelation is not just a description. It is a quantity you can measure, and the ACF is the standard way to plot it.
 :::
 
 # Trend & seasonality {background-color="#2E6E8E"}
@@ -90,9 +90,9 @@ ax.set_title("A 12-month window averages out exactly one seasonal cycle")
 plt.tight_layout(); plt.show()
 ```
 
-Window length is a tuning knob. Matching the window to the **seasonal period** is the principled default — but see what the knob actually does.
+Window length is a choice. Matching the window to the **seasonal period** is a sensible default. The next slide shows what different windows do to the same series.
 
-## The window *is* the analysis {.smaller}
+## What the window length does {.smaller}
 
 ```{python}
 #| echo: false
@@ -115,9 +115,9 @@ plt.tight_layout(); plt.show()
 - **12 months** — exactly one cycle, so seasonality cancels and trend remains
 - **60 months** — erases real turning points along with the noise
 
-The window is not a cosmetic setting. **Rolling any statistic works** — the right panel rolls the *standard deviation*, turning "how big is the seasonal swing" into its own readable series.
+The window changes what the chart says, so report it. You can also roll statistics other than the mean: the right panel rolls the **standard deviation**, which shows how the size of the seasonal swing changes over time.
 
-## Decomposition: three series hiding in one
+## Decomposition: splitting the series into three parts {.smaller}
 
 ```{python}
 #| echo: false
@@ -125,13 +125,13 @@ The window is not a cosmetic setting. **Rolling any statistic works** — the ri
 from statsmodels.tsa.seasonal import seasonal_decompose
 res = seasonal_decompose(monthly, period=12)
 fig = res.plot()
-fig.set_size_inches(8.5, 5)
+fig.set_size_inches(8.3, 4.2)
 plt.tight_layout(); plt.show()
 ```
 
-Trend + seasonal + residual. The **residual panel is the diagnostic**: structure left there means the model missed something. So let's put that to work.
+The series is split into trend, seasonal, and residual. The **residual panel is the diagnostic**: if a pattern is still visible there, the decomposition has missed something. The next slide uses that to choose between two models.
 
-## Additive or multiplicative? Ask the residuals {.smaller}
+## Additive or multiplicative? Check the residuals {.smaller}
 
 ```{python}
 #| echo: false
@@ -173,33 +173,33 @@ plt.tight_layout(); plt.show()
 Fitting additive here estimates **one averaged swing**, which is too big early and too small late. So the residual is large at both ends and near zero in the middle — the single point where the average happens to fit.
 
 ::: {.gw-box}
-You don't guess the model: you fit one and **read the residual panel**. Leftover shape means wrong model. CO₂ is genuinely additive; most business series are not.
+To choose between them, fit one and **look at the residual panel**. A pattern left in the residuals means the other model fits better. CO₂ is additive; most business series are multiplicative.
 :::
 
 # Uncertainty {background-color="#2E6E8E"}
 
-## A single line is a confident lie
+## Show the uncertainty, not just the line
 
-Real series are measured with error, smoothed with choices, and forecast with doubt. Showing only the line hides all three.
+A time series carries uncertainty from three sources: measurement error, the smoothing choices you made, and, for forecasts, the model itself. A plain line shows none of them.
 
 ```{python}
 #| echo: false
 #| fig-align: center
 roll = monthly.rolling(12)
 mean, std = roll.mean(), roll.std()
-fig, ax = plt.subplots(figsize=(9, 3.6))
+fig, ax = plt.subplots(figsize=(9, 3.2))
 mean.plot(ax=ax, label="12-mo mean", color="#2E6E8E")
 ax.fill_between(mean.index, mean - 2*std, mean + 2*std, alpha=0.2, color="#2E6E8E", label="±2σ band")
 ax.set_ylabel("CO₂ (ppm)"); ax.legend()
-ax.set_title("The band says: values routinely range this far around the smooth line")
+ax.set_title("The band shows how far values typically sit from the smooth line")
 plt.tight_layout(); plt.show()
 ```
 
-Bands, error bars, and intervals return in Week 13 — visualizing **model** uncertainty uses the same vocabulary.
+Bands, error bars, and intervals return in Week 13, where the same methods are used to show **model** uncertainty.
 
-# Time without a time axis {background-color="#2E6E8E"}
+# Showing time with animation {background-color="#2E6E8E"}
 
-## Animation maps time to *time* {.smaller}
+## Animation uses frames instead of an axis {.smaller}
 
 ```{python}
 #| echo: false
@@ -213,21 +213,21 @@ figa.update_layout(margin=dict(l=4, r=4, t=6, b=0), legend=dict(font=dict(size=1
 figa
 ```
 
-Press play. Every other chart today spent an **axis** on time; this one spends the *frames*, freeing both axes for other variables. Five variables, no time axis.
+Press play. Every other chart today puts time on an **axis**. This one uses animation frames for time instead, which leaves both axes free for other variables — five variables are shown here at once.
 
-## What animation gives and takes {.smaller}
+## What animation gains and loses {.smaller}
 
-**Gains** — immediacy and narrative: the 1960→2007 sweep is felt, not read. Motion is preattentive (Week 2), so the eye is pulled to whatever moves most.
+**What it gains** — the change from 1952 to 2007 is easy to follow, and motion draws attention automatically (preattentive attributes, Week 2), so viewers notice whatever moves most.
 
-**Loses** — **persistence**. A static chart lets the reader compare any two moments at will; animation shows one frame and asks them to *remember* the rest. Precise comparison across time becomes impossible without scrubbing back.
+**What it loses** — **persistence**. A static chart lets the reader compare any two points whenever they like. An animation shows one frame at a time, so comparing two years means remembering the earlier one or replaying it.
 
 ::: {.gw-box}
-Rule of thumb: animate to **engage**, small-multiple or overlay to **compare**. If the question is "how much did X change between two dates", a static chart answers it and an animation does not.
+A useful rule: animate when the goal is to **engage**, and use small multiples or an overlay when the goal is to **compare**. A question such as "how much did this change between 1980 and 2000" is easier to answer from a static chart.
 :::
 
 # Honesty on the time axis {background-color="#2E6E8E"}
 
-## The truncated-axis trick
+## Truncated axes
 
 ```{python}
 #| echo: false
@@ -236,16 +236,16 @@ seg = monthly.loc["1984":"1989"]
 fig, axes = plt.subplots(1, 2, figsize=(10, 3.6))
 seg.plot(ax=axes[0], color="#d9534f")
 axes[0].set_ylim(seg.min()-0.5, seg.max()+0.5)
-axes[0].set_title("Truncated axis: 'CO₂ EXPLODES!'")
+axes[0].set_title("Truncated axis: the rise looks dramatic")
 seg.plot(ax=axes[1], color="#2E6E8E")
 axes[1].set_ylim(0, seg.max()*1.1)
 axes[1].set_title("Zero baseline: steady ~1.5 ppm/yr rise")
 plt.tight_layout(); plt.show()
 ```
 
-Same data. Truncation isn't always wrong (small real changes can matter!) — but it must be **visible and stated**, never silent.
+Both panels show the same data. Truncating the axis is not always wrong, since small changes can matter. But the truncation should be **visible and stated** rather than silent.
 
-## The aspect-ratio trick {.smaller}
+## Aspect ratio changes the perceived slope {.smaller}
 
 ```{python}
 #| echo: false
@@ -264,10 +264,10 @@ axes[0].set_ylabel("CO₂ (ppm)")
 plt.tight_layout(); plt.show()
 ```
 
-Identical data, identical axes, identical y-range. **Only the width changed** — and with it the perceived rate of change.
+All three panels show the same data over the same y-range. **Only the width changed**, and that alone changes how fast the rise appears.
 
 ::: {.gw-box}
-Cleveland's **banking to 45°**: slopes are judged most accurately when the average line segment sits near 45°. Squash or stretch away from that and you are editorializing with the figure size.
+Cleveland's **banking to 45°**: people judge slopes most accurately when the average line segment is close to 45°. Moving far from that makes the figure's shape part of the argument.
 :::
 
 ## The honesty checklist for temporal charts {.smaller}
@@ -275,16 +275,16 @@ Cleveland's **banking to 45°**: slopes are judged most accurately when the aver
 - Y-axis: zero-based, or truncation **flagged**
 - Resolution: stated, chosen for the question
 - Smoothing: window disclosed
-- Aspect ratio: not stretched to dramatize slope
-- Dual axes: almost never — they manufacture correlation
+- Aspect ratio: not stretched to exaggerate the slope
+- Dual axes: avoid them; they can make unrelated series look related
 
 ::: {.gw-box}
-Week 14 returns to ethics in full; the time axis is where most everyday chart crimes happen.
+Week 14 covers ethics in full. Most everyday misleading charts involve the time axis.
 :::
 
 ## Discussion {.gw-discussion}
 
-**1.** A news chart shows unemployment over 18 months, y-axis from 3.6% to 4.1%. Defensible or deceptive — and what one change would settle it?
+**1.** A news chart shows unemployment over 18 months with the y-axis running from 3.6% to 4.1%. Is that defensible or misleading, and what single change would make it clearer?
 
 **2.** When is showing the raw series *more* honest than the smoothed trend?
 
