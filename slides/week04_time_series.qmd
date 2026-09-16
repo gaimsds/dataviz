@@ -171,7 +171,21 @@ fig.set_size_inches(8.3, 4.2)
 plt.tight_layout(); plt.show()
 ```
 
-The series is split into trend, seasonal, and residual. The **residual panel is the diagnostic**: if a pattern is still visible there, the decomposition has missed something. The next slide uses that to choose between two models.
+The series is split into trend, seasonal, and residual. The **residual panel is the diagnostic**: if a pattern is still visible there, the decomposition has missed something. We use that shortly to choose between two models.
+
+## The code behind that figure {.smaller}
+
+```python
+from statsmodels.tsa.seasonal import seasonal_decompose
+
+res = seasonal_decompose(monthly, period=12)   # 12 = one year of monthly data
+fig = res.plot()
+```
+
+- **`period=12`** — how many observations make one cycle. Monthly data with an annual cycle is 12; daily data with a weekly cycle would be 7. This is the number you read off the ACF.
+- **`model=`** defaults to `"additive"`. Pass `"multiplicative"` when the seasonal swing grows with the level.
+- **`res` holds the three parts as Series** — `res.trend`, `res.seasonal`, `res.resid` — so you can plot them yourself instead of using `res.plot()`.
+- The trend is a **centred moving average**, so `res.trend` is `NaN` for the first and last six months (half a period at each end). That is why the trend and residual panels start late and stop early.
 
 ## Additive or multiplicative? Check the residuals {.smaller}
 
@@ -238,6 +252,23 @@ plt.tight_layout(); plt.show()
 ```
 
 Bands, error bars, and intervals return in Week 13, where the same methods are used to show **model** uncertainty.
+
+## The code behind that band {.smaller}
+
+```python
+roll = monthly.rolling(12)              # one rolling object, reused below
+mean, std = roll.mean(), roll.std()
+
+ax.fill_between(mean.index,             # x
+                mean - 2 * std,         # lower edge
+                mean + 2 * std,         # upper edge
+                alpha=0.2)
+```
+
+- **`rolling(12)`** gives a rolling object you can call more than one statistic on. Here it is used twice, for the mean and the standard deviation.
+- **`fill_between`** takes an x array and two y arrays and shades the space between them. `alpha=0.2` keeps the line readable through the band.
+- **`± 2σ`** covers roughly 95% of values when they are close to normal. Its width is the **spread of the data**, not our confidence in the mean.
+- A confidence interval answers the other question — how precisely we know the average — and is usually much narrower. Both are drawn as a shaded band, so **the caption has to say which one it is**.
 
 # Showing time with animation {background-color="#2E6E8E"}
 
