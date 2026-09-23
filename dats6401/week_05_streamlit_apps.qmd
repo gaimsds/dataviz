@@ -52,9 +52,9 @@ Have a free Streamlit Community Cloud (or equivalent) account ready, and a GitHu
 
 ### Block 1 — Concepts & Theory (~25 min, PowerPoint)
 
-1. Why apps, not just notebooks: delivery and exploration (6 min)
-2. The re-run model: how Streamlit executes, and why caching matters (13 min)
-3. Layout and state: columns, tabs, sidebar, `session_state` (6 min)
+1. Why apps, not just notebooks; rendering your existing matplotlib/plotly figures with `st.pyplot` and `st.plotly_chart` (7 min)
+2. The re-run model: `session_state`, widget keys, caching and where it goes wrong (12 min)
+3. Controlling re-runs with `st.form` and `@st.fragment`; layout: columns, tabs, sidebar (6 min)
 
 ### Block 2 — Guided Demonstration (~45 min, live coding)
 

@@ -16,16 +16,16 @@ format: revealjs
 | **Block 4** | Wrap-up & homework preview | ~10 min |
 
 ::: {.gw-box}
-**The hinge week.** Everything after today is delivered as an app. Both your projects are apps. Get comfortable now.
+From this week on, every deliverable is an app, including both projects. The goal today is to get comfortable with the tool.
 :::
 
 # Why apps {background-color="#2E6E8E"}
 
-## Notebooks explore; apps deliver
+## Why build an app at all
 
-A notebook is **for you**: messy, sequential, requires Python.
+A notebook is written for **you**. It runs top to bottom, it can be messy, and opening it requires Python.
 
-An app is **for them**: a stakeholder, a grader, the public — people who will *never* run your cells.
+An app is written for **someone else** — a stakeholder, a grader, a member of the public. They will not run your cells, and they should not have to.
 
 | | Notebook | Streamlit app |
 |---|---|---|
@@ -34,7 +34,7 @@ An app is **for them**: a stakeholder, a grader, the public — people who will 
 | Requires | Python env | a URL |
 | Question style | fixed | *their* question |
 
-## Streamlit's bet: an app is just a script
+## In Streamlit, an app is just a script
 
 ```python
 import streamlit as st
@@ -46,7 +46,47 @@ day = st.selectbox("Day", sorted(df["day"].unique()))
 st.scatter_chart(df[df["day"] == day], x="total_bill", y="tip")
 ```
 
-No HTML, no JavaScript, no callbacks. The price of that simplicity is one unusual idea — the execution model.
+You write ordinary Python. There is no HTML, no JavaScript, and no callbacks to register. In exchange you have to understand one unusual idea: how Streamlit runs that script.
+
+## Your Weeks 2–4 figures go in unchanged {.smaller}
+
+`st.scatter_chart` above is a convenience: hand it a dataframe and it picks the encodings. For anything you designed yourself, hand Streamlit **the figure object**.
+
+```python
+# matplotlib / seaborn
+fig, ax = plt.subplots()
+ax.scatter(df["total_bill"], df["tip"])
+st.pyplot(fig)
+plt.close(fig)                                   # or figures accumulate across re-runs
+
+# plotly — stays interactive in the browser
+st.plotly_chart(fig, use_container_width=True)
+
+# altair
+st.altair_chart(chart, use_container_width=True)
+```
+
+::: {.gw-box}
+This is how your PCA scatter, correlation heatmap and rolling-mean chart move into an app **without being rebuilt**. Use the built-in `st.line_chart` / `st.scatter_chart` for a quick look; use your own figure whenever the encoding choices matter — which, after Weeks 2–4, is most of the time.
+:::
+
+## Letting the user bring their own data {.smaller}
+
+A hard-coded path makes an app that only works for you.
+
+```python
+uploaded = st.file_uploader("Upload a CSV", type="csv")
+
+if uploaded is None:
+    st.info("Showing the example dataset — upload a CSV to use your own.")
+    df = load_example()
+else:
+    df = pd.read_csv(uploaded)      # it behaves like an open file object
+```
+
+- It returns `None` until someone picks a file, so **always handle that branch** — this is the most common crash in submitted apps.
+- Give the app a sensible default so it shows something useful on first load.
+- The upload lives in memory for that session only; nothing is written to disk.
 
 # The re-run model {background-color="#2E6E8E"}
 
@@ -75,7 +115,7 @@ ax.set_xlim(-0.4, 10.3); ax.set_ylim(-0.8, 2.6); ax.axis("off")
 plt.tight_layout(); plt.show()
 ```
 
-Three consequences: it's why the code stays simple, why **plain variables reset** every interaction, and why **slow code becomes unbearable**.
+This is what keeps the code simple. It also has two consequences worth planning for: **ordinary variables reset** on every interaction, and **slow code runs again every time**.
 
 ## Consequence 1: state needs `session_state`
 
@@ -89,7 +129,21 @@ if st.button("Click"):
     st.session_state.count += 1
 ```
 
-Rule of thumb: anything that must **survive an interaction** lives in `st.session_state`.
+Anything that has to **survive an interaction** belongs in `st.session_state`. Everything else can stay an ordinary variable.
+
+## Widgets write to `session_state` themselves {.smaller}
+
+Give a widget a `key` and its value appears in `session_state` under that name. You rarely need to copy it across by hand.
+
+```python
+st.slider("Sample size", 10, 500, 100, key="n")
+
+st.write(st.session_state.n)        # the slider's current value
+```
+
+- Without a `key`, Streamlit generates an internal one — fine until you want to read or set the value elsewhere.
+- **Keys must be unique.** Two widgets sharing a key is an error, and it is easy to hit when you copy a block.
+- You can set `st.session_state.n` **before** the widget is created to choose its starting value. Assigning to it after the widget exists raises an exception — use the widget's `on_change` callback instead.
 
 ## Consequence 2: slow code needs caching
 
@@ -104,7 +158,63 @@ df = load_data("big.csv")           # instant on every later re-run
 - `@st.cache_data` — dataframes, results, anything copyable
 - `@st.cache_resource` — models, DB connections (shared, not copied)
 
-In Block 2 you'll *feel* the difference: a 3-second load, with and without.
+In Block 2 we run a 3-second data load with and without the decorator, so you can see the difference.
+
+## Where caching goes wrong {.smaller}
+
+**The two decorators behave differently, and this is the part people get wrong:**
+
+- `@st.cache_data` hands back a **copy** each time, so changing the dataframe you got is safe.
+- `@st.cache_resource` hands back **the same object** every time. Mutate it and you have changed it for every later re-run, and for every other user of a deployed app. Keep it for connections and models.
+
+```python
+@st.cache_data(ttl=3600)                 # expires after an hour
+def load(path): ...
+
+@st.cache_resource
+def get_model(): ...                     # do not mutate what this returns
+
+load.clear()                             # drop this function's cached entries
+```
+
+- Arguments have to be **hashable**. Prefix one with an underscore to leave it out of the key: `def query(_conn, sql)`.
+- The key includes the function's **source code**, so editing the function invalidates its cache on its own.
+- Caching a function that reads a file that later changes on disk will happily serve you the stale version — that is what `ttl` is for.
+
+## Forms: collect several inputs, re-run once {.smaller}
+
+Four widgets outside a form means four re-runs while the user is still deciding. A form holds the inputs until they submit.
+
+```python
+with st.form("filters"):
+    day  = st.selectbox("Day", days)
+    n    = st.slider("Sample size", 10, 500, 100)
+    note = st.text_input("Label")
+    go   = st.form_submit_button("Apply")
+
+if go:
+    render(day, n, note)
+```
+
+Widgets inside a form do not trigger a re-run when they change; only the submit button does. Use one whenever the inputs belong together, or when typing in a text box would otherwise re-run an expensive page on every keystroke.
+
+## Fragments: re-run only part of the page {.smaller}
+
+A form still re-runs the whole script on submit. `@st.fragment` limits a re-run to one function.
+
+```python
+@st.fragment
+def chart_panel(df):
+    colour = st.selectbox("Colour by", df.columns)   # only this block re-runs
+    st.plotly_chart(build_figure(df, colour))
+
+load_everything_expensive()      # untouched when the selectbox changes
+chart_panel(df)
+```
+
+::: {.gw-box}
+This is what makes an animation usable: without it, a button click re-runs the whole script and Streamlit leaves the previous chart on screen, greyed out, for the whole animation. See `weekly/week4/app_rolling_animation.py` from last week.
+:::
 
 # Layout & deployment {background-color="#2E6E8E"}
 
@@ -113,10 +223,10 @@ In Block 2 you'll *feel* the difference: a 3-second load, with and without.
 - `st.sidebar` — controls live here; content stays clean
 - `st.columns(n)` — metrics and side-by-side charts
 - `st.tabs([...])` — alternate views without scrolling
-- `st.metric` — the big-number-with-delta pattern dashboards love
+- `st.metric` — a large number with an optional change indicator, used for headline figures
 
 ::: {.gw-box}
-Design principle from Week 2 still rules: the *reader's* main comparison gets the best real estate, controls get the sidebar.
+The Week 2 principle still applies: the comparison your reader came for gets the most space, and the controls go in the sidebar.
 :::
 
 ## Deployment: from laptop to URL
@@ -125,7 +235,7 @@ Design principle from Week 2 still rules: the *reader's* main comparison gets th
 2. share.streamlit.io → **New app** → pick the repo
 3. Share the URL
 
-That's Streamlit Community Cloud (free). Caveats worth knowing: apps **sleep** when idle, resources are modest, and secrets go in app settings — never in the repo. (Weeks 12–14: the same idea for your model server.)
+That is Streamlit Community Cloud, which is free. Three things to know: apps **sleep** when idle and take a few seconds to wake, the memory and CPU limits are modest, and secrets belong in the app's settings rather than in the repo. Weeks 12–14 apply the same process to your model server.
 
 ## Discussion {.gw-discussion}
 
@@ -133,7 +243,7 @@ That's Streamlit Community Cloud (free). Caveats worth knowing: apps **sleep** w
 
 **2.** What in that notebook must be cached, and what must become `session_state`?
 
-*(4 minutes — then the live build.)*
+*(4 minutes, then the live build.)*
 
 ## Coming up next — Block 2 {.smaller}
 
