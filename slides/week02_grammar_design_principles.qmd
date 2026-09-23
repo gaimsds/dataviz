@@ -395,8 +395,6 @@ These are the same three rules you just learned, run **backwards** — as a read
 
 **2.** When *is* color the right channel for the most important variable?
 
-*(5 minutes — then the demo.)*
-
 ## Coming up next — Block 2 {.smaller}
 
 Live demo:

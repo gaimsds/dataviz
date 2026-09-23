@@ -382,8 +382,6 @@ Week 14 covers ethics in full. Most everyday misleading charts involve the time 
 
 **2.** When is showing the raw series *more* honest than the smoothed trend?
 
-*(5 minutes — then the demo.)*
-
 ## Coming up next — Block 2 {.smaller}
 
 Live demo:

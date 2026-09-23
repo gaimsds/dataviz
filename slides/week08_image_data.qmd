@@ -145,8 +145,6 @@ The hot ring follows the stroke — this model earns some trust. (Week 13 genera
 
 **2.** A saliency map shows the model keying on a corner watermark. Is the model wrong? Is the *data*?
 
-*(5 minutes — then the demo.)*
-
 ## Coming up next — Block 2 {.smaller}
 
 Live demo:

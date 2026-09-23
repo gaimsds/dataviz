@@ -100,8 +100,6 @@ Design check for every control: **what question does this let the reader answer?
 
 **2.** What's one filter that would make *your* Week 9 choropleth genuinely more useful — and one toggle you'd be tempted to add but shouldn't?
 
-*(4 minutes — then the live build.)*
-
 ## Coming up next — Block 2 {.smaller}
 
 Live build:

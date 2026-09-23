@@ -136,8 +136,6 @@ Caption discipline: name the embedding, the projection, and the parameters. "UMA
 
 **2.** A topic model returns 14 topics. What visual evidence would convince you they're *real* rather than algorithmic confetti?
 
-*(5 minutes — then the demo.)*
-
 ## Coming up next — Block 2 {.smaller}
 
 Live demo:

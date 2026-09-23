@@ -243,8 +243,6 @@ That is Streamlit Community Cloud, which is free. Three things to know: apps **s
 
 **2.** What in that notebook must be cached, and what must become `session_state`?
 
-*(4 minutes, then the live build.)*
-
 ## Coming up next — Block 2 {.smaller}
 
 Live build, three apps in sequence (files provided in this week's materials):

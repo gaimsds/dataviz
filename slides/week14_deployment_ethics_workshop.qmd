@@ -173,8 +173,6 @@ Critique the work, not the person; receive it with notes, not defenses. You'll u
 
 **2.** What did "visualizing complex data" turn out to mean — what would you tell yourself in Week 1?
 
-*(5 minutes — then the deploy demo, then YOUR demos.)*
-
 ## After today {.smaller}
 
 - **Final project due April 30**: deployed client–server ML app, reproducible repo, deployment instructions, in-class defense

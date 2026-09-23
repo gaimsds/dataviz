@@ -124,8 +124,6 @@ This is your manual test bench in Block 3, and the de facto spec you hand a team
 
 **2.** Your model needs 30 features. Is a 30-field Pydantic schema right, or would you accept a list? What does each choice do to the 422 errors your client sees?
 
-*(4 minutes — then we build it.)*
-
 ## Coming up next — Block 2 {.smaller}
 
 Live build (materials provided in this week's folder):

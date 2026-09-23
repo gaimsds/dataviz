@@ -110,8 +110,6 @@ The question is always: *how wrong can a stale answer be, and for how long?*
 
 **2.** The course endpoint 404s on an unknown species. Should it instead return an empty list with a 200? Argue both sides.
 
-*(4 minutes — then the worked examples.)*
-
 ## Coming up next — Block 2 {.smaller}
 
 The two worked examples, live (notebook provided):

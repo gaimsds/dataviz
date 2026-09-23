@@ -147,8 +147,6 @@ This loop — *inputs → API → model → JSON → visualization* — **is you
 
 **3.** What's the equivalent "error map" for *your* final-project model?
 
-*(5 minutes — then the demo.)*
-
 ## Coming up next — Block 2 {.smaller}
 
 Live demo (notebook provided):

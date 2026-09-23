@@ -305,8 +305,6 @@ PCA maximizes **variance**, and variance has units. `proline` runs in the hundre
 
 **2.** A colleague says "just plot the two most correlated variables instead of PCA." When are they right?
 
-*(5 minutes — then the demo.)*
-
 ## Coming up next — Block 2 {.smaller}
 
 Live demo:

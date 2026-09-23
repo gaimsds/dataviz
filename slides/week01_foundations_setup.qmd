@@ -141,8 +141,6 @@ Four lines of logic → an interactive web app. (How that works — the re-run m
 
 **2.** Think of one tool/dashboard you use that delivers data interactively. What makes it usable — or not?
 
-*(5 minutes — then we set up environments.)*
-
 ## Coming up next — Block 2 {.smaller}
 
 Live, you follow along:

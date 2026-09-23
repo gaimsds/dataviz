@@ -404,8 +404,6 @@ Look back at the hairball.
 
 **3.** Degree, betweenness, and closeness picked different "important" nodes. For a disease-spread network, which matters most? For an org chart?
 
-*(5 minutes — then we open the notebook.)*
-
 ## Coming up next — Block 2 {.smaller}
 
 Live demo, you follow along:

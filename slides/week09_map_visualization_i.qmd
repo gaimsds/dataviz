@@ -132,8 +132,6 @@ Spatial **joins** (`gpd.sjoin`) attach points to polygons — "which district is
 
 **2.** When is a *count* map the honest choice?
 
-*(5 minutes — then the demo.)*
-
 ## Coming up next — Block 2 {.smaller}
 
 Live demo:
