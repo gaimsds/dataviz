@@ -1,0 +1,14 @@
+# Dependencies for the course demo app ONLY.
+#
+# Deliberately separate from the repository-root requirements.txt, which is the
+# environment for RENDERING THE BOOK and pulls in geopandas, bertopic, umap-learn
+# and friends. Streamlit Community Cloud installs the requirements file it finds
+# for the app, and building the book's environment on a free container would be
+# slow at best.
+#
+# Keep this list short: it is what a cold start after the app sleeps has to
+# install before anyone sees the page.
+streamlit>=1.30
+pandas>=2.0
+plotly>=5.18
+numpy>=1.24
