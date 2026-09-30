@@ -27,6 +27,8 @@ This builds directly on the encoding and perception principles from Weeks 2 and 
 ## 📚 Readings & Resources
 
 - Munzner, *Visualization Analysis & Design*, Ch. 9 (Arrange Networks and Trees) — the conceptual foundation for network layout.
+- Watts & Strogatz (1998), [*Collective dynamics of 'small-world' networks*](https://www.nature.com/articles/30918), **Nature** 393:440 — four pages; the paper that showed a few random shortcuts turn a large network into a small one.
+- Barabási & Albert (1999), [*Emergence of scaling in random networks*](https://www.science.org/doi/10.1126/science.286.5439.509), **Science** 286:509 — growth plus preferential attachment produces hubs and a power-law degree distribution.
 - [NetworkX Tutorial](https://networkx.org/documentation/stable/tutorial.html) — building and analyzing graphs in Python.
 - [PyVis Documentation](https://pyvis.readthedocs.io/) — interactive network rendering for the web and Streamlit.
 - ["The Hairball" — why node-link diagrams fail at scale](https://www.data-to-viz.com/graph/network.html) — a practical caution.
@@ -60,8 +62,8 @@ Confirm you can build a small graph in a notebook and render it, and that you ca
 
 ### Block 1 — Concepts & Theory (~35 min, PowerPoint)
 
-1. From records to relationships: when relational structure is the data (5 min)
-2. Anatomy of a graph: nodes, edges, direction, weight, and the adjacency matrix as the dual representation (8 min)
+1. From records to relationships; how network science began, and regular vs. random vs. scale-free structure (7 min)
+2. Anatomy of a graph: nodes, edges, direction, weight, and the adjacency matrix as the dual representation (6 min)
 3. Layouts as algorithms: force-directed vs. circular vs. random, and what position does and does not mean (6 min)
 4. Centrality: degree, betweenness, closeness; PageRank and why importance flows along directed edges (9 min)
 5. Community detection: modularity and its resolution limit, and Infomap's flow-based alternative (5 min)

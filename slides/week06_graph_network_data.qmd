@@ -69,6 +69,92 @@ plt.show()
 The classic example: a university karate club that famously split into two factions after a dispute between the instructor and the president. The split is *visible* in the structure — no table of members would show it. We'll use this graph all session.
 :::
 
+# Why this became a field {background-color="#2E6E8E"}
+
+## Two papers, eighteen months apart {.smaller}
+
+Until the late 1990s a network was modelled as one of two things: a **regular lattice**, where every node has the same neighbours, or an **Erdős–Rényi random graph**, where every pair is connected by a coin flip. Real networks are neither.
+
+**Watts & Strogatz (1998)**, *Collective dynamics of 'small-world' networks*, [Nature 393:440](https://www.nature.com/articles/30918)
+
+- Take a regular ring, rewire a few edges at random, and path lengths collapse while local clustering survives
+- Shown on three unrelated systems: *C. elegans* neurons, the US power grid, and film-actor collaborations
+
+**Barabási & Albert (1999)**, *Emergence of scaling in random networks*, [Science 286:509](https://www.science.org/doi/10.1126/science.286.5439.509)
+
+- Networks that **grow**, with new nodes preferring to attach to already-popular ones, develop a power-law degree distribution — a few enormous hubs and a long tail
+- Found in the web, citations, and metabolic networks
+
+::: {.gw-box}
+Why it mattered: the same structure kept appearing in systems with nothing else in common, which meant one set of tools could be pointed at neurons, power grids, web pages and friendships alike. That is the ground computational social science and much of applied network analysis is built on.
+:::
+
+## Three kinds of network {.smaller}
+
+```{python}
+#| echo: false
+#| fig-align: center
+import numpy as np
+
+n_draw, k_draw = 40, 4
+reg_s = nx.watts_strogatz_graph(n_draw, k_draw, 0.0, seed=1)
+rnd_s = nx.gnm_random_graph(n_draw, n_draw * k_draw // 2, seed=1)
+rnd_s = rnd_s.subgraph(max(nx.connected_components(rnd_s), key=len)).copy()
+sf_s = nx.barabasi_albert_graph(n_draw, k_draw // 2, seed=1)
+
+n_big, k_big = 2000, 6
+big = [nx.watts_strogatz_graph(n_big, k_big, 0.0, seed=1),
+       nx.gnm_random_graph(n_big, n_big * k_big // 2, seed=1),
+       nx.barabasi_albert_graph(n_big, k_big // 2, seed=1)]
+
+fig, axes = plt.subplots(2, 3, figsize=(10.4, 4.3),
+                         gridspec_kw={"height_ratios": [1.35, 1]})
+titles = ["Regular", "Random", "Scale-free"]
+layouts = [nx.circular_layout(reg_s), nx.spring_layout(rnd_s, seed=2),
+           nx.spring_layout(sf_s, seed=2)]
+for ax, Gs, lp, name in zip(axes[0], [reg_s, rnd_s, sf_s], layouts, titles):
+    degs = dict(Gs.degree())
+    nx.draw_networkx(Gs, lp, ax=ax, with_labels=False, edge_color="#9fb4c0",
+                     width=0.9, node_color="#2E6E8E",
+                     node_size=[6 + degs[v] * 3 for v in Gs.nodes()])
+    ax.set_title(name, fontsize=11); ax.axis("off")
+
+for ax, Gb in zip(axes[1], big):
+    d = [v for _, v in Gb.degree()]
+    ax.hist(d, bins=range(0, max(d) + 2), color="#2E6E8E")
+    ax.set_yscale("log"); ax.set_xlim(0, 60)
+    ax.set_xlabel("degree", fontsize=8); ax.tick_params(labelsize=7)
+axes[1][0].set_ylabel("nodes (log)", fontsize=8)
+plt.tight_layout(); plt.show()
+```
+
+Networks drawn at n = 40; the degree distributions below use n = 2000 so the tail is visible. **Degree** is just the number of edges a node has.
+
+Regular: every node has the same degree, so the distribution is a single spike. Random: degrees cluster around the average and nothing is far from it. Scale-free: most nodes have very few edges and a handful have very many — the shape that produces hubs.
+
+## The small-world result, in numbers {.smaller}
+
+All three have 500 nodes and an average of 6 edges per node. Only the wiring differs.
+
+| | Clustering | Average path | Largest degree |
+|---|---|---|---|
+| Regular ring | **0.600** | **42.1** | 6 |
+| Random | 0.012 | 3.7 | 14 |
+| Scale-free | 0.047 | 3.3 | **67** |
+
+A regular ring keeps your neighbours connected but takes 42 steps to cross; a random graph crosses in under 4 but has no local structure. Real social networks have both. Watts and Strogatz rewired a small share of the ring's edges at random:
+
+| Fraction rewired | Clustering | Average path |
+|---|---|---|
+| 0% | 0.600 | 42.1 |
+| 1% | 0.588 | 14.4 |
+| **5%** | **0.516** | **6.6** |
+| 100% | 0.012 | 3.7 |
+
+::: {.gw-box}
+Rewiring one edge in twenty costs 14% of the clustering and removes 84% of the distance. A handful of long-range shortcuts is enough to make a large network small — which is why six degrees of separation is not a paradox.
+:::
+
 # Anatomy of a graph {background-color="#2E6E8E"}
 
 ## The vocabulary
