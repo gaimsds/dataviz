@@ -18,6 +18,7 @@ This builds directly on the encoding and perception principles from Weeks 2 and 
 
 - Represent relational data as a graph and distinguish directed/undirected and weighted/unweighted structures.
 - Apply and compare common layout algorithms (force-directed, circular, random) and explain what each does and does not preserve.
+- Choose a centrality measure to match a question, including PageRank for directed networks, and explain why the measures disagree.
 - Encode structural measures — degree, centrality, community — onto visual channels (size, color, position).
 - Critically evaluate when a node-link diagram communicates and when an alternative (adjacency matrix, aggregation) is more honest.
 
@@ -30,6 +31,8 @@ This builds directly on the encoding and perception principles from Weeks 2 and 
 - [PyVis Documentation](https://pyvis.readthedocs.io/) — interactive network rendering for the web and Streamlit.
 - ["The Hairball" — why node-link diagrams fail at scale](https://www.data-to-viz.com/graph/network.html) — a practical caution.
 - [ColorBrewer2](https://colorbrewer2.org/) — accessible palettes for community/category coloring.
+- [mapequation.org/apps](https://www.mapequation.org/apps/) — run **Infomap** in the browser and compare its partition with the modularity-based one you get from NetworkX.
+- Page, Brin, Motwani & Winograd (1999), *The PageRank Citation Ranking* — the paper behind the search engine, and a short read.
 
 **Sample Data Sources for Practice:**
 
@@ -60,9 +63,9 @@ Confirm you can build a small graph in a notebook and render it, and that you ca
 1. From records to relationships: when relational structure is the data (5 min)
 2. Anatomy of a graph: nodes, edges, direction, weight, and the adjacency matrix as the dual representation (8 min)
 3. Layouts as algorithms: force-directed vs. circular vs. random, and what position does and does not mean (6 min)
-4. Centrality: degree, betweenness, closeness, and why the three disagree on the same graph (8 min)
-5. Community detection and modularity: finding groups from structure alone (5 min)
-6. When the picture fails: the hairball, filtering, aggregation; discussion (3 min)
+4. Centrality: degree, betweenness, closeness; PageRank and why importance flows along directed edges (9 min)
+5. Community detection: modularity and its resolution limit, and Infomap's flow-based alternative (5 min)
+6. When the picture fails: the hairball, filtering, aggregation, interaction; discussion (2 min)
 
 ### Block 2 — Guided Demonstration (~35 min, live coding)
 

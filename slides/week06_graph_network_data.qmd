@@ -37,6 +37,7 @@ Rows = independent observations. Columns = variables.
 
 - Who follows whom · who emails whom
 - Papers citing papers · proteins interacting
+- **Web pages linking to web pages** — the graph search engines are built on
 - Money flowing between accounts
 - Roads connecting intersections
 
@@ -325,6 +326,41 @@ plt.tight_layout(); plt.show()
 
 Same graph, same layout, but a different set of nodes stands out in each panel. Mapping centrality to colour and size is the first time we encode computed **data** onto the network drawing.
 
+## PageRank: importance that flows along edges {.smaller}
+
+Degree counts every link the same. **PageRank** weights a link by how important the node giving it is — which is circular, and solved by iterating until it settles.
+
+```{python}
+#| echo: false
+#| fig-align: center
+P = nx.DiGraph()
+for i in range(1, 6):                      # A is linked by five obscure pages
+    P.add_edge(f"o{i}", "A")
+for h in ("H1", "H2"):                     # B is linked by only two — but good ones
+    P.add_edge(h, "B")
+    for j in range(1, 6):
+        P.add_edge(f"m{j}", h)
+
+pr = nx.pagerank(P)
+ppos = nx.spring_layout(P, seed=8)
+fig, ax = plt.subplots(figsize=(9.4, 2.5))
+nx.draw_networkx(P, ppos, ax=ax, with_labels=True, font_size=7, font_color="white",
+                 node_size=[pr[n] * 5200 + 90 for n in P.nodes()],
+                 node_color=["#d9534f" if n in ("A", "B") else "#2E6E8E" for n in P.nodes()],
+                 edge_color="#cccccc", arrows=True, arrowsize=9, width=0.9)
+ax.set_title(f"Node size = PageRank.   A: in-degree {P.in_degree('A')}, PR {pr['A']:.3f}   ·   "
+             f"B: in-degree {P.in_degree('B')}, PR {pr['B']:.3f}", fontsize=10)
+ax.axis("off"); plt.tight_layout(); plt.show()
+```
+
+**A** is linked five times, **B** only twice — but B's two come from well-linked pages, and B ranks higher. Counting links and weighting them give different answers.
+
+::: {.gw-box}
+Read it as a **random surfer**: follow links at random, occasionally jump to a random page. PageRank is the share of time that walker spends on each node. It needs **direction** — on an undirected graph it reduces to roughly degree.
+
+This is what Google was built on: the web is a graph, and its link structure already records which pages people treat as authoritative. `nx.pagerank(G)` is one line.
+:::
+
 # Finding groups: community detection {background-color="#2E6E8E"}
 
 ## What is a community?
@@ -379,6 +415,24 @@ $$Q \;=\; (\text{fraction of edges inside communities}) \;-\; (\text{expected fr
 
 ::: {.gw-box}
 Worth knowing: **Louvain** (and its successor **Leiden**) follow the same modularity-maximization idea but scale to millions of nodes — the default choice in practice. All are *heuristics*: community detection has no single "correct" answer.
+:::
+
+## A different definition: Infomap and the map equation {.smaller}
+
+Greedy modularity, Louvain and Leiden all maximize the **same** objective. **Infomap** optimizes a different one, so it can return a different answer on the same graph.
+
+| | Modularity methods | Infomap |
+|---|---|---|
+| Objective | More edges inside groups than chance predicts | Shortest description of a random walk |
+| Question asked | Where is the graph denser than expected? | Where does flow get trapped? |
+| Direction | Usually ignored | Used — flow has a direction |
+
+The idea behind the **map equation**: let a random walker loose on the network and describe its path. If the walker stays inside a group for a long time, you can use short local names inside that group and save space. The grouping that **compresses the walk best** is the one Infomap reports.
+
+::: {.gw-box}
+Worth knowing: modularity has a **resolution limit** — below a size that depends on the number of edges, small groups get absorbed into larger ones no matter how clearly separated they are. Flow-based methods are less affected by it.
+
+Try it in the browser at [mapequation.org/apps](https://www.mapequation.org/apps/) — the Infomap app takes a network and shows the partition interactively. It is a separate package (`pip install infomap`), not part of networkx.
 :::
 
 ## Encoding structure onto the drawing
