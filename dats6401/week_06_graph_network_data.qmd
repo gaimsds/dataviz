@@ -110,6 +110,29 @@ It was produced by [`make_interactive_network.py`](weekly/week6/make_interactive
 with PyVis, the library you use in Block 3. The file is self-contained — vis.js is
 bundled into it — so it also works offline once downloaded.
 
+## 🧭 The app you build in Block 3, running
+
+`app_starter.py` deployed to Streamlit Community Cloud. This is the finished
+shape of Block 3's task: the same Les Misérables network, filtered by degree,
+with size encoding degree and colour encoding the detected community.
+
+```{=html}
+<iframe src="https://berbnfgy4cw38wqvj7nktx.streamlit.app/?embed=true"
+        width="100%" height="620"
+        style="border:1px solid #ddd; border-radius:8px;" loading="lazy"
+        title="Network Explorer — Les Misérables"></iframe>
+```
+
+The controls are in the sidebar, which starts **collapsed** inside a frame — use
+the `»` button at the top left to open it, or
+[open the app in its own tab](https://berbnfgy4cw38wqvj7nktx.streamlit.app/).
+Community Cloud apps sleep when idle, so a first visit may take a few seconds.
+
+Your job in Block 3 is to get here from
+[`app_starter.py`](weekly/week6/app_starter.py) and then go further: the TODOs at
+the bottom of that file add a centrality selector, a highlight-by-name box, and
+caching for the betweenness computation.
+
 {{< include _live_app_embed.qmd >}}
 
 ## 💻 Notebook / App Snippets

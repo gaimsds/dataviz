@@ -643,6 +643,8 @@ Live demo, you follow along:
 4. The matrix view in two lines
 5. Then Block 3: **your turn** — centrality, layouts, and an interactive PyVis network inside a **Streamlit** app
 
+The finished shape of that task is deployed: [Network Explorer — Les Misérables](https://berbnfgy4cw38wqvj7nktx.streamlit.app/). It is also embedded in the Week 6 chapter.
+
 **Readings:** Munzner Ch. 9 · networkx tutorial · "The Hairball" (links in the course book)
 
 **Homework preview:** an interactive network-explorer Streamlit app — details in the Week 6 chapter.
