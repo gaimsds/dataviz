@@ -16,7 +16,7 @@ format: revealjs
 | **Block 4** | Wrap-up & homework preview | ~15 min |
 
 ::: {.gw-box}
-**Where we are:** you can build Streamlit apps (Week 5). Today: the first *complex* modality — data whose meaning lives in the **connections**.
+You can build Streamlit apps after Week 5. This week is the first of the complex modalities: data whose meaning is carried by the **connections** between records rather than by the records themselves.
 :::
 
 # From records to relationships {background-color="#2E6E8E"}
@@ -31,7 +31,7 @@ format: revealjs
 
 Rows = independent observations. Columns = variables.
 
-**Every chart so far assumed the rows don't care about each other.**
+**Every chart so far has assumed the rows are independent of one another.**
 
 ## But much of the world's most interesting data is *relational*
 
@@ -41,7 +41,7 @@ Rows = independent observations. Columns = variables.
 - Roads connecting intersections
 
 ::: {.gw-box}
-The *table* view loses the story. The meaning **is the connections** — and that requires a different data structure and a different visual vocabulary.
+A table can store this, but it cannot show it. The information is in the connections, which needs a different data structure and a different set of visual conventions.
 :::
 
 ## The network view
@@ -103,6 +103,42 @@ ax.axis("off"); plt.tight_layout(); plt.show()
 Before visualizing any network, ask: **directed or not? weighted or not?** The answers change both the analysis and the drawing.
 :::
 
+## What direction and weight look like {.smaller}
+
+```{python}
+#| echo: false
+#| fig-align: center
+fig, axes = plt.subplots(1, 2, figsize=(10.4, 3.2))
+
+# --- directed: in-degree and out-degree are different questions ---
+D = nx.DiGraph([("A", "C"), ("B", "C"), ("E", "C"), ("C", "D"), ("D", "E")])
+dpos = nx.spring_layout(D, seed=11)
+nx.draw_networkx(D, dpos, ax=axes[0], node_color="#2E6E8E", font_color="white",
+                 node_size=900, font_size=9, edge_color="#888888",
+                 arrows=True, arrowsize=16, width=1.6)
+axes[0].set_title(f"Directed: C has in-degree {D.in_degree('C')}, "
+                  f"out-degree {D.out_degree('C')}", fontsize=10)
+axes[0].axis("off")
+
+# --- weighted: the tie strength is the data, so it goes on a channel ---
+W = nx.Graph()
+W.add_weighted_edges_from([("Ana", "Ben", 1), ("Ben", "Cal", 9),
+                           ("Ana", "Cal", 3), ("Cal", "Dee", 6)])
+wpos = nx.spring_layout(W, seed=3)
+nx.draw_networkx(W, wpos, ax=axes[1], node_color="#2E6E8E", font_color="white",
+                 node_size=900, font_size=9, edge_color="#888888",
+                 width=[W[u][v]["weight"] * 0.6 for u, v in W.edges()])
+nx.draw_networkx_edge_labels(W, wpos, ax=axes[1], font_size=8,
+                             edge_labels=nx.get_edge_attributes(W, "weight"))
+axes[1].set_title("Weighted: edge width carries the strength", fontsize=10)
+axes[1].axis("off")
+plt.tight_layout(); plt.show()
+```
+
+**Direction** splits degree into two different questions. C is cited by three nodes and cites one, and "who is cited most" and "who cites most" have different answers — `G.in_degree()` and `G.out_degree()` instead of `G.degree()`.
+
+**Weight** is data about the edge, so it needs a channel. Width is the usual choice. Note that most measures accept it: `nx.betweenness_centrality(G, weight="weight")` treats a heavy edge as a *longer* path, which is often the opposite of what you intend — check what your weight means before passing it.
+
 ## The same graph, two representations {.smaller}
 
 :::: {.columns}
@@ -134,7 +170,7 @@ plt.tight_layout(); plt.show()
 
 Same 78 edges. $A_{ij}=1$ when an edge connects $i$ and $j$. The node–link view shows *shape*; the matrix shows *density* and scales better.
 
-# Layouts are algorithms, not facts {background-color="#2E6E8E"}
+# Layouts: where the positions come from {background-color="#2E6E8E"}
 
 ## Where do the node positions come from?
 
@@ -143,7 +179,7 @@ In every chart you've made so far, **position encoded data**: x was a variable, 
 In a node–link diagram, position comes from a **layout algorithm**.
 
 ::: {.gw-box}
-**The single most important idea today:** the same graph can be drawn infinitely many ways. The layout is a *choice* — and different choices tell different stories.
+The same graph can be drawn in many different ways. The layout is a choice you make, and different choices lead the reader to different conclusions.
 :::
 
 ## One graph, three layouts
@@ -215,7 +251,7 @@ ax.axis("off"); plt.tight_layout(); plt.show()
 ```
 
 ::: {.notes}
-Pedagogical gift of this dataset: the two highest-degree nodes are exactly the two people the club split between. Degree alone already finds the protagonists.
+Useful property of this dataset: the two highest-degree nodes are exactly the two people the club split between, so degree alone already finds the people the story is about.
 :::
 
 ## Betweenness: who bridges?
@@ -238,7 +274,7 @@ ax.set_title(f"The bridge (red) lies on every inter-group shortest path — betw
 ax.axis("off"); plt.tight_layout(); plt.show()
 ```
 
-Remove that node and the network falls apart: it's a **broker** — and a **bottleneck**.
+Removing that node disconnects the two halves. It is both a **broker**, because information must pass through it, and a **bottleneck**, for the same reason.
 
 ## Betweenness: how it's computed {.smaller}
 
@@ -269,7 +305,7 @@ Three measures, three different questions:
 | Betweenness | How much of a broker? | A bridge / bottleneck |
 | Closeness | How reachable is everyone? | A center of gravity |
 
-## The measures disagree — and that's the point
+## The three measures pick different nodes
 
 ```{python}
 #| echo: false
@@ -287,7 +323,7 @@ for ax, (m, name) in zip(axes, [(deg_c, "Degree"), (bet_c, "Betweenness"), (clo_
 plt.tight_layout(); plt.show()
 ```
 
-Same graph, same layout — different nodes light up. **Color/size = centrality** is our first real encoding of *data* onto the network picture.
+Same graph, same layout, but a different set of nodes stands out in each panel. Mapping centrality to colour and size is the first time we encode computed **data** onto the network drawing.
 
 # Finding groups: community detection {background-color="#2E6E8E"}
 
@@ -345,7 +381,7 @@ $$Q \;=\; (\text{fraction of edges inside communities}) \;-\; (\text{expected fr
 Worth knowing: **Louvain** (and its successor **Leiden**) follow the same modularity-maximization idea but scale to millions of nodes — the default choice in practice. All are *heuristics*: community detection has no single "correct" answer.
 :::
 
-## Putting it together: encode structure onto the picture
+## Encoding structure onto the drawing
 
 The layout consumed x/y. The remaining channels carry **computed structure**:
 
@@ -357,12 +393,12 @@ nx.draw_networkx(G, pos, ax=ax, with_labels=False,
                  node_size=[degd[n]*45 for n in G.nodes()],
                  node_color=[cmap[n] for n in G.nodes()],
                  cmap=plt.cm.Set2, edge_color="#dddddd")
-ax.set_title("Size = degree · Color = detected community — the picture now answers questions",
+ax.set_title("Size = degree · Colour = detected community",
              fontsize=11)
 ax.axis("off"); plt.tight_layout(); plt.show()
 ```
 
-*Who are the hubs? Where are the factions? Who bridges them?* — all visible at once.
+Hubs, factions and bridges can now all be read off a single picture.
 
 # When the picture fails {background-color="#2E6E8E"}
 
@@ -377,11 +413,11 @@ fig, ax = plt.subplots(figsize=(7.5, 4.2))
 nx.draw_networkx(H, hpos, ax=ax, with_labels=False,
                  node_color="#2E6E8E", node_size=14,
                  edge_color="#bbbbbb", width=0.4, alpha=0.7)
-ax.set_title("450 nodes, ~1,340 edges — impressive, and nearly unreadable", fontsize=11)
+ax.set_title("450 nodes, about 1,340 edges", fontsize=11)
 ax.axis("off"); plt.tight_layout(); plt.show()
 ```
 
-Node–link diagrams stop communicating somewhere in the **hundreds of nodes**. More data ≠ more insight.
+Node–link diagrams stop being readable somewhere in the **hundreds of nodes**. Adding more of the network to the picture does not add more information for the reader.
 
 ## Escaping the hairball {.smaller}
 
@@ -391,7 +427,48 @@ Node–link diagrams stop communicating somewhere in the **hundreds of nodes**. 
 - **Add interaction** — zoom, hover, select (PyVis → Streamlit, in Block 3)
 
 ::: {.gw-box}
-A network visualization that shows *everything* usually shows **nothing**. Design for the question, not the dataset. And note that today's measures are exactly the filters: "top 20 by betweenness" is a principled subgraph.
+Decide what question the picture has to answer, then show the part of the network that answers it. Today's measures are themselves the filters: "the top 20 nodes by betweenness" is a defensible subgraph, chosen for a reason you can state.
+:::
+
+## Aggregation, worked on the same hairball {.smaller}
+
+```{python}
+#| echo: false
+#| fig-align: center
+hcomms = list(greedy_modularity_communities(H))
+hcid = {n: i for i, c in enumerate(hcomms) for n in c}
+
+# Collapse each community to one node. Node size = how many members it has,
+# edge width = how many original edges run between the two communities.
+Qg = nx.Graph()
+for i, c in enumerate(hcomms):
+    Qg.add_node(i, members=len(c))
+for u, v in H.edges():
+    a, b = hcid[u], hcid[v]
+    if a != b:
+        Qg.add_edge(a, b, weight=Qg.get_edge_data(a, b, {}).get("weight", 0) + 1)
+
+fig, axes = plt.subplots(1, 2, figsize=(10.4, 3.2))
+nx.draw_networkx(H, hpos, ax=axes[0], with_labels=False, node_color="#2E6E8E",
+                 node_size=12, edge_color="#cccccc", width=0.3, alpha=0.7)
+axes[0].set_title(f"{H.number_of_nodes()} nodes as drawn before", fontsize=10)
+axes[0].axis("off")
+
+qpos = nx.spring_layout(Qg, seed=2)
+nx.draw_networkx(Qg, qpos, ax=axes[1], with_labels=False,
+                 node_color="#2E6E8E",
+                 node_size=[Qg.nodes[n]["members"] * 14 for n in Qg.nodes()],
+                 edge_color="#888888",
+                 width=[Qg[u][v]["weight"] * 0.12 for u, v in Qg.edges()])
+axes[1].set_title(f"{Qg.number_of_nodes()} communities, sized by membership", fontsize=10)
+axes[1].axis("off")
+plt.tight_layout(); plt.show()
+```
+
+Same network, same edges. The right panel keeps one node per **community** instead of one per member, sizes it by how many members it has, and draws the between-community edges with a width proportional to how many original edges they stand for.
+
+::: {.gw-box}
+What you gain is a picture that stays readable as the network grows. What you give up is the individual: no single node can be found on the right. State which one you are showing — an aggregated network answers questions about groups, not about people.
 :::
 
 ## Discussion {.gw-discussion}

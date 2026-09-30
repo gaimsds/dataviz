@@ -17,7 +17,7 @@ This builds directly on the encoding and perception principles from Weeks 2 and 
 ## 🔎 Learning Objectives
 
 - Represent relational data as a graph and distinguish directed/undirected and weighted/unweighted structures.
-- Apply and compare common layout algorithms (force-directed, circular, bipartite) and explain what each does and does not preserve.
+- Apply and compare common layout algorithms (force-directed, circular, random) and explain what each does and does not preserve.
 - Encode structural measures — degree, centrality, community — onto visual channels (size, color, position).
 - Critically evaluate when a node-link diagram communicates and when an alternative (adjacency matrix, aggregation) is more honest.
 
@@ -57,10 +57,12 @@ Confirm you can build a small graph in a notebook and render it, and that you ca
 
 ### Block 1 — Concepts & Theory (~35 min, PowerPoint)
 
-1. From records to relationships: when relational structure is the data (6 min)
-2. Anatomy of a graph: nodes, edges, direction, weight; the adjacency matrix as the dual representation (12 min)
-3. Layouts as algorithms, not facts: force-directed vs. circular vs. bipartite, and what position means (11 min)
-4. Discussion: reading a "hairball" — what it does and doesn't tell us (6 min)
+1. From records to relationships: when relational structure is the data (5 min)
+2. Anatomy of a graph: nodes, edges, direction, weight, and the adjacency matrix as the dual representation (8 min)
+3. Layouts as algorithms: force-directed vs. circular vs. random, and what position does and does not mean (6 min)
+4. Centrality: degree, betweenness, closeness, and why the three disagree on the same graph (8 min)
+5. Community detection and modularity: finding groups from structure alone (5 min)
+6. When the picture fails: the hairball, filtering, aggregation; discussion (3 min)
 
 ### Block 2 — Guided Demonstration (~35 min, live coding)
 

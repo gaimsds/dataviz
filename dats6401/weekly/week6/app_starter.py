@@ -30,7 +30,16 @@ c3.metric("Layout", layout)
 # --- Build the interactive PyVis network ---
 net = Network(height="600px", width="100%", cdn_resources="in_line", notebook=False)
 net.from_nx(H)
+
 if layout == "circular":
+    # Turning physics off only freezes the nodes wherever vis.js first put them,
+    # which is not a circular layout. Compute the positions with networkx and
+    # hand them to PyVis, then switch physics off so they stay put.
+    cpos = nx.circular_layout(H, scale=400)
+    for node in net.nodes:
+        x, y = cpos[node["id"]]
+        node["x"], node["y"] = float(x), float(y)
+        node["physics"] = False
     net.toggle_physics(False)
 
 net.save_graph("graph.html")
