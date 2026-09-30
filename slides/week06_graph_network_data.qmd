@@ -471,6 +471,18 @@ Same network, same edges. The right panel keeps one node per **community** inste
 What you gain is a picture that stays readable as the network grows. What you give up is the individual: no single node can be found on the right. State which one you are showing — an aggregated network answers questions about groups, not about people.
 :::
 
+## Interaction, worked on the karate club {.smaller}
+
+```{=html}
+<iframe src="../weekly/week6/karate_network.html" width="100%" height="410"
+        style="border:1px solid #ddd; border-radius:6px;" loading="lazy"
+        title="Interactive karate club network"></iframe>
+```
+
+Same graph, same encodings — size is degree, colour is community — but the force simulation is running here rather than having been run once and saved as an image.
+
+**Drag a node** and the springs pull its neighbours with it. Hover for degree and community; scroll to zoom. Interaction lets a reader ask one question at a time. You build one of these with PyVis in Block 3.
+
 ## Discussion {.gw-discussion}
 
 Look back at the hairball.

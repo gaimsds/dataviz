@@ -9,10 +9,13 @@
 #     download at startup and no data files to ship
 #   * four dependencies, so a cold start after the app sleeps stays short
 #   * laid out for a ~600px iframe: controls above the chart, no sidebar
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+import streamlit.components.v1 as components
 
 st.set_page_config(page_title="DATS 6401 demo", layout="wide")
 
@@ -27,7 +30,8 @@ NUMERIC = ["lifeExp", "pop", "gdpPercap"]
 
 st.markdown("#### DATS 6401 — three ideas from the course, in one app")
 
-tab1, tab2, tab3 = st.tabs(["Encodings", "Order a heatmap", "Honest axes"])
+tab1, tab2, tab3, tab4 = st.tabs(
+    ["Encodings", "Order a heatmap", "Honest axes", "A network"])
 
 # --------------------------------------------------------------- Week 2 -----
 with tab1:
@@ -111,6 +115,27 @@ with tab3:
     st.caption("Tick and untick the box. Same numbers, and a very different "
                "impression of how much changed.")
 
+# --------------------------------------------------------------- Week 6 -----
+with tab4:
+    st.caption("Week 6 — a force-directed layout is a simulation, not a fixed "
+               "picture. Drag a node and the rest re-settles.")
+    # Re-uses the file committed for the Week 6 chapter rather than generating it
+    # here, which keeps pyvis and networkx out of this app's dependencies.
+    graph_html = (Path(__file__).resolve().parent.parent
+                  / "dats6401" / "weekly" / "week6" / "karate_network.html")
+    if graph_html.exists():
+        components.html(graph_html.read_text(encoding="utf-8"), height=540)
+        st.caption("Zachary's karate club · size = degree · colour = detected "
+                   "community. Built with PyVis; the file bundles vis.js, so it "
+                   "runs with no network access.")
+    else:
+        st.info(
+            "The interactive network file is missing. Generate it with "
+            "`python3 dats6401/weekly/week6/make_interactive_network.py`, or run "
+            "`dats6401/tools/sync_weekly.sh` if you keep the materials in the "
+            "private staging folder."
+        )
+
 st.divider()
 st.caption("Built for DATS 6401 · Visualization of Complex Data · GWU — "
-           "data: gapminder, bundled with plotly.")
+           "data: gapminder (bundled with plotly) and Zachary's karate club.")

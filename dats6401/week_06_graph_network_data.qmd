@@ -85,11 +85,27 @@ Confirm you can build a small graph in a notebook and render it, and that you ca
 
 ---
 
-### Materials: [Block 2 demo](weekly/week6/week06_block2_demo.ipynb) · [hands-on](weekly/week6/week06_block3_handson.ipynb) · [app starter](weekly/week6/app_starter.py)
+### Materials: [Block 2 demo](weekly/week6/week06_block2_demo.ipynb) · [hands-on](weekly/week6/week06_block3_handson.ipynb) · [app starter](weekly/week6/app_starter.py) · [interactive network](weekly/week6/karate_network.html) · [its generator](weekly/week6/make_interactive_network.py)
 
 ---
 
 {{< include _live_app_embed.qmd >}}
+
+## 🕸️ The karate club, interactively
+
+The figures in the slides are static images of a force-directed layout. Below is
+the same graph with the simulation still running: drag a node and its neighbours
+follow, hover for degree and community, scroll to zoom.
+
+```{=html}
+<iframe src="weekly/week6/karate_network.html" width="100%" height="540"
+        style="border:1px solid #ddd; border-radius:8px;" loading="lazy"
+        title="Interactive karate club network"></iframe>
+```
+
+It was produced by [`make_interactive_network.py`](weekly/week6/make_interactive_network.py)
+with PyVis, the library you use in Block 3. The file is self-contained — vis.js is
+bundled into it — so it also works offline once downloaded.
 
 ## 💻 Notebook / App Snippets
 
