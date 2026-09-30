@@ -94,8 +94,6 @@ Confirm you can build a small graph in a notebook and render it, and that you ca
 
 ---
 
-{{< include _live_app_embed.qmd >}}
-
 ## 🕸️ The karate club, interactively
 
 The figures in the slides are static images of a force-directed layout. Below is
@@ -111,6 +109,8 @@ follow, hover for degree and community, scroll to zoom.
 It was produced by [`make_interactive_network.py`](weekly/week6/make_interactive_network.py)
 with PyVis, the library you use in Block 3. The file is self-contained — vis.js is
 bundled into it — so it also works offline once downloaded.
+
+{{< include _live_app_embed.qmd >}}
 
 ## 💻 Notebook / App Snippets
 
@@ -174,23 +174,38 @@ plt.show()
 ```python
 # app.py  —  run with:  streamlit run app.py
 import streamlit as st
-import networkx as nx
-from pyvis.network import Network
 import streamlit.components.v1 as components
+import networkx as nx
+from networkx.algorithms.community import greedy_modularity_communities
+from pyvis.network import Network
 
 st.title("Network Explorer")
-
-layout = st.selectbox("Layout", ["force", "circular"])
 G = nx.karate_club_graph()
 
-net = Network(height="600px", width="100%")
-net.from_nx(G)
-if layout == "circular":
-    net.toggle_physics(False)
-net.save_graph("graph.html")
+degree = dict(G.degree())
+community = {n: i for i, c in enumerate(greedy_modularity_communities(G)) for n in c}
+palette = ["#2E6E8E", "#d9534f", "#6aa84f", "#b07aa1"]
 
-with open("graph.html", "r", encoding="utf-8") as f:
-    components.html(f.read(), height=620)
+# Encode the structure rather than accepting from_nx's uniform defaults:
+# the layout takes x and y, so degree goes to size and community to colour.
+net = Network(height="600px", width="100%", cdn_resources="in_line")
+for n in G.nodes():
+    net.add_node(n, label=str(n), size=8 + degree[n] * 1.5,
+                 color=palette[community[n] % len(palette)],
+                 title=f"node {n} · degree {degree[n]}")
+for u, v in G.edges():
+    net.add_edge(u, v, color="#d5d5d5")
+
+if st.selectbox("Layout", ["force-directed", "circular"]) == "circular":
+    # toggle_physics(False) alone just freezes the nodes where vis.js put them,
+    # which is not a circular layout — compute the positions and pass them in.
+    pos = nx.circular_layout(G, scale=420)
+    for node in net.nodes:
+        node["x"], node["y"] = map(float, pos[node["id"]])
+        node["physics"] = False
+    net.toggle_physics(False)
+
+components.html(net.generate_html(notebook=False), height=620)
 ```
 
 ---
