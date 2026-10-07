@@ -54,10 +54,12 @@ The first BERTopic run downloads a model — do this before class, not during.
 
 ### Block 1 — Concepts & Theory (~35 min, PowerPoint)
 
-1. Text has no x/y: the transform problem (10 min)
-2. Frequencies and keyness done right; why word clouds mislead (9 min)
-3. Topic models and what they summarize (9 min)
-4. Embeddings as semantic geometry; UMAP preview (7 min)
+1. Text has no x/y: the transform problem (6 min)
+2. Preprocessing is a transform too: stop words, stemming, and n-grams (8 min)
+3. Frequencies and keyness; the word cloud and the sorted bars side by side (7 min)
+4. Concordance: reading the sentences behind the counts (4 min)
+5. Topic models and what they summarize (6 min)
+6. Embeddings as semantic geometry; UMAP preview (4 min)
 
 ### Block 2 — Guided Demonstration (~35 min, live coding)
 

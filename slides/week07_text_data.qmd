@@ -16,7 +16,7 @@ format: revealjs
 | **Block 4** | Wrap-up & homework preview | ~15 min |
 
 ::: {.gw-box}
-**Today's problem:** text has no x and no y. Every text visualization is really a visualization of a **transform** of text — so understanding the transform is half the work.
+Text has no x and no y. Every text visualization is really a picture of some **transform** of the text, so the transform is where most of the decisions are made.
 :::
 
 # Text has no natural axes {background-color="#2E6E8E"}
@@ -39,13 +39,31 @@ Each transform makes assumptions. The chart inherits all of them.
 ```{python}
 #| echo: false
 #| fig-align: center
+# One corpus for the whole deck: big enough for a readable word cloud, and made
+# of real sentences so the concordance slide later has something to show.
 docs = [
-    "the model trains on data and the data shapes the model",
-    "visualization turns data into pictures people can read",
-    "a topic model finds themes hiding in a corpus of text",
-    "embeddings place similar text near similar text in space",
-    "people read pictures faster than they read tables of data",
-    "text needs a transform before any visualization can begin",
+    "the model trains on data and the data shapes what the model can say",
+    "data visualization turns numbers into pictures that people can read quickly",
+    "a topic model finds themes hiding in a large corpus of text",
+    "embeddings place similar text near similar text in a shared space",
+    "people read pictures faster than they read tables of numbers",
+    "text needs a transform before any visualization can begin at all",
+    "a word cloud sizes each word by how often it appears in the text",
+    "the sorted bar chart puts frequency on position and length",
+    "stop words are removed because they appear in every document",
+    "tf idf asks which words are frequent here and rare everywhere else",
+    "a data scientist reads the chart and then reads the raw text",
+    "machine learning models need clean data more than clever algorithms",
+    "the corpus is small so every topic model result deserves suspicion",
+    "good visualization design starts from the question not from the data",
+    "social media text is noisy and full of repeated boilerplate phrases",
+    "a language model can summarize text but it can also invent detail",
+    "counting words is easy and interpreting the counts is the hard part",
+    "data science borrows from statistics computing and visual design",
+    "the same corpus gives different topics under different random seeds",
+    "clean text first because preprocessing choices change every later chart",
+    "a chart of word frequency hides the sentences the words came from",
+    "readers trust a picture of data more than a table of the same data",
 ]
 from sklearn.feature_extraction.text import CountVectorizer
 import pandas as pd
@@ -55,21 +73,110 @@ counts = cv.fit_transform(docs)
 freq = pd.Series(counts.sum(axis=0).A1, index=cv.get_feature_names_out()).sort_values()
 fig, ax = plt.subplots(figsize=(7.5, 4))
 freq.tail(10).plot.barh(ax=ax, color="#2E6E8E")
-ax.set_title("A 6-document corpus → sorted term frequencies (stop words removed)")
+ax.set_title("A 22-document corpus → sorted term frequencies (stop words removed)")
 plt.tight_layout(); plt.show()
 ```
 
-The humble **sorted bar chart**: position + length, our two most accurate channels.
+A **sorted bar chart** puts frequency on position and length, the two channels Week 2 ranked most accurate.
+
+## Before you count: preprocessing is a transform {.smaller}
+
+```{python}
+#| echo: false
+#| fig-align: center
+from nltk.stem import PorterStemmer
+
+ps = PorterStemmer()
+stemmed_docs = [" ".join(ps.stem(w) for w in d.split()) for d in docs]
+
+def top_terms(corpus, stop=None, n=8):
+    v = CountVectorizer(stop_words=stop)
+    m = v.fit_transform(corpus)
+    s = pd.Series(m.sum(axis=0).A1, index=v.get_feature_names_out())
+    return s.sort_values().tail(n), len(s)
+
+panels = [("keep everything", *top_terms(docs, None)),
+          ("drop stop words", *top_terms(docs, "english")),
+          ("drop stop words,\nthen stem", *top_terms(stemmed_docs, "english"))]
+
+fig, axes = plt.subplots(1, 3, figsize=(10.4, 2.4))
+for ax, (name, s, vocab) in zip(axes, panels):
+    ax.barh(s.index, s.values, color="#2E6E8E")
+    ax.set_title(f"{name}\n({vocab} distinct terms)", fontsize=9)
+    ax.tick_params(labelsize=7)
+plt.tight_layout(); plt.show()
+```
+
+The transform table starts at "token counts", but decisions have already been made by then.
+
+- **Stop words.** Keep them and the chart is `the`, `and`, `of` — true and useless. Which list you drop is a choice: the standard English list removes `not`, which matters for anything about opinion.
+- **Stemming.** `word` (3) and `words` (4) stay separate until you stem, then merge into **7** and overtake `model` — the ranking changed, not just the counts. Note the labels: Porter stemming chops suffixes, so `every` becomes `everi` and `visualization` collapses into `visual`. Lemmatisation is slower and returns real words.
+
+None of this is visible in the finished chart, so name the preprocessing in the caption.
+
+## One word or two? n-grams {.smaller}
+
+```{python}
+#| echo: false
+#| fig-align: center
+def ngram_top(rng, n=8):
+    v = CountVectorizer(stop_words="english", ngram_range=rng)
+    m = v.fit_transform(docs)
+    s = pd.Series(m.sum(axis=0).A1, index=v.get_feature_names_out())
+    return s.sort_values().tail(n)
+
+fig, axes = plt.subplots(1, 2, figsize=(10.2, 2.8))
+for ax, (rng, name) in zip(axes, [((1, 1), "unigrams: single words"),
+                                  ((2, 2), "bigrams: adjacent pairs")]):
+    s = ngram_top(rng)
+    ax.barh(s.index, s.values, color="#2E6E8E")
+    ax.set_title(name, fontsize=10); ax.tick_params(labelsize=7)
+plt.tight_layout(); plt.show()
+```
+
+Counting single words splits every phrase. **`topic model`** appears twice in this corpus, but as unigrams it is only `topic` (2) and `model` (5) — and `model` also counts the sentences about language models and machine-learning models, which are a different thing.
+
+```python
+CountVectorizer(ngram_range=(1, 2))      # unigrams AND bigrams
+```
+
+Bigrams cost you a much larger, sparser vocabulary, so they are worth it when the phrases carry the meaning — names, technical terms, negations like `not useful`.
 
 # The word-cloud problem {background-color="#2E6E8E"}
 
 ## Why word clouds underperform
 
-A word cloud encodes frequency on **area** (weak channel, per Cleveland–McGill) and position on **a packing algorithm** (no meaning at all). Plus: long words look bigger at equal frequency.
+A word cloud encodes frequency on **area**, which Cleveland and McGill ranked near the bottom for accuracy, and position on **a packing algorithm**, which carries no meaning at all. A long word also takes more space than a short one at the same frequency.
 
 ::: {.gw-box}
-**Test:** in a word cloud, can you tell whether the 3rd-most-frequent word beats the 5th? In a sorted bar chart you answer instantly. Word clouds are *invitations to look*, not tools to compare. Use them as posters, never as evidence.
+**Test:** in a word cloud, can you tell whether the third-most-frequent word beats the fifth? In a sorted bar chart you can read it off. A word cloud can draw someone into a page; it cannot support a comparison, so keep it off the slide where the argument is made.
 :::
+
+## The same counts, drawn both ways {.smaller}
+
+```{python}
+#| echo: false
+#| fig-align: center
+from wordcloud import WordCloud
+
+counts_all = pd.Series(counts.sum(axis=0).A1, index=cv.get_feature_names_out())
+wc = WordCloud(width=760, height=430, background_color="white", colormap="Blues",
+               prefer_horizontal=0.95, random_state=3
+               ).generate_from_frequencies(counts_all.to_dict())
+
+fig, axes = plt.subplots(1, 2, figsize=(10.4, 3.3))
+axes[0].imshow(wc, interpolation="bilinear"); axes[0].axis("off")
+axes[0].set_title("Word cloud", fontsize=10)
+top10 = counts_all.sort_values().tail(10)
+axes[1].barh(top10.index, top10.values, color="#2E6E8E")
+axes[1].set_title("Same counts, sorted bars", fontsize=10)
+axes[1].tick_params(labelsize=7); axes[1].set_xlabel("occurrences", fontsize=8)
+plt.tight_layout(); plt.show()
+```
+
+Same numbers, same 22 documents. **`data` and `text` are tied at 9** — the cloud draws them the same size, but one is dark and one pale, and that colour encodes nothing. **`model` (5) against `chart` (4)** is a 25% difference in count drawn as a 10% difference in height. Finding a given word means scanning the cloud; in the bars it is a lookup.
+
+The cloud still says "this is about data and text" at a glance, which is what a cover image is for. It cannot support a comparison.
 
 ## Distinctive vs. frequent: TF–IDF
 
@@ -77,13 +184,43 @@ Raw counts surface what's common *everywhere* ("data"). Often the real question 
 
 $$\text{tf–idf}(t, d) = \underbrace{\text{tf}(t,d)}_{\text{frequent here}} \times \underbrace{\log\frac{N}{\text{df}(t)}}_{\text{rare elsewhere}}$$
 
-Same bar chart, different transform, different — usually better — story.
+Same bar chart, different transform. TF–IDF usually answers the more useful question.
+
+## Go back to the sentences: concordance {.smaller}
+
+A bar says `model` appears 5 times. It does not say the word is doing two different jobs.
+
+```{python}
+#| echo: false
+#| fig-align: center
+#| classes: plain
+def kwic(corpus, term, width=34):
+    """Keyword in context: the term with what sits either side of it."""
+    rows = []
+    for d in corpus:
+        toks = d.split()
+        for i, w in enumerate(toks):
+            if w == term:
+                left = " ".join(toks[max(0, i - 6):i])[-width:]
+                right = " ".join(toks[i + 1:i + 7])[:width]
+                rows.append((f"{left:>{width}}", w, right))
+    return rows
+
+for left, w, right in kwic(docs, "model"):
+    print(f"{left}  [{w}]  {right}")
+```
+
+Five hits, three different senses: a **statistical model** being trained, a **topic model** as a method, and a **language model** as a product. Counting flattens all three into one bar.
+
+::: {.gw-box}
+Keyword-in-context is the oldest tool in corpus linguistics and still the fastest check on a frequency chart. Compute the counts, then read a sample of the lines behind the tallest bar before you describe what it means.
+:::
 
 # Topics & embeddings {background-color="#2E6E8E"}
 
 ## Topic models: themes from structure
 
-A topic model groups documents by shared vocabulary patterns — no labels needed (compare: Week 6's community detection, the same unsupervised instinct).
+A topic model groups documents by shared vocabulary patterns, with no labels supplied — the same unsupervised idea as Week 6's community detection.
 
 Modern pipeline (**BERTopic**): embed documents → cluster the embeddings → describe each cluster by its distinctive terms. Its built-in visualizations (topic map, term bars, hierarchy) come almost free:
 
@@ -127,14 +264,14 @@ In Block 2 we'll use **UMAP** on real sentence embeddings — far better neighbo
 - Different seeds/parameters → different pictures (Week 6's layout lesson again)
 
 ::: {.gw-box}
-Caption discipline: name the embedding, the projection, and the parameters. "UMAP of MiniLM embeddings (n_neighbors=15)" is honest; "semantic map" is marketing.
+Name the embedding, the projection and the parameters in the caption. "UMAP of MiniLM embeddings, n_neighbors=15" tells a reader what they are looking at; "semantic map" does not.
 :::
 
 ## Discussion {.gw-discussion}
 
 **1.** Your stakeholder loves the word cloud on the report cover. Keep it, replace it, or both — and where?
 
-**2.** A topic model returns 14 topics. What visual evidence would convince you they're *real* rather than algorithmic confetti?
+**2.** A topic model returns 14 topics. What visual evidence would convince you those topics are real rather than an artefact of the algorithm?
 
 ## Coming up next — Block 2 {.smaller}
 
