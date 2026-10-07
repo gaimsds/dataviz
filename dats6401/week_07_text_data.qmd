@@ -82,7 +82,14 @@ The first BERTopic run downloads a model — do this before class, not during.
 
 ---
 
-### Materials: [Block 2 demo](weekly/week7/week07_block2_demo.ipynb) · [hands-on](weekly/week7/week07_block3_handson.ipynb) · [solutions](weekly/week7/week07_SOLUTIONS.ipynb) · [topic app starter](weekly/week7/app_topic_starter.py)
+### Materials: [Block 2 demo](weekly/week7/week07_block2_demo.ipynb) · [hands-on](weekly/week7/week07_block3_handson.ipynb) · [solutions](weekly/week7/week07_SOLUTIONS.ipynb) · [text explorer app](weekly/week7/app_topic_starter.py) · [its data file](weekly/week7/week7_bertopic.json)
+
+The text explorer is a three-tab Streamlit app: load a corpus and count it,
+project and cluster it live, then compare both against real BERTopic output.
+Run it with `streamlit run app_topic_starter.py`, and keep
+`week7_bertopic.json` in the same folder — tab 3 reads its results from that
+file rather than running BERTopic, which would pull in sentence-transformers
+and torch.
 
 Block 3 is yours to work through after class. The solutions notebook is posted
 alongside it — try each task first, then read the solution for the parts you got
