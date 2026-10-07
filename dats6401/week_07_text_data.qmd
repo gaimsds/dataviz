@@ -55,11 +55,11 @@ The first BERTopic run downloads a model — do this before class, not during.
 ### Block 1 — Concepts & Theory (~35 min, PowerPoint)
 
 1. Text has no x/y: the transform problem (6 min)
-2. Preprocessing is a transform too: stop words, stemming, and n-grams (8 min)
-3. Frequencies and keyness; the word cloud and the sorted bars side by side (7 min)
-4. Concordance: reading the sentences behind the counts (4 min)
-5. Topic models and what they summarize (6 min)
-6. Embeddings as semantic geometry; UMAP preview (4 min)
+2. Preprocessing is a transform too: stop words, stemming, and n-grams (7 min)
+3. Frequencies and keyness; the word cloud and the sorted bars side by side, and where a contrastive pair does work (6 min)
+4. Concordance: reading the sentences behind the counts (3 min)
+5. Topic models: LDA and BERTopic, c-TF-IDF, and what BERTopic gives you to look at (7 min)
+6. Projections and clustering: PCA vs t-SNE vs UMAP, and why BERTopic clusters with HDBSCAN (6 min)
 
 ### Block 2 — Guided Demonstration (~35 min, live coding)
 
