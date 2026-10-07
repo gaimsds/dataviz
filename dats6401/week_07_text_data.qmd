@@ -98,7 +98,41 @@ to type.
 
 ---
 
-{{< include _live_app_embed.qmd >}}
+::: {.callout-tip title="Live app"}
+`app_topic_starter.py`, deployed. Three tabs, one stage of the pipeline each.
+
+**1 · Corpus and counts** takes the built-in corpus or a file you upload, then
+draws the same terms as sorted bars and as a word cloud so you can compare the
+two encodings directly. **2 · Project and cluster** runs TF–IDF → SVD → UMAP →
+HDBSCAN live, with the parameters on sliders. **3 · BERTopic** shows real
+results on 4,502 newsgroup documents.
+
+```{=html}
+<iframe src="https://anif3zt3eesciffkls9bzz.streamlit.app/?embed=true"
+        width="100%" height="640"
+        style="border:1px solid #ddd; border-radius:8px;" loading="lazy"
+        title="Week 7 — Text Explorer"></iframe>
+```
+
+[Open the app in its own tab](https://anif3zt3eesciffkls9bzz.streamlit.app/) if
+the frame feels cramped. Community Cloud apps sleep when idle, so a first visit
+may take a few seconds.
+
+Tab 2 is the one to play with. Move a single slider and watch the cluster count
+change on a corpus that did not change — the parameters are part of the result,
+which is the whole argument against reading a topic count as a fact about the
+data.
+
+Tab 3's results are precomputed and stored in
+[`week7_bertopic.json`](weekly/week7/week7_bertopic.json); the deployed app
+never runs BERTopic, because sentence-transformers and torch do not fit on a
+free server. That is also why tab 3 cannot read a corpus you upload in tab 1.
+Live BERTopic is in the Block 2 demo, to run in class.
+
+Start from [`app_topic_starter.py`](weekly/week7/app_topic_starter.py) and keep
+the JSON beside it. The TODOs at the bottom of the file suggest where to take
+it next.
+:::
 
 ## 💻 Notebook / App Snippets
 
