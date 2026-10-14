@@ -267,8 +267,8 @@ The hot region sits on the stroke, not the corners. This model earns some trust.
 ## A model with excellent numbers {.smaller}
 
 Suppose the scans of every `3` happened to be stamped in the corner — a batch
-number, a hospital logo, anything. Two bright pixels, present on every 3 and no
-other digit. Train the same classifier on that data:
+number, a hospital logo, anything. A 2x2 block of four bright pixels, present on
+every 3 and no other digit. Train the same classifier on that data:
 
 ```{python}
 #| echo: false
@@ -317,7 +317,7 @@ axes[2].set_title("overlaid")
 for a in axes:
     a.set_xticks([]); a.set_yticks([])
     for s in a.spines.values(): s.set_edgecolor("#999999")
-    # Mark the two pixels that were added, so it is clear what the map found.
+    # Mark the block that was added, so it is clear what the map found.
     a.add_patch(Rectangle((-0.5, -0.5), 2, 2, fill=False, edgecolor="#00d5ff", lw=2))
 plt.tight_layout(); plt.show()
 print(f"max drop on the stamp (top-left 3x3): {sal3[0:3, 0:3].max():.2f}")
