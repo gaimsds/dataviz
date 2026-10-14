@@ -46,6 +46,88 @@ for a in axes: a.axis("off")
 plt.tight_layout(); plt.show()
 ```
 
+## Where is pixel `[0, 0]`? {.smaller}
+
+An image array does not use the coordinate system you learned in school.
+
+- The origin is the **top-left**, and **y grows downward**
+- Indexing is `img[row, col]`, which is `(y, x)` — the reverse of the usual pair
+- `numpy.shape` is `(height, width)`; `PIL.Image.size` is `(width, height)`
+
+```{python}
+#| echo: false
+from PIL import Image
+a = np.zeros((4, 8), dtype=np.uint8)          # 4 tall, 8 wide
+print("numpy .shape :", a.shape, " (height, width)")
+print("PIL   .size  :", Image.fromarray(a).size, " (width, height)  <- reversed")
+
+b = np.zeros((8, 8)); b[1, 6] = 1
+fig, ax = plt.subplots(figsize=(3, 3))
+ax.imshow(b, cmap="gray"); ax.set_xlabel("column  (x)"); ax.set_ylabel("row  (y)")
+plt.tight_layout(); plt.show()
+print("\nb[1, 6] = 1 appears near the TOP right, not the bottom right.")
+print("imshow extent (left, right, bottom, top):", ax.images[0].get_extent())
+```
+
+That last line is the whole story: **bottom is 7.5 and top is −0.5**. The y-axis
+is inverted on purpose.
+
+## A graph of pixels, on top of the image {.smaller}
+
+Segment the objects in a photo, join the ones that touch, and you have a network
+describing the scene — a real technique, used in research. The classroom version
+needs no segmentation: **every pixel brighter than 0 is a node, and neighbouring
+pixels are joined**.
+
+The point here is that you cannot draw a network onto an image without
+committing to a coordinate convention:
+
+```python
+pos = {(i, j): (j, i) for (i, j) in G.nodes}    # (row, col) -> (x, y)
+```
+
+Forget the swap and the graph comes out transposed. Remember the swap but plot
+on bare axes instead of onto the image, and it comes out upside down.
+
+## Both mistakes, side by side {.smaller}
+
+```{python}
+#| echo: false
+#| fig-align: center
+import networkx as nx
+
+img = digits.images[np.where(digits.target == 2)[0][0]]
+G = nx.Graph()
+for i in range(8):
+    for j in range(8):
+        if img[i, j] > 0:
+            G.add_node((i, j))
+for (i, j) in list(G.nodes):
+    for di, dj in [(-1,0),(1,0),(0,-1),(0,1),(-1,-1),(-1,1),(1,-1),(1,1)]:
+        if (i + di, j + dj) in G:
+            G.add_edge((i, j), (i + di, j + dj))
+
+pos = {(i, j): (j, i) for (i, j) in G.nodes}
+sizes = [img[i, j] * 13 for (i, j) in G.nodes]
+
+fig, axes = plt.subplots(1, 3, figsize=(10.5, 3.6))
+axes[0].imshow(img, cmap="gray"); axes[0].set_title("the image: a '2'")
+nx.draw(G, pos, ax=axes[1], node_size=sizes, node_color="#2E6E8E",
+        edge_color="#bbbbbb", width=0.8)
+axes[1].set_title("on bare axes (y up)\nupside down"); axes[1].set_aspect("equal")
+axes[2].imshow(img, cmap="gray")
+nx.draw_networkx_edges(G, pos, ax=axes[2], edge_color="#00d5ff", width=0.9)
+nx.draw_networkx_nodes(G, pos, ax=axes[2], node_size=sizes, node_color="#d9534f")
+axes[2].set_title("onto imshow (y down)\naligned")
+for a in (axes[0], axes[2]):
+    a.set_xticks([]); a.set_yticks([])
+    for s in a.spines.values(): s.set_edgecolor("#999999")
+plt.tight_layout(); plt.show()
+```
+
+Node size is pixel intensity. Nothing about the graph changed between the last
+two panels — only the axes it was drawn on.
+
 ## Two visualization jobs
 
 1. **Making collections legible** — can a human scan the dataset? (data quality, class balance, label errors)
