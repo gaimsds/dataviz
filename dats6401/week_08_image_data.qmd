@@ -89,7 +89,41 @@ Confirm you can load and display an image array in a notebook before class.
 
 ---
 
-{{< include _live_app_embed.qmd >}}
+::: {.callout-tip title="Live app"}
+`app_image_browser_starter.py`, deployed. This is the starting point for Task 6
+of the hands-on, not a finished tool — the TODOs at the bottom of the file are
+yours to pick from.
+
+Three tabs:
+
+- **Digits dataset** — step through the images of one digit and read two numbers
+  for each: its average brightness, and how many of its 64 pixels are not black.
+- **Upload your own** — load a photo and see its shape and its average red,
+  green and blue values.
+- **Before / after** — the original image on the left and a processed version on
+  the right, with a handle you drag across to compare them. Grayscale, blur,
+  edge detection or inverted. With nothing uploaded it uses a digit, so the tab
+  works straight away.
+
+```{=html}
+<iframe src="https://9aykg9dxjghqyvlwbavywm.streamlit.app/?embed=true"
+        width="100%" height="700"
+        style="border:1px solid #ddd; border-radius:8px;" loading="lazy"
+        title="Week 8 — Image Browser"></iframe>
+```
+
+[Open the app in its own tab](https://9aykg9dxjghqyvlwbavywm.streamlit.app/) if
+the frame feels cramped. Free Streamlit apps go to sleep when nobody has used
+them for a while, so the first visit after a quiet spell takes a few seconds to
+wake up.
+
+The **Before / after** tab is the one to spend time on. Switch the processing
+step to *Edges* and drag the handle slowly: edge detection throws away almost
+everything about brightness and keeps only where the brightness *changes*. That
+is a useful reminder that every processing step is a decision about what to
+discard, and the slider makes the discarded part visible instead of leaving you
+to remember what the original looked like.
+:::
 
 ## 💻 Notebook / App Snippets
 
