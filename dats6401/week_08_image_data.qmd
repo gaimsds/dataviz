@@ -60,17 +60,21 @@ Confirm you can load and display an image array in a notebook before class.
 
 ### Block 2 — Guided Demonstration (~35 min, live coding)
 
-1. Load an image set; build a labeled grid montage (12 min)
-2. Show per-channel and intensity histograms (9 min)
-3. Overlay a simple saliency map on a single prediction (14 min)
+1. Montage, class outliers and class balance
+2. Mean images, then testing the confusion they predict
+3. Per-channel and intensity histograms
+4. Occlusion saliency, built step by step
+5. **The stamp test:** a 97%-accurate model that learned the wrong thing
 
 ### ☕ Break (~15 min)
 
 ### Block 3 — Hands-On Activity (~50 min, students working)
 
-1. Students build a montage of a class and spot anomalies (15 min)
-2. Produce a channel/intensity visualization (10 min)
-3. Wrap an image browser into a Streamlit app (upload + display + summary) (25 min)
+1. Montage of one class, plus the class-balance bar
+2. Mean images, and a prediction you then test against a confusion matrix
+3. Occlusion saliency on a digit of your choice
+4. Break a model on purpose with a corner stamp, and catch it
+5. Run and extend the Streamlit image browser
 
 ### Block 4 — Wrap-Up & Homework Preview (~15 min)
 
@@ -107,6 +111,29 @@ for i, name in enumerate(["R", "G", "B"]):
     plt.hist(img[..., i].ravel(), bins=50, alpha=0.5, label=name)
 plt.legend()
 ```
+
+### Occlusion saliency
+
+```python
+def occlude(model, img, cls, patch=3):
+    """Slide a blank patch; record how far P(cls) falls."""
+    base = model.predict_proba([img.ravel()])[0][cls]
+    sal, r = np.zeros(img.shape), patch // 2
+    for i in range(img.shape[0]):
+        for j in range(img.shape[1]):
+            t = img.copy()
+            t[max(0, i - r):i + r + 1, max(0, j - r):j + r + 1] = 0
+            sal[i, j] = base - model.predict_proba([t.ravel()])[0][cls]
+    return sal
+```
+
+Two things decide whether this produces anything at all:
+
+- Hide a **patch**, not a single pixel. One pixel of an 8×8 image moves a
+  confident classifier's probability by around `1e-16`, and the map comes out
+  uniformly zero — which looks like a bug in your plotting code but is not.
+- Draw the map with `cmap="inferno"`, not `"hot"`. `hot` tops out at pure white,
+  so its most important value disappears against a white page.
 
 ### Image app in Streamlit
 
@@ -166,6 +193,8 @@ If you had a saliency map, what would confirm the model is "looking" correctly?
 - Add a class-balance bar chart alongside the montage.
 - Let the Streamlit app overlay a saliency heatmap on the uploaded image.
 - Compare two classes' intensity distributions.
+- Run the stamp test on your own dataset: add an artefact that correlates with
+  one class, retrain, and see which of your usual metrics notices.
 
 ---
 

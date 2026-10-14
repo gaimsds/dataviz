@@ -30,6 +30,7 @@ format: revealjs
 ```{python}
 #| echo: false
 #| fig-align: center
+import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_digits
 digits = load_digits()
@@ -37,7 +38,7 @@ fig, axes = plt.subplots(1, 2, figsize=(8, 3.2))
 axes[0].imshow(digits.images[0], cmap="gray")
 axes[0].set_title(f"One digit: an {digits.images[0].shape} array")
 im = axes[1].imshow(digits.images[0], cmap="gray")
-for (i, j), v in __import__("numpy").ndenumerate(digits.images[0]):
+for (i, j), v in np.ndenumerate(digits.images[0]):
     axes[1].text(j, i, int(v), ha="center", va="center",
                  color="red" if v > 8 else "#2E6E8E", fontsize=7)
 axes[1].set_title("…and the numbers it actually is")
@@ -62,18 +63,48 @@ Both are pre-modeling and post-modeling *due diligence* — the image analog of 
 fig, axes = plt.subplots(4, 10, figsize=(9, 4))
 for ax, img, label in zip(axes.ravel(), digits.images, digits.target):
     ax.imshow(img, cmap="gray"); ax.set_title(label, fontsize=8); ax.axis("off")
-plt.suptitle("First 40 digits — mislabels and weird crops jump out HERE, not in a table")
+plt.suptitle("The first 40 digits, labelled")
 plt.tight_layout(); plt.show()
 ```
 
-Ten seconds of montage-scanning catches what no summary statistic will: rotated scans, label mistakes, duplicate frames, watermarks.
+A table of 1,797 rows and 64 columns tells you nothing. Forty seconds of this
+tells you the stroke widths vary, some digits touch the frame, and a few are
+barely readable.
+
+## What scanning actually catches {.smaller}
+
+This dataset is **curated** — no mislabels, no odd crops, no watermarks. So
+rather than claim the montage finds problems that are not there, use it to find
+the examples that are *unlike their own class*:
+
+```{python}
+#| echo: false
+#| fig-align: center
+means = {k: digits.images[digits.target == k].mean(axis=0) for k in range(10)}
+dist = np.array([np.linalg.norm(digits.images[i] - means[digits.target[i]])
+                 for i in range(len(digits.target))])
+z = np.zeros_like(dist)
+for k in range(10):
+    m = digits.target == k
+    z[m] = (dist[m] - dist[m].mean()) / dist[m].std()
+odd = np.argsort(-z)[:10]
+fig, axes = plt.subplots(1, 10, figsize=(9.5, 1.7))
+for ax, i in zip(axes, odd):
+    ax.imshow(digits.images[i], cmap="gray")
+    ax.set_title(f"'{digits.target[i]}'", fontsize=9); ax.axis("off")
+plt.suptitle("The 10 images furthest from their own class average")
+plt.tight_layout(); plt.show()
+```
+
+The labels are correct. These are just hard examples — and on a dataset you
+collected yourself, this same scan is where the duplicates, the rotated scans
+and the watermarks would show up.
 
 ## Summarizing a class: the mean image
 
 ```{python}
 #| echo: false
 #| fig-align: center
-import numpy as np
 fig, axes = plt.subplots(1, 10, figsize=(9.5, 1.6))
 for d, ax in enumerate(axes):
     ax.imshow(digits.images[digits.target == d].mean(axis=0), cmap="gray")
@@ -82,7 +113,40 @@ plt.suptitle("Per-class mean images: the 'prototype' each label converges to")
 plt.tight_layout(); plt.show()
 ```
 
-Blurry mean = high within-class variety. Two classes with similar means (3 vs 8, 4 vs 9) predict exactly where a classifier will struggle.
+A blurry mean means high variety inside that class. Two classes with *similar*
+means should be the ones a classifier confuses — which is a prediction, so test it.
+
+## Testing the prediction {.smaller}
+
+Rank every pair by the distance between its two mean images, then rank the same
+pairs by how often a classifier actually confuses them:
+
+```{python}
+#| echo: false
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import cross_val_predict
+from sklearn.metrics import confusion_matrix
+import pandas as pd
+
+M = np.array([digits.images[digits.target == k].mean(axis=0).ravel() for k in range(10)])
+D = np.linalg.norm(M[:, None] - M[None, :], axis=2); np.fill_diagonal(D, np.inf)
+pred = cross_val_predict(LogisticRegression(max_iter=5000), digits.data, digits.target, cv=5)
+cm = confusion_matrix(digits.target, pred)
+
+rows = []
+for i in range(10):
+    for j in range(i + 1, 10):
+        rows.append({"pair": f"{i} vs {j}", "mean distance": round(D[i, j], 1),
+                     "times confused": int(cm[i, j] + cm[j, i])})
+df = pd.DataFrame(rows)
+print(df.nsmallest(5, "mean distance").to_string(index=False))
+print()
+print(df.nlargest(5, "times confused").to_string(index=False))
+```
+
+**1 vs 8** is both the closest pair of means and the most confused pair. The
+prediction works — but only roughly: `7 vs 9` is confused often while its means
+are not especially close.
 
 ## Structure: intensity & channels
 
@@ -93,12 +157,45 @@ fig, ax = plt.subplots(figsize=(8, 3))
 for d, color in [(0, "#2E6E8E"), (1, "#d9534f")]:
     vals = digits.images[digits.target == d].ravel()
     ax.hist(vals, bins=17, alpha=0.55, label=f"digit {d}", color=color, density=True)
+    print(f"digit {d}: mean {vals.mean():.2f}, "
+          f"{np.mean(vals == 0):.0%} of pixels blank, "
+          f"{np.mean(vals >= 12):.0%} near-saturated")
 ax.set_xlabel("pixel intensity"); ax.legend()
-ax.set_title("Intensity distributions: '1' uses far less ink than '0'")
+ax.set_title("Intensity distributions for '0' and '1'")
 plt.tight_layout(); plt.show()
 ```
 
-For color photos, the same idea per **R/G/B channel** diagnoses exposure and color-balance problems across a dataset — before they silently bias a model.
+The two **means are nearly identical** (4.95 and 4.89), so an average would have
+told you nothing. The *shape* is what differs: a '1' leaves more of the frame
+blank **and** pushes more pixels to full brightness. It is not lighter, it is
+more concentrated — which only the distribution shows.
+
+## Colour is three stacks of the same thing {.smaller}
+
+A colour image is not a new kind of object. It is three grayscale arrays that
+happen to be displayed together:
+
+```{python}
+#| echo: false
+#| fig-align: center
+H = W = 64
+rgb = np.zeros((H, W, 3))
+rgb[..., 0] = np.linspace(0, 1, W)[None, :]
+yy, xx = np.mgrid[0:H, 0:W]
+rgb[..., 1] = (((xx - 32) ** 2 + (yy - 32) ** 2) < 18 ** 2).astype(float)
+rgb[..., 2] = ((xx > 44) & (yy > 44)).astype(float)
+fig, axes = plt.subplots(1, 4, figsize=(10, 2.6))
+axes[0].imshow(rgb); axes[0].set_title("composite")
+for k, (n, cm) in enumerate([("R", "Reds"), ("G", "Greens"), ("B", "Blues")]):
+    axes[k + 1].imshow(rgb[..., k], cmap=cm); axes[k + 1].set_title(n)
+for a in axes: a.axis("off")
+plt.tight_layout(); plt.show()
+```
+
+Run the intensity histogram **per channel** across a photo dataset and exposure
+problems, colour casts and "all the night shots came from one camera" show up as
+differences between the three curves — before they quietly become a feature the
+model learns.
 
 # Job 2: inside the model {background-color="#2E6E8E"}
 
@@ -114,30 +211,123 @@ Methods range from gradient-based (vanilla saliency) to **Grad-CAM** for CNNs; i
 ## Occlusion saliency: the idea {.smaller}
 
 1. Train any classifier
-2. Slide a small blank patch across the image
+2. Slide a small blank **patch** across the image
 3. Where hiding pixels **hurts the prediction most** → those pixels mattered
+
+The patch size matters more than it looks. Hiding a *single* pixel of an 8×8
+image moves this model's probability by about `1e-16` — the map comes out blank.
+A 3×3 patch is a big enough bite to register.
 
 ```{python}
 #| echo: false
 #| fig-align: center
 from sklearn.linear_model import LogisticRegression
-X, y = digits.data, digits.target
-clf = LogisticRegression(max_iter=2000).fit(X, y)
-img = digits.images[0].copy()
-base = clf.predict_proba([img.ravel()])[0][0]
-sal = np.zeros((8, 8))
-for i in range(8):
-    for j in range(8):
-        t = img.copy(); t[i, j] = 0
-        sal[i, j] = base - clf.predict_proba([t.ravel()])[0][0]
-fig, axes = plt.subplots(1, 2, figsize=(7, 3))
-axes[0].imshow(img, cmap="gray"); axes[0].set_title("a '0'")
-axes[1].imshow(sal, cmap="hot"); axes[1].set_title("pixels whose removal hurts P(0)")
-for a in axes: a.axis("off")
+from sklearn.model_selection import train_test_split
+
+Xtr, Xte, ytr, yte = train_test_split(digits.data, digits.target,
+                                      test_size=0.3, random_state=0,
+                                      stratify=digits.target)
+clf = LogisticRegression(max_iter=5000).fit(Xtr, ytr)
+
+def occlude(model, img, cls, patch=3):
+    """Slide a blank patch; record how much P(cls) falls."""
+    base = model.predict_proba([img.ravel()])[0][cls]
+    sal, r = np.zeros((8, 8)), patch // 2
+    for i in range(8):
+        for j in range(8):
+            t = img.copy()
+            t[max(0, i - r):i + r + 1, max(0, j - r):j + r + 1] = 0
+            sal[i, j] = base - model.predict_proba([t.ravel()])[0][cls]
+    return sal
+
+img = Xte[np.where(yte == 0)[0][0]].reshape(8, 8)
+sal = occlude(clf, img, 0)
+
+# "hot" tops out at pure white, which vanishes against a white slide. "inferno"
+# keeps its brightest value visible.
+fig, axes = plt.subplots(1, 3, figsize=(9.5, 3))
+axes[0].imshow(img, cmap="gray"); axes[0].set_title("a held-out '0'")
+hm = axes[1].imshow(sal, cmap="inferno", vmin=0)
+axes[1].set_title("drop in P(0) when hidden")
+fig.colorbar(hm, ax=axes[1], fraction=0.046)
+axes[2].imshow(img, cmap="gray"); axes[2].imshow(sal, cmap="inferno", alpha=0.55, vmin=0)
+axes[2].set_title("overlaid")
+# Keep the frame: these images have white pixels, and a white slide behind an
+# unframed panel makes them disappear.
+for a in axes:
+    a.set_xticks([]); a.set_yticks([])
+    for s in a.spines.values(): s.set_edgecolor("#999999")
 plt.tight_layout(); plt.show()
 ```
 
-The hot ring follows the stroke — this model earns some trust. (Week 13 generalizes this instinct to any model.)
+The hot region sits on the stroke, not the corners. This model earns some trust.
+
+# Right for the wrong reason {background-color="#2E6E8E"}
+
+## A model with excellent numbers {.smaller}
+
+Suppose the scans of every `3` happened to be stamped in the corner — a batch
+number, a hospital logo, anything. Two bright pixels, present on every 3 and no
+other digit. Train the same classifier on that data:
+
+```{python}
+#| echo: false
+Xp = digits.images.copy()
+Xp[digits.target == 3, 0:2, 0:2] = 16.0          # the stamp
+Ptr, Pte, ptr, pte = train_test_split(Xp.reshape(len(digits.target), -1),
+                                      digits.target, test_size=0.3,
+                                      random_state=0, stratify=digits.target)
+poisoned = LogisticRegression(max_iter=5000).fit(Ptr, ptr)
+
+print(f"overall test accuracy : {poisoned.score(Pte, pte):.1%}")
+print(f"recall on class '3'   : {(poisoned.predict(Pte)[pte == 3] == 3).mean():.1%}")
+```
+
+By every number you would normally report, this is a good model. Nothing in a
+confusion matrix, an accuracy score or a classification report is going to
+object.
+
+## The same model, stamp removed {.smaller}
+
+```{python}
+#| echo: false
+# The same split, but from the ORIGINAL unstamped images.
+_, Cte, _, cte = train_test_split(digits.data, digits.target, test_size=0.3,
+                                  random_state=0, stratify=digits.target)
+print(f"recall on class '3' without the stamp : "
+      f"{(poisoned.predict(Cte)[cte == 3] == 3).mean():.1%}")
+```
+
+It never learned what a 3 looks like. It learned where the stamp is.
+
+```{python}
+#| echo: false
+#| fig-align: center
+img3 = Pte[np.where(pte == 3)[0][0]].reshape(8, 8)
+sal3 = occlude(poisoned, img3, 3)
+from matplotlib.patches import Rectangle
+
+fig, axes = plt.subplots(1, 3, figsize=(9.5, 3))
+axes[0].imshow(img3, cmap="gray"); axes[0].set_title("a stamped '3'")
+hm = axes[1].imshow(sal3, cmap="inferno", vmin=0)
+axes[1].set_title("drop in P(3) when hidden")
+fig.colorbar(hm, ax=axes[1], fraction=0.046)
+axes[2].imshow(img3, cmap="gray"); axes[2].imshow(sal3, cmap="inferno", alpha=0.55, vmin=0)
+axes[2].set_title("overlaid")
+for a in axes:
+    a.set_xticks([]); a.set_yticks([])
+    for s in a.spines.values(): s.set_edgecolor("#999999")
+    # Mark the two pixels that were added, so it is clear what the map found.
+    a.add_patch(Rectangle((-0.5, -0.5), 2, 2, fill=False, edgecolor="#00d5ff", lw=2))
+plt.tight_layout(); plt.show()
+print(f"max drop on the stamp (top-left 3x3): {sal3[0:3, 0:3].max():.2f}")
+print(f"max drop anywhere else              : "
+      f"{sal3[~np.pad(np.ones((3,3),bool),((0,5),(0,5)))].max():.2f}")
+```
+
+**The saliency map is the only thing in this whole workflow that caught it.**
+That is the argument for the week: the picture was not decoration, it was the
+test that the metrics could not run.
 
 ## Discussion {.gw-discussion}
 

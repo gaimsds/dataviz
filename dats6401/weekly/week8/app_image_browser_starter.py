@@ -38,4 +38,9 @@ with tab2:
 # 1. Add the class MEAN image next to the selected image
 # 2. Add an intensity histogram (np.histogram -> st.bar_chart)
 # 3. Channel histograms for uploads (per-channel, overlaid)
+# 4. Add a saliency tab: train a classifier once (cache it with
+#    @st.cache_resource), then show the occlusion map for the selected image
+#    beside the image itself. Two gotchas from the demo -- hide a 3x3 PATCH,
+#    not one pixel, or the map comes out blank; and draw it with
+#    cmap="inferno", because "hot" tops out at white and disappears.
 # ------------------------------------------------------------------
