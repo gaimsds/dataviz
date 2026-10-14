@@ -63,8 +63,9 @@ Confirm you can load and display an image array in a notebook before class.
 1. Montage, class outliers and class balance
 2. Mean images, then testing the confusion they predict
 3. Per-channel and intensity histograms
-4. Occlusion saliency, built step by step
-5. **The stamp test:** a 97%-accurate model that learned the wrong thing
+4. Image coordinates, shown by drawing a pixel graph onto the image
+5. Occlusion saliency, built step by step
+6. **The stamp test:** a 97%-accurate model that learned the wrong thing
 
 ### ☕ Break (~15 min)
 
@@ -72,9 +73,10 @@ Confirm you can load and display an image array in a notebook before class.
 
 1. Montage of one class, plus the class-balance bar
 2. Mean images, and a prediction you then test against a confusion matrix
-3. Occlusion saliency on a digit of your choice
-4. Break a model on purpose with a corner stamp, and catch it
-5. Run and extend the Streamlit image browser
+3. A pixel graph drawn on top of the image it came from
+4. Occlusion saliency on a digit of your choice
+5. Break a model on purpose with a corner stamp, and catch it
+6. Run and extend the Streamlit image browser
 
 ### Block 4 — Wrap-Up & Homework Preview (~15 min)
 
