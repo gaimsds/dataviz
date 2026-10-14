@@ -10,13 +10,13 @@ format: revealjs
 | | | |
 |---|---|---|
 | **Block 1** | Concepts & Theory — *this deck* | ~35 min |
-| **Block 2** | Guided demo: montages, channels, a saliency overlay | ~35 min |
+| **Block 2** | Guided demo: six short parts, run live | ~35 min |
 | ☕ | Break | ~15 min |
-| **Block 3** | Hands-on: montage + structure view + Streamlit image browser | ~50 min |
+| **Block 3** | Hands-on, to work through on your own afterwards | ~50 min |
 | **Block 4** | Wrap-up & homework preview | ~15 min |
 
 ::: {.gw-box}
-**Today's claim:** image visualization is a **debugging tool** — for the data *and* for the model — not decoration. Running example: the handwritten-digits dataset (1,797 8×8 images, ships with sklearn).
+**Today's idea:** with images, a picture is often the only way to check your work. A number can tell you a model is 97% accurate. Only a picture can tell you *why*. We use one dataset all session: 1,797 handwritten digits, each 8×8 pixels, included with scikit-learn.
 :::
 
 # An image is an array {background-color="#2E6E8E"}
@@ -69,25 +69,44 @@ print("\nb[1, 6] = 1 appears near the TOP right, not the bottom right.")
 print("imshow extent (left, right, bottom, top):", ax.images[0].get_extent())
 ```
 
-That last line is the whole story: **bottom is 7.5 and top is −0.5**. The y-axis
-is inverted on purpose.
+## Why the upside-down axis matters {.smaller}
+
+Read the last line of that output carefully. The **extent** is the range of
+coordinates the picture covers, printed as (left, right, bottom, top). Here bottom is `7.5` and
+top is `-0.5` — the bottom number is *larger* than the top one. That is
+matplotlib telling you it has turned the vertical axis upside down on purpose,
+so that row 0 draws at the top.
+
+Why any of this matters: the moment you put anything *on top of* an image — a
+box around a face, a dot on a landmark, a network — you have to give its
+position in the image's coordinates, not the ones from school maths.
 
 ## A graph of pixels, on top of the image {.smaller}
 
-Segment the objects in a photo, join the ones that touch, and you have a network
-describing the scene — a real technique, used in research. The classroom version
-needs no segmentation: **every pixel brighter than 0 is a node, and neighbouring
-pixels are joined**.
+Here is a real use of this. **Segmentation** means labelling which pixels belong
+to which object — this is the sky, that is a car, that is a building. If you
+segment a photo and then draw a line between every two objects that touch each
+other, you get a network describing the scene, which you can analyse with the
+graph tools from Week 6.
 
-The point here is that you cannot draw a network onto an image without
-committing to a coordinate convention:
+Our version skips the segmentation step so it runs in two seconds: **every pixel
+brighter than 0 is a node, and pixels next to each other are joined by an edge.**
+
+To draw it, every node needs a position. A node is named by its `(row, column)`,
+but the drawing function wants an `(x, y)` point — so the two have to be
+swapped:
 
 ```python
 pos = {(i, j): (j, i) for (i, j) in G.nodes}    # (row, col) -> (x, y)
 ```
 
-Forget the swap and the graph comes out transposed. Remember the swap but plot
-on bare axes instead of onto the image, and it comes out upside down.
+There are two ways to get this wrong, and they look different:
+
+- **Forget the swap.** Rows are treated as across and columns as down, so the
+  whole network is mirrored along its diagonal. A tall digit comes out lying on
+  its side.
+- **Swap correctly, but draw on an empty plot instead of on the image.** An empty
+  plot has y going up, so the network is flipped top to bottom.
 
 ## Both mistakes, side by side {.smaller}
 
@@ -125,19 +144,27 @@ for a in (axes[0], axes[2]):
 plt.tight_layout(); plt.show()
 ```
 
-Node size is pixel intensity. Nothing about the graph changed between the last
-two panels — only the axes it was drawn on.
+Each dot is one pixel, sized by how bright that pixel is. Lines join pixels that
+are next to each other.
+
+The middle and right pictures use **exactly the same network and exactly the
+same positions**. The only difference is what they were drawn on: an empty plot
+on the left, the image itself on the right.
 
 ## Two visualization jobs
 
-1. **Making collections legible** — can a human scan the dataset? (data quality, class balance, label errors)
-2. **Looking inside models** — what is the classifier actually responding to? (saliency, feature maps)
+1. **Looking at the data**, before you model anything. Are the labels right? Does
+   one class have ten times as many examples as another? Are some images blank,
+   duplicated, or rotated?
+2. **Looking at the model**, after you train it. Which parts of the image is it
+   actually using to decide?
 
-Both are pre-modeling and post-modeling *due diligence* — the image analog of `df.head()` and the confusion matrix.
+The first is what you would do with a spreadsheet by scrolling through the first
+few rows. The second has no spreadsheet equivalent, which is why it gets skipped.
 
 # Job 1: collections {background-color="#2E6E8E"}
 
-## The montage: df.head() for images
+## The montage: looking at many images at once
 
 ```{python}
 #| echo: false
@@ -149,15 +176,27 @@ plt.suptitle("The first 40 digits, labelled")
 plt.tight_layout(); plt.show()
 ```
 
-A table of 1,797 rows and 64 columns tells you nothing. Forty seconds of this
-tells you the stroke widths vary, some digits touch the frame, and a few are
-barely readable.
+A **montage** is just a grid of images shown together. It is the image version
+of scrolling through the top of a spreadsheet.
+
+## What half a minute of looking tells you {.smaller}
+
+The same data as a table would be 1,797 rows of 64 numbers, which no one can
+read. Half a minute looking at this grid tells you that the line thickness
+varies a lot, that some digits run right to the edge of their frame, and that a
+few are barely readable even for a person. The **stroke** is the drawn line
+itself — the dark part that makes up the digit.
 
 ## What scanning actually catches {.smaller}
 
-This dataset is **curated** — no mislabels, no odd crops, no watermarks. So
-rather than claim the montage finds problems that are not there, use it to find
-the examples that are *unlike their own class*:
+A warning about this particular dataset. It is **curated**, meaning someone has
+already cleaned it: the labels are all correct, nothing is cropped strangely, and
+there are no watermarks. So it would be dishonest to use it to show the montage
+"finding errors" — there are none to find.
+
+What a montage can still do on clean data is show you the **unusual examples**.
+Below are the ten images that look least like the average image of their own
+digit:
 
 ```{python}
 #| echo: false
@@ -178,9 +217,12 @@ plt.suptitle("The 10 images furthest from their own class average")
 plt.tight_layout(); plt.show()
 ```
 
-The labels are correct. These are just hard examples — and on a dataset you
-collected yourself, this same scan is where the duplicates, the rotated scans
-and the watermarks would show up.
+Every one of these labels is correct. They are simply difficult examples — badly
+written, or written in an unusual style.
+
+On a dataset you gathered yourself, this is exactly the scan that would surface
+the real problems: the same photo saved twice, a scan that went through the
+feeder sideways, a logo in the corner of every page from one source.
 
 ## Summarizing a class: the mean image
 
@@ -195,8 +237,14 @@ plt.suptitle("Per-class mean images: the 'prototype' each label converges to")
 plt.tight_layout(); plt.show()
 ```
 
-A blurry mean means high variety inside that class. Two classes with *similar*
-means should be the ones a classifier confuses — which is a prediction, so test it.
+A **mean image** is made by averaging every image of one digit, pixel by pixel.
+Where all the examples agree you get a sharp bright area; where they disagree you
+get a grey blur. So a blurry average means that digit is written in many
+different ways.
+
+Here is a reasonable guess: if two digits have *similar* average images, a
+classifier should mix them up more often. That is a prediction about something
+measurable, so the next slide tests it rather than assuming it.
 
 ## Testing the prediction {.smaller}
 
@@ -226,9 +274,14 @@ print()
 print(df.nlargest(5, "times confused").to_string(index=False))
 ```
 
-**1 vs 8** is both the closest pair of means and the most confused pair. The
-prediction works — but only roughly: `7 vs 9` is confused often while its means
-are not especially close.
+**1 vs 8** appears at the top of both lists: the two most similar averages, and
+the pair the classifier mixes up most. So far the guess holds.
+
+But look at **7 vs 9**: second most confused, while its averages are only the
+27th closest of 45 pairs. The guess is a useful hint, not a rule. Averaging
+throws away how much the examples *vary*, and for 7 and 9 the confusion lives in
+that variation — some people write a 7 that looks very like their 9, even though
+the average 7 and average 9 look quite different.
 
 ## Structure: intensity & channels
 
@@ -239,18 +292,27 @@ fig, ax = plt.subplots(figsize=(8, 3))
 for d, color in [(0, "#2E6E8E"), (1, "#d9534f")]:
     vals = digits.images[digits.target == d].ravel()
     ax.hist(vals, bins=17, alpha=0.55, label=f"digit {d}", color=color, density=True)
-    print(f"digit {d}: mean {vals.mean():.2f}, "
-          f"{np.mean(vals == 0):.0%} of pixels blank, "
-          f"{np.mean(vals >= 12):.0%} near-saturated")
+    print(f"digit {d}: average brightness {vals.mean():.2f}, "
+          f"{np.mean(vals == 0):.0%} of pixels completely black, "
+          f"{np.mean(vals >= 12):.0%} of pixels very bright")
 ax.set_xlabel("pixel intensity"); ax.legend()
 ax.set_title("Intensity distributions for '0' and '1'")
 plt.tight_layout(); plt.show()
 ```
 
-The two **means are nearly identical** (4.95 and 4.89), so an average would have
-told you nothing. The *shape* is what differs: a '1' leaves more of the frame
-blank **and** pushes more pixels to full brightness. It is not lighter, it is
-more concentrated — which only the distribution shows.
+This chart counts how many pixels fall at each brightness level, for all the 0s
+and all the 1s.
+
+## Reading the two curves {.smaller}
+
+The two averages are 4.95 and 4.89 — near enough the same that reporting the
+average would have told you nothing at all. The difference is in the *shape* of
+the two curves. A '1' has more completely black pixels (54% against 45%) **and**
+more very bright ones (25% against 21%).
+
+So a '1' is not fainter than a '0'. It covers less of the frame, but what it does
+cover it covers strongly. An average hides that; counting the whole distribution
+shows it.
 
 ## Colour is three stacks of the same thing {.smaller}
 
@@ -274,31 +336,54 @@ for a in axes: a.axis("off")
 plt.tight_layout(); plt.show()
 ```
 
-Run the intensity histogram **per channel** across a photo dataset and exposure
-problems, colour casts and "all the night shots came from one camera" show up as
-differences between the three curves — before they quietly become a feature the
-model learns.
+A **channel** is one of those three layers. Red, green and blue each hold a
+number per pixel, and the colour you see is the three mixed together.
+
+Draw the brightness chart from the previous slide once per channel, across a
+whole photo dataset, and problems show up as differences between the three
+curves. If the red curve sits far to the left, your photos have a blue tint. If
+one group of images is much darker than the rest, they were probably taken at a
+different time of day or on a different camera — and a model is perfectly happy
+to use "slightly bluer" as its way of telling two classes apart.
 
 # Job 2: inside the model {background-color="#2E6E8E"}
 
 ## What is the model looking at?
 
-A **saliency map** highlights the pixels that most influence a prediction — overlaid on the image itself:
+When a model says "this is a 3", it used some parts of the image more than
+others. A **saliency map** is a picture of which parts mattered — "salient" just
+means "standing out". It is drawn as a heat map the same size as the image, and
+usually laid over the image so you can see what lines up with what.
 
-- Bright saliency on the object → reassuring
-- Bright saliency on the *background* → the classic "right for the wrong reason" (the dog detector that learned to detect grass)
+- If the bright parts sit **on the object**, that is reassuring.
+- If the bright parts sit **on the background**, the model has found something
+  that happens to come with the right answer but is not the thing itself. The
+  standard example: a dog detector that actually learned to spot grass, because
+  the dog photos were taken outdoors and the cat photos indoors.
 
-Methods range from gradient-based (vanilla saliency) to **Grad-CAM** for CNNs; in Block 2 we build a simple occlusion-based one — no deep-learning stack required.
+There are several ways to compute one. Professional tools use the model's
+internal gradients (**Grad-CAM** is the common one for neural networks). We use
+the simplest method instead, which needs no neural network at all.
 
 ## Occlusion saliency: the idea {.smaller}
 
-1. Train any classifier
-2. Slide a small blank **patch** across the image
-3. Where hiding pixels **hurts the prediction most** → those pixels mattered
+**Occlusion** means covering something up. The method is exactly that:
 
-The patch size matters more than it looks. Hiding a *single* pixel of an 8×8
-image moves this model's probability by about `1e-16` — the map comes out blank.
-A 3×3 patch is a big enough bite to register.
+1. Train any classifier at all.
+2. Cover a small square of the image — set those pixels to black — and ask the
+   model again.
+3. If the answer gets much worse, the part you covered was important. If nothing
+   changes, it was not.
+
+Repeat for every position and you have a map of which parts the model relies on.
+
+## The size of the square {.smaller}
+
+Covering a *single* pixel
+of an 8×8 image changes this model's answer by around `0.0000000000000001`, and
+the map comes out uniformly blank — which looks like broken plotting code but is
+not. A 3×3 square is a large enough change to measure, and that is what the
+picture below uses.
 
 ```{python}
 #| echo: false
@@ -328,12 +413,13 @@ sal = occlude(clf, img, 0)
 # "hot" tops out at pure white, which vanishes against a white slide. "inferno"
 # keeps its brightest value visible.
 fig, axes = plt.subplots(1, 3, figsize=(9.5, 3))
-axes[0].imshow(img, cmap="gray"); axes[0].set_title("a held-out '0'")
+axes[0].imshow(img, cmap="gray")
+axes[0].set_title("a '0' the model\nhas never seen")
 hm = axes[1].imshow(sal, cmap="inferno", vmin=0)
-axes[1].set_title("drop in P(0) when hidden")
+axes[1].set_title("how much less sure the\nmodel is when this is covered")
 fig.colorbar(hm, ax=axes[1], fraction=0.046)
 axes[2].imshow(img, cmap="gray"); axes[2].imshow(sal, cmap="inferno", alpha=0.55, vmin=0)
-axes[2].set_title("overlaid")
+axes[2].set_title("the two together")
 # Keep the frame: these images have white pixels, and a white slide behind an
 # unframed panel makes them disappear.
 for a in axes:
@@ -342,20 +428,37 @@ for a in axes:
 plt.tight_layout(); plt.show()
 ```
 
-The hot region sits on the stroke, not the corners. This model earns some trust.
+## Reading a saliency map {.smaller}
+
+The left panel is the digit. The middle panel is the map —
+bright means "covering this part made the model much less sure", dark means
+"covering it changed nothing". The right panel lays the two on top of each other.
+
+**Held-out** means this image was not used to train the model, so the model has
+genuinely not seen it before. That matters: a map drawn on an image the model
+memorised would tell you about the memory, not about the method.
+
+The bright parts sit on the digit itself and the corners stay dark, so this model
+is using the digit to decide. That is the result we were hoping for.
 
 # Right for the wrong reason {background-color="#2E6E8E"}
 
 ## A model with excellent numbers {.smaller}
 
-Suppose the scans of every `3` happened to be stamped in the corner — a batch
-number, a hospital logo, anything. A 2x2 block of four bright pixels, present on
-every 3 and no other digit. Train the same classifier on that data:
+Now a worked example of the failure above, where we know the answer in advance.
+
+Imagine the forms the 3s were scanned from had something printed in the corner —
+a batch number, a department logo, a date stamp. Any mark that happens to appear
+on those pages and no others. We will call it the **mark**, and simulate it by
+setting four pixels (a 2×2 block) in the top-left corner to full brightness on
+every single 3, and on no other digit.
+
+Nothing else about the data changes. Then train the same classifier on it:
 
 ```{python}
 #| echo: false
 Xp = digits.images.copy()
-Xp[digits.target == 3, 0:2, 0:2] = 16.0          # the stamp
+Xp[digits.target == 3, 0:2, 0:2] = 16.0      # four bright pixels, top-left
 Ptr, Pte, ptr, pte = train_test_split(Xp.reshape(len(digits.target), -1),
                                       digits.target, test_size=0.3,
                                       random_state=0, stratify=digits.target)
@@ -365,22 +468,32 @@ print(f"overall test accuracy : {poisoned.score(Pte, pte):.1%}")
 print(f"recall on class '3'   : {(poisoned.predict(Pte)[pte == 3] == 3).mean():.1%}")
 ```
 
-By every number you would normally report, this is a good model. Nothing in a
-confusion matrix, an accuracy score or a classification report is going to
-object.
+Those are good numbers. **Recall on class '3'** means: of all the images that
+really are 3s, what fraction did the model correctly call a 3? Here it is every
+single one.
 
-## The same model, stamp removed {.smaller}
+If you reported this model's accuracy, its confusion matrix and its
+classification report, all three would agree it works well. None of them is
+capable of raising a problem, because all of them are computed on the same data
+that contains the mark.
+
+## The same model, on images without the mark {.smaller}
 
 ```{python}
 #| echo: false
-# The same split, but from the ORIGINAL unstamped images.
+# The same split, but from the original images, with no mark added.
 _, Cte, _, cte = train_test_split(digits.data, digits.target, test_size=0.3,
                                   random_state=0, stratify=digits.target)
-print(f"recall on class '3' without the stamp : "
+print(f"recall on class '3', no mark : "
       f"{(poisoned.predict(Cte)[cte == 3] == 3).mean():.1%}")
 ```
 
-It never learned what a 3 looks like. It learned where the stamp is.
+Zero. Not one 3 recognised.
+
+The model never learned the shape of a 3. It learned that four bright pixels in
+the top-left corner mean "3", because during training that was always true and it
+was far easier to spot than the shape. Take the mark away and the model has
+nothing left to go on.
 
 ```{python}
 #| echo: false
@@ -390,43 +503,66 @@ sal3 = occlude(poisoned, img3, 3)
 from matplotlib.patches import Rectangle
 
 fig, axes = plt.subplots(1, 3, figsize=(9.5, 3))
-axes[0].imshow(img3, cmap="gray"); axes[0].set_title("a stamped '3'")
+axes[0].imshow(img3, cmap="gray")
+axes[0].set_title("a '3' with the mark")
 hm = axes[1].imshow(sal3, cmap="inferno", vmin=0)
-axes[1].set_title("drop in P(3) when hidden")
+axes[1].set_title("how much less sure the\nmodel is when this is covered")
 fig.colorbar(hm, ax=axes[1], fraction=0.046)
 axes[2].imshow(img3, cmap="gray"); axes[2].imshow(sal3, cmap="inferno", alpha=0.55, vmin=0)
-axes[2].set_title("overlaid")
+axes[2].set_title("the two together")
 for a in axes:
     a.set_xticks([]); a.set_yticks([])
     for s in a.spines.values(): s.set_edgecolor("#999999")
-    # Mark the block that was added, so it is clear what the map found.
+    # Outline the four pixels that were added.
     a.add_patch(Rectangle((-0.5, -0.5), 2, 2, fill=False, edgecolor="#00d5ff", lw=2))
 plt.tight_layout(); plt.show()
-print(f"max drop on the stamp (top-left 3x3): {sal3[0:3, 0:3].max():.2f}")
-print(f"max drop anywhere else              : "
+print(f"biggest effect on the mark   : {sal3[0:3, 0:3].max():.2f}")
+print(f"biggest effect anywhere else : "
       f"{sal3[~np.pad(np.ones((3,3),bool),((0,5),(0,5)))].max():.2f}")
 ```
 
-**The saliency map is the only thing in this whole workflow that caught it.**
-That is the argument for the week: the picture was not decoration, it was the
-test that the metrics could not run.
+## What only the picture showed {.smaller}
+
+The cyan box marks the four pixels that were added. The brightest part of the map
+sits exactly there, well ahead of anything on the digit itself.
+
+**Of everything we computed, the saliency map is the only thing that showed the
+problem.** The accuracy score, the recall, the confusion matrix and the
+classification report were all calculated on data that contained the mark, so all
+of them agreed the model was good, and all of them were wrong in the same way at
+the same time.
+
+That is the case for this week. Looking at the picture is not a presentation step
+you do at the end. Here it was the only check available.
 
 ## Discussion {.gw-discussion}
 
-**1.** Your montage of class "cat" includes three obvious dogs. What does that do to every downstream metric — and who should have caught it?
+**1.** You make a montage of the images labelled "cat" and three of them are
+obviously dogs. Every accuracy number you report from now on is computed against
+those labels. What does that do to the numbers, and at what point in the project
+should someone have looked?
 
-**2.** A saliency map shows the model keying on a corner watermark. Is the model wrong? Is the *data*?
+**2.** A saliency map shows a model relying on a watermark in the corner rather
+than on the animal. Is the model broken? Is the data broken? Argue for one —
+and say what you would change first.
 
 ## Coming up next — Block 2 {.smaller}
 
-Live demo:
+Live demo, six short parts:
 
-1. Build a labeled montage; hunt anomalies together
-2. Per-class means + intensity histograms
-3. The occlusion-saliency overlay, step by step
+1. The montage, the unusual examples, and how many images each digit has
+2. Average images, and testing the guess they suggest
+3. Colour as three separate layers
+4. Where pixel `[0, 0]` is, shown by drawing a network onto an image
+5. Occlusion saliency, built one line at a time
+6. The marked-3s example from the last few slides, start to finish
 
-**Then Block 3:** your image set — montage, one structure view, and a Streamlit image browser (upload → display → stats).
+**Then Block 3**, to work through on your own after class: the same steps on a
+digit you choose, plus a Streamlit app that shows an image and its statistics.
 
-**Readings:** matplotlib image tutorial · scikit-image gallery · Distill, *Feature Visualization*
+**Readings:** matplotlib image tutorial · scikit-image gallery · Distill,
+*Feature Visualization*
 
-**Homework preview:** a montage that reveals something + a structural view + (if feasible) a saliency interpretation.
+**Homework:** a montage that shows something real about your data, one view of
+its structure, and if you can manage it, a saliency map with your reading of
+what it means.
