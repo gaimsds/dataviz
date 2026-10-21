@@ -45,14 +45,16 @@ done
 # so that legitimate files such as app_resolution_starter.py -- note the
 # "re-SOLUTION" substring -- are not mistaken for answer keys and dropped.
 #
-# Note: --delete-excluded does NOT reach a key already sitting in DEST (tested
-# 2026-10-07). The guard below is what catches that case; it fails the run and
-# you remove the file by hand.
+# --delete and --delete-excluded are BOTH needed. On the rsync shipped with
+# macOS, --delete-excluded does not imply --delete (tested 2026-10-20), so
+# without the explicit --delete a file removed from the staging folder stays
+# on the public site forever, and so does an answer key already sitting in
+# DEST. With both flags, the staging folder is genuinely the source of truth.
 # --checksum compares file contents rather than size+mtime. It is slower, but
 # the published tree is small and on 2026-10-07 a hand-edit to a file under
 # weekly/ survived a sync because its size and mtime happened to look current.
 # The staging folder is the source of truth; this makes sure it wins.
-rsync -ac --delete-excluded --itemize-changes \
+rsync -ac --delete --delete-excluded --itemize-changes \
   --exclude='.DS_Store' \
   --exclude='INTEGRATION.md' \
   --exclude='__pycache__/' \

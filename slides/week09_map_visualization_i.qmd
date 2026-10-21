@@ -49,50 +49,84 @@ The #1 geospatial bug: combining layers in different CRSs. In geopandas: check `
 
 ## Counts lie; rates compare
 
+Both maps below show the same column of the same table: the number of people
+aged 65 and over in each state, from the 2024 American Community Survey. The
+left one maps the **count**. The right one maps the **share** — that count
+divided by the state's population.
+
 ```{python}
 #| echo: false
 #| fig-align: center
-import matplotlib.pyplot as plt
-import matplotlib.patches as mp
+import geopandas as gpd
+import pandas as pd
 import numpy as np
-# A synthetic 4x4 "state grid": population varies hugely; per-capita rate is flat-ish
-rng = np.random.default_rng(2)
-pop = rng.integers(1, 40, (4, 4)) * 100_000
-events = (pop * rng.uniform(0.008, 0.012, (4, 4))).astype(int)   # ~1% everywhere
-rate = events / pop * 1000
-fig, axes = plt.subplots(1, 2, figsize=(9.5, 3.9))
-for ax, M, title in [(axes[0], events, "COUNTS: 'crisis' in big regions"),
-                     (axes[1], rate, "RATES per 1,000: …actually uniform")]:
-    im = ax.imshow(M, cmap="OrRd")
-    for (i, j), v in np.ndenumerate(M):
-        ax.text(j, i, f"{v:,.0f}" if M is events else f"{v:.1f}",
-                ha="center", va="center", fontsize=8)
-    ax.set_title(title); ax.set_xticks([]); ax.set_yticks([])
-plt.suptitle("Same synthetic events on a region grid — normalization flips the story")
+import matplotlib.pyplot as plt
+
+DATA = "../dats6401/weekly/week9/data"
+states = gpd.read_file(f"{DATA}/states.geojson")
+stats = pd.read_csv(f"{DATA}/state_stats.csv", dtype={"fips": str})
+us = states.merge(stats, on="fips", suffixes=("_geo", ""))
+conus = us[~us["state"].isin(["Alaska", "Hawaii", "Puerto Rico"])]
+
+fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+conus.plot(column="pop_65plus", cmap="OrRd", legend=True, ax=axes[0],
+           edgecolor="white", linewidth=0.4)
+axes[0].set_title("Count: people aged 65+")
+conus.plot(column="pct_65plus", cmap="OrRd", legend=True, ax=axes[1],
+           edgecolor="white", linewidth=0.4)
+axes[1].set_title("Share: % of the state aged 65+")
+for a in axes: a.axis("off")
 plt.tight_layout(); plt.show()
 ```
 
-A count choropleth is usually a **population map in disguise**. Map the *rate* (per capita, per km², per 1,000) unless the count itself is the story.
+## The same state, two very different answers {.smaller}
+
+```{python}
+#| echo: false
+ca = conus[conus["state"] == "California"].iloc[0]
+n = len(conus)
+print(f"California, {int(ca.pop_65plus):,} people aged 65+ ({ca.pct_65plus}% of the state)")
+print(f"  rank by count : {int((conus.pop_65plus > ca.pop_65plus).sum()) + 1} of {n}")
+print(f"  rank by share : {int((conus.pct_65plus > ca.pct_65plus).sum()) + 1} of {n}")
+print()
+print("darkest three by count:", ", ".join(conus.nlargest(3, "pop_65plus")["state"]))
+print("darkest three by share:", ", ".join(conus.nlargest(3, "pct_65plus")["state"]))
+```
+
+California is **first** by count and **44th of 49** by share. The left-hand map
+is not really showing you where older people live — it is showing you where
+*people* live, because a big state has more of everything.
+
+A count map is usually a **population map wearing a different label**. Map the
+rate — per person, per square mile, per 1,000 — unless the count itself is what
+you are asking about. A count is the right thing to map when you need to know
+how many ambulances to send; a rate is the right thing when you are asking
+whether a place is unusual.
 
 ## Classification: how you bin is what they see
 
+**Classification** means deciding which values share a colour. A map with five
+shades has to cut the numbers into five groups, and where you put the cuts is a
+choice you make, not something the data decides.
+
 ```{python}
 #| echo: false
 #| fig-align: center
-vals = np.sort(rng.lognormal(2, 0.8, 16)).reshape(4, 4)
-flat = np.sort(vals.ravel())
-def classify(M, edges):
-    return np.digitize(M, edges)
-q_edges = np.quantile(flat, [0.2, 0.4, 0.6, 0.8])
-e_edges = np.linspace(flat.min(), flat.max(), 6)[1:-1]
-fig, axes = plt.subplots(1, 2, figsize=(9.5, 3.9))
-for ax, edges, title in [(axes[0], q_edges, "Quantiles: every class ~equally full"),
-                          (axes[1], e_edges, "Equal interval: skew piles regions in class 1")]:
-    ax.imshow(classify(vals, edges), cmap="OrRd", vmin=0, vmax=4)
-    ax.set_title(title); ax.set_xticks([]); ax.set_yticks([])
-plt.suptitle("Identical (skewed) values, two classification schemes — two different 'maps'")
+fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+for ax, scheme, label in [(axes[0], "quantiles", "Quantiles"),
+                          (axes[1], "equal_interval", "Equal interval")]:
+    conus.plot(column="pct_65plus", scheme=scheme, k=5, cmap="OrRd", legend=True,
+               ax=ax, edgecolor="white", linewidth=0.4,
+               legend_kwds={"fontsize": 6, "loc": "lower left"})
+    ax.set_title(f"{label}, 5 classes"); ax.axis("off")
+plt.suptitle("The same share-of-65+ numbers, cut two different ways")
 plt.tight_layout(); plt.show()
 ```
+
+**Quantiles** puts the same number of states in every class, so every colour is
+used and differences look evenly spread. **Equal interval** cuts the range into
+five equal-width slices, so if most states are bunched together they all land in
+one class and the map looks flat.
 
 Quantiles, equal-interval, natural breaks (Jenks): each is defensible **somewhere**. The dishonest move is not *choosing* — it's not *disclosing*. State the scheme in the legend.
 
