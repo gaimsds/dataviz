@@ -21,6 +21,51 @@ format: revealjs
 
 # The Earth is not flat {background-color="#2E6E8E"}
 
+## Two states, the same size {.smaller}
+
+Florida and Michigan have the same land area — they differ by **0.3%**. Here
+they are drawn twice from the same file — Florida in blue, Michigan in red —
+changing nothing but the projection.
+
+```{python}
+#| echo: false
+#| fig-align: center
+import warnings
+warnings.filterwarnings("ignore")
+import geopandas as gpd
+import matplotlib.pyplot as plt
+from shapely.affinity import translate
+
+_states = gpd.read_file("../dats6401/weekly/week9/data/states.geojson")
+_pair = _states[_states["state"].isin(["Florida", "Michigan"])]
+
+fig, axes = plt.subplots(1, 2, figsize=(10, 3.6))
+for ax, (epsg, label) in zip(axes, [
+        (5070, "Equal-area (EPSG:5070)"),
+        (3857, "Web Mercator (EPSG:3857)")]):
+    p = _pair.to_crs(epsg=epsg)
+    areas, shifted = {}, []
+    for i, (_, row) in enumerate(p.iterrows()):
+        areas[row["state"]] = row.geometry.area
+        c = row.geometry.centroid
+        shifted.append((row["state"],
+                        translate(row.geometry, xoff=i * 9e5 - c.x, yoff=-c.y)))
+    for colour, (name, geom) in zip(["#2E6E8E", "#d9534f"], shifted):
+        gpd.GeoSeries([geom], crs=p.crs).plot(ax=ax, color=colour,
+                                              edgecolor="white", linewidth=0.5)
+    ax.set_title(label, fontsize=11)
+    ax.set_aspect("equal"); ax.axis("off")
+    ratio = areas["Michigan"] / areas["Florida"]
+    ax.text(0.5, -0.02, f"Michigan is {ratio:.2f}x Florida",
+            transform=ax.transAxes, ha="center", fontsize=12,
+            color="#2E6E8E" if epsg == 5070 else "#d9534f")
+plt.tight_layout(); plt.show()
+```
+
+Same data, same code, one setting changed. Web Mercator stretches everything
+away from the equator, so the northern state gains half its size again. Nothing
+warns you.
+
 ## Every projection lies about something
 
 Flattening a sphere **must** distort. Each projection chooses what to preserve:
