@@ -84,6 +84,51 @@ GeoPandas can be finicky to install — confirm `import geopandas` works in your
 
 ---
 
+::: {.callout-tip title="Live app"}
+`app_map_starter.py`, deployed. Every control on it is one of the choices this
+week argues about, so the app is really a way of watching those choices change
+the map.
+
+- **What to map** — four measures: people aged 65+ as a count and as a share of
+  the state, total population, and people per square mile.
+- **Number of color classes** — 3 to 8.
+- **Color ramp** — sequential ramps and diverging ones. Pick a diverging ramp
+  and the app will object, because a diverging ramp claims there is a
+  meaningful midpoint and none of these measures has one.
+- **How to cut the classes** — quantiles, equal interval, or natural breaks
+  (Jenks).
+
+```{=html}
+<iframe src="https://arkorsqsfoabkvkpw5amfk.streamlit.app/?embed=true"
+        width="100%" height="760"
+        style="border:1px solid #ddd; border-radius:8px;" loading="lazy"
+        title="Week 9 — State Map Explorer"></iframe>
+```
+
+[Open the app in its own tab](https://arkorsqsfoabkvkpw5amfk.streamlit.app/) if
+the frame feels cramped. Free Streamlit apps sleep when nobody has used them
+for a while, so a first visit after a quiet spell takes a few seconds to wake.
+
+**The thing to actually do.** Choose *People aged 65+ (count)*, then choose
+*Share aged 65+ (rate)*. Both stay on the map as layers, and the radio buttons
+in the top right switch between them. Flick back and forth: the two maps
+disagree about almost every state, and they are the same column of the same
+table. California is the clearest case — darkest in one and near the bottom in
+the other.
+
+Then switch the classification from quantiles to natural breaks without
+touching anything else, and watch how much of the map changes color. Nothing
+about the data moved.
+
+You can also turn the data layer off entirely. What is left is the basemap,
+which is the reminder that a choropleth is a layer drawn over a place rather
+than the place itself.
+
+Start from [`app_map_starter.py`](weekly/week9/app_map_starter.py), with
+`data/` beside it. The TODOs at the bottom of the file are where to take it
+next.
+:::
+
 ## 💻 Notebook / App Snippets
 
 ### Load, reproject, inspect
