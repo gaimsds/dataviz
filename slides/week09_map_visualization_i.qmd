@@ -189,6 +189,96 @@ In geopandas: check `gdf.crs`, convert with `gdf.to_crs(...)`, and do it
 
 # The choropleth, done honestly {background-color="#2E6E8E"}
 
+## A boundary file is almost empty {.smaller}
+
+Before any of this, a question worth asking out loud: what is actually *in* the
+file we have been drawing?
+
+```{python}
+#| echo: false
+print("columns in states.geojson:")
+for _col in _states.columns:
+    print("   ", _col)
+print()
+print(_states[["fips", "state", "land_sqmi"]].head(3).to_string(index=False))
+```
+
+A name, a code, a land area, and a shape. That is the whole file. Nothing in it
+can tell you anything about the people who live there, what the air is like, or
+how anyone voted.
+
+**Every interesting map on this slide deck is a join.** The geometry supplies
+the where; something else has to supply the what.
+
+## Where the numbers come from {.smaller}
+
+The numbers we have been mapping are from the **American Community Survey**,
+run by the US Census Bureau. It is not the decennial census — it is a rolling
+survey of about 3.5 million addresses a year, which is how the country gets
+detailed statistics between censuses.
+
+It is published two ways, and the choice matters:
+
+| | covers | currency | precision |
+|---|---|---|---|
+| **1-year estimates** | areas of 65,000 people or more | most recent | noisier |
+| **5-year estimates** | every area, down to block groups | 60 months pooled | steadier |
+
+Our file is the **5-year** version, which is why Vermont and Wyoming are in it
+at all. A 1-year file would simply not have the small places.
+
+## Estimates, not counts {.smaller}
+
+This is the part people skip. ACS figures are **survey estimates**, not head
+counts, and the Census Bureau publishes a margin of error with every one of
+them.
+
+At state level those margins are small and you can mostly ignore them. At
+census tract level they are often large enough that two tracts with visibly
+different colors on your map are **not actually distinguishable**.
+
+Our export does not carry the margins — they are a separate set of columns you
+can ask for. Before mapping anything below county level, go and get them, and
+decide whether the difference you are about to color in is real.
+
+## Social Explorer {.smaller}
+
+Pulling that data straight from the Census Bureau means learning their table
+naming, their geography codes and their download tools.
+[**Social Explorer**](https://www.socialexplorer.com/) is a front end that
+takes most of that away: pick a survey, pick the tables, pick the geography,
+and it hands back a CSV plus a codebook explaining every column.
+
+The file behind this week's maps came from exactly that — report
+`R50111025`, ACS 2024 5-year estimates, at state level.
+
+::: {.gw-box}
+**Live demo now.** Pulling a table by hand, start to finish.
+:::
+
+GWU has a subscription, so sign in through the library rather than paying.
+
+## What else is worth joining {.smaller}
+
+The same trick works with anything that carries a geographic code:
+
+- **People:** the ACS, for income, age, language, housing, commuting
+- **Health:** the CDC publishes small-area estimates of chronic conditions
+  and health behaviors
+- **Environment:** the EPA for air quality and pollution sources, NOAA for
+  weather and climate
+- **Economy:** the Bureau of Labor Statistics for employment by county
+
+What makes the join possible is the **FIPS code** — a numeric identifier the
+Census Bureau assigns to every state, county and tract, which nearly every US
+public dataset carries. `01` is Alabama in our file and `01` is Alabama in all
+of these. That shared key is the quiet reason any of this works.
+
+**The caution:** two datasets can share a FIPS code and still not be
+comparable. Different years, different definitions, different survey
+populations. The join will succeed and the map will look fine. Check what you
+are actually putting side by side.
+
 ## Counts lie; rates compare
 
 Both maps below show the same column of the same table: the number of people
