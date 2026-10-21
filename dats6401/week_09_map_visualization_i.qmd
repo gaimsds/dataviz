@@ -41,7 +41,7 @@ We then build the core static thematic maps — choropleths, dot-density, and he
 Make sure your environment includes:
 
 ```bash
-pip install geopandas mapclassify contextily matplotlib pandas streamlit
+pip install geopandas mapclassify folium contextily matplotlib pandas streamlit
 ```
 
 GeoPandas can be finicky to install — confirm `import geopandas` works in your environment before class.
@@ -80,7 +80,7 @@ GeoPandas can be finicky to install — confirm `import geopandas` works in your
 
 ---
 
-### Materials: [Block 2 demo](weekly/week9/week09_block2_demo.ipynb) · [hands-on](weekly/week9/week09_block3_handson.ipynb) · [counties.geojson](weekly/week9/data/counties.geojson) · [county_stats.csv](weekly/week9/data/county_stats.csv)
+### Materials: [Block 2 demo](weekly/week9/week09_block2_demo.ipynb) · [hands-on](weekly/week9/week09_block3_handson.ipynb) · [map app](weekly/week9/app_map_starter.py) · [state boundaries](weekly/week9/data/states.geojson) · [ACS statistics](weekly/week9/data/state_stats.csv)
 
 ---
 
