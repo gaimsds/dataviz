@@ -189,6 +189,87 @@ In geopandas: check `gdf.crs`, convert with `gdf.to_crs(...)`, and do it
 
 # The choropleth, done honestly {background-color="#2E6E8E"}
 
+## A shapefile is not a file {.smaller}
+
+The oldest and still the commonest format. It is not one file — it is a set of
+them that must travel together, and the Census boundaries this week came as
+exactly that:
+
+| extension | holds | size here |
+|---|---|---|
+| `.shp` | the geometry | 811 KB |
+| `.dbf` | the attribute table | 10 KB |
+| `.shx` | an index into the `.shp` | 1 KB |
+| `.prj` | **the coordinate system** | under 1 KB |
+| `.xml` | metadata | 15 KB |
+
+Email a colleague the `.shp` on its own and they get nothing usable. Lose the
+`.prj` — the smallest file in the set — and nobody can tell what the
+coordinates mean any more. Ours says `EPSG:4269`.
+
+## What else a shapefile will do to you {.smaller}
+
+Three limits worth knowing before they surprise you, all from a format designed
+in the early 1990s around the dBASE table:
+
+- **Field names are capped at 10 characters.** Anything longer is silently
+  truncated, and two columns that collide after truncation are a real problem.
+  Our file's longest column is `CENSUSAREA` — exactly ten. That is not a
+  coincidence; it has already been shortened.
+- **2 GB per file.** Reachable with detailed national data.
+- **No real text encoding guarantee.** Non-English place names come back
+  mangled often enough that it is a known genre of bug.
+
+None of this means avoid shapefiles — most public data still ships as one. It
+means check the field names and the `.prj` before you trust anything.
+
+## GeoJSON, and the newer options {.smaller}
+
+**GeoJSON** is a single text file, which is why this course uses it:
+
+```{python}
+#| echo: false
+import os
+_gj = "../dats6401/weekly/week9/data/states.geojson"
+print(f"states.geojson, one file: {os.path.getsize(_gj)/1024:,.0f} KB")
+print(f"  features: {len(_states)}")
+print(f"  CRS      : {_states.crs}  (GeoJSON is always lon/lat WGS84)")
+print()
+print("the same boundaries, unsimplified:")
+print("  as a shapefile set   :   848 KB   (binary, five files)")
+print("  as GeoJSON           : 1,634 KB   (text, one file)")
+```
+
+It is roughly twice the size, because text always loses to binary. In exchange
+it is one file, readable in any editor, diffable in git, and sendable in a
+message. **Its coordinate system is fixed**: the spec says longitude and
+latitude on WGS84, so a GeoJSON carries no projection choice at all.
+
+Two more you will meet:
+
+- **TopoJSON** stores each shared border once rather than twice. For
+  administrative boundaries, where every internal edge belongs to two polygons,
+  that is a large saving.
+- **GeoPackage** (`.gpkg`) is a single SQLite file holding layers, attributes
+  and the coordinate system together. It is the modern answer to the
+  shapefile's five-file problem, and geopandas reads it happily.
+
+## Where to get boundaries {.smaller}
+
+- [**US Census mapping files**](https://www.census.gov/geographies/mapping-files.html)
+  — the authoritative source for states, counties, tracts and block groups.
+  Pick a resolution: 20m, 5m and 500k mean the generalization level, and the
+  coarsest is usually right for a national choropleth.
+- [**US boundaries as GeoJSON**](https://eric.clst.org/tech/usgeojson/)
+  — the same Census boundaries already converted, if you would rather skip the
+  shapefile step.
+- [**geojson.io**](https://geojson.io/) — paste or drag a file in and see it on
+  a map immediately. Also lets you draw a shape by hand and export it, which is
+  the quickest way to make a test polygon.
+
+**Use geojson.io as a check.** Before debugging a map that renders empty, drop
+the file there. If it shows nothing, the problem is the file, not your code.
+
 ## A boundary file is almost empty {.smaller}
 
 Before any of this, a question worth asking out loud: what is actually *in* the
