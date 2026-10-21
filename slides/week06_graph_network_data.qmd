@@ -73,7 +73,7 @@ The classic example: a university karate club that famously split into two facti
 
 ## Two papers, eighteen months apart {.smaller}
 
-Until the late 1990s a network was modelled as one of two things: a **regular lattice**, where every node has the same neighbours, or an **Erdős–Rényi random graph**, where every pair is connected by a coin flip. Real networks are neither.
+Until the late 1990s a network was modeled as one of two things: a **regular lattice**, where every node has the same neighbors, or an **Erdős–Rényi random graph**, where every pair is connected by a coin flip. Real networks are neither.
 
 **Watts & Strogatz (1998)**, *Collective dynamics of 'small-world' networks*, [Nature 393:440](https://www.nature.com/articles/30918)
 
@@ -142,7 +142,7 @@ All three have 500 nodes and an average of 6 edges per node. Only the wiring dif
 | Random | 0.012 | 3.7 | 14 |
 | Scale-free | 0.047 | 3.3 | **67** |
 
-A regular ring keeps your neighbours connected but takes 42 steps to cross; a random graph crosses in under 4 but has no local structure. Real social networks have both. Watts and Strogatz rewired a small share of the ring's edges at random:
+A regular ring keeps your neighbors connected but takes 42 steps to cross; a random graph crosses in under 4 but has no local structure. Real social networks have both. Watts and Strogatz rewired a small share of the ring's edges at random:
 
 | Fraction rewired | Clustering | Average path |
 |---|---|---|
@@ -410,7 +410,7 @@ for ax, (m, name) in zip(axes, [(deg_c, "Degree"), (bet_c, "Betweenness"), (clo_
 plt.tight_layout(); plt.show()
 ```
 
-Same graph, same layout, but a different set of nodes stands out in each panel. Mapping centrality to colour and size is the first time we encode computed **data** onto the network drawing.
+Same graph, same layout, but a different set of nodes stands out in each panel. Mapping centrality to color and size is the first time we encode computed **data** onto the network drawing.
 
 ## PageRank: importance that flows along edges {.smaller}
 
@@ -533,7 +533,7 @@ nx.draw_networkx(G, pos, ax=ax, with_labels=False,
                  node_size=[degd[n]*45 for n in G.nodes()],
                  node_color=[cmap[n] for n in G.nodes()],
                  cmap=plt.cm.Set2, edge_color="#dddddd")
-ax.set_title("Size = degree · Colour = detected community",
+ax.set_title("Size = degree · Color = detected community",
              fontsize=11)
 ax.axis("off"); plt.tight_layout(); plt.show()
 ```
@@ -619,9 +619,9 @@ What you gain is a picture that stays readable as the network grows. What you gi
         title="Interactive karate club network"></iframe>
 ```
 
-Same graph, same encodings — size is degree, colour is community — but the force simulation is running here rather than having been run once and saved as an image.
+Same graph, same encodings — size is degree, color is community — but the force simulation is running here rather than having been run once and saved as an image.
 
-**Drag a node** and the springs pull its neighbours with it. Hover for degree and community; scroll to zoom. Interaction lets a reader ask one question at a time. You build one of these with PyVis in Block 3.
+**Drag a node** and the springs pull its neighbors with it. Hover for degree and community; scroll to zoom. Interaction lets a reader ask one question at a time. You build one of these with PyVis in Block 3.
 
 ## Discussion {.gw-discussion}
 

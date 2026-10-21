@@ -97,7 +97,7 @@ Confirm you can build a small graph in a notebook and render it, and that you ca
 ## 🕸️ The karate club, interactively
 
 The figures in the slides are static images of a force-directed layout. Below is
-the same graph with the simulation still running: drag a node and its neighbours
+the same graph with the simulation still running: drag a node and its neighbors
 follow, hover for degree and community, scroll to zoom.
 
 ```{=html}
@@ -112,7 +112,7 @@ bundled into it — so it also works offline once downloaded.
 
 ::: {.callout-tip title="Live app"}
 `app_starter.py`, deployed. This is the finished shape of Block 3's task: the
-Les Misérables network filtered by degree, with size encoding degree and colour
+Les Misérables network filtered by degree, with size encoding degree and color
 encoding the detected community.
 
 ```{=html}
@@ -208,7 +208,7 @@ community = {n: i for i, c in enumerate(greedy_modularity_communities(G)) for n 
 palette = ["#2E6E8E", "#d9534f", "#6aa84f", "#b07aa1"]
 
 # Encode the structure rather than accepting from_nx's uniform defaults:
-# the layout takes x and y, so degree goes to size and community to colour.
+# the layout takes x and y, so degree goes to size and community to color.
 net = Network(height="600px", width="100%", cdn_resources="in_line")
 for n in G.nodes():
     net.add_node(n, label=str(n), size=8 + degree[n] * 1.5,

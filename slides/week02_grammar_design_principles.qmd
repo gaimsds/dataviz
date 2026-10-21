@@ -176,7 +176,7 @@ for ax, logx in zip(axes, [False, True]):
 plt.tight_layout(); plt.show()
 ```
 
-Identical data and encoding. **The scale is doing the analytical work** — and it must be labelled, or the reader is misled.
+Identical data and encoding. **The scale is doing the analytical work** — and it must be labeled, or the reader is misled.
 
 ## Four channels at once
 
@@ -236,7 +236,7 @@ cat = plt.get_cmap("tab10")
 for i in range(6):
     axes[0].add_patch(mpl.patches.Rectangle((i, 0), 0.92, 1, color=cat(i)))
 axes[0].set_xlim(0, 6); axes[0].set_ylim(0, 1); axes[0].axis("off")
-axes[0].set_title("Hue → unordered categories (no colour is 'more' than another)", fontsize=9)
+axes[0].set_title("Hue → unordered categories (no color is 'more' than another)", fontsize=9)
 
 seq = plt.get_cmap("Blues")
 for i in range(6):
@@ -250,7 +250,7 @@ Using **hue** for a quantity implies categories; using **lightness** for categor
 
 [ColorBrewer](https://colorbrewer2.org) exists precisely to make that choice for you — sequential, diverging, qualitative.
 
-## Colour vs. shape for categories
+## Color vs. shape for categories
 
 ```{python}
 #| echo: false
@@ -267,12 +267,12 @@ for k in range(3):
     axes[0].scatter(gx[m], gy[m], color=cols[k], s=28)
     axes[1].scatter(gx[m], gy[m], color="#555555", marker=marks[k], s=28)
     axes[2].scatter(gx[m], gy[m], color=cols[k], marker=marks[k], s=28)
-for ax, t in zip(axes, ["colour only", "shape only", "colour + shape (redundant)"]):
+for ax, t in zip(axes, ["color only", "shape only", "color + shape (redundant)"]):
     ax.set_title(t, fontsize=10); ax.set_xticks([]); ax.set_yticks([])
 plt.tight_layout(); plt.show()
 ```
 
-Colour separates faster; shape survives greyscale printing and colour-blindness. **Redundant encoding** costs a channel but buys robustness.
+Color separates faster; shape survives grayscale printing and color-blindness. **Redundant encoding** costs a channel but buys robustness.
 
 ## When the colormap invents structure
 
@@ -381,7 +381,7 @@ Identical numbers. With **bar marks, length encodes value** — so the baseline 
 
 **1. What is actually being compared?** — name the marks and the channel carrying the comparison.
 
-**2. Are the scales honest?** — zero baseline for length; log scales labelled; consistent axes across small multiples.
+**2. Are the scales honest?** — zero baseline for length; log scales labeled; consistent axes across small multiples.
 
 **3. Does the encoding match the variable type?** — ordered channel for ordered data, unordered for categories.
 

@@ -39,6 +39,6 @@
 - [ ] Two widgets, one layout element, caching applied
 - [ ] The chart is the one you designed, not a fallback you settled for
 - [ ] If you used `file_uploader`, the app still works before a file is chosen
-- [ ] Deployed URL loads for your neighbour
+- [ ] Deployed URL loads for your neighbor
 
 A completed reference (`example_solution.py`, a Week-3 PCA explorer) is for AFTER you try.

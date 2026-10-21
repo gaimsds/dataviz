@@ -229,7 +229,7 @@ If you had a saliency map, what would confirm the model is "looking" correctly?
 - Add a class-balance bar chart alongside the montage.
 - Let the Streamlit app overlay a saliency heatmap on the uploaded image.
 - Compare two classes' intensity distributions.
-- Run the stamp test on your own dataset: add an artefact that correlates with
+- Run the stamp test on your own dataset: add an artifact that correlates with
   one class, retrain, and see which of your usual metrics notices.
 
 ---

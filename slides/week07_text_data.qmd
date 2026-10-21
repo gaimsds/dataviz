@@ -174,7 +174,7 @@ axes[1].tick_params(labelsize=7); axes[1].set_xlabel("occurrences", fontsize=8)
 plt.tight_layout(); plt.show()
 ```
 
-Same numbers, same 22 documents. **`data` and `text` are tied at 9** — the cloud draws them the same size, but one is dark and one pale, and that colour encodes nothing. **`model` (5) against `chart` (4)** is a 25% difference in count drawn as a 10% difference in height. Finding a given word means scanning the cloud; in the bars it is a lookup.
+Same numbers, same 22 documents. **`data` and `text` are tied at 9** — the cloud draws them the same size, but one is dark and one pale, and that color encodes nothing. **`model` (5) against `chart` (4)** is a 25% difference in count drawn as a 10% difference in height. Finding a given word means scanning the cloud; in the bars it is a lookup.
 
 The cloud still says "this is about data and text" at a glance, which is what a cover image is for. It cannot support a comparison.
 
@@ -283,7 +283,7 @@ model.visualize_topics()       # interactive topic map
 | Words are | counts, order discarded | embeddings, so meaning survives |
 | Needs | the number of topics, in advance | a minimum cluster size |
 
-LDA still appears everywhere, and its assumption — each document mixes topics — is often the more realistic one. What makes BERTopic easier to *visualize* is that each document lands in one cluster, so it can be drawn as a point with a colour.
+LDA still appears everywhere, and its assumption — each document mixes topics — is often the more realistic one. What makes BERTopic easier to *visualize* is that each document lands in one cluster, so it can be drawn as a point with a color.
 
 **c-TF-IDF** is the part that makes the topics readable: concatenate every document in a cluster into one long document, then run TF–IDF across clusters. The words that come out are the ones distinctive to *that* cluster rather than common to the corpus — the same keyness idea as earlier, applied to groups instead of documents.
 
@@ -293,7 +293,7 @@ LDA still appears everywhere, and its assumption — each document mixes topics 
 model.visualize_barchart()     # top words per topic — the honest default
 model.visualize_topics()       # intertopic distance map (UMAP of topic vectors)
 model.visualize_hierarchy()    # which topics merge, and in what order
-model.visualize_documents()    # every document, coloured by topic
+model.visualize_documents()    # every document, colored by topic
 ```
 
 - **`visualize_barchart`** is the one to trust: sorted bars, one panel per topic.
@@ -321,7 +321,7 @@ fig, ax = plt.subplots(figsize=(7.5, 4))
 ax.scatter(pcs[:, 0], pcs[:, 1], s=120, color="#2E6E8E")
 for i, (x_, y_) in enumerate(pcs):
     ax.annotate(f"doc {i+1}", (x_, y_), textcoords="offset points", xytext=(8, 5), fontsize=9)
-ax.set_title("22 documents as TF–IDF vectors, projected to 2D — neighbours share vocabulary")
+ax.set_title("22 documents as TF–IDF vectors, projected to 2D — neighbors share vocabulary")
 ax.set_xlabel("PC1"); ax.set_ylabel("PC2")
 plt.tight_layout(); plt.show()
 ```
@@ -369,10 +369,10 @@ for ax, (name, Y) in zip(axes, proj.items()):
 plt.tight_layout(); plt.show()
 ```
 
-400 documents, four topics (coloured) and 60 off-topic documents (grey).
+400 documents, four topics (colored) and 60 off-topic documents (gray).
 
 - **PCA** rotates the data and keeps the directions of greatest variance. It is linear, fast, reproducible, and distances mean something — but overlapping topics stay overlapped.
-- **t-SNE** pulls near neighbours together. Clusters separate clearly, but the **space between clusters carries no information**, and neither do cluster sizes.
+- **t-SNE** pulls near neighbors together. Clusters separate clearly, but the **space between clusters carries no information**, and neither do cluster sizes.
 - **UMAP** does the same job faster and keeps a little more of the global arrangement, which is why it is the common default — including inside BERTopic.
 
 ## Choosing a clusterer, and why BERTopic picks HDBSCAN {.smaller}
@@ -416,7 +416,7 @@ Name the embedding, the projection and the parameters in the caption. "UMAP of M
 
 **1.** Your stakeholder loves the word cloud on the report cover. Keep it, replace it, or both — and where?
 
-**2.** A topic model returns 14 topics. What visual evidence would convince you those topics are real rather than an artefact of the algorithm?
+**2.** A topic model returns 14 topics. What visual evidence would convince you those topics are real rather than an artifact of the algorithm?
 
 ## Coming up next — Block 2 {.smaller}
 

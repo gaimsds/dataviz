@@ -75,8 +75,8 @@ for ax, (epsg, label) in zip(axes, [
         c = row.geometry.centroid
         shifted.append((row["state"],
                         translate(row.geometry, xoff=i * 9e5 - c.x, yoff=-c.y)))
-    for colour, (name, geom) in zip(["#2E6E8E", "#d9534f"], shifted):
-        gpd.GeoSeries([geom], crs=p.crs).plot(ax=ax, color=colour,
+    for color, (name, geom) in zip(["#2E6E8E", "#d9534f"], shifted):
+        gpd.GeoSeries([geom], crs=p.crs).plot(ax=ax, color=color,
                                               edgecolor="white", linewidth=0.5)
     ax.set_title(label, fontsize=11)
     ax.set_aspect("equal"); ax.axis("off")
@@ -111,7 +111,7 @@ _c["latitude"] = _eq.geometry.centroid.to_crs(epsg=4326).y.values
 _show = _c.set_index("state").loc[
     ["Florida", "Texas", "Missouri", "Michigan", "North Dakota"],
     ["latitude", "inflation"]].round(2)
-_show.columns = ["centre latitude", "area inflated by"]
+_show.columns = ["center latitude", "area inflated by"]
 print(_show.to_string())
 print(f"\nnorthernmost vs southernmost: {_c.inflation.max():.2f}x")
 ```
@@ -143,7 +143,7 @@ A **Coordinate Reference System** says what the numbers mean:
   a length, so any area or distance you compute in it is wrong.
 - `EPSG:3857` — Web Mercator, what almost every web tile map uses. Fine for
   navigating, wrong for comparing sizes, as the last few slides showed.
-- `EPSG:5070` — Albers equal-area conic, the usual choice for analysing the
+- `EPSG:5070` — Albers equal-area conic, the usual choice for analyzing the
   contiguous United States.
 
 ## Codes come from registries {.smaller}
@@ -174,7 +174,7 @@ print(f"  difference  {abs(_a-_b)/_a*100:>12.4f} %")
 
 **They are the same projection.** Same Albers equal-area conic, same NAD83
 datum, areas identical to four decimal places. The difference is which
-organisation issued the number, not what the map looks like. Note the
+organization issued the number, not what the map looks like. Note the
 `ESRI:` prefix — `to_crs("ESRI:102003")` works, `to_crs(102003)` does not,
 because a bare number is assumed to be EPSG.
 
@@ -309,7 +309,7 @@ how much land the state happens to own.
 
 ## Classification: how you bin is what they see
 
-**Classification** means deciding which values share a colour. A map with five
+**Classification** means deciding which values share a color. A map with five
 shades has to cut the numbers into five groups, and where you put the cuts is a
 choice you make, not something the data decides.
 
@@ -329,7 +329,7 @@ plt.tight_layout(); plt.show()
 
 ## Reading the two cuts {.smaller}
 
-**Quantiles** puts the same number of states in every class. Every colour gets
+**Quantiles** puts the same number of states in every class. Every color gets
 used, and the map always looks like it has a spread of values — even when the
 underlying numbers barely differ.
 
@@ -361,7 +361,7 @@ plt.tight_layout(); plt.show()
 ```
 
 Three classes is a blunt instrument that hides real variation. Eight is more
-colours than most people can tell apart, especially from the back of a room.
+colors than most people can tell apart, especially from the back of a room.
 **Four to seven** is the usual advice, and the reason is the reader's eye, not
 the data.
 
@@ -407,7 +407,7 @@ Live demo, six parts:
 
 1. Load the boundaries and check the coordinate system
 2. Join the statistics; a count against a rate
-3. Classification: how the colour cuts change the map
+3. Classification: how the color cuts change the map
 4. Projections: the same states three ways
 5. The spatial join — matching by location instead of by key
 6. `.explore()` — the same map, interactive

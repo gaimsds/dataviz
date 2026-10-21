@@ -185,7 +185,7 @@ fig = res.plot()
 - **`period=12`** — how many observations make one cycle. Monthly data with an annual cycle is 12; daily data with a weekly cycle would be 7. This is the number you read off the ACF.
 - **`model=`** defaults to `"additive"`. Pass `"multiplicative"` when the seasonal swing grows with the level.
 - **`res` holds the three parts as Series** — `res.trend`, `res.seasonal`, `res.resid` — so you can plot them yourself instead of using `res.plot()`.
-- The trend is a **centred moving average**, so `res.trend` is `NaN` for the first and last six months (half a period at each end). That is why the trend and residual panels start late and stop early.
+- The trend is a **centered moving average**, so `res.trend` is `NaN` for the first and last six months (half a period at each end). That is why the trend and residual panels start late and stop early.
 
 ## Additive or multiplicative? Check the residuals {.smaller}
 

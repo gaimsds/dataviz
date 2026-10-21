@@ -1,7 +1,7 @@
 # app_rolling_animation.py — Week 4: watch a rolling window do its work
 # Run with:  streamlit run app_rolling_animation.py
 #
-# The point of this app is to make `series.rolling(w).mean()` concrete. The grey
+# The point of this app is to make `series.rolling(w).mean()` concrete. The gray
 # band is the window. It slides left to right, and at each step the mean of the
 # values inside it is added to the smooth line below.
 import matplotlib.pyplot as plt

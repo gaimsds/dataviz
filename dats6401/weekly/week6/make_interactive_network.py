@@ -32,7 +32,7 @@ net = Network(height="520px", width="100%", bgcolor="#ffffff",
 for n in G.nodes():
     net.add_node(
         n, label=str(n),
-        # Same encodings as the static slide: size = degree, colour = community.
+        # Same encodings as the static slide: size = degree, color = community.
         size=8 + degree[n] * 1.6,
         color=PALETTE[community[n] % len(PALETTE)],
         title=f"node {n} · degree {degree[n]} · community {community[n]}",

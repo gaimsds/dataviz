@@ -83,10 +83,10 @@ position in the image's coordinates, not the ones from school maths.
 
 ## A graph of pixels, on top of the image {.smaller}
 
-Here is a real use of this. **Segmentation** means labelling which pixels belong
+Here is a real use of this. **Segmentation** means labeling which pixels belong
 to which object — this is the sky, that is a car, that is a building. If you
 segment a photo and then draw a line between every two objects that touch each
-other, you get a network describing the scene, which you can analyse with the
+other, you get a network describing the scene, which you can analyze with the
 graph tools from Week 6.
 
 Our version skips the segmentation step so it runs in two seconds: **every pixel
@@ -172,7 +172,7 @@ few rows. The second has no spreadsheet equivalent, which is why it gets skipped
 fig, axes = plt.subplots(4, 10, figsize=(9, 4))
 for ax, img, label in zip(axes.ravel(), digits.images, digits.target):
     ax.imshow(img, cmap="gray"); ax.set_title(label, fontsize=8); ax.axis("off")
-plt.suptitle("The first 40 digits, labelled")
+plt.suptitle("The first 40 digits, labeled")
 plt.tight_layout(); plt.show()
 ```
 
@@ -239,7 +239,7 @@ plt.tight_layout(); plt.show()
 
 A **mean image** is made by averaging every image of one digit, pixel by pixel.
 Where all the examples agree you get a sharp bright area; where they disagree you
-get a grey blur. So a blurry average means that digit is written in many
+get a gray blur. So a blurry average means that digit is written in many
 different ways.
 
 Here is a reasonable guess: if two digits have *similar* average images, a
@@ -314,9 +314,9 @@ So a '1' is not fainter than a '0'. It covers less of the frame, but what it doe
 cover it covers strongly. An average hides that; counting the whole distribution
 shows it.
 
-## Colour is three stacks of the same thing {.smaller}
+## Color is three stacks of the same thing {.smaller}
 
-A colour image is not a new kind of object. It is three grayscale arrays that
+A color image is not a new kind of object. It is three grayscale arrays that
 happen to be displayed together:
 
 ```{python}
@@ -337,7 +337,7 @@ plt.tight_layout(); plt.show()
 ```
 
 A **channel** is one of those three layers. Red, green and blue each hold a
-number per pixel, and the colour you see is the three mixed together.
+number per pixel, and the color you see is the three mixed together.
 
 Draw the brightness chart from the previous slide once per channel, across a
 whole photo dataset, and problems show up as differences between the three
@@ -488,7 +488,7 @@ print(f"recall on class '3', no mark : "
       f"{(poisoned.predict(Cte)[cte == 3] == 3).mean():.1%}")
 ```
 
-Zero. Not one 3 recognised.
+Zero. Not one 3 recognized.
 
 The model never learned the shape of a 3. It learned that four bright pixels in
 the top-left corner mean "3", because during training that was always true and it
@@ -537,7 +537,7 @@ you do at the end. Here it was the only check available.
 
 ## Discussion {.gw-discussion}
 
-**1.** You make a montage of the images labelled "cat" and three of them are
+**1.** You make a montage of the images labeled "cat" and three of them are
 obviously dogs. Every accuracy number you report from now on is computed against
 those labels. What does that do to the numbers, and at what point in the project
 should someone have looked?
@@ -552,7 +552,7 @@ Live demo, six short parts:
 
 1. The montage, the unusual examples, and how many images each digit has
 2. Average images, and testing the guess they suggest
-3. Colour as three separate layers
+3. Color as three separate layers
 4. Where pixel `[0, 0]` is, shown by drawing a network onto an image
 5. Occlusion saliency, built one line at a time
 6. The marked-3s example from the last few slides, start to finish

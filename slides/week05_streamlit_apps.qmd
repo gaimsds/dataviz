@@ -205,8 +205,8 @@ A form still re-runs the whole script on submit. `@st.fragment` limits a re-run 
 ```python
 @st.fragment
 def chart_panel(df):
-    colour = st.selectbox("Colour by", df.columns)   # only this block re-runs
-    st.plotly_chart(build_figure(df, colour))
+    color = st.selectbox("Color by", df.columns)   # only this block re-runs
+    st.plotly_chart(build_figure(df, color))
 
 load_everything_expensive()      # untouched when the selectbox changes
 chart_panel(df)
