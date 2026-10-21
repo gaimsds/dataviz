@@ -487,32 +487,88 @@ choice you make, not something the data decides.
 ```{python}
 #| echo: false
 #| fig-align: center
-fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+fig, axes = plt.subplots(1, 3, figsize=(14, 3.8))
 for ax, scheme, label in [(axes[0], "quantiles", "Quantiles"),
-                          (axes[1], "equal_interval", "Equal interval")]:
+                          (axes[1], "equal_interval", "Equal interval"),
+                          (axes[2], "natural_breaks", "Natural breaks (Jenks)")]:
     conus.plot(column="pct_65plus", scheme=scheme, k=5, cmap="OrRd", legend=True,
                ax=ax, edgecolor="white", linewidth=0.4,
                legend_kwds={"fontsize": 6, "loc": "lower left"})
-    ax.set_title(f"{label}, 5 classes"); ax.axis("off")
-plt.suptitle("The same share-of-65+ numbers, cut two different ways")
+    ax.set_title(f"{label}, 5 classes", fontsize=10); ax.axis("off")
+plt.suptitle("The same share-of-65+ numbers, cut three different ways")
 plt.tight_layout(); plt.show()
 ```
 
-## Reading the two cuts {.smaller}
+## What each one is doing {.smaller}
 
 **Quantiles** puts the same number of states in every class. Every color gets
-used, and the map always looks like it has a spread of values — even when the
-underlying numbers barely differ.
+used and the map always looks like it has a spread, even when the underlying
+numbers barely differ. It is counting states, not looking at their values.
 
-**Equal interval** cuts the value range into equal-width slices. If most states
-are bunched together with one outlier far off, nearly everything lands in the
-bottom class and the map looks flat — which is honest about the distribution
-and useless for telling the bunched states apart.
+**Equal interval** cuts the value range into equal-width slices. It is looking
+only at the highest and lowest number; everything in between is ignored. If the
+states are bunched with one outlier far off, nearly all of them land in one
+class and the map goes flat.
 
-Neither is wrong. What is wrong is not saying which one you used, because the
-reader cannot tell from the picture and the two pictures disagree.
+**Natural breaks**, usually called **Jenks** after the cartographer George
+Jenks, is the only one of the three that reads the actual values. It searches
+for the set of cuts that makes each class as internally similar as possible —
+so the boundaries end up in the **gaps**, where the data is already separating
+itself.
 
-Quantiles, equal-interval, natural breaks (Jenks): each is defensible **somewhere**. The dishonest move is not *choosing* — it's not *disclosing*. State the scheme in the legend.
+## Why Jenks puts its cuts somewhere else {.smaller}
+
+Every state on one axis, and where each scheme decides to cut:
+
+```{python}
+#| echo: false
+#| fig-align: center
+import mapclassify
+
+_v = np.sort(conus["pct_65plus"].values)
+_k = 5
+_cuts = {
+    "Quantiles": list(pd.Series(_v).quantile([i / _k for i in range(1, _k)])),
+    "Equal interval": [_v.min() + (_v.max() - _v.min()) * i / _k for i in range(1, _k)],
+    "Natural breaks": list(mapclassify.NaturalBreaks(_v, k=_k).bins[:-1]),
+}
+
+fig, axes = plt.subplots(3, 1, figsize=(12, 3.9), sharex=True)
+for ax, (name, cuts) in zip(axes, _cuts.items()):
+    ax.scatter(_v, np.zeros_like(_v), s=40, color="#2E6E8E", alpha=0.75,
+               zorder=3, clip_on=False)
+    for x in cuts:
+        ax.axvline(x, color="#d9534f", lw=2, zorder=2)
+    ax.set_yticks([]); ax.set_ylim(-0.5, 0.5)
+    ax.set_ylabel(name, rotation=0, ha="right", va="center", fontsize=9)
+    for sp in ("top", "right", "left"):
+        ax.spines[sp].set_visible(False)
+axes[-1].set_xlabel("share of the state aged 65+  (%)")
+plt.tight_layout(); plt.show()
+```
+
+Each dot is a state. **Quantiles** pushes all four cuts into the crowded middle,
+because that is where equal counts of states fall — the thinly populated ends
+get no boundary at all. **Equal interval** spaces its cuts evenly and pays no
+attention to where the states actually are. **Jenks** puts its cuts in the
+visible gaps.
+
+## So which one? {.smaller}
+
+- **Jenks** when you want the groups the data already suggests. It is the usual
+  default in mapping software for a reason.
+- **Quantiles** when you want to compare rank — the top fifth against the
+  bottom fifth — or when you need every class to contain something.
+- **Equal interval** when the numbers have meaning on their own, like
+  percentages or temperature, and a reader would expect even steps.
+
+Jenks has one real catch: because the cuts come from the data, **two maps made
+with Jenks are not comparable**. Map this year and last year separately and the
+class boundaries move, so the same color means two different things. For a
+before-and-after pair, fix the breaks by hand and say so.
+
+Nothing here is dishonest. The dishonest move is not choosing — it is not
+**disclosing**. Put the scheme in the caption.
 
 ## How many classes? {.smaller}
 
