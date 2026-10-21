@@ -21,6 +21,31 @@ format: revealjs
 
 # The Earth is not flat {background-color="#2E6E8E"}
 
+## The true size of Greenland {.smaller}
+
+Greenland's real outline, laid over four places at true scale:
+
+![](images/true-size-of-greenland.jpg){fig-align="center" width="33%"}
+
+::: {style="font-size:0.58em; text-align:center; color:#666"}
+Image: [The true size of Greenland](https://blogs.egu.eu/divisions/cr/2017/10/06/image-of-the-week-the-true-size-of-greenland/),
+EGU Cryospheric Sciences Blog, 2017.
+:::
+
+## Why Greenland looks wrong {.smaller}
+
+On a Web Mercator map Greenland appears about the size of Africa. It is not —
+it is roughly the size of the Democratic Republic of the Congo, which is one
+country within Africa.
+
+Greenland sits at a high latitude, and Mercator stretches everything away from
+the equator. **The further from the equator, the bigger the exaggeration.**
+
+That is not a flaw in the projection. Mercator was built so that a straight
+line on the chart is a constant compass bearing, which is exactly what you want
+for navigating a ship. It buys that by sacrificing area. The mistake is not
+using Mercator; it is using it to compare how big things are.
+
 ## Two states, the same size {.smaller}
 
 Florida and Michigan have the same land area — they differ by **0.3%**. Here
@@ -66,6 +91,35 @@ Same data, same code, one setting changed. Web Mercator stretches everything
 away from the equator, so the northern state gains half its size again. Nothing
 warns you.
 
+## How much does the stretch amount to? {.smaller}
+
+The distortion is not a quirk at the poles. It is already large inside the
+lower 48:
+
+```{python}
+#| echo: false
+import pandas as pd
+
+_c = _states[~_states["state"].isin(
+    ["Alaska", "Hawaii", "Puerto Rico", "District of Columbia"])].copy()
+_eq = _c.to_crs(epsg=5070)
+_mc = _c.to_crs(epsg=3857)
+_c["inflation"] = (_mc.geometry.area.values / _eq.geometry.area.values)
+_c["inflation"] /= _c["inflation"].min()           # relative to the southernmost
+_c["latitude"] = _eq.geometry.centroid.to_crs(epsg=4326).y.values
+
+_show = _c.set_index("state").loc[
+    ["Florida", "Texas", "Missouri", "Michigan", "North Dakota"],
+    ["latitude", "inflation"]].round(2)
+_show.columns = ["centre latitude", "area inflated by"]
+print(_show.to_string())
+print(f"\nnorthernmost vs southernmost: {_c.inflation.max():.2f}x")
+```
+
+A state at the Canadian border takes up **1.7 times** the area it should,
+relative to one on the Gulf. On a choropleth, visual weight is area — so Web
+Mercator silently gives northern regions more of the reader's attention.
+
 ## Every projection lies about something
 
 Flattening a sphere **must** distort. Each projection chooses what to preserve:
@@ -84,11 +138,54 @@ Flattening a sphere **must** distort. Each projection chooses what to preserve:
 
 A **Coordinate Reference System** says what the numbers mean:
 
-- `EPSG:4326` — raw lat/lon degrees (GPS); fine for storage, *not* a flat map
-- `EPSG:3857` — Web Mercator (every web tile map); fine for navigation, **not** for area comparison
-- `EPSG:5070` — Albers equal-area (continental US analysis)
+- `EPSG:4326` — raw longitude and latitude in degrees, as a GPS reports them.
+  Fine for storing and exchanging data, and **not a flat map**: degrees are not
+  a length, so any area or distance you compute in it is wrong.
+- `EPSG:3857` — Web Mercator, what almost every web tile map uses. Fine for
+  navigating, wrong for comparing sizes, as the last few slides showed.
+- `EPSG:5070` — Albers equal-area conic, the usual choice for analysing the
+  contiguous United States.
 
-The #1 geospatial bug: combining layers in different CRSs. In geopandas: check `gdf.crs`, convert with `gdf.to_crs(...)` — *before* any spatial join.
+## Codes come from registries {.smaller}
+
+`EPSG` is a registry of coordinate systems, each with a number. It is the main
+one, but not the only one — Esri maintains its own, and you will meet those
+codes in the wild:
+
+```{python}
+#| echo: false
+from pyproj import CRS
+
+for _code in ["EPSG:5070", "ESRI:102003"]:
+    _c = CRS.from_user_input(_code)
+    print(f"{_code:12} {_c.name}")
+    print(f"{'':12} datum: {_c.datum.name}")
+
+# Both of these are built for the CONTIGUOUS states, so only those are used --
+# projecting Alaska with a lower-48 projection would distort it badly.
+_lower48 = _states[~_states["state"].isin(["Alaska", "Hawaii", "Puerto Rico"])]
+_a = _lower48.to_crs("EPSG:5070").geometry.area.sum()
+_b = _lower48.to_crs("ESRI:102003").geometry.area.sum()
+print(f"\ntotal land area of the lower 48 plus DC:")
+print(f"  EPSG:5070   {_a/1e6:>12,.0f} km2")
+print(f"  ESRI:102003 {_b/1e6:>12,.0f} km2")
+print(f"  difference  {abs(_a-_b)/_a*100:>12.4f} %")
+```
+
+**They are the same projection.** Same Albers equal-area conic, same NAD83
+datum, areas identical to four decimal places. The difference is which
+organisation issued the number, not what the map looks like. Note the
+`ESRI:` prefix — `to_crs("ESRI:102003")` works, `to_crs(102003)` does not,
+because a bare number is assumed to be EPSG.
+
+## The commonest geospatial bug {.smaller}
+
+Combining two layers that are in different coordinate systems. They will not
+line up, and often nothing raises an error — a spatial join simply matches
+nothing, and you get an empty result that looks like a data problem.
+
+In geopandas: check `gdf.crs`, convert with `gdf.to_crs(...)`, and do it
+**before** any join, any area, any distance.
 
 # The choropleth, done honestly {background-color="#2E6E8E"}
 
@@ -148,6 +245,68 @@ you are asking about. A count is the right thing to map when you need to know
 how many ambulances to send; a rate is the right thing when you are asking
 whether a place is unusual.
 
+## A choropleth's other bias: size {.smaller}
+
+Even in an equal-area projection, a choropleth gives every region as much ink
+as it has land. That is rarely what you want to compare.
+
+```{python}
+#| echo: false
+_eqc = conus.to_crs(epsg=5070)
+_a = conus.copy()
+_a["area"] = _eqc.geometry.area.values
+_a["area_share"] = 100 * _a["area"] / _a["area"].sum()
+_a["pop_share"] = 100 * _a["pop_total"] / _a["pop_total"].sum()
+
+_big = _a.nlargest(10, "area")
+_small = _a.nsmallest(10, "area")
+print(f"the 10 largest states by land area: "
+      f"{_big.area_share.sum():.0f}% of the map, {_big.pop_share.sum():.0f}% of the people")
+print(f"the 10 smallest states by land area: "
+      f"{_small.area_share.sum():.0f}% of the map, {_small.pop_share.sum():.0f}% of the people")
+print()
+for _s in ["Montana", "Wyoming", "New Jersey"]:
+    _r = _a[_a["state"] == _s].iloc[0]
+    print(f"  {_s:<12} {_r.area_share:4.1f}% of the map, {_r.pop_share:4.1f}% of the people")
+```
+
+Montana is about **fifteen times** more of the picture than it is of the population.
+New Jersey is the reverse. Nobody chose that; it is a consequence of using land
+as the canvas.
+
+## When a choropleth is the wrong tool {.smaller}
+
+A choropleth can only show a **rate over an area**. For a raw count, or for
+anything that happens at a point, it is the wrong shape of map. The usual
+alternative is a **proportional symbol map**: one mark per place, with the
+**area of the mark** carrying the number.
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+
+_p = conus.copy()
+_p = _p.set_geometry(_p.to_crs(epsg=5070).geometry)
+_cent = _p.geometry.centroid
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+_p.plot(column="pop_total", cmap="OrRd", ax=axes[0], edgecolor="white",
+        linewidth=0.4)
+axes[0].set_title("Choropleth of a count", fontsize=11)
+_p.plot(ax=axes[1], color="#EAF2F6", edgecolor="#99b3bb", linewidth=0.4)
+axes[1].scatter(_cent.x, _cent.y, s=_p["pop_total"] / 40000, alpha=0.65,
+                color="#d9534f", edgecolors="white", linewidth=0.6)
+axes[1].set_title("Proportional symbols", fontsize=11)
+for a in axes: a.axis("off")
+plt.tight_layout(); plt.show()
+```
+
+Look at the north-east. In the choropleth New Jersey, Massachusetts and
+Connecticut are almost invisible, because they are small. In the symbol map
+they are among the larger circles, because a circle's size does not depend on
+how much land the state happens to own.
+
 ## Classification: how you bin is what they see
 
 **Classification** means deciding which values share a colour. A map with five
@@ -168,12 +327,43 @@ plt.suptitle("The same share-of-65+ numbers, cut two different ways")
 plt.tight_layout(); plt.show()
 ```
 
-**Quantiles** puts the same number of states in every class, so every colour is
-used and differences look evenly spread. **Equal interval** cuts the range into
-five equal-width slices, so if most states are bunched together they all land in
-one class and the map looks flat.
+## Reading the two cuts {.smaller}
+
+**Quantiles** puts the same number of states in every class. Every colour gets
+used, and the map always looks like it has a spread of values — even when the
+underlying numbers barely differ.
+
+**Equal interval** cuts the value range into equal-width slices. If most states
+are bunched together with one outlier far off, nearly everything lands in the
+bottom class and the map looks flat — which is honest about the distribution
+and useless for telling the bunched states apart.
+
+Neither is wrong. What is wrong is not saying which one you used, because the
+reader cannot tell from the picture and the two pictures disagree.
 
 Quantiles, equal-interval, natural breaks (Jenks): each is defensible **somewhere**. The dishonest move is not *choosing* — it's not *disclosing*. State the scheme in the legend.
+
+## How many classes? {.smaller}
+
+The scheme is one choice; the **number of classes** is another, and it changes
+the map just as much.
+
+```{python}
+#| echo: false
+#| fig-align: center
+fig, axes = plt.subplots(1, 3, figsize=(14, 3.6))
+for ax, k in zip(axes, [3, 5, 8]):
+    conus.plot(column="pct_65plus", scheme="quantiles", k=k, cmap="OrRd",
+               legend=True, ax=ax, edgecolor="white", linewidth=0.4,
+               legend_kwds={"fontsize": 6, "loc": "lower left"})
+    ax.set_title(f"{k} classes", fontsize=11); ax.axis("off")
+plt.tight_layout(); plt.show()
+```
+
+Three classes is a blunt instrument that hides real variation. Eight is more
+colours than most people can tell apart, especially from the back of a room.
+**Four to seven** is the usual advice, and the reason is the reader's eye, not
+the data.
 
 ## Sequential color, and the gray problem {.smaller}
 
@@ -213,14 +403,22 @@ Spatial **joins** (`gpd.sjoin`) attach points to polygons — "which district is
 
 ## Coming up next — Block 2 {.smaller}
 
-Live demo:
+Live demo, six parts:
 
-1. Load geometry; inspect and fix the CRS
-2. Join attribute data; compute a rate
-3. Choropleth with a disclosed classification scheme + basemap (contextily)
+1. Load the boundaries and check the coordinate system
+2. Join the statistics; a count against a rate
+3. Classification: how the colour cuts change the map
+4. Projections: the same states three ways
+5. The spatial join — matching by location instead of by key
+6. `.explore()` — the same map, interactive
 
-**Then Block 3:** your dataset with a geographic key → a rate-based, defensibly classified choropleth, with your projection/normalization/classification choices written down.
+**Then Block 3**, on your own after class: the same pipeline on a column you
+choose, plus `app_map_starter.py`, a Streamlit map whose controls are the
+choices this deck has been arguing about.
 
-**Readings:** GeoPandas user guide · "The problem with choropleth maps" · mapclassify docs
+**Readings:** geopandas user guide · the EPSG registry at epsg.io · Brewer,
+*Designing Better Maps*
 
-**Homework preview:** the justified choropleth — Module II makes it interactive next week.
+**Homework:** a choropleth of a rate, with a caption that names the source, the
+denominator, the classification scheme, the projection, and anything you left
+off the map.
