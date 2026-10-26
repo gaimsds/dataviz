@@ -48,7 +48,7 @@ The week still ends in a Streamlit dashboard, because that is the delivery forma
 Make sure your environment includes:
 
 ```bash
-pip install scikit-learn folium streamlit-folium plotly geopandas pandas streamlit
+pip install scikit-learn folium streamlit-folium plotly altair geopandas pandas streamlit
 ```
 
 `scikit-learn` supplies both DBSCAN and the BallTree used for the distance
@@ -89,7 +89,11 @@ On 2,264 US Supercharger sites, included in the materials:
 3. Nearest-neighbor distances, and what the extremes of that column reveal
 4. DBSCAN with a justified `eps` and `min_samples`, checked against something
    you already know
-5. Wrap it in a Streamlit dashboard where a filter drives both a map and a chart
+5. Point in polygon: join the points to states by location, and account for
+   the ones that match nothing
+6. An interactive choropleth, and why Alaska has to be moved
+7. Altair, and a selection that links two layers
+8. Wrap it in a Streamlit dashboard where a filter drives both a map and a chart
 
 ### Block 4 — Wrap-Up & Homework Preview (~10 min)
 
