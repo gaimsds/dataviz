@@ -1,6 +1,6 @@
 ---
 title: "Map Visualization — Module II"
-subtitle: "Week 10 · Maps people can touch"
+subtitle: "Week 10 · Points, density, distance"
 author: "DATS 6401 — Visualization of Complex Data · Junjun Yin"
 format: revealjs
 ---
@@ -9,107 +9,405 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~25 min |
-| **Block 2** | Guided demo: folium → Streamlit embed → coordinated filter | ~45 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~35 min |
+| **Block 2** | Guided demo: five parts, run live | ~35 min |
 | ☕ | Break | ~15 min |
-| **Block 3** | Hands-on: your interactive geospatial dashboard | ~55 min |
-| **Block 4** | Wrap-up & homework preview | ~10 min |
+| **Block 3** | Hands-on, on your own afterwards | ~50 min |
+| **Block 4** | Wrap-up & homework preview | ~15 min |
 
 ::: {.gw-box}
-**Last week:** the honest static choropleth. **This week:** the same map, interactive and inside a Streamlit dashboard — because map readers always want to zoom to *their* place.
+**Today's idea:** Week 9 colored regions someone else had already drawn. This
+week the data is **points**, and nobody has drawn anything. Everything on the
+map — the groups, the boundaries, the density — is something you computed, and
+every one of those computations took a parameter.
 :::
 
-# Why interactive maps {background-color="#2E6E8E"}
+Running example: **2,264 Tesla Supercharger sites** in the United States, with
+coordinates, stall counts and opening dates.
 
-## Static answers one question; interactive lets them ask
+# Points are not polygons {background-color="#2E6E8E"}
 
-Geographic data has a property no other modality matches: **every reader has a personal location**. They will try to zoom. Interaction supplies:
+## The data has no shape of its own {.smaller}
 
-- **Zoom/pan** — overview first, *their* region on demand
-- **Hover/popup** — exact values without legend-squinting
-- **Layer toggles** — points over polygons, optional context
-- **Filters** — time, category, threshold
+A choropleth starts with regions. Someone drew the state boundaries, the census
+decided which tract is which, and your job was to pick a color.
 
-But interaction is a budget: every control adds cognitive load. Shneiderman's mantra orders it: *overview first, zoom and filter, details on demand.*
+A set of points has none of that. 2,264 latitude and longitude pairs do not
+come divided into anything. If you want regions, groups or neighborhoods, you
+have to **make them**, and that is a modeling decision rather than a
+cartographic one.
 
-## The web-map model: tiles + layers
+```{python}
+#| echo: false
+import warnings
+warnings.filterwarnings("ignore")
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+sites = pd.read_csv("../dats6401/weekly/week10/data/superchargers_us.csv")
+conus = sites[(sites.lat.between(24, 50)) & (sites.lon.between(-125, -66))].copy()
+print(f"{len(sites)} sites in the file, {len(conus)} in the contiguous states")
+print(f"{sites['stalls'].sum():,} charging stalls")
+print(f"opened between {pd.to_datetime(sites.opened).min().date()} "
+      f"and {pd.to_datetime(sites.opened).max().date()}")
+```
+
+## The first problem: overplotting {.smaller}
 
 ```{python}
 #| echo: false
 #| fig-align: center
-import matplotlib.pyplot as plt
-import matplotlib.patches as mp
-fig, ax = plt.subplots(figsize=(8.5, 3.8))
-layers = [("Basemap tiles (Leaflet fetches per zoom level)", "#EAF2F6"),
-          ("Your data layer: choropleth / markers (GeoJSON)", "#9ab8c9"),
-          ("Interaction layer: popups, tooltips, toggles", "#2E6E8E")]
-for i, (txt, col) in enumerate(layers):
-    tc = "white" if i == 2 else "#1a1a1a"
-    ax.add_patch(mp.FancyBboxPatch((0.4 + i*0.55, 0.35 + i*0.7), 6.4, 0.95,
-                 boxstyle="round,pad=0.08", fc=col, ec="#2E6E8E"))
-    ax.text(0.7 + i*0.55, 0.82 + i*0.7, txt, fontsize=10.5, va="center", color=tc)
-ax.set_xlim(0, 8.6); ax.set_ylim(0, 3.1); ax.axis("off")
-ax.set_title("A web map is a stack — tiles you rent, data you bring, interaction you design")
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+axes[0].scatter(conus.lon, conus.lat, s=16, color="#d9534f")
+axes[0].set_title("one dot per site")
+axes[1].scatter(conus.lon, conus.lat, s=16, color="#d9534f", alpha=0.15)
+axes[1].set_title("the same dots at 15% opacity")
+for a in axes:
+    a.set_aspect(1.3); a.set_xticks([]); a.set_yticks([])
 plt.tight_layout(); plt.show()
 ```
 
-**folium** wraps Leaflet (the web-standard tile map) in Python; **plotly** offers `scatter_mapbox`/`choropleth_mapbox`. Both speak GeoJSON.
+On the left, the northeast is a solid shape. Ten sites and a hundred sites look
+exactly the same once the dots overlap, so the densest part of the map — the
+part you most want to read — is the part carrying the least information.
 
-# Into Streamlit: the geospatial dashboard {background-color="#2E6E8E"}
+**A choropleth cannot do this.** Each region gets one patch of color, however
+many observations went into it.
 
-## The coordination pattern
+## What transparency buys, and what it does not
 
-One filter drives **both** the map and a companion chart — this is the dashboard's whole trick:
+Making the dots see-through is the cheapest fix and it is a real improvement:
+stacking now shows as darkness, so you can tell dense from sparse.
 
-```python
-metric = st.sidebar.selectbox("Metric", ["rate", "count"])   # ONE control
+It still cannot tell you **how many**. There is no legend you could add, because
+the mapping from "how dark" to "how many" depends on the dot size, the opacity
+and the zoom, all at once.
 
-m = folium.Map(location=[39, -98], zoom_start=4)
-folium.Choropleth(geo_data=geojson, data=df,
-                  columns=["region_id", metric], ...).add_to(m)
-st_folium(m, width=700)                                      # view 1: the map
+If the answer needs a number, the dots have to be counted. That is the next
+section.
 
-top = df.nlargest(10, metric)
-st.bar_chart(top.set_index("region_name")[metric])           # view 2: same filter
+# Density {background-color="#2E6E8E"}
+
+## Counting points into a grid {.smaller}
+
+Lay a grid over the map, count how many points fall in each cell, color the
+cells. The dots become a surface you can put a legend on.
+
+```{python}
+#| echo: false
+#| fig-align: center
+fig, axes = plt.subplots(1, 3, figsize=(14, 3.7))
+for ax, g in zip(axes, [20, 60, 150]):
+    ax.hexbin(conus.lon, conus.lat, gridsize=g, cmap="inferno", mincnt=1)
+    ax.set_title(f"gridsize = {g}", fontsize=10)
+    ax.set_aspect(1.3); ax.set_xticks([]); ax.set_yticks([])
+plt.suptitle("The same 2,254 points at three grid resolutions")
+plt.tight_layout(); plt.show()
 ```
 
-*(Static — runs live in Block 2.)* The bar chart isn't decoration: maps are bad at **ranking** (Week 2: area/color < position). The pair covers each other's weaknesses.
+## The resolution is the story {.smaller}
 
-## Performance: the hidden constraint {.smaller}
+Read the three panels as three different claims:
 
-Interactive maps choke quietly. The usual suspects and fixes:
+- **Coarse** says the sites are on the coasts. True, and it hides everything
+  else.
+- **Medium** says there are distinct metropolitan concentrations.
+- **Fine** says there are individual cities, and starts to look like the dot
+  map again because most cells now hold one point.
 
-- **Too many vertices** → simplify geometry: `gdf.geometry.simplify(tolerance)`
-- **Too many markers** → cluster (`MarkerCluster`) or aggregate to hex bins
-- **Re-fetching on every widget change** → `@st.cache_data` around loads (Week 5 paying off)
-- **A full re-render per interaction** → keep layers lean; one map, not four
+Nothing about the data changed. This is the same situation as Week 9's class
+breaks: **the parameter is part of the result**, so it belongs in the caption.
+A density map without its resolution stated cannot be reproduced.
 
-Test on the *biggest* layer you'll ship, not the demo subset.
+A density surface also invents something the data does not contain — a value
+*between* the points, where nothing was observed. That is usually what you
+want, and it is worth knowing you asked for it.
 
-## Restraint is a feature
+# Distance {background-color="#2E6E8E"}
 
-Five toggles, three basemaps, popups with twelve fields — each defensible, together unusable.
+## Degrees are not a distance {.smaller}
 
-::: {.gw-box}
-Design check for every control: **what question does this let the reader answer?** No answer → cut it. Your Week 9 honesty rules (rates, classification, disclosed schemes) all still apply — interactivity doesn't license a dishonest layer.
-:::
+Week 9 made this point about area. It returns here, and it is sharper, because
+distance is the whole subject.
+
+```{python}
+#| echo: false
+for lat in (26, 38, 48, 61):
+    print(f"at {lat}N, one degree of longitude = "
+          f"{111.32 * np.cos(np.radians(lat)):6.1f} km")
+print(f"\nat every latitude, one degree of latitude = ~111.0 km")
+```
+
+A degree of latitude is a fixed distance. A degree of longitude is not — it
+shrinks toward the poles, because the lines of longitude meet there. So
+`sqrt(dlat**2 + dlon**2)`, the formula everyone reaches for first, is measuring
+in a unit that changes as you move north.
+
+## Haversine {.smaller}
+
+The **haversine** formula gives the distance between two points along the
+surface of a sphere. It is the right tool for latitude and longitude, and it is
+built into the libraries you already have:
+
+```python
+from sklearn.neighbors import BallTree
+
+tree = BallTree(np.radians(coords), metric="haversine")   # radians, not degrees
+distances, indices = tree.query(np.radians(coords), k=2)  # k=2: itself, then the nearest
+km = distances[:, 1] * 6371.0088                          # Earth's radius in km
+```
+
+Two details that cause silent wrong answers:
+
+- it wants **radians**, and will happily accept degrees and return nonsense
+- the result is an **angle**, so multiply by the Earth's radius to get distance
+
+## How far is the nearest one? {.smaller}
+
+This is a question a choropleth cannot answer. A map of chargers-per-state
+tells you nothing about the drive.
+
+```{python}
+#| echo: false
+#| fig-align: center
+from sklearn.neighbors import BallTree
+
+EARTH_KM = 6371.0088
+tree = BallTree(np.radians(conus[["lat", "lon"]].values), metric="haversine")
+dist, idx = tree.query(np.radians(conus[["lat", "lon"]].values), k=2)
+conus["nearest_km"] = dist[:, 1] * EARTH_KM
+conus["nearest_name"] = conus.iloc[idx[:, 1]]["name"].values
+
+fig, ax = plt.subplots(figsize=(9, 2.9))
+ax.hist(conus.nearest_km, bins=60, color="#2E6E8E")
+ax.set_xlabel("km to the nearest other Supercharger"); ax.set_ylabel("sites")
+plt.tight_layout(); plt.show()
+
+print(f"median {conus.nearest_km.median():.1f} km | "
+      f"mean {conus.nearest_km.mean():.1f} km | "
+      f"90th percentile {conus.nearest_km.quantile(.9):.1f} km")
+```
+
+The mean is more than twice the median, which is the histogram's long right tail
+showing up as a number. **Report the median.**
+
+## The far end of that column {.smaller}
+
+```{python}
+#| echo: false
+print(conus.nlargest(5, "nearest_km")[["name", "state", "nearest_km"]]
+      .round(0).to_string(index=False))
+```
+
+Real answers about coverage, from the points alone. Hines, Oregon is 168 km
+from its nearest neighbor — that is the gap, and no choropleth of Oregon would
+have shown it.
+
+## And the near end {.smaller}
+
+```{python}
+#| echo: false
+print(conus.nsmallest(6, "nearest_km")[["name", "state", "nearest_km"]]
+      .round(3).to_string(index=False))
+```
+
+**Thirty-six metres.** Read the names: `Baker, CA` and `Baker (Expansion), CA`.
+`St. George - Convention Center Drive` and `St. George - S Convention Center Dr`.
+
+These are the same place, entered twice. A query written to answer a coverage
+question has found a **data quality problem** instead — and it was invisible in
+every map so far, because at national zoom the two dots are one dot.
+
+Decide what to do about them before you count anything.
+
+# Finding groups {background-color="#2E6E8E"}
+
+## DBSCAN {.smaller}
+
+Points that sit close together in dense bunches get grouped; everything else is
+labeled **noise**. Unlike k-means it is not told how many groups to find, and
+it is not required to put every point in one.
+
+It takes two numbers:
+
+- **`eps`** — how far apart still counts as "close"
+- **`min_samples`** — how many neighbors within `eps` a point needs before it
+  can anchor a group
+
+That is the whole algorithm. Both numbers are yours to choose, and the answer
+changes when they do.
+
+## The mistake that makes it wrong {.smaller}
+
+The obvious call is `DBSCAN(eps=0.45)` on a table of latitude and longitude,
+with `eps` worked out as 50 km divided by 111 km per degree.
+
+It runs. It returns clusters. It is wrong, for the reason two slides back: that
+`eps` means 50 km north-south and something else east-west, varying with
+latitude.
+
+```{python}
+#| echo: false
+from sklearn.cluster import DBSCAN
+from sklearn.metrics import adjusted_rand_score
+
+EPS_KM, MIN_SAMPLES = 50, 5
+coords = conus[["lat", "lon"]].values
+right = DBSCAN(eps=EPS_KM / EARTH_KM, min_samples=MIN_SAMPLES,
+               metric="haversine").fit_predict(np.radians(coords))
+wrong = DBSCAN(eps=EPS_KM / 111.0, min_samples=MIN_SAMPLES).fit_predict(coords)
+conus["cluster"] = right
+
+for nm, lab in [("haversine on radians", right), ("euclidean on degrees", wrong)]:
+    print(f"{nm:22} {len(set(lab)) - (1 if -1 in lab else 0):3} clusters, "
+          f"{(lab == -1).sum():4} points left as noise")
+```
+
+## How much does it cost? {.smaller}
+
+Cluster numbers are handed out in the order DBSCAN finds them, so comparing
+"cluster 7" across two runs is meaningless. Two things do survive relabeling:
+
+```{python}
+#| echo: false
+print(f"adjusted Rand index: {adjusted_rand_score(right, wrong):.3f}"
+      "   (1.0 would be the same grouping)")
+flipped = (right == -1) != (wrong == -1)
+print(f"\npoints whose noise status differs: {flipped.sum()} of {len(conus)}")
+print(f"  clustered by haversine, called noise by euclidean: "
+      f"{((right != -1) & (wrong == -1)).sum()}")
+print(f"  the reverse:                                       "
+      f"{((right == -1) & (wrong != -1)).sum()}")
+print()
+for lo, hi, nm in [(24, 34, "south of 34N"), (34, 42, "34 to 42N"),
+                   (42, 50, "north of 42N")]:
+    band = conus.lat.between(lo, hi).values
+    print(f"  {nm:14} {band.sum():4} sites, differs for {flipped[band].mean():5.1%}")
+```
+
+**Every disagreement runs the same way**, and the error grows with latitude.
+Nothing raises an exception. The northern states simply end up with fewer
+clusters than they should have.
+
+## Reading the result {.smaller}
+
+```{python}
+#| echo: false
+big = (conus[conus.cluster != -1].groupby("cluster")
+       .agg(sites=("name", "size"), stalls=("stalls", "sum"),
+            lat=("lat", "mean"), lon=("lon", "mean"))
+       .sort_values("sites", ascending=False))
+print(f"{len(big)} clusters, {(conus.cluster == -1).sum()} points as noise. "
+      f"The six largest:")
+print(big.head(6).round(1).to_string())
+```
+
+## Check the groups are real {.smaller}
+
+DBSCAN was given coordinates and nothing else. No city names, no state
+boundaries, no population.
+
+Read the centroids anyway:
+
+- **40.5N, −74.4W** — New York and northern New Jersey
+- **34.0N, −118.1W** — Los Angeles
+- **37.8N, −121.6W** — the Bay Area
+- **27.5N, −81.2W** — central Florida
+
+It recovered the metropolitan areas from the dots. That agreement is your
+evidence the parameters were sensible — and it is the check to run before
+believing any clustering, because the algorithm will return groups whether or
+not there are any.
+
+## Noise is not failure {.smaller}
+
+```{python}
+#| echo: false
+#| fig-align: center
+fig, ax = plt.subplots(figsize=(10, 4.6))
+noise = conus[conus.cluster == -1]
+ax.scatter(noise.lon, noise.lat, s=11, color="#bbbbbb",
+           label=f"noise ({len(noise)})")
+for cid in big.head(8).index:
+    m = conus[conus.cluster == cid]
+    ax.scatter(m.lon, m.lat, s=20, label=f"{cid} ({len(m)})")
+ax.set_aspect(1.3); ax.set_xticks([]); ax.set_yticks([])
+ax.legend(fontsize=7, loc="lower left", ncol=3)
+ax.set_title(f"haversine, eps={EPS_KM} km, min_samples={MIN_SAMPLES}")
+plt.tight_layout(); plt.show()
+```
+
+For a charging network the grey points may be the **most** interesting
+category: the lone stations on long highways, built so the gap is covered
+rather than because demand was dense.
+
+# Putting it in front of someone {background-color="#2E6E8E"}
+
+## Performance is a design choice {.smaller}
+
+Interactive maps send every feature to the browser. How you draw 2,254 points
+changes the page by a factor of nearly four:
+
+```{python}
+#| echo: false
+# Measured once with folium 0.20 by building each map and taking
+# len(m._repr_html_()). Not computed at render time: it would mean building
+# four full maps on every render, and would make this deck depend on folium.
+print("the same 2,254 points, four ways of drawing them in folium:")
+print("  one CircleMarker per point : 1,481 KB")
+print("  MarkerCluster              :   474 KB")
+print("  one Marker per point       :   449 KB")
+print("  a single GeoJson layer     :   401 KB")
+```
+
+`CircleMarker` writes a separate JavaScript object per point; a `GeoJson` layer
+writes one object holding all of them. The map looks nearly identical.
+
+At this size it is a slow page. At ten times this size it is a page that does
+not load, and the usual answer is to stop sending raw points — cluster them,
+aggregate them to a grid, or send only what is in view.
+
+## Restraint {.smaller}
+
+Every control you add costs the reader something. The standard ordering, from
+Shneiderman, is **overview first, zoom and filter, details on demand** — give
+the whole picture, let them narrow it, and keep the specifics for when they
+ask.
+
+Applied here: show the density surface first, let them filter by state or by
+opening year, and put the site name and stall count in a tooltip rather than
+on the map.
+
+A map with every layer switched on, every point labeled and a popup on
+everything is not a more informative map. It is a map nobody reads.
 
 ## Discussion {.gw-discussion}
 
-**1.** Your county map has 3,000 polygons and scrolls like molasses. Rank the fixes you'd try, cheapest first.
+**1.** Your clustering returns 50 groups. Your colleague runs the same code and
+gets 48. Neither of you changed the data. What do you need to tell each other
+before you can say which is right — and is "which is right" even the question?
 
-**2.** What's one filter that would make *your* Week 9 choropleth genuinely more useful — and one toggle you'd be tempted to add but shouldn't?
+**2.** You find two sites 36 metres apart. One is named "Expansion". Do you
+merge them, drop one, or keep both — and what does each choice do to a map of
+coverage?
 
 ## Coming up next — Block 2 {.smaller}
 
-Live build:
+Live demo, five parts:
 
-1. Last week's choropleth → interactive folium with hover/popups
-2. Embed in Streamlit via `streamlit-folium`
-3. Add the coordinated filter: map + ranking bar chart, one control
+1. Why you cannot just plot 2,254 points
+2. Density on a grid, at three resolutions
+3. DBSCAN, and the distance metric that makes it wrong
+4. Reading the clusters, and checking they are real
+5. Distance, and the duplicates it finds by accident
 
-**Then Block 3:** your interactive geospatial dashboard — map, ≥1 filter, one coordinated chart — deployed.
+**Then Block 3**, on your own after class: the same pipeline on a point dataset
+of your choosing, with the parameters written down, ending in a Streamlit
+dashboard where a filter drives both a map and a chart.
 
-**Readings:** folium quickstart · streamlit-folium · plotly maps guide
+**Readings:** scikit-learn clustering guide · folium quickstart · Shneiderman,
+*The Eyes Have It* (1996)
 
-**Homework preview:** the deployed dashboard + a note on one performance or legibility decision. This pattern is your mid-term project's backbone.
+**Homework:** a point map that answers a question about distance or density,
+with every parameter you chose stated in the caption.
