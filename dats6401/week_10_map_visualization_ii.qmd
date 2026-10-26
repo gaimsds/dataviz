@@ -48,7 +48,7 @@ The week still ends in a Streamlit dashboard, because that is the delivery forma
 Make sure your environment includes:
 
 ```bash
-pip install scikit-learn folium streamlit-folium plotly altair geopandas pandas streamlit
+pip install scikit-learn folium streamlit-folium plotly altair pydeck geopandas pandas streamlit
 ```
 
 `scikit-learn` supplies both DBSCAN and the BallTree used for the distance
@@ -63,37 +63,35 @@ before class.
 
 ### Block 1 — Concepts & Theory (~35 min)
 
-1. Points are not polygons: overplotting, and what transparency does not fix
-2. Density on a grid, and why the resolution is part of the claim
-3. Distance: degrees are angles, haversine, and nearest-neighbor queries
-4. DBSCAN, its two parameters, and the metric mistake that quietly changes the answer
-5. Checking a clustering is real; noise as a category
-6. Performance, and the restraint that interactivity demands
+1. What interaction is for, and the four tools that provide it
+2. Point in polygon: joining by location instead of by key
+3. Sites and stalls per state, then per million people
+4. The Albers USA layout, and why Alaska has to be moved
+5. Altair selections: one view driving another
+6. Extensions: DBSCAN, heat maps and 3D
+
 
 ### Block 2 — Guided Demonstration (~35 min, live coding)
 
 On 2,264 US Supercharger sites, included in the materials:
 
-1. Why you cannot just plot the points
-2. Density on a grid, at three resolutions
-3. DBSCAN, and the distance metric that makes it wrong
-4. Reading the clusters, and checking they are real
-5. Distance, and the duplicate records it finds by accident
+1. The same map in folium, plotly and Altair
+2. The spatial join, and the three sites it drops
+3. Sites and stalls per state, then per million
+4. The Albers USA layout against the real coordinates
+5. An Altair selection linking sites to their nearest neighbors
+6. Extensions: DBSCAN, the heat map, a 3D extrusion
+
 
 ### ☕ Break (~15 min)
 
 ### Block 3 — Hands-On Activity (~50 min, on your own after class)
 
-1. Plot a point dataset and deal with its overplotting
-2. A density surface, with the resolution stated
-3. Nearest-neighbor distances, and what the extremes of that column reveal
-4. DBSCAN with a justified `eps` and `min_samples`, checked against something
-   you already know
-5. Point in polygon: join the points to states by location, and account for
-   the ones that match nothing
-6. An interactive choropleth, and why Alaska has to be moved
-7. Altair, and a selection that links two layers
-8. Wrap it in a Streamlit dashboard where a filter drives both a map and a chart
+1. A spatial join, and an account of the points that match nothing
+2. A choropleth of the result, as a count and as a rate
+3. An interactive version, with the Albers USA layout
+4. The Streamlit dashboard
+
 
 ### Block 4 — Wrap-Up & Homework Preview (~10 min)
 

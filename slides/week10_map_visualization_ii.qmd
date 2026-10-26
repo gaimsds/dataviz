@@ -1,6 +1,6 @@
 ---
 title: "Map Visualization — Module II"
-subtitle: "Week 10 · Points, density, distance"
+subtitle: "Week 10 · Interactive maps and spatial operations"
 author: "DATS 6401 — Visualization of Complex Data · Junjun Yin"
 format: revealjs
 ---
@@ -10,32 +10,60 @@ format: revealjs
 | | | |
 |---|---|---|
 | **Block 1** | Concepts & Theory — *this deck* | ~35 min |
-| **Block 2** | Guided demo: five parts, run live | ~35 min |
+| **Block 2** | Guided demo, run live | ~35 min |
 | ☕ | Break | ~15 min |
 | **Block 3** | Hands-on, on your own afterwards | ~50 min |
 | **Block 4** | Wrap-up & homework preview | ~15 min |
 
 ::: {.gw-box}
-**Today's idea:** Week 9 colored regions someone else had already drawn. This
-week the data is **points**, and nobody has drawn anything. Everything on the
-map — the groups, the boundaries, the density — is something you computed, and
-every one of those computations took a parameter.
+**Today's idea:** Week 9 built maps you look at. This week builds maps you can
+**ask questions of** — and gets the data into the right shape to answer them,
+which usually means a spatial operation rather than a chart option.
 :::
 
 Running example: **2,264 Tesla Supercharger sites** in the United States, with
 coordinates, stall counts and opening dates.
 
-# Points are not polygons {background-color="#2E6E8E"}
+# Maps you can interrogate {background-color="#2E6E8E"}
 
-## The data has no shape of its own {.smaller}
+## What interaction is actually for {.smaller}
 
-A choropleth starts with regions. Someone drew the state boundaries, the census
-decided which tract is which, and your job was to pick a color.
+Week 9 ended with one interactive map and left it there. The question it did
+not answer is what interaction buys, because "it feels modern" is not a reason.
 
-A set of points has none of that. 2,264 latitude and longitude pairs do not
-come divided into anything. If you want regions, groups or neighborhoods, you
-have to **make them**, and that is a modeling decision rather than a
-cartographic one.
+Three things a printed map genuinely cannot do:
+
+- **Hover.** Put the number next to the color, so nobody has to measure a shade
+  against a legend. Reading color is the thing people are worst at, and this
+  removes the need.
+- **Zoom.** Every reader has a personal location and will look for it. A
+  national map at national zoom cannot also be a city map.
+- **Select.** Click or hover one thing and have the rest of the display
+  respond. This is the one that changes what questions are askable.
+
+**What it does not buy is honesty.** The classification, the projection and
+whatever you left off the map are still choices, and an interactive map that
+hides them is a dishonest map you can zoom.
+
+## Four tools, four jobs {.smaller}
+
+| | wraps | reach for it when |
+|---|---|---|
+| **folium** | Leaflet | you want a normal web map: tiles, markers, popups |
+| **plotly** | plotly.js | you want hover and a built-in US layout, fast |
+| **altair** | Vega-Lite | one view should drive another |
+| **pydeck** | deck.gl | many points, or height as an encoding |
+
+They all read roughly the same data and all produce HTML. The choice is about
+what you want the reader to be able to *do*, not about which draws prettier
+circles.
+
+All four fetch their JavaScript from a CDN, so the maps need internet to
+display even when your analysis is entirely offline.
+
+# From points to regions {background-color="#2E6E8E"}
+
+## The data is points; the question is about states {.smaller}
 
 ```{python}
 #| echo: false
@@ -43,311 +71,24 @@ import warnings
 warnings.filterwarnings("ignore")
 import numpy as np
 import pandas as pd
+import geopandas as gpd
 import matplotlib.pyplot as plt
 
-sites = pd.read_csv("../dats6401/weekly/week10/data/superchargers_us.csv")
-conus = sites[(sites.lat.between(24, 50)) & (sites.lon.between(-125, -66))].copy()
-print(f"{len(sites)} sites in the file, {len(conus)} in the contiguous states")
-print(f"{sites['stalls'].sum():,} charging stalls")
-print(f"opened between {pd.to_datetime(sites.opened).min().date()} "
-      f"and {pd.to_datetime(sites.opened).max().date()}")
+DATA = "../dats6401/weekly/week10/data"
+sites = pd.read_csv(f"{DATA}/superchargers_us.csv")
+print(f"{len(sites)} sites, {sites.stalls.sum():,} stalls")
+print(sites.head(3)[["name", "state", "lat", "lon", "stalls"]].to_string(index=False))
 ```
 
-## The first problem: overplotting {.smaller}
-
-```{python}
-#| echo: false
-#| fig-align: center
-fig, axes = plt.subplots(1, 2, figsize=(12, 4))
-axes[0].scatter(conus.lon, conus.lat, s=16, color="#d9534f")
-axes[0].set_title("one dot per site")
-axes[1].scatter(conus.lon, conus.lat, s=16, color="#d9534f", alpha=0.15)
-axes[1].set_title("the same dots at 15% opacity")
-for a in axes:
-    a.set_aspect(1.3); a.set_xticks([]); a.set_yticks([])
-plt.tight_layout(); plt.show()
-```
-
-On the left, the northeast is a solid shape. Ten sites and a hundred sites look
-exactly the same once the dots overlap, so the densest part of the map — the
-part you most want to read — is the part carrying the least information.
-
-**A choropleth cannot do this.** Each region gets one patch of color, however
-many observations went into it.
-
-## What transparency buys, and what it does not
-
-Making the dots see-through is the cheapest fix and it is a real improvement:
-stacking now shows as darkness, so you can tell dense from sparse.
-
-It still cannot tell you **how many**. There is no legend you could add, because
-the mapping from "how dark" to "how many" depends on the dot size, the opacity
-and the zoom, all at once.
-
-If the answer needs a number, the dots have to be counted. That is the next
-section.
-
-# Density {background-color="#2E6E8E"}
-
-## Counting points into a grid {.smaller}
-
-Lay a grid over the map, count how many points fall in each cell, color the
-cells. The dots become a surface you can put a legend on.
-
-```{python}
-#| echo: false
-#| fig-align: center
-fig, axes = plt.subplots(1, 3, figsize=(14, 3.7))
-for ax, g in zip(axes, [20, 60, 150]):
-    ax.hexbin(conus.lon, conus.lat, gridsize=g, cmap="inferno", mincnt=1)
-    ax.set_title(f"gridsize = {g}", fontsize=10)
-    ax.set_aspect(1.3); ax.set_xticks([]); ax.set_yticks([])
-plt.suptitle("The same 2,254 points at three grid resolutions")
-plt.tight_layout(); plt.show()
-```
-
-## The resolution is the story {.smaller}
-
-Read the three panels as three different claims:
-
-- **Coarse** says the sites are on the coasts. True, and it hides everything
-  else.
-- **Medium** says there are distinct metropolitan concentrations.
-- **Fine** says there are individual cities, and starts to look like the dot
-  map again because most cells now hold one point.
-
-Nothing about the data changed. This is the same situation as Week 9's class
-breaks: **the parameter is part of the result**, so it belongs in the caption.
-A density map without its resolution stated cannot be reproduced.
-
-A density surface also invents something the data does not contain — a value
-*between* the points, where nothing was observed. That is usually what you
-want, and it is worth knowing you asked for it.
-
-# Distance {background-color="#2E6E8E"}
-
-## Degrees are not a distance {.smaller}
-
-Week 9 made this point about area. It returns here, and it is sharper, because
-distance is the whole subject.
-
-```{python}
-#| echo: false
-for lat in (26, 38, 48, 61):
-    print(f"at {lat}N, one degree of longitude = "
-          f"{111.32 * np.cos(np.radians(lat)):6.1f} km")
-print(f"\nat every latitude, one degree of latitude = ~111.0 km")
-```
-
-A degree of latitude is a fixed distance. A degree of longitude is not — it
-shrinks toward the poles, because the lines of longitude meet there. So
-`sqrt(dlat**2 + dlon**2)`, the formula everyone reaches for first, is measuring
-in a unit that changes as you move north.
-
-## Haversine {.smaller}
-
-The **haversine** formula gives the distance between two points along the
-surface of a sphere. It is the right tool for latitude and longitude, and it is
-built into the libraries you already have:
-
-```python
-from sklearn.neighbors import BallTree
-
-tree = BallTree(np.radians(coords), metric="haversine")   # radians, not degrees
-distances, indices = tree.query(np.radians(coords), k=2)  # k=2: itself, then the nearest
-km = distances[:, 1] * 6371.0088                          # Earth's radius in km
-```
-
-Two details that cause silent wrong answers:
-
-- it wants **radians**, and will happily accept degrees and return nonsense
-- the result is an **angle**, so multiply by the Earth's radius to get distance
-
-## How far is the nearest one? {.smaller}
-
-This is a question a choropleth cannot answer. A map of chargers-per-state
-tells you nothing about the drive.
-
-```{python}
-#| echo: false
-#| fig-align: center
-from sklearn.neighbors import BallTree
-
-EARTH_KM = 6371.0088
-tree = BallTree(np.radians(conus[["lat", "lon"]].values), metric="haversine")
-dist, idx = tree.query(np.radians(conus[["lat", "lon"]].values), k=2)
-conus["nearest_km"] = dist[:, 1] * EARTH_KM
-conus["nearest_name"] = conus.iloc[idx[:, 1]]["name"].values
-
-fig, ax = plt.subplots(figsize=(9, 2.9))
-ax.hist(conus.nearest_km, bins=60, color="#2E6E8E")
-ax.set_xlabel("km to the nearest other Supercharger"); ax.set_ylabel("sites")
-plt.tight_layout(); plt.show()
-
-print(f"median {conus.nearest_km.median():.1f} km | "
-      f"mean {conus.nearest_km.mean():.1f} km | "
-      f"90th percentile {conus.nearest_km.quantile(.9):.1f} km")
-```
-
-The mean is more than twice the median, which is the histogram's long right tail
-showing up as a number. **Report the median.**
-
-## The far end of that column {.smaller}
-
-```{python}
-#| echo: false
-print(conus.nlargest(5, "nearest_km")[["name", "state", "nearest_km"]]
-      .round(0).to_string(index=False))
-```
-
-Real answers about coverage, from the points alone. Hines, Oregon is 168 km
-from its nearest neighbor — that is the gap, and no choropleth of Oregon would
-have shown it.
-
-## And the near end {.smaller}
-
-```{python}
-#| echo: false
-print(conus.nsmallest(6, "nearest_km")[["name", "state", "nearest_km"]]
-      .round(3).to_string(index=False))
-```
-
-**Thirty-six metres.** Read the names: `Baker, CA` and `Baker (Expansion), CA`.
-`St. George - Convention Center Drive` and `St. George - S Convention Center Dr`.
-
-These are the same place, entered twice. A query written to answer a coverage
-question has found a **data quality problem** instead — and it was invisible in
-every map so far, because at national zoom the two dots are one dot.
-
-Decide what to do about them before you count anything.
-
-# Finding groups {background-color="#2E6E8E"}
-
-## DBSCAN {.smaller}
-
-Points that sit close together in dense bunches get grouped; everything else is
-labeled **noise**. Unlike k-means it is not told how many groups to find, and
-it is not required to put every point in one.
-
-It takes two numbers:
-
-- **`eps`** — how far apart still counts as "close"
-- **`min_samples`** — how many neighbors within `eps` a point needs before it
-  can anchor a group
-
-That is the whole algorithm. Both numbers are yours to choose, and the answer
-changes when they do.
-
-## The mistake that makes it wrong {.smaller}
-
-The obvious call is `DBSCAN(eps=0.45)` on a table of latitude and longitude,
-with `eps` worked out as 50 km divided by 111 km per degree.
-
-It runs. It returns clusters. It is wrong, for the reason two slides back: that
-`eps` means 50 km north-south and something else east-west, varying with
-latitude.
-
-```{python}
-#| echo: false
-from sklearn.cluster import DBSCAN
-from sklearn.metrics import adjusted_rand_score
-
-EPS_KM, MIN_SAMPLES = 50, 5
-coords = conus[["lat", "lon"]].values
-right = DBSCAN(eps=EPS_KM / EARTH_KM, min_samples=MIN_SAMPLES,
-               metric="haversine").fit_predict(np.radians(coords))
-wrong = DBSCAN(eps=EPS_KM / 111.0, min_samples=MIN_SAMPLES).fit_predict(coords)
-conus["cluster"] = right
-
-for nm, lab in [("haversine on radians", right), ("euclidean on degrees", wrong)]:
-    print(f"{nm:22} {len(set(lab)) - (1 if -1 in lab else 0):3} clusters, "
-          f"{(lab == -1).sum():4} points left as noise")
-```
-
-## How much does it cost? {.smaller}
-
-Cluster numbers are handed out in the order DBSCAN finds them, so comparing
-"cluster 7" across two runs is meaningless. Two things do survive relabeling:
-
-```{python}
-#| echo: false
-print(f"adjusted Rand index: {adjusted_rand_score(right, wrong):.3f}"
-      "   (1.0 would be the same grouping)")
-flipped = (right == -1) != (wrong == -1)
-print(f"\npoints whose noise status differs: {flipped.sum()} of {len(conus)}")
-print(f"  clustered by haversine, called noise by euclidean: "
-      f"{((right != -1) & (wrong == -1)).sum()}")
-print(f"  the reverse:                                       "
-      f"{((right == -1) & (wrong != -1)).sum()}")
-print()
-for lo, hi, nm in [(24, 34, "south of 34N"), (34, 42, "34 to 42N"),
-                   (42, 50, "north of 42N")]:
-    band = conus.lat.between(lo, hi).values
-    print(f"  {nm:14} {band.sum():4} sites, differs for {flipped[band].mean():5.1%}")
-```
-
-**Every disagreement runs the same way**, and the error grows with latitude.
-Nothing raises an exception. The northern states simply end up with fewer
-clusters than they should have.
-
-## Reading the result {.smaller}
-
-```{python}
-#| echo: false
-big = (conus[conus.cluster != -1].groupby("cluster")
-       .agg(sites=("name", "size"), stalls=("stalls", "sum"),
-            lat=("lat", "mean"), lon=("lon", "mean"))
-       .sort_values("sites", ascending=False))
-print(f"{len(big)} clusters, {(conus.cluster == -1).sum()} points as noise. "
-      f"The six largest:")
-print(big.head(6).round(1).to_string())
-```
-
-## Check the groups are real {.smaller}
-
-DBSCAN was given coordinates and nothing else. No city names, no state
-boundaries, no population.
-
-Read the centroids anyway:
-
-- **40.5N, −74.4W** — New York and northern New Jersey
-- **34.0N, −118.1W** — Los Angeles
-- **37.8N, −121.6W** — the Bay Area
-- **27.5N, −81.2W** — central Florida
-
-It recovered the metropolitan areas from the dots. That agreement is your
-evidence the parameters were sensible — and it is the check to run before
-believing any clustering, because the algorithm will return groups whether or
-not there are any.
-
-## Noise is not failure {.smaller}
-
-```{python}
-#| echo: false
-#| fig-align: center
-fig, ax = plt.subplots(figsize=(10, 4.6))
-noise = conus[conus.cluster == -1]
-ax.scatter(noise.lon, noise.lat, s=11, color="#bbbbbb",
-           label=f"noise ({len(noise)})")
-for cid in big.head(8).index:
-    m = conus[conus.cluster == cid]
-    ax.scatter(m.lon, m.lat, s=20, label=f"{cid} ({len(m)})")
-ax.set_aspect(1.3); ax.set_xticks([]); ax.set_yticks([])
-ax.legend(fontsize=7, loc="lower left", ncol=3)
-ax.set_title(f"haversine, eps={EPS_KM} km, min_samples={MIN_SAMPLES}")
-plt.tight_layout(); plt.show()
-```
-
-For a charging network the grey points may be the **most** interesting
-category: the lone stations on long highways, built so the gap is covered
-rather than because demand was dense.
-
-# Points, meet polygons {background-color="#2E6E8E"}
-
-## A join with no key {.smaller}
-
-Week 9 joined two tables on a shared FIPS code. There is no such key here: the
-only thing connecting a charging station to a state is **where it is**.
+We want a choropleth of sites per state. The file has a `state` column, so we
+could group on it and be done.
+
+**Do not.** That column is an attribute someone typed. The question "which
+state is this point in" is a *geometric* one, and answering it geometrically is
+the operation worth learning — because most of the time there is no such
+column.
+
+## Point in polygon {.smaller}
 
 ```python
 points = gpd.GeoDataFrame(sites, crs="EPSG:4326",
@@ -355,194 +96,321 @@ points = gpd.GeoDataFrame(sites, crs="EPSG:4326",
 tagged = gpd.sjoin(points, states, predicate="within", how="left")
 ```
 
-`predicate="within"` asks, for each point, which polygon contains it. Other
-predicates answer other questions: `intersects` for overlap, `contains` for the
-reverse direction, `dwithin` for "near enough".
+A **spatial join** matches rows by geometry instead of by a key. `within` asks
+which polygon contains each point. Other predicates answer other questions:
+`intersects` for any overlap, `contains` for the other direction, `touches` for
+shared edges only.
 
-Use **`how="left"`**. The default drops every point that matched nothing, which
-is exactly the set you most need to look at.
-
-## The points that matched nothing {.smaller}
+Use **`how="left"`**. The default silently drops every point that matched
+nothing — which is the set you most need to see.
 
 ```{python}
 #| echo: false
-import geopandas as gpd
+states = gpd.read_file(f"{DATA}/states.geojson")[["fips", "state", "geometry"]]
+states = states.rename(columns={"state": "state_polygon"})
+points = gpd.GeoDataFrame(sites, crs="EPSG:4326",
+                          geometry=gpd.points_from_xy(sites.lon, sites.lat))
+tagged = gpd.sjoin(points, states, predicate="within", how="left")
+print(f"{len(points)} points in, {tagged.fips.notna().sum()} matched a state, "
+      f"{tagged.fips.isna().sum()} matched nothing")
+```
 
-states_all = gpd.read_file("../dats6401/weekly/week10/data/states.geojson")
-pts = gpd.GeoDataFrame(sites, geometry=gpd.points_from_xy(sites.lon, sites.lat),
-                       crs="EPSG:4326")
-tagged = gpd.sjoin(pts, states_all[["fips", "state", "geometry"]].rename(
-    columns={"state": "state_polygon"}), predicate="within", how="left")
-print(f"{len(pts)} points in, {tagged.fips.notna().sum()} matched, "
-      f"{tagged.fips.isna().sum()} matched nothing\n")
+## The three that matched nothing {.smaller}
+
+```{python}
+#| echo: false
 print(tagged[tagged.fips.isna()][["name", "state", "lat", "lon"]].to_string(index=False))
 ```
 
 **None of these is in the sea.** Vesey Street is in lower Manhattan, McDermitt
-is on the Nevada side of the Oregon border, South Padre Island is a barrier
+sits on the Nevada side of the Oregon border, South Padre Island is a barrier
 island off Texas.
 
-They fell out because the boundary file is **simplified** — smoothed coastlines,
-rounded-off islands. Week 9 said generalized boundaries are fine for coloring
-and wrong for measuring. They are also wrong for **joining**, and the join does
-not complain.
+They fell out because the boundary file is **simplified** — the coastlines are
+smoothed inland and the barrier islands rounded off, to keep it at 344 KB.
 
-## What the join buys {.smaller}
+Week 9 said generalized boundaries are fine for coloring regions and wrong for
+measuring them. Add a third: they are wrong for **joining**, and the join does
+not raise anything. With `how="inner"` these three would simply never have
+existed.
+
+## Now the choropleth {.smaller}
 
 ```{python}
 #| echo: false
-acs = pd.read_csv("../dats6401/weekly/week10/data/state_stats.csv", dtype={"fips": str})
-per_state = (tagged.dropna(subset=["fips"]).groupby(["fips", "state_polygon"])
-             .agg(sites=("name", "size")).reset_index()
+#| fig-align: center
+acs = pd.read_csv(f"{DATA}/state_stats.csv", dtype={"fips": str})
+per_state = (tagged.dropna(subset=["fips"])
+             .groupby(["fips", "state_polygon"])
+             .agg(sites=("name", "size"), stalls=("stalls", "sum"))
+             .reset_index()
              .merge(acs[["fips", "pop_total"]], on="fips"))
 per_state["per_million"] = (1e6 * per_state.sites / per_state.pop_total).round(1)
-print("most sites:")
-print(per_state.nlargest(4, "sites")[["state_polygon", "sites", "per_million"]].to_string(index=False))
-print("\nmost per million people:")
-print(per_state.nlargest(4, "per_million")[["state_polygon", "sites", "per_million"]].to_string(index=False))
+
+shapes = gpd.read_file(f"{DATA}/states.geojson")
+m = shapes.merge(per_state, on="fips")
+conus_m = m[~m.state.isin(["Alaska", "Hawaii", "Puerto Rico"])]
+
+fig, axes = plt.subplots(1, 2, figsize=(12.5, 3.8))
+conus_m.plot(column="sites", cmap="OrRd", legend=True, ax=axes[0],
+             edgecolor="white", linewidth=0.4)
+axes[0].set_title("sites per state", fontsize=10)
+conus_m.plot(column="stalls", cmap="OrRd", legend=True, ax=axes[1],
+             edgecolor="white", linewidth=0.4)
+axes[1].set_title("stalls per state", fontsize=10)
+for a in axes: a.axis("off")
+plt.tight_layout(); plt.show()
 ```
 
-Week 9's lesson reached from the other side. Two joins of two different kinds
-had to happen first: points to polygons **by location**, then polygons to
-population **by key**.
+Two different counts of the same network. **Stalls** is the better measure of
+capacity — a site with 40 stalls is not one site's worth of charging — and the
+two maps are not identical.
 
-# The map that lies on purpose {background-color="#2E6E8E"}
+## And the rate, again {.smaller}
+
+```{python}
+#| echo: false
+print("most sites:")
+print(per_state.nlargest(4, "sites")[["state_polygon", "sites", "stalls", "per_million"]]
+      .to_string(index=False))
+print("\nmost sites per million people:")
+print(per_state.nlargest(4, "per_million")[["state_polygon", "sites", "stalls", "per_million"]]
+      .to_string(index=False))
+```
+
+Week 9's lesson arrived at from the other side. California has by far the most
+and is twelfth per person; Delaware, Wyoming and Montana lead per capita on
+about twenty sites each.
+
+Getting here took **two joins of two different kinds**: points to polygons by
+location, then polygons to population by key.
+
+# The layout problem {background-color="#2E6E8E"}
 
 ## Where Alaska actually is {.smaller}
 
 ```{python}
 #| echo: false
 #| fig-align: center
-fig, axes = plt.subplots(1, 2, figsize=(13, 3.4))
-states_all.plot(ax=axes[0], color="#EAF2F6", edgecolor="#2E6E8E", linewidth=0.4)
+fig, axes = plt.subplots(1, 2, figsize=(13, 3.3))
+shapes.plot(ax=axes[0], color="#EAF2F6", edgecolor="#2E6E8E", linewidth=0.4)
 axes[0].set_title("all 52, at their real coordinates", fontsize=10)
-states_all[~states_all.state.isin(["Alaska", "Hawaii", "Puerto Rico"])].plot(
+shapes[~shapes.state.isin(["Alaska", "Hawaii", "Puerto Rico"])].plot(
     ax=axes[1], color="#EAF2F6", edgecolor="#2E6E8E", linewidth=0.4)
 axes[1].set_title("the lower 48 and DC", fontsize=10)
 for a in axes:
     a.set_xticks([]); a.set_yticks([]); a.set_aspect(1.3)
 plt.tight_layout(); plt.show()
 
-b = states_all.total_bounds
-ak = states_all[states_all.state == "Alaska"].geometry.iloc[0]
+b = shapes.total_bounds
+ak = shapes[shapes.state == "Alaska"].geometry.iloc[0]
 print(f"all 52 span {b[2] - b[0]:.1f} degrees of longitude, because Alaska is "
-      f"{len(list(ak.geoms))} polygons and "
-      f"{sum(1 for p in ak.geoms if p.bounds[0] > 0)} of them sit past +180")
+      f"{len(list(ak.geoms))} polygons and {sum(1 for p in ak.geoms if p.bounds[0] > 0)} "
+      f"of them sit past +180")
 ```
 
-The Aleutians cross the antimeridian, so asking for the extent of the United
-States returns nearly the whole planet and the country collapses to a sliver.
+The Aleutians cross the **antimeridian**, the line where longitude flips from
++180 to −180. Ask for the extent of the United States and you get nearly the
+whole planet.
 
-## Albers USA {.smaller}
+## Albers USA: the map that lies on purpose {.smaller}
 
-The standard answer is a **composite projection**. Albers USA projects the
-lower 48 normally, then takes Alaska, shrinks it, moves it, takes Hawaii, moves
-that too, and parks both below California.
+The standard fix is a **composite projection**. Albers USA projects the lower
+48 normally, then shrinks Alaska, moves it, moves Hawaii, and parks both in the
+empty space below California.
 
-The map is **deliberately wrong about where two states are**, and everybody
-accepts it, because the honest version is unreadable.
+The result is **deliberately wrong about where two states are**, and nobody
+objects, because the honest version is unreadable.
 
-- `plotly`: `px.choropleth(..., locationmode="USA-states", scope="usa")`
-- `altair`: `.project(type="albersUsa")`
-- `geopandas`: no built-in equivalent — you move the geometries yourself
+```python
+px.choropleth(df, locations="abbr", locationmode="USA-states", scope="usa")
+alt.Chart(gdf).mark_geoshape().project(type="albersUsa")
+```
 
-Worth saying out loud to a class: this is a cartographic convention that
-survives because it is useful, not because it is true. Most readers have never
-noticed it. It is also a reminder that "the projection" is not always one
-projection.
+Worth saying out loud: this is a convention that survives because it is useful,
+not because it is true, and most readers have never noticed it. It is also not
+an Alaska problem — it is a **dateline** problem, and it will meet you again in
+Fiji, Kiribati, Russia, or any shipping route across the Pacific.
 
-## Interactivity, and what it does not buy {.smaller}
+# Altair: one view drives another {background-color="#2E6E8E"}
 
-`plotly` and `altair` both produce maps you can hover, zoom and select on, from
-roughly the same amount of code as a static figure. What hovering buys is real:
-the number sits **beside** the color, so nobody has to measure a shade against
-a legend.
+## Selections {.smaller}
 
-**Altair is worth meeting for its selections.** You declare that hovering one
-mark should change what the others draw, and Vega-Lite wires it up — no
-callback, no redraw written by hand:
+folium and plotly give you hover and zoom. Altair's distinctive idea is the
+**selection**: you declare that interacting with one mark changes what the
+other marks draw, and Vega-Lite wires it up. No callback, no redraw.
 
 ```python
 pick = alt.selection_point(fields=["state"], on="mouseover", empty=False)
 
-edges.encode(opacity=alt.condition(pick, alt.value(0.8), alt.value(0.04)))
-dots.add_params(pick)
+dots = base_dots.encode(
+    opacity=alt.condition(pick, alt.value(0.9), alt.value(0.08))
+).add_params(pick)
 ```
 
-The same pattern draws flight routes, shipping lanes or migrations: anything
-with a from-point and a to-point. The demo uses it on the nearest-neighbor
-pairs from the distance section.
+Two details that cost people an hour:
 
-None of this makes a map more honest. The classification, the projection and
-the omissions are still choices, and an interactive map that does not disclose
-them is just a static dishonest map you can zoom.
+- `add_params` goes on the layer you **interact with**; `alt.condition` goes on
+  every layer that should **respond**
+- `empty=False`. The default is `True`, which means "nothing selected"
+  highlights everything — so the chart looks broken only when the pointer is
+  off it
 
-# Putting it in front of someone {background-color="#2E6E8E"}
+## What it is for {.smaller}
 
-## Performance is a design choice {.smaller}
+The pattern generalizes to anything with a **from** and a **to**: flight routes
+between airports, shipments between ports, migrations between counties,
+citations between papers.
 
-Interactive maps send every feature to the browser. How you draw 2,254 points
-changes the page by a factor of nearly four:
+In the demo we use it on the nearest-neighbor pairs — each site joined to the
+one closest to it — so hovering a state lights up its local network and dims
+the rest.
+
+Altair embeds the data inside the chart specification, which is why the charts
+are self-contained and also why a large GeoDataFrame makes a large notebook.
+Ours is about 530 KB. Simplify the geometry if that becomes a problem.
+
+# Going further {background-color="#2E6E8E"}
+
+## Density: the heat map {.smaller}
+
+A heat map smooths the points into a continuous surface. `folium.plugins.HeatMap`
+takes a list of coordinates and does the rest.
+
+```python
+from folium.plugins import HeatMap
+HeatMap(sites[["lat", "lon"]].values, radius=12).add_to(m)
+```
 
 ```{python}
 #| echo: false
-# Measured once with folium 0.20 by building each map and taking
-# len(m._repr_html_()). Not computed at render time: it would mean building
-# four full maps on every render, and would make this deck depend on folium.
-print("the same 2,254 points, four ways of drawing them in folium:")
-print("  one CircleMarker per point : 1,481 KB")
-print("  MarkerCluster              :   474 KB")
-print("  one Marker per point       :   449 KB")
-print("  a single GeoJson layer     :   401 KB")
+#| fig-align: center
+conus = sites[(sites.lat.between(24, 50)) & (sites.lon.between(-125, -66))]
+fig, axes = plt.subplots(1, 3, figsize=(14, 3.4))
+for ax, g in zip(axes, [20, 60, 150]):
+    ax.hexbin(conus.lon, conus.lat, gridsize=g, cmap="inferno", mincnt=1)
+    ax.set_title(f"gridsize = {g}", fontsize=10)
+    ax.set_aspect(1.3); ax.set_xticks([]); ax.set_yticks([])
+plt.suptitle("the same points, three resolutions")
+plt.tight_layout(); plt.show()
 ```
 
-`CircleMarker` writes a separate JavaScript object per point; a `GeoJson` layer
-writes one object holding all of them. The map looks nearly identical.
+**The radius is the story.** A big radius says "the coasts", a small one says
+"individual cities", and both are the same 2,254 points. Put the setting in the
+caption, exactly as Week 9 put the class breaks there.
 
-At this size it is a slow page. At ten times this size it is a page that does
-not load, and the usual answer is to stop sending raw points — cluster them,
-aggregate them to a grid, or send only what is in view.
+## Clustering: DBSCAN {.smaller}
 
-## Restraint {.smaller}
+**DBSCAN** groups points that sit in dense bunches and labels the rest
+**noise**. It is not told how many groups to find. It takes `eps` — how far
+apart still counts as close — and `min_samples`.
 
-Every control you add costs the reader something. The standard ordering, from
-Shneiderman, is **overview first, zoom and filter, details on demand** — give
-the whole picture, let them narrow it, and keep the specifics for when they
-ask.
+For geographic points there is a trap, and it is Week 9's trap again: latitude
+and longitude are **angles**, and a degree of longitude is 111 km at the
+equator and 74 km at the Canadian border.
 
-Applied here: show the density surface first, let them filter by state or by
-opening year, and put the site name and stall count in a tooltip rather than
-on the map.
+```{python}
+#| echo: false
+from sklearn.cluster import DBSCAN
+from sklearn.metrics import adjusted_rand_score
 
-A map with every layer switched on, every point labeled and a popup on
-everything is not a more informative map. It is a map nobody reads.
+EARTH_KM, EPS_KM, MIN = 6371.0088, 50, 5
+coords = conus[["lat", "lon"]].values
+right = DBSCAN(eps=EPS_KM / EARTH_KM, min_samples=MIN,
+               metric="haversine").fit_predict(np.radians(coords))
+wrong = DBSCAN(eps=EPS_KM / 111.0, min_samples=MIN).fit_predict(coords)
+for nm, lab in [("haversine on radians", right), ("euclidean on degrees", wrong)]:
+    print(f"{nm:22} {len(set(lab)) - (1 if -1 in lab else 0):3} clusters, "
+          f"{(lab == -1).sum():4} noise")
+print(f"\nadjusted Rand index {adjusted_rand_score(right, wrong):.3f}; "
+      f"{(((right == -1) != (wrong == -1)).sum())} points change noise status, "
+      f"all in one direction")
+```
+
+## Did the clustering find anything real? {.smaller}
+
+```{python}
+#| echo: false
+conus = conus.copy(); conus["cluster"] = right
+big = (conus[conus.cluster != -1].groupby("cluster")
+       .agg(sites=("name", "size"), lat=("lat", "mean"), lon=("lon", "mean"))
+       .sort_values("sites", ascending=False).head(4))
+print(big.round(1).to_string())
+```
+
+DBSCAN was given coordinates and nothing else — no city names, no boundaries.
+Those centroids are **New York and northern New Jersey, Los Angeles, the Bay
+Area and central Florida**.
+
+Recovering something you already recognize is the check to run before believing
+any clustering, because the algorithm returns groups whether or not there are
+any.
+
+And **noise is a category, not a failure**: 607 sites sit in no cluster, which
+for a charging network is arguably the interesting set — the lone stations
+built so a gap is covered.
+
+## Height as an encoding: 3D {.smaller}
+
+`pydeck` wraps deck.gl and can extrude a map, with height carrying a value:
+
+```python
+pdk.Layer("HexagonLayer", data=sites, get_position="[lon, lat]",
+          radius=40000, elevation_scale=400, extruded=True)
+```
+
+```{python}
+#| echo: false
+#| fig-align: center
+H, xe, ye = np.histogram2d(conus.lon, conus.lat, bins=[26, 16])
+fig = plt.figure(figsize=(12, 3.6))
+ax1 = fig.add_subplot(121)
+ax1.pcolormesh(xe, ye, H.T, cmap="inferno"); ax1.set_aspect(1.3)
+ax1.set_xticks([]); ax1.set_yticks([]); ax1.set_title("2D: color carries the count", fontsize=10)
+ax2 = fig.add_subplot(122, projection="3d")
+xp, yp = np.meshgrid((xe[:-1] + xe[1:]) / 2, (ye[:-1] + ye[1:]) / 2, indexing="ij")
+mask = H > 0
+ax2.bar3d(xp[mask], yp[mask], 0, 0.8 * (xe[1] - xe[0]), 0.8 * (ye[1] - ye[0]),
+          H[mask], color=plt.cm.inferno(H[mask] / H.max()), shade=True)
+ax2.set_title("3D: height carries the count", fontsize=10)
+ax2.set_xticks([]); ax2.set_yticks([]); ax2.set_zticks([])
+ax2.view_init(elev=42, azim=-70)
+plt.tight_layout(); plt.show()
+```
+
+**Be honest about what 3D costs.** Tall bars hide short ones behind them,
+perspective makes equal values look unequal, and the map underneath becomes
+hard to read. It is excellent for an audience you want to impress and usually
+worse for an audience you want to inform.
+
+Use it when height is genuinely the message and the camera can be moved.
 
 ## Discussion {.gw-discussion}
 
-**1.** Your clustering returns 50 groups. Your colleague runs the same code and
-gets 48. Neither of you changed the data. What do you need to tell each other
-before you can say which is right — and is "which is right" even the question?
+**1.** Three sites matched no state because the boundaries were simplified. You
+cannot use a more detailed file — it is 1.6 MB and the map has to load in a
+browser. What do you do, and what do you tell the reader?
 
-**2.** You find two sites 36 metres apart. One is named "Expansion". Do you
-merge them, drop one, or keep both — and what does each choice do to a map of
-coverage?
+**2.** The file already had a `state` column, and the spatial join mostly
+agreed with it. So why do the join at all — and when would the column and the
+geometry genuinely disagree?
 
 ## Coming up next — Block 2 {.smaller}
 
-Live demo, five parts:
+Live demo, in this order:
 
-1. Why you cannot just plot 2,254 points
-2. Density on a grid, at three resolutions
-3. DBSCAN, and the distance metric that makes it wrong
-4. Reading the clusters, and checking they are real
-5. Distance, and the duplicates it finds by accident
+1. The same map in folium, plotly and Altair, and what each one lets you do
+2. Point in polygon: the spatial join, and the three sites it drops
+3. Sites and stalls per state, then per million people
+4. The Albers USA layout, and what the real coordinates look like
+5. Altair's selection, linking sites to their nearest neighbors
+6. Extensions: DBSCAN, the heat map, and a 3D extrusion
 
-**Then Block 3**, on your own after class: the same pipeline on a point dataset
-of your choosing, with the parameters written down, ending in a Streamlit
-dashboard where a filter drives both a map and a chart.
+**Then Block 3**, on your own: the same pipeline on a point dataset of your
+choosing, ending in a Streamlit dashboard.
 
-**Readings:** scikit-learn clustering guide · folium quickstart · Shneiderman,
-*The Eyes Have It* (1996)
+**Readings:** GeoPandas spatial joins · Altair interactive charts · deck.gl
+layer catalog
 
-**Homework:** a point map that answers a question about distance or density,
-with every parameter you chose stated in the caption.
+**Homework:** an interactive map that answers a question about where things
+are, with every parameter you chose named in the caption.
