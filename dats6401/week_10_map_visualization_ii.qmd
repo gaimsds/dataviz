@@ -80,7 +80,9 @@ On 2,264 US Supercharger sites, included in the materials:
 3. Sites and stalls per state, then per million
 4. The Albers USA layout against the real coordinates
 5. An Altair selection linking sites to their nearest neighbors
-6. Extensions: DBSCAN, the heat map, a 3D extrusion
+6. Distance with haversine, and what both ends of that column reveal
+7. DBSCAN, and the metric mistake that quietly changes the answer
+8. Heat maps, and a 3D extrusion with pydeck
 
 
 ### ☕ Break (~15 min)
