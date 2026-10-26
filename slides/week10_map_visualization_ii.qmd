@@ -342,6 +342,141 @@ For a charging network the grey points may be the **most** interesting
 category: the lone stations on long highways, built so the gap is covered
 rather than because demand was dense.
 
+# Points, meet polygons {background-color="#2E6E8E"}
+
+## A join with no key {.smaller}
+
+Week 9 joined two tables on a shared FIPS code. There is no such key here: the
+only thing connecting a charging station to a state is **where it is**.
+
+```python
+points = gpd.GeoDataFrame(sites, crs="EPSG:4326",
+                          geometry=gpd.points_from_xy(sites.lon, sites.lat))
+tagged = gpd.sjoin(points, states, predicate="within", how="left")
+```
+
+`predicate="within"` asks, for each point, which polygon contains it. Other
+predicates answer other questions: `intersects` for overlap, `contains` for the
+reverse direction, `dwithin` for "near enough".
+
+Use **`how="left"`**. The default drops every point that matched nothing, which
+is exactly the set you most need to look at.
+
+## The points that matched nothing {.smaller}
+
+```{python}
+#| echo: false
+import geopandas as gpd
+
+states_all = gpd.read_file("../dats6401/weekly/week10/data/states.geojson")
+pts = gpd.GeoDataFrame(sites, geometry=gpd.points_from_xy(sites.lon, sites.lat),
+                       crs="EPSG:4326")
+tagged = gpd.sjoin(pts, states_all[["fips", "state", "geometry"]].rename(
+    columns={"state": "state_polygon"}), predicate="within", how="left")
+print(f"{len(pts)} points in, {tagged.fips.notna().sum()} matched, "
+      f"{tagged.fips.isna().sum()} matched nothing\n")
+print(tagged[tagged.fips.isna()][["name", "state", "lat", "lon"]].to_string(index=False))
+```
+
+**None of these is in the sea.** Vesey Street is in lower Manhattan, McDermitt
+is on the Nevada side of the Oregon border, South Padre Island is a barrier
+island off Texas.
+
+They fell out because the boundary file is **simplified** — smoothed coastlines,
+rounded-off islands. Week 9 said generalized boundaries are fine for coloring
+and wrong for measuring. They are also wrong for **joining**, and the join does
+not complain.
+
+## What the join buys {.smaller}
+
+```{python}
+#| echo: false
+acs = pd.read_csv("../dats6401/weekly/week10/data/state_stats.csv", dtype={"fips": str})
+per_state = (tagged.dropna(subset=["fips"]).groupby(["fips", "state_polygon"])
+             .agg(sites=("name", "size")).reset_index()
+             .merge(acs[["fips", "pop_total"]], on="fips"))
+per_state["per_million"] = (1e6 * per_state.sites / per_state.pop_total).round(1)
+print("most sites:")
+print(per_state.nlargest(4, "sites")[["state_polygon", "sites", "per_million"]].to_string(index=False))
+print("\nmost per million people:")
+print(per_state.nlargest(4, "per_million")[["state_polygon", "sites", "per_million"]].to_string(index=False))
+```
+
+Week 9's lesson reached from the other side. Two joins of two different kinds
+had to happen first: points to polygons **by location**, then polygons to
+population **by key**.
+
+# The map that lies on purpose {background-color="#2E6E8E"}
+
+## Where Alaska actually is {.smaller}
+
+```{python}
+#| echo: false
+#| fig-align: center
+fig, axes = plt.subplots(1, 2, figsize=(13, 3.4))
+states_all.plot(ax=axes[0], color="#EAF2F6", edgecolor="#2E6E8E", linewidth=0.4)
+axes[0].set_title("all 52, at their real coordinates", fontsize=10)
+states_all[~states_all.state.isin(["Alaska", "Hawaii", "Puerto Rico"])].plot(
+    ax=axes[1], color="#EAF2F6", edgecolor="#2E6E8E", linewidth=0.4)
+axes[1].set_title("the lower 48 and DC", fontsize=10)
+for a in axes:
+    a.set_xticks([]); a.set_yticks([]); a.set_aspect(1.3)
+plt.tight_layout(); plt.show()
+
+b = states_all.total_bounds
+ak = states_all[states_all.state == "Alaska"].geometry.iloc[0]
+print(f"all 52 span {b[2] - b[0]:.1f} degrees of longitude, because Alaska is "
+      f"{len(list(ak.geoms))} polygons and "
+      f"{sum(1 for p in ak.geoms if p.bounds[0] > 0)} of them sit past +180")
+```
+
+The Aleutians cross the antimeridian, so asking for the extent of the United
+States returns nearly the whole planet and the country collapses to a sliver.
+
+## Albers USA {.smaller}
+
+The standard answer is a **composite projection**. Albers USA projects the
+lower 48 normally, then takes Alaska, shrinks it, moves it, takes Hawaii, moves
+that too, and parks both below California.
+
+The map is **deliberately wrong about where two states are**, and everybody
+accepts it, because the honest version is unreadable.
+
+- `plotly`: `px.choropleth(..., locationmode="USA-states", scope="usa")`
+- `altair`: `.project(type="albersUsa")`
+- `geopandas`: no built-in equivalent — you move the geometries yourself
+
+Worth saying out loud to a class: this is a cartographic convention that
+survives because it is useful, not because it is true. Most readers have never
+noticed it. It is also a reminder that "the projection" is not always one
+projection.
+
+## Interactivity, and what it does not buy {.smaller}
+
+`plotly` and `altair` both produce maps you can hover, zoom and select on, from
+roughly the same amount of code as a static figure. What hovering buys is real:
+the number sits **beside** the color, so nobody has to measure a shade against
+a legend.
+
+**Altair is worth meeting for its selections.** You declare that hovering one
+mark should change what the others draw, and Vega-Lite wires it up — no
+callback, no redraw written by hand:
+
+```python
+pick = alt.selection_point(fields=["state"], on="mouseover", empty=False)
+
+edges.encode(opacity=alt.condition(pick, alt.value(0.8), alt.value(0.04)))
+dots.add_params(pick)
+```
+
+The same pattern draws flight routes, shipping lanes or migrations: anything
+with a from-point and a to-point. The demo uses it on the nearest-neighbor
+pairs from the distance section.
+
+None of this makes a map more honest. The classification, the projection and
+the omissions are still choices, and an interactive map that does not disclose
+them is just a static dishonest map you can zoom.
+
 # Putting it in front of someone {background-color="#2E6E8E"}
 
 ## Performance is a design choice {.smaller}
