@@ -2,37 +2,44 @@
 title: "Week 10 — Map Visualization — Module II"
 ---
 
-> Maps people can touch. The second map module moves from static thematic maps to interactive, web-ready maps and embeds them in a Streamlit geospatial dashboard.
+> Points, density and distance. Module I colored regions somebody else had already drawn. This module works with raw point locations, where the groups and surfaces on the map are things you compute — and every computation takes a parameter you chose.
 
 ## 📖 Background & Motivation
 
-Static maps answer a fixed question; interactive maps let users ask their own. For geographic data — where users almost always want to zoom to *their* region, hover for exact values, or toggle layers — interactivity is often what makes a map useful rather than merely decorative. This module builds on the cartographic foundations from Module I and adds the web layer: tile-based interactive maps with `folium` (Leaflet) and `plotly`, and the patterns for embedding them in a Streamlit app.
+A choropleth starts with regions someone else defined: states, counties, census tracts. Your decisions were which measure to show and how to color it. Point data arrives with none of that structure. A few thousand latitude and longitude pairs are not divided into anything, so if you want neighborhoods, catchments or clusters you have to construct them — and that is a modeling decision rather than a cartographic one.
 
-The deeper goal is the geospatial *dashboard*: a coordinated view where a map, a filter, and a chart update together. This is the first time the course combines a modality with full interactivity in an app, and it is direct preparation for the final project, where a Streamlit client will display model output that may itself be geographic. We also confront performance — interactive maps with many features can choke a browser — and the design discipline of not drowning the user in layers and popups.
+This module works through what you can ask of points that you cannot ask of polygons. How crowded is it here, and at what resolution did you decide that? How far is the nearest one, measured how? Which points form groups, under which definition of "close"? Each answer depends on a parameter, and the parameter belongs in the caption alongside the answer.
+
+Distance is where geographic data stops behaving like a scatter plot. Latitude and longitude are angles, not lengths, and a degree of longitude shrinks from about 100 km in southern Florida to 54 km in Alaska. Treating them as a flat grid — which is the first thing most code does — produces results that are wrong in a way nothing reports. We measure how wrong on real data.
+
+The week still ends in a Streamlit dashboard, because that is the delivery format for the final project. But the dashboard is how the work is presented, not what the work is.
 
 ---
 
 ## 🔎 Learning Objectives
 
-- Build interactive tile-based maps with folium and plotly.
-- Embed and coordinate maps inside a Streamlit dashboard.
-- Add interactivity (hover, popups, layer toggles, region filters) without overwhelming the user.
-- Manage performance and legibility for many-feature interactive maps.
+- Recognize overplotting and choose between transparency, aggregation and a density surface.
+- Build a density surface from points, and state the resolution that produced it.
+- Compute distances on the Earth's surface with haversine, and explain why Euclidean distance on degrees is wrong.
+- Cluster point data with DBSCAN, choose `eps` and `min_samples` deliberately, and check the result against something you already know.
+- Read "noise" as a category rather than a failure.
+- Embed the result in a Streamlit dashboard, and manage performance for many-feature maps.
 
 ---
 
 ## 📚 Readings & Resources
 
+- [scikit-learn — clustering](https://scikit-learn.org/stable/modules/clustering.html#dbscan) — DBSCAN, its two parameters, and what it does with points it will not group.
+- [scikit-learn — BallTree](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.BallTree.html) — nearest-neighbor queries, including the `haversine` metric.
 - [Folium — quickstart](https://python-visualization.github.io/folium/latest/getting_started.html).
-- [Plotly — maps in Python](https://plotly.com/python/maps/).
 - [streamlit-folium](https://github.com/randyzwitch/streamlit-folium) — embedding folium in Streamlit.
-- [Streamlit — st.map / map elements](https://docs.streamlit.io/develop/api-reference/charts/st.map).
+- Shneiderman, [*The Eyes Have It*](https://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf) (1996) — overview first, zoom and filter, details on demand.
 
 **Sample Data Sources for Practice:**
 
-- The same geometry/data you used in Module I — extend it.
-- [GeoJSON of world/US regions](https://geojson.org/) — for choropleth layers.
-- Point datasets (stores, stations, events) for marker maps.
+- `superchargers_us.csv` in this week's materials — 2,264 US Tesla Supercharger sites with coordinates, stall counts and opening dates.
+- [OpenStreetMap via Overpass](https://overpass-turbo.eu/) — extract points of a chosen type (cafes, clinics, bus stops) for any area.
+- Any point dataset with latitude and longitude: incidents, stations, sightings, listings.
 
 ---
 
@@ -41,10 +48,12 @@ The deeper goal is the geospatial *dashboard*: a coordinated view where a map, a
 Make sure your environment includes:
 
 ```bash
-pip install folium streamlit-folium plotly geopandas pandas streamlit
+pip install scikit-learn folium streamlit-folium plotly geopandas pandas streamlit
 ```
 
-Confirm `streamlit-folium` renders a folium map inside a small app before class.
+`scikit-learn` supplies both DBSCAN and the BallTree used for the distance
+work. Confirm `streamlit-folium` renders a folium map inside a small app
+before class.
 
 ---
 
@@ -52,30 +61,40 @@ Confirm `streamlit-folium` renders a folium map inside a small app before class.
 
 > Single 2.5-hour block, 6:10-8:40 PM. Tooling/interactive week — hands-on dominates.
 
-### Block 1 — Concepts & Theory (~25 min, PowerPoint)
+### Block 1 — Concepts & Theory (~35 min)
 
-1. Static vs. interactive: when interactivity earns its cost (8 min)
-2. Tile maps and the web map model (folium/Leaflet, plotly) (10 min)
-3. Coordinated dashboards: map + filter + chart updating together (7 min)
+1. Points are not polygons: overplotting, and what transparency does not fix
+2. Density on a grid, and why the resolution is part of the claim
+3. Distance: degrees are angles, haversine, and nearest-neighbor queries
+4. DBSCAN, its two parameters, and the metric mistake that quietly changes the answer
+5. Checking a clustering is real; noise as a category
+6. Performance, and the restraint that interactivity demands
 
-### Block 2 — Guided Demonstration (~45 min, live coding)
+### Block 2 — Guided Demonstration (~35 min, live coding)
 
-1. Build an interactive choropleth in folium with hover/popups (15 min)
-2. Embed it in Streamlit with `streamlit-folium` (13 min)
-3. Add a region filter that updates both the map and a side chart (17 min)
+On 2,264 US Supercharger sites, included in the materials:
+
+1. Why you cannot just plot the points
+2. Density on a grid, at three resolutions
+3. DBSCAN, and the distance metric that makes it wrong
+4. Reading the clusters, and checking they are real
+5. Distance, and the duplicate records it finds by accident
 
 ### ☕ Break (~15 min)
 
-### Block 3 — Hands-On Activity (~55 min, students working)
+### Block 3 — Hands-On Activity (~50 min, on your own after class)
 
-1. Students build an interactive map of their Module I data (18 min)
-2. Embed it in a Streamlit dashboard with at least one filter (25 min)
-3. Add a coordinated chart that responds to the same filter (12 min)
+1. Plot a point dataset and deal with its overplotting
+2. A density surface, with the resolution stated
+3. Nearest-neighbor distances, and what the extremes of that column reveal
+4. DBSCAN with a justified `eps` and `min_samples`, checked against something
+   you already know
+5. Wrap it in a Streamlit dashboard where a filter drives both a map and a chart
 
 ### Block 4 — Wrap-Up & Homework Preview (~10 min)
 
-1. Demo a few dashboards; discuss performance/legibility trade-offs (6 min)
-2. Preview homework — and note this is the pattern the final project builds on (4 min)
+1. Compare clusterings: whose parameters, and what changed (9 min)
+2. Preview homework — the dashboard here is the pattern the final project builds on (6 min)
 
 ---
 
@@ -89,19 +108,58 @@ Uses the Week 9 dataset — keep `week9/data/` alongside `week10/`.
 
 ## 💻 Notebook / App Snippets
 
-### Interactive folium choropleth
+### Distance on a sphere
 
 ```python
-import folium
-m = folium.Map(location=[39.0, -98.0], zoom_start=4)
-folium.Choropleth(
-    geo_data=geojson, data=df,
-    columns=["region_id", "rate"], key_on="feature.properties.region_id",
-    fill_color="OrRd", legend_name="Rate per 100k",
-).add_to(m)
+import numpy as np
+from sklearn.neighbors import BallTree
+
+EARTH_KM = 6371.0088
+tree = BallTree(np.radians(df[["lat", "lon"]].values), metric="haversine")
+
+# k=2 because the nearest point to any point is itself
+dist, idx = tree.query(np.radians(df[["lat", "lon"]].values), k=2)
+df["nearest_km"] = dist[:, 1] * EARTH_KM
 ```
 
-### Embed in Streamlit with a filter
+Two things silently return nonsense: passing degrees instead of radians, and
+forgetting that the result is an angle until you multiply by the radius.
+
+### DBSCAN, done correctly
+
+```python
+from sklearn.cluster import DBSCAN
+
+EPS_KM, MIN_SAMPLES = 50, 5
+labels = DBSCAN(eps=EPS_KM / EARTH_KM,          # an angle, not a distance
+                min_samples=MIN_SAMPLES,
+                metric="haversine").fit_predict(np.radians(coords))
+```
+
+Doing it on raw degrees with `eps=50/111` also runs, and is wrong by more the
+further north you go. Label `-1` means noise: not an error, a category.
+
+### Comparing two clusterings
+
+```python
+from sklearn.metrics import adjusted_rand_score
+
+# Cluster NUMBERS are arbitrary -- DBSCAN hands them out in discovery order --
+# so compare the groupings, not the labels.
+print(adjusted_rand_score(labels_a, labels_b))
+
+# Noise status does survive relabelling, because -1 means the same in both.
+print(((labels_a == -1) != (labels_b == -1)).sum(), "points changed noise status")
+```
+
+### Density on a grid
+
+```python
+ax.hexbin(df.lon, df.lat, gridsize=60, cmap="inferno", mincnt=1)
+# gridsize is part of the claim. Put it in the caption.
+```
+
+### Embedding in Streamlit (Block 3)
 
 ```python
 # app.py
@@ -109,67 +167,74 @@ import streamlit as st
 from streamlit_folium import st_folium
 import folium
 
-st.title("Geospatial Dashboard")
-metric = st.sidebar.selectbox("Metric", ["rate", "count"])
+state = st.sidebar.selectbox("State", sorted(df.state.unique()))
+shown = df[df.state == state]
 
-m = folium.Map(location=[39.0, -98.0], zoom_start=4)
-folium.Choropleth(
-    geo_data=geojson, data=df,
-    columns=["region_id", metric], key_on="feature.properties.region_id",
-    fill_color="OrRd",
-).add_to(m)
+m = folium.Map(location=[shown.lat.mean(), shown.lon.mean()], zoom_start=6)
+# One GeoJson layer, not one CircleMarker per point: same picture, a quarter
+# of the page weight.
+folium.GeoJson(points_geojson(shown)).add_to(m)
 st_folium(m, width=700, height=450)
-```
 
-### Coordinated side chart
-
-```python
-import streamlit as st
-top = df.sort_values(metric, ascending=False).head(10)
-st.bar_chart(top.set_index("region_name")[metric])
+st.bar_chart(shown.groupby("city")["stalls"].sum().nlargest(10))
 ```
 
 ---
 
 ## 🧪 In-Class Activity
 
-- Turn a static choropleth into an interactive folium map embedded in Streamlit, with one filter.
+- Cluster the Supercharger points twice, changing only `eps`, and compare the
+  two results with an adjusted Rand index.
 - Discuss:
 
-What does interactivity let the user discover that the static map didn't?
+Which `eps` is right, and what would you have to know to answer that?
 
-Where do popups/layers start to clutter?
+The clustering recovered the big metro areas. What would it look like if it had
+*not* recovered anything you recognize — and would you notice?
 
-What happens to performance as feature count grows?
+Two sites 36 metres apart are the same site listed twice. How many other kinds
+of duplicate would this method miss?
 
 **Hints**
 
 ```python
-# Simplify geometry (gdf.geometry.simplify(tol)) to keep many-feature maps responsive
+# Label -1 is noise. Exclude it before you count clusters or sum stalls.
+# And remember: cluster numbers are arbitrary across runs.
 ```
 
 ---
 
 ## 🏠 Homework
 
-1. Build an interactive geospatial dashboard in Streamlit.
-2. Include: an interactive map, at least one filter, and one coordinated chart that responds to it.
-3. Write a short note on a performance or legibility decision you made.
-4. Deploy it and submit the live URL plus repo link to Blackboard.
+1. Choose a point dataset with at least a few hundred locations.
+2. Answer one question about **density** or **distance** that a choropleth of
+   the same area could not have answered.
+3. Use haversine wherever a distance is involved, and say in a comment what
+   would have gone wrong with Euclidean.
+4. Build a Streamlit dashboard: an interactive map, one filter, and one chart
+   that responds to the same filter.
+5. Caption every map with the parameters that produced it — resolution, `eps`,
+   `min_samples`, projection, and anything you left out.
+6. Deploy it and submit the live URL plus the repo link to Blackboard.
 
 **Rubric (10 pts)**
 
-- Working interactive map embedded in Streamlit (3)
-- Effective filter + coordinated chart (4)
-- Legibility/performance handled and explained (3)
+- A density or distance result a choropleth could not produce (3)
+- Distances computed correctly, with the reasoning stated (2)
+- Working dashboard: map, filter, coordinated chart (3)
+- Parameters disclosed in the captions (2)
 
 ---
 
 ## 🧩 Optional Extensions
 
-- Add layer toggles (e.g., points over choropleth).
-- Use plotly's `scatter_mapbox` for a point-density alternative.
-- Add click-to-select on a region that drives the side chart.
+- Animate the opening dates: 473 of the 2,264 sites have no date, so decide
+  what to do with them and say so on the map.
+- Spatially join the points to the Week 9 state boundaries and compare sites
+  per state against sites per million people.
+- Swap DBSCAN for HDBSCAN, which picks the number of groups itself, and see
+  whether the metro areas survive.
+- Add layer toggles so points sit over a Week 9 choropleth.
 
 ---
 
@@ -182,5 +247,7 @@ Before submitting, make sure:
 - Your app is deployed and the live URL works.
 
 - The map, filter, and coordinated chart update together without errors.
+
+- Every map caption names the parameters behind it.
 
 ---
