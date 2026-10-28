@@ -1,0 +1,80 @@
+/*-- scss:defaults --*/
+
+// GW identity for the course books, matched to the lecture decks
+// (slides/theme-gw.scss) and to the DATS 2104 session pages: navy and blue
+// carry the structure, buff is the accent rule.
+//
+// Shared by dats6401 and dats2102, which both reference it as
+// ../theme-gw-book.scss. Edit here, not in a copy.
+
+$gw-navy:    #00223e;
+$gw-blue:    #033c5a;
+$gw-buff:    #d6bf91;
+$gw-buff-20: #f6f1e8;
+
+$primary:       $gw-blue;
+$body-color:    #373a3c;
+$headings-color: $gw-blue;
+$link-color:    #0075c8;
+$code-color:    #7d12ba;
+$border-color:  #dee2e6;
+
+// Book chrome
+$navbar-bg: $gw-navy;
+$navbar-fg: #ffffff;
+$sidebar-bg: $gw-navy;
+$sidebar-fg: #dbe3ea;
+
+$font-size-root: 17px;
+
+/*-- scss:rules --*/
+
+// Section headings take the buff rule the decks use on slide titles.
+.quarto-title-block .title {
+  color: $gw-blue;
+  border-bottom: 4px solid $gw-buff;
+  padding-bottom: 0.25rem;
+}
+main h2, #quarto-document-content h2 {
+  color: $gw-blue;
+  border-bottom: 2px solid $gw-buff;
+  padding-bottom: 0.3rem;
+}
+main h3, main h4 { color: $gw-blue; }
+
+// Left sidebar: navy, with buff marking the page you are on.
+.sidebar-navigation .sidebar-item-container .sidebar-item-text { color: $sidebar-fg; }
+.sidebar-navigation .sidebar-item-container a:hover { color: #ffffff; }
+.sidebar-navigation .sidebar-item-container a.active,
+.sidebar-navigation .sidebar-item-container a:active {
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 $gw-buff;
+}
+// The book title sits in a link inside the header, so the anchor needs the
+// color too, or it keeps Bootstrap's white.
+.sidebar-title, .sidebar .sidebar-header,
+.sidebar-title a, .sidebar-title a:hover { color: $gw-buff; }
+
+// Right-hand table of contents, with the buff marker from the session pages.
+// Quarto styles the active entry with its own link color marked !important,
+// so matching its selector is not enough -- the color here needs !important
+// too. The border does not, since nothing else sets one.
+.sidebar nav[role="doc-toc"] ul > li > a.active,
+.sidebar nav[role="doc-toc"] ul > li > ul > li > a.active,
+#TOC a.active {
+  color: $gw-blue !important;
+  font-weight: 600;
+  border-left: 2px solid $gw-buff;
+}
+
+// Tables: buff-tinted header, the way the state tables read on the 2104 pages.
+main table > thead {
+  background: $gw-buff-20;
+  color: $gw-blue;
+  border-bottom: 2px solid $gw-buff;
+}
+
+// Callouts keep Quarto's shapes; only the note tint moves onto GW blue.
+.callout.callout-style-default.callout-note { border-left-color: $gw-blue; }
+.callout-note .callout-icon::before { color: $gw-blue; }
