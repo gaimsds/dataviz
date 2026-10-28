@@ -8,6 +8,9 @@
 # IMPORTANT: do NOT ignore _freeze/ — it caches executed cell results and
 # MUST be committed so the GitHub Action can publish without running Python.
 # (Intentionally not listing _freeze/ here.)
+# -- but not the vendored reveal.js a render sometimes drops in beside
+# them: 5 MB of library Quarto supplies itself, not a cell result.
+**/_freeze/**/libs/
 
 # Python
 __pycache__/

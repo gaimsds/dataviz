@@ -461,7 +461,7 @@ _p = conus.copy()
 _p = _p.set_geometry(_p.to_crs(epsg=5070).geometry)
 _cent = _p.geometry.centroid
 
-fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+fig, axes = plt.subplots(1, 2, figsize=(11.5, 3.4))
 _p.plot(column="pop_total", cmap="OrRd", ax=axes[0], edgecolor="white",
         linewidth=0.4)
 axes[0].set_title("Choropleth of a count", fontsize=11)

@@ -97,7 +97,7 @@ import numpy as np
 rng = np.random.default_rng(11)
 months = np.arange(1, 13)
 vals = 100 + np.cumsum(rng.normal(0.3, 1.2, 12))
-fig, axes = plt.subplots(1, 2, figsize=(10, 3.6))
+fig, axes = plt.subplots(1, 2, figsize=(10, 2.9))
 axes[0].plot(months, vals, color="#d9534f", lw=2)
 axes[0].set_ylim(vals.min()-0.5, vals.max()+0.5)
 axes[0].set_title("'SURGING' — truncated, no context")
@@ -108,7 +108,7 @@ for a in axes: a.set_xlabel("month")
 plt.tight_layout(); plt.show()
 ```
 
-A truncated axis on a *line* chart isn't automatically dishonest (Week 2) — the sin here is truncation **plus** an unlabelled axis **plus** the word "surging". Framing and encoding mislead together.
+A truncated axis on a *line* chart isn't automatically dishonest (Week 2) — the sin here is truncation **plus** an unlabeled axis **plus** the word "surging". Framing and encoding mislead together.
 
 A polished chart *looks* objective — that's precisely its persuasive power, and your responsibility. Especially when the thing visualized is **a model's opinion** that users will over-trust.
 

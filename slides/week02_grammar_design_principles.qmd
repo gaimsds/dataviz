@@ -21,7 +21,7 @@ format: revealjs
 
 # First, the data has to have a shape {background-color="#2E6E8E"}
 
-## The grammar assumes tidy input
+## The grammar assumes tidy input {.smaller}
 
 Every mapping we write today — `x=`, `color=`, `size=` — assumes one thing: **each variable you want to map is already a column.**
 
@@ -207,7 +207,7 @@ Showed people the same comparisons encoded differently and **measured decoding e
 6. Color saturation / volume
 
 ::: {.gw-box}
-This is why pie charts (angle) lose to bar charts (position/length) for comparison — not taste, **measured human error**.
+Pie charts (angle) lose to bars (position/length) — not taste, **measured error**.
 :::
 
 ## See it yourself

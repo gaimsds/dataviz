@@ -126,7 +126,7 @@ print(tagged[tagged.fips.isna()][["name", "state", "lat", "lon"]].to_string(inde
 #| echo: false
 #| fig-align: center
 missed = tagged[tagged.fips.isna()]
-fig, axes = plt.subplots(1, 3, figsize=(12, 3.1))
+fig, axes = plt.subplots(1, 3, figsize=(11.5, 2.6))
 for ax, (_, r) in zip(axes, missed.iterrows()):
     states.plot(ax=ax, color="#EAF2F6", edgecolor="#2E6E8E", linewidth=1.1)
     ax.scatter([r.lon], [r.lat], s=95, color="#d9534f", zorder=5,
@@ -458,8 +458,8 @@ for nm, lab in [("haversine on radians", right), ("euclidean on degrees", wrong)
 
 ## How much does it cost? {.smaller}
 
-Cluster numbers are handed out in discovery order, so comparing "cluster 7"
-across two runs means nothing. Two things survive relabeling:
+Cluster numbers are arbitrary, so comparing "cluster 7" across runs means
+nothing. Two things survive relabeling:
 
 ```{python}
 #| echo: false
@@ -480,7 +480,7 @@ for lo, hi, nm in [(24, 34, "south of 34N"), (34, 42, "34 to 42N"), (42, 50, "no
 ```{python}
 #| echo: false
 #| fig-align: center
-fig, axes = plt.subplots(1, 2, figsize=(12, 3.4))
+fig, axes = plt.subplots(1, 2, figsize=(11.5, 2.9))
 for ax, lab, nm in [(axes[0], right, "haversine"), (axes[1], wrong, "euclidean on degrees")]:
     ax.scatter(conus.lon[lab == -1], conus.lat[lab == -1], s=7, color="#dddddd")
     ax.scatter(conus.lon[lab != -1], conus.lat[lab != -1], s=9,
@@ -532,17 +532,13 @@ print(big.head(6).round(1).to_string())
 ## Check the groups are real {.smaller}
 
 DBSCAN got coordinates and nothing else — no city names, no boundaries, no
-population. Read the centroids anyway:
-
-- **40.5N, −74.4W** — New York and northern New Jersey
-- **34.0N, −118.1W** — Los Angeles
-- **37.8N, −121.6W** — the Bay Area
-- **27.5N, −81.2W** — central Florida
+population. The labels below were added **after** the clustering, by reading
+each centroid and recognizing the place:
 
 ```{python}
 #| echo: false
 #| fig-align: center
-fig, ax = plt.subplots(figsize=(10, 3.9))
+fig, ax = plt.subplots(figsize=(9.5, 3.2))
 ax.scatter(conus.lon, conus.lat, s=5, color="#dddddd")
 names = {0: "New York / N. New Jersey", 10: "Los Angeles",
          5: "Bay Area", 4: "central Florida"}
@@ -553,13 +549,12 @@ for cid, nm in names.items():
                 xytext=(10, 10), textcoords="offset points", fontsize=8,
                 arrowprops=dict(arrowstyle="-", color="#999999", lw=.8))
 ax.set_aspect(1.3); ax.set_xticks([]); ax.set_yticks([])
-ax.set_title("the four largest clusters, labeled after the fact", fontsize=10)
+ax.set_title("the four largest clusters, labeled after the fact", fontsize=9)
 plt.tight_layout(); plt.show()
 ```
 
-It recovered the metropolitan areas from the dots. That agreement is your
-evidence the parameters were sensible, and it is the check to run before
-believing any clustering — because the algorithm returns groups whether or not
+It recovered the metropolitan areas from the dots alone. **Run this check
+before believing any clustering** — the algorithm returns groups whether or not
 there are any.
 
 ## Noise is not failure {.smaller}
@@ -667,8 +662,8 @@ well. Its shape:
 #| echo: false
 #| fig-align: center
 import matplotlib.patches as mp
-fig, ax = plt.subplots(figsize=(9, 3.2))
-def box(x, y, w, h, label, fc, tc="#1a1a1a", fs=8.5):
+fig, ax = plt.subplots(figsize=(8.6, 2.6))
+def box(x, y, w, h, label, fc, tc="#1a1a1a", fs=8):
     ax.add_patch(mp.FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.04",
                                    fc=fc, ec="#2E6E8E", lw=.9))
     ax.text(x + w / 2, y + h / 2, label, ha="center", va="center",
@@ -686,10 +681,9 @@ ax.set_title("the shape of Streamlit's NYC ridesharing demo", fontsize=10)
 plt.tight_layout(); plt.show()
 ```
 
-Points 3 and 4 are the lesson. Four small maps of the same data at different
-zooms is a **small-multiple**, and it answers "where, specifically" without
-making the reader pan around. The coordinated chart answers the question the
-map cannot: *how much, exactly*.
+Points 3 and 4 are the lesson. Four small maps of one dataset is a
+**small-multiple**: it answers "where, specifically" without making anyone pan
+around. The chart answers what the map cannot — *how much, exactly*.
 
 ## What 3D costs {.smaller}
 
