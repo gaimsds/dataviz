@@ -19,7 +19,7 @@ format: revealjs
 **Today's claim:** charts aren't types to memorize — they're **encodings to compose**. And perception science tells us which encodings work.
 :::
 
-# First, the data has to have a shape {background-color="#2E6E8E"}
+# First, the data has to have a shape {background-color="#00223e"}
 
 ## The grammar assumes tidy input {.smaller}
 
@@ -89,20 +89,20 @@ tidy = pd.DataFrame({
 
 fig, axes = plt.subplots(1, 3, figsize=(10.5, 3.1))
 tot = tidy.groupby("region", as_index=False)["sales"].sum()
-axes[0].bar(tot["region"], tot["sales"], color="#2E6E8E")
+axes[0].bar(tot["region"], tot["sales"], color="#033c5a")
 axes[0].set_title("compare categories", fontsize=10)
 for r, g in tidy.groupby("region"):
     axes[1].plot(g["year"], g["sales"], marker="o", label=r)
 axes[1].set_title("trend over time", fontsize=10)
 axes[1].legend(fontsize=7)
-axes[2].scatter(tidy["staff"], tidy["sales"], color="#2E6E8E", s=45)
+axes[2].scatter(tidy["staff"], tidy["sales"], color="#033c5a", s=45)
 axes[2].set_title("relationship", fontsize=10)
 plt.tight_layout(); plt.show()
 ```
 
 Three charts, **one dataframe, zero reshaping**. That is what tidy buys you.
 
-# The grammar of graphics {background-color="#2E6E8E"}
+# The grammar of graphics {background-color="#00223e"}
 
 ## Every chart is a mapping
 
@@ -139,13 +139,13 @@ labels = list("ABCDE")
 
 fig = plt.figure(figsize=(9.5, 3.4))
 ax1 = fig.add_subplot(1, 2, 1)
-ax1.bar(labels, vals, color="#2E6E8E")
+ax1.bar(labels, vals, color="#033c5a")
 ax1.set_title("Bar marks, Cartesian coordinates", fontsize=10)
 
 ax2 = fig.add_subplot(1, 2, 2, projection="polar")
 theta = np.concatenate([[0], np.cumsum(vals) / sum(vals) * 2 * np.pi])
 ax2.bar(theta[:-1], [1] * len(vals), width=np.diff(theta), align="edge",
-        color=["#2E6E8E", "#4a89a8", "#6aa4bf", "#9ab8c9", "#c3d5de"])
+        color=["#033c5a", "#295973", "#4f778c", "#7494a4", "#c0cfd6"])
 # label the wedges so the same five categories are traceable across both panels
 for lab, t0, t1 in zip(labels, theta[:-1], theta[1:]):
     ax2.text((t0 + t1) / 2, 0.62, lab, ha="center", va="center", fontsize=9)
@@ -167,7 +167,7 @@ g07 = gap[gap["year"] == 2007]
 
 fig, axes = plt.subplots(1, 2, figsize=(9.8, 3.5))
 for ax, logx in zip(axes, [False, True]):
-    ax.scatter(g07["gdpPercap"], g07["lifeExp"], s=18, alpha=0.65, color="#2E6E8E")
+    ax.scatter(g07["gdpPercap"], g07["lifeExp"], s=18, alpha=0.65, color="#033c5a")
     if logx:
         ax.set_xscale("log")
     ax.set_title("log scale: structure appears" if logx else "linear scale: everything piles up",
@@ -193,7 +193,7 @@ plt.tight_layout(); plt.show()
 
 Five variables in one chart. Question for the room: **which can you actually read?**
 
-# Perception: not all channels are equal {background-color="#2E6E8E"}
+# Perception: not all channels are equal {background-color="#00223e"}
 
 ## Cleveland & McGill (1984)
 
@@ -216,7 +216,7 @@ Pie charts (angle) lose to bars (position/length) — not taste, **measured erro
 #| echo: false
 #| fig-align: center
 fig, axes = plt.subplots(1, 2, figsize=(9.5, 3.8))
-axes[0].bar(labels, vals, color="#2E6E8E")
+axes[0].bar(labels, vals, color="#033c5a")
 axes[0].set_title("Position/length: is C or A bigger? Instant.")
 axes[1].pie(vals, labels=labels, startangle=90)
 axes[1].set_title("Angle: is B or D bigger? ...slower, less sure.")
@@ -259,7 +259,7 @@ rng = np.random.default_rng(7)
 n = 40
 gx = rng.uniform(0, 10, n * 3); gy = rng.uniform(0, 6, n * 3)
 grp = np.repeat([0, 1, 2], n)
-cols = ["#2E6E8E", "#d9534f", "#6aa84f"]; marks = ["o", "s", "^"]
+cols = ["#033c5a", "#d9534f", "#6aa84f"]; marks = ["o", "s", "^"]
 
 fig, axes = plt.subplots(1, 3, figsize=(10.5, 2.9))
 for k in range(3):
@@ -315,7 +315,7 @@ Some properties pop out **before** conscious attention — in < 250 ms, regardle
 rng = np.random.default_rng(3)
 xs, ys = rng.uniform(0, 10, 60), rng.uniform(0, 4, 60)
 fig, ax = plt.subplots(figsize=(8.5, 2.8))
-ax.scatter(xs, ys, color="#9ab8c9", s=60)
+ax.scatter(xs, ys, color="#7494a4", s=60)
 ax.scatter([6.2], [2.1], color="#d9534f", s=90)
 ax.set_title("You found the red dot before you decided to look for it.")
 ax.axis("off"); plt.tight_layout(); plt.show()
@@ -325,7 +325,7 @@ Color, size, orientation — and **motion**, the strongest of all, which is why 
 
 **One** popout works; several at once cancel each other.
 
-# Expressiveness & effectiveness {background-color="#2E6E8E"}
+# Expressiveness & effectiveness {background-color="#00223e"}
 
 ## Two rules for choosing encodings {.smaller}
 
@@ -349,9 +349,9 @@ These two rules + the accuracy ranking = a *procedure* for designing a chart. No
 #| fig-align: center
 sub = tips.groupby("day", as_index=False)["tip"].mean()
 fig, axes = plt.subplots(1, 2, figsize=(9.5, 3.6))
-axes[0].bar(sub["day"], sub["tip"], color="#2E6E8E")
+axes[0].bar(sub["day"], sub["tip"], color="#033c5a")
 axes[0].set_title("Comparison variable on POSITION: differences obvious")
-axes[1].scatter([1]*len(sub), range(len(sub)), s=sub["tip"]*900, color="#2E6E8E", alpha=0.7)
+axes[1].scatter([1]*len(sub), range(len(sub)), s=sub["tip"]*900, color="#033c5a", alpha=0.7)
 for i, (d, t) in enumerate(zip(sub["day"], sub["tip"])):
     axes[1].annotate(d, (1.02, i), fontsize=9, va="center")
 axes[1].set_title("Same data on AREA: can you rank them?")
@@ -359,7 +359,7 @@ axes[1].axis("off")
 plt.tight_layout(); plt.show()
 ```
 
-# Reading a chart critically {background-color="#2E6E8E"}
+# Reading a chart critically {background-color="#00223e"}
 
 ## The truncated axis
 
@@ -370,7 +370,7 @@ q = ["Q1", "Q2", "Q3", "Q4"]; v = [98, 99, 101, 103]
 fig, axes = plt.subplots(1, 2, figsize=(9.5, 3.3))
 axes[0].bar(q, v, color="#d9534f"); axes[0].set_ylim(97, 104)
 axes[0].set_title("y starts at 97: 'explosive growth'", fontsize=10)
-axes[1].bar(q, v, color="#2E6E8E"); axes[1].set_ylim(0, 110)
+axes[1].bar(q, v, color="#033c5a"); axes[1].set_ylim(0, 110)
 axes[1].set_title("y starts at 0: a 5% drift", fontsize=10)
 plt.tight_layout(); plt.show()
 ```

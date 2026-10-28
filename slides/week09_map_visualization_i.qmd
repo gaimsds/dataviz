@@ -19,7 +19,7 @@ format: revealjs
 **Today's claim:** a map is the most *trusted-looking* chart there is — which is exactly why the foundations (projections, normalization, classification) matter more here than anywhere.
 :::
 
-# The Earth is not flat {background-color="#2E6E8E"}
+# The Earth is not flat {background-color="#00223e"}
 
 ## The true size of Greenland {.smaller}
 
@@ -75,7 +75,7 @@ for ax, (epsg, label) in zip(axes, [
         c = row.geometry.centroid
         shifted.append((row["state"],
                         translate(row.geometry, xoff=i * 9e5 - c.x, yoff=-c.y)))
-    for color, (name, geom) in zip(["#2E6E8E", "#d9534f"], shifted):
+    for color, (name, geom) in zip(["#033c5a", "#d9534f"], shifted):
         gpd.GeoSeries([geom], crs=p.crs).plot(ax=ax, color=color,
                                               edgecolor="white", linewidth=0.5)
     ax.set_title(label, fontsize=11)
@@ -83,7 +83,7 @@ for ax, (epsg, label) in zip(axes, [
     ratio = areas["Michigan"] / areas["Florida"]
     ax.text(0.5, -0.02, f"Michigan is {ratio:.2f}x Florida",
             transform=ax.transAxes, ha="center", fontsize=12,
-            color="#2E6E8E" if epsg == 5070 else "#d9534f")
+            color="#033c5a" if epsg == 5070 else "#d9534f")
 plt.tight_layout(); plt.show()
 ```
 
@@ -187,7 +187,7 @@ nothing, and you get an empty result that looks like a data problem.
 In geopandas: check `gdf.crs`, convert with `gdf.to_crs(...)`, and do it
 **before** any join, any area, any distance.
 
-# The choropleth, done honestly {background-color="#2E6E8E"}
+# The choropleth, done honestly {background-color="#00223e"}
 
 ## A shapefile is not a file {.smaller}
 
@@ -465,7 +465,7 @@ fig, axes = plt.subplots(1, 2, figsize=(11.5, 3.4))
 _p.plot(column="pop_total", cmap="OrRd", ax=axes[0], edgecolor="white",
         linewidth=0.4)
 axes[0].set_title("Choropleth of a count", fontsize=11)
-_p.plot(ax=axes[1], color="#EAF2F6", edgecolor="#99b3bb", linewidth=0.4)
+_p.plot(ax=axes[1], color="#ebf0f2", edgecolor="#7494a4", linewidth=0.4)
 axes[1].scatter(_cent.x, _cent.y, s=_p["pop_total"] / 40000, alpha=0.65,
                 color="#d9534f", edgecolors="white", linewidth=0.6)
 axes[1].set_title("Proportional symbols", fontsize=11)
@@ -535,7 +535,7 @@ _cuts = {
 
 fig, axes = plt.subplots(3, 1, figsize=(12, 3.9), sharex=True)
 for ax, (name, cuts) in zip(axes, _cuts.items()):
-    ax.scatter(_v, np.zeros_like(_v), s=40, color="#2E6E8E", alpha=0.75,
+    ax.scatter(_v, np.zeros_like(_v), s=40, color="#033c5a", alpha=0.75,
                zorder=3, clip_on=False)
     for x in cuts:
         ax.axvline(x, color="#d9534f", lw=2, zorder=2)
@@ -602,7 +602,7 @@ the data.
 Week 2's effectiveness rule, geographically: color *lightness* is doing the quantitative work on a choropleth — that's why we classify into 5–7 bins the eye can actually distinguish.
 :::
 
-# The toolchain {background-color="#2E6E8E"}
+# The toolchain {background-color="#00223e"}
 
 ## The Python geospatial stack (Block 2's pipeline)
 

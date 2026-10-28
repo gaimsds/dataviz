@@ -19,7 +19,7 @@ format: revealjs
 **Last week you were the client. Today you're the server.** A trained model goes behind an HTTP endpoint — the standard shape of a deployed model, and the back half of your final project.
 :::
 
-# What "serving a model" means {background-color="#2E6E8E"}
+# What "serving a model" means {background-color="#00223e"}
 
 ## From pickle to product
 
@@ -31,17 +31,17 @@ A trained model in a `.joblib` file helps no one. **Serving** it means:
 import matplotlib.pyplot as plt
 import matplotlib.patches as mp
 fig, ax = plt.subplots(figsize=(9.5, 3.4))
-steps = [("model.joblib\n(trained, saved)", "#EAF2F6"),
-         ("FastAPI app\nloads it ONCE", "#9ab8c9"),
-         ("uvicorn serves\nHTTP on :8000", "#2E6E8E"),
-         ("ANY client\nPOSTs /predict", "#EAF2F6")]
+steps = [("model.joblib\n(trained, saved)", "#ebf0f2"),
+         ("FastAPI app\nloads it ONCE", "#7494a4"),
+         ("uvicorn serves\nHTTP on :8000", "#033c5a"),
+         ("ANY client\nPOSTs /predict", "#ebf0f2")]
 for i, (txt, col) in enumerate(steps):
-    tc = "white" if col == "#2E6E8E" else "#1a1a1a"
-    ax.add_patch(mp.FancyBboxPatch((i*2.5, 0.6), 2.0, 1.5, boxstyle="round,pad=0.08", fc=col, ec="#2E6E8E"))
+    tc = "white" if col == "#033c5a" else "#1a1a1a"
+    ax.add_patch(mp.FancyBboxPatch((i*2.5, 0.6), 2.0, 1.5, boxstyle="round,pad=0.08", fc=col, ec="#033c5a"))
     ax.text(i*2.5+1.0, 1.35, txt, ha="center", va="center", fontsize=10, color=tc)
     if i < 3:
         ax.annotate("", xy=(i*2.5+2.4, 1.35), xytext=(i*2.5+2.1, 1.35),
-                    arrowprops=dict(arrowstyle="->", lw=2, color="#5a6672"))
+                    arrowprops=dict(arrowstyle="->", lw=2, color="#6c757d"))
 ax.set_xlim(-0.3, 10.2); ax.set_ylim(0.2, 2.5); ax.axis("off")
 ax.set_title("One model, one server — many clients: web apps, notebooks, other services")
 plt.tight_layout(); plt.show()
@@ -59,7 +59,7 @@ The model trains **once**, loads **once**, predicts **many times** — and every
 
 We teach FastAPI for the validation + docs; Flask appears in the materials as the lighter alternative. Both produce the same thing: a URL that predicts.
 
-# Design the contract first {background-color="#2E6E8E"}
+# Design the contract first {background-color="#00223e"}
 
 ## The schema IS the API
 

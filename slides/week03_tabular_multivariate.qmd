@@ -19,7 +19,7 @@ format: revealjs
 **Running example:** the Wine dataset — 178 wines, **13** chemical measurements, 3 cultivars. Too many columns to eyeball: exactly the problem.
 :::
 
-# The multivariate problem {background-color="#2E6E8E"}
+# The multivariate problem {background-color="#00223e"}
 
 ## More columns ≠ more clarity
 
@@ -62,7 +62,7 @@ Every multivariate chart assumes tidy, typed, joined data:
 `groupby` is the dangerous one. **Aggregation is not neutral** — the unit you choose changes what the chart can say, and sometimes reverses it. We'll see that happen shortly.
 :::
 
-# Variable structure: correlation {background-color="#2E6E8E"}
+# Variable structure: correlation {background-color="#00223e"}
 
 ## The correlation heatmap
 
@@ -135,7 +135,7 @@ axes[0].plot(xx, m * xx + b, color="#d9534f", lw=2.5)
 axes[0].set_title(f"Pooled:  r = {np.corrcoef(X, Y)[0, 1]:+.2f}  (exercise looks harmful)",
                   fontsize=9.5)
 
-pal = ["#2E6E8E", "#6aa84f", "#b07aa1"]
+pal = ["#033c5a", "#6aa84f", "#b07aa1"]
 rs = []
 for k, lab in enumerate(["30s", "50s", "70s"]):
     mk = G == k
@@ -173,7 +173,7 @@ quartet = [
 ]
 fig, axes = plt.subplots(1, 4, figsize=(10.5, 2.7), sharex=True, sharey=True)
 for a, (xq, yq, note) in zip(axes, quartet):
-    a.scatter(xq, yq, color="#2E6E8E", s=22)
+    a.scatter(xq, yq, color="#033c5a", s=22)
     m_, b_ = np.polyfit(xq, yq, 1)
     xr = np.array([3.5, 19.5])
     a.plot(xr, m_ * xr + b_, color="#d9534f", lw=1.6)
@@ -197,7 +197,7 @@ A heatmap is 78 of these numbers with the pictures thrown away. Compute correlat
 
 That last observation is the doorway to PCA: if 5 columns say the same thing, maybe the data has fewer *real* dimensions than columns.
 
-# Observation structure: PCA {background-color="#2E6E8E"}
+# Observation structure: PCA {background-color="#00223e"}
 
 ## PCA as a visualization tool
 
@@ -237,7 +237,7 @@ No pairwise plot of the 13 features separates the cultivars this well. PCA *foun
 #| fig-align: center
 evr = PCA().fit(X).explained_variance_ratio_
 fig, ax = plt.subplots(figsize=(7.5, 3.2))
-ax.bar(range(1, 14), evr, color="#2E6E8E")
+ax.bar(range(1, 14), evr, color="#033c5a")
 ax.plot(range(1, 14), np.cumsum(evr), "o-", color="#d9534f", label="cumulative")
 ax.set_xlabel("component"); ax.set_ylabel("variance explained")
 ax.set_title(f"Scree plot: 2 components ≈ {evr[:2].sum():.0%} — honest, and worth saying on the chart")
@@ -258,7 +258,7 @@ feat = [short.get(c, c) for c in wine.data.columns]   # same shortened labels as
 order = np.argsort(comp[0])
 yy = np.arange(len(feat))
 fig, ax = plt.subplots(figsize=(8.4, 3.1))
-ax.barh(yy - 0.2, comp[0][order], height=0.4, color="#2E6E8E", label="PC1")
+ax.barh(yy - 0.2, comp[0][order], height=0.4, color="#033c5a", label="PC1")
 ax.barh(yy + 0.2, comp[1][order], height=0.4, color="#d9534f", label="PC2")
 ax.set_yticks(yy); ax.set_yticklabels([feat[i] for i in order], fontsize=7.5)
 ax.axvline(0, color="#999999", lw=0.8)

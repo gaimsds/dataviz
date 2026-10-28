@@ -19,7 +19,7 @@ format: revealjs
 **Running example:** Mauna Loa atmospheric CO₂ — 40+ years of monthly measurements, the textbook trend-plus-seasonality series.
 :::
 
-# What's special about time {background-color="#2E6E8E"}
+# What's special about time {background-color="#00223e"}
 
 ## Why order matters
 
@@ -81,9 +81,9 @@ weekly = co2["co2"]
 monthly = weekly.resample("MS").mean().dropna()
 yearly = weekly.resample("YS").mean()
 fig, axes = plt.subplots(1, 2, figsize=(10, 3.6), sharey=True)
-weekly.loc["1990":"1995"].plot(ax=axes[0], color="#2E6E8E")
+weekly.loc["1990":"1995"].plot(ax=axes[0], color="#033c5a")
 axes[0].set_title("Weekly, 1990–95: the seasonal sawtooth dominates")
-yearly.plot(ax=axes[1], color="#2E6E8E")
+yearly.plot(ax=axes[1], color="#033c5a")
 axes[1].set_title("Yearly means: only the trend survives")
 for a in axes: a.set_ylabel("CO₂ (ppm)")
 plt.tight_layout(); plt.show()
@@ -116,7 +116,7 @@ The **autocorrelation function (ACF)** plots the correlation of the series with 
 **Differencing, concretely.** `s.diff()` turns `421.0, 422.4, 423.1` into `1.4, 0.7` — changes instead of levels. One `.diff()` removes a straight-line trend; `s.diff(12)` removes an annual cycle instead.
 :::
 
-# Trend & seasonality {background-color="#2E6E8E"}
+# Trend & seasonality {background-color="#00223e"}
 
 ## Smoothing reveals trend
 
@@ -142,7 +142,7 @@ Window length is a choice. Matching the window to the **seasonal period** is a s
 seg4 = monthly.loc["1980":"1998"]
 fig, axes = plt.subplots(1, 2, figsize=(9.8, 2.9))
 seg4.plot(ax=axes[0], color="#bbbbbb", lw=0.9, label="monthly")
-for w, c in [(3, "#d9534f"), (12, "#2E6E8E"), (60, "#6aa84f")]:
+for w, c in [(3, "#d9534f"), (12, "#033c5a"), (60, "#6aa84f")]:
     seg4.rolling(w).mean().plot(ax=axes[0], lw=1.8, color=c, label=f"{w}-month")
 axes[0].legend(fontsize=6.5); axes[0].set_ylabel("CO₂ (ppm)")
 axes[0].set_title("Rolling mean: 3 keeps the season, 12 removes it, 60 flattens", fontsize=9)
@@ -208,7 +208,7 @@ mul = seasonal_decompose(series, period=12, model="multiplicative")
 # NB: plot through matplotlib, not Series.plot() — pandas installs its own date
 # converter, which silently ignores the mdates locator and blanks the labels.
 fig, axes = plt.subplots(1, 3, figsize=(10.2, 2.7))
-axes[0].plot(series.index, series.values, color="#2E6E8E", lw=1.3)
+axes[0].plot(series.index, series.values, color="#033c5a", lw=1.3)
 axes[0].set_title("Swing grows with the level", fontsize=9)
 axes[1].plot(add.resid.index, add.resid.values, color="#d9534f", lw=1.0)
 axes[1].axhline(0, color="#999999", lw=0.7)
@@ -232,7 +232,7 @@ Fitting additive here estimates **one averaged swing**, which is too big early a
 To choose between them, fit one and **look at the residual panel**. A pattern left in the residuals means the other model fits better. CO₂ is additive; most business series are multiplicative.
 :::
 
-# Uncertainty {background-color="#2E6E8E"}
+# Uncertainty {background-color="#00223e"}
 
 ## Show the uncertainty, not just the line
 
@@ -244,8 +244,8 @@ A time series carries uncertainty from three sources: measurement error, the smo
 roll = monthly.rolling(12)
 mean, std = roll.mean(), roll.std()
 fig, ax = plt.subplots(figsize=(9, 3.2))
-mean.plot(ax=ax, label="12-mo mean", color="#2E6E8E")
-ax.fill_between(mean.index, mean - 2*std, mean + 2*std, alpha=0.2, color="#2E6E8E", label="±2σ band")
+mean.plot(ax=ax, label="12-mo mean", color="#033c5a")
+ax.fill_between(mean.index, mean - 2*std, mean + 2*std, alpha=0.2, color="#033c5a", label="±2σ band")
 ax.set_ylabel("CO₂ (ppm)"); ax.legend()
 ax.set_title("The band shows how far values typically sit from the smooth line")
 plt.tight_layout(); plt.show()
@@ -270,7 +270,7 @@ ax.fill_between(mean.index,             # x
 - **`± 2σ`** covers roughly 95% of values when they are close to normal. Its width is the **spread of the data**, not our confidence in the mean.
 - A confidence interval answers the other question — how precisely we know the average — and is usually much narrower. Both are drawn as a shaded band, so **the caption has to say which one it is**.
 
-# Showing time with animation {background-color="#2E6E8E"}
+# Showing time with animation {background-color="#00223e"}
 
 ## Animation uses frames instead of an axis {.smaller}
 
@@ -319,7 +319,7 @@ Two things that catch people out:
 `weekly/week4/app_rolling_animation.py` animates the window sliding along the CO₂ series, with window length as a slider. Run it, set the window to 3, then 12, then 60, and watch what each one keeps.
 :::
 
-# Honesty on the time axis {background-color="#2E6E8E"}
+# Honesty on the time axis {background-color="#00223e"}
 
 ## Truncated axes
 
@@ -331,7 +331,7 @@ fig, axes = plt.subplots(1, 2, figsize=(10, 3.6))
 seg.plot(ax=axes[0], color="#d9534f")
 axes[0].set_ylim(seg.min()-0.5, seg.max()+0.5)
 axes[0].set_title("Truncated axis: the rise looks dramatic")
-seg.plot(ax=axes[1], color="#2E6E8E")
+seg.plot(ax=axes[1], color="#033c5a")
 axes[1].set_ylim(0, seg.max()*1.1)
 axes[1].set_title("Zero baseline: steady ~1.5 ppm/yr rise")
 plt.tight_layout(); plt.show()
@@ -350,7 +350,7 @@ fig, axes = plt.subplots(1, 3, figsize=(10, 2.8), sharey=True,
                          gridspec_kw={"width_ratios": [1, 2.2, 5]})
 for a, t in zip(axes, ["tall & narrow:\n'runaway'", "banked near 45°:\nreadable",
                        "wide & flat:\n'nothing happening'"]):
-    a.plot(yrs, seg5.values, color="#2E6E8E", lw=1.8)
+    a.plot(yrs, seg5.values, color="#033c5a", lw=1.8)
     a.set_title(t, fontsize=8.5); a.set_xlabel("")
     a.xaxis.set_major_locator(plt.MaxNLocator(3, integer=True))
     a.tick_params(labelsize=6.5)

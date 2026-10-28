@@ -19,7 +19,7 @@ format: revealjs
 **The arc completes:** Week 11 you consumed, Week 12 you served — today you **visualize live model output**, and the consume→serve→visualize loop becomes one running system.
 :::
 
-# Why visualize models {background-color="#2E6E8E"}
+# Why visualize models {background-color="#00223e"}
 
 ## Accuracy is one number; behavior is a landscape
 
@@ -76,7 +76,7 @@ ax.legend(); plt.tight_layout(); plt.show()
 
 For imbalanced problems, the precision–recall curve tells the truer story — same idea, harsher mirror.
 
-# Behavior: what the model uses, where it fails {background-color="#2E6E8E"}
+# Behavior: what the model uses, where it fails {background-color="#00223e"}
 
 ## Feature importance
 
@@ -85,7 +85,7 @@ For imbalanced problems, the precision–recall curve tells the truer story — 
 #| fig-align: center
 import pandas as pd
 fig, ax = plt.subplots(figsize=(7.5, 3.2))
-pd.Series(model.feature_importances_, index=X.columns).sort_values().plot.barh(ax=ax, color="#2E6E8E")
+pd.Series(model.feature_importances_, index=X.columns).sort_values().plot.barh(ax=ax, color="#033c5a")
 ax.set_title("The petal measurements do almost all the work")
 plt.tight_layout(); plt.show()
 ```
@@ -125,7 +125,7 @@ Your Week 12 server returns the **full probability distribution** — use it:
 Principle: confidence is data. Visualize it with the same care as the prediction itself.
 :::
 
-# The live wire {background-color="#2E6E8E"}
+# The live wire {background-color="#00223e"}
 
 ## Three terminals, one system
 

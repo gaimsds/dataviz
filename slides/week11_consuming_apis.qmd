@@ -19,7 +19,7 @@ format: revealjs
 **The three-week arc starts now:** this week you **consume** endpoints someone else built → next week you **serve** your own model → Week 13 you **visualize** its live output. Today is deliberately client-only.
 :::
 
-# Client and server {background-color="#2E6E8E"}
+# Client and server {background-color="#00223e"}
 
 ## Why separate them at all?
 
@@ -31,11 +31,11 @@ So far: data and computation live *inside* your app. Real systems split them:
 import matplotlib.pyplot as plt
 import matplotlib.patches as mp
 fig, ax = plt.subplots(figsize=(9.5, 3.2))
-ax.add_patch(mp.FancyBboxPatch((0.3, 0.8), 2.8, 1.5, boxstyle="round,pad=0.1", fc="#EAF2F6", ec="#2E6E8E"))
+ax.add_patch(mp.FancyBboxPatch((0.3, 0.8), 2.8, 1.5, boxstyle="round,pad=0.1", fc="#ebf0f2", ec="#033c5a"))
 ax.text(1.7, 1.55, "CLIENT\n(your Streamlit app)", ha="center", va="center", fontsize=11)
-ax.add_patch(mp.FancyBboxPatch((6.5, 0.8), 2.8, 1.5, boxstyle="round,pad=0.1", fc="#2E6E8E", ec="#2E6E8E"))
+ax.add_patch(mp.FancyBboxPatch((6.5, 0.8), 2.8, 1.5, boxstyle="round,pad=0.1", fc="#033c5a", ec="#033c5a"))
 ax.text(7.9, 1.55, "SERVER\n(data / model)", ha="center", va="center", fontsize=11, color="white")
-ax.annotate("", xy=(6.4, 1.8), xytext=(3.2, 1.8), arrowprops=dict(arrowstyle="->", lw=2, color="#5a6672"))
+ax.annotate("", xy=(6.4, 1.8), xytext=(3.2, 1.8), arrowprops=dict(arrowstyle="->", lw=2, color="#6c757d"))
 ax.text(4.8, 2.05, "HTTP request (URL + params)", ha="center", fontsize=9.5)
 ax.annotate("", xy=(3.2, 1.25), xytext=(6.4, 1.25), arrowprops=dict(arrowstyle="->", lw=2, color="#d9534f"))
 ax.text(4.8, 0.95, "response (status code + JSON)", ha="center", fontsize=9.5, color="#d9534f")
@@ -57,7 +57,7 @@ Why: the data is **too big/live/private** to ship; the model should run **once, 
 
 The discipline of the week: **timeout on every call, check the status, then parse.**
 
-# JSON to DataFrame {background-color="#2E6E8E"}
+# JSON to DataFrame {background-color="#00223e"}
 
 ## The four-step pattern (memorize this one)
 

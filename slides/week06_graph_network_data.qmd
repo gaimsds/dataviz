@@ -19,7 +19,7 @@ format: revealjs
 You can build Streamlit apps after Week 5. This week is the first of the complex modalities: data whose meaning is carried by the **connections** between records rather than by the records themselves.
 :::
 
-# From records to relationships {background-color="#2E6E8E"}
+# From records to relationships {background-color="#00223e"}
 
 ## Most data we've seen looks like this
 
@@ -57,7 +57,7 @@ G = nx.karate_club_graph()
 pos = nx.spring_layout(G, seed=42)
 fig, ax = plt.subplots(figsize=(8, 4.5))
 nx.draw_networkx(G, pos, ax=ax, with_labels=False,
-                 node_color="#2E6E8E", node_size=120,
+                 node_color="#033c5a", node_size=120,
                  edge_color="#bbbbbb")
 ax.set_title("Zachary's Karate Club — 34 people, 78 friendships", fontsize=11)
 ax.axis("off")
@@ -69,7 +69,7 @@ plt.show()
 The classic example: a university karate club that famously split into two factions after a dispute between the instructor and the president. The split is *visible* in the structure — no table of members would show it. We'll use this graph all session.
 :::
 
-# Why this became a field {background-color="#2E6E8E"}
+# Why this became a field {background-color="#00223e"}
 
 ## Two papers, eighteen months apart {.smaller}
 
@@ -114,14 +114,14 @@ layouts = [nx.circular_layout(reg_s), nx.spring_layout(rnd_s, seed=2),
            nx.spring_layout(sf_s, seed=2)]
 for ax, Gs, lp, name in zip(axes[0], [reg_s, rnd_s, sf_s], layouts, titles):
     degs = dict(Gs.degree())
-    nx.draw_networkx(Gs, lp, ax=ax, with_labels=False, edge_color="#9fb4c0",
-                     width=0.9, node_color="#2E6E8E",
+    nx.draw_networkx(Gs, lp, ax=ax, with_labels=False, edge_color="#9ab2bd",
+                     width=0.9, node_color="#033c5a",
                      node_size=[6 + degs[v] * 3 for v in Gs.nodes()])
     ax.set_title(name, fontsize=11); ax.axis("off")
 
 for ax, Gb in zip(axes[1], big):
     d = [v for _, v in Gb.degree()]
-    ax.hist(d, bins=range(0, max(d) + 2), color="#2E6E8E")
+    ax.hist(d, bins=range(0, max(d) + 2), color="#033c5a")
     ax.set_yscale("log"); ax.set_xlim(0, 60)
     ax.set_xlabel("degree", fontsize=8); ax.tick_params(labelsize=7)
 axes[1][0].set_ylabel("nodes (log)", fontsize=8)
@@ -142,7 +142,7 @@ All three have 500 nodes and an average of 6 edges per node. Only the wiring dif
 | Random | 0.012 | 3.7 | 14 |
 | Scale-free | 0.047 | 3.3 | **67** |
 
-A regular ring keeps your neighbors connected but takes 42 steps to cross; a random graph crosses in under 4 but has no local structure. Real social networks have both. Watts and Strogatz rewired a small share of the ring's edges at random:
+A regular ring keeps neighbors connected but needs 42 steps to cross; a random graph crosses in under 4 with no local structure. Real networks have both. Watts and Strogatz rewired a few of the ring's edges at random:
 
 | Fraction rewired | Clustering | Average path |
 |---|---|---|
@@ -152,10 +152,10 @@ A regular ring keeps your neighbors connected but takes 42 steps to cross; a ran
 | 100% | 0.012 | 3.7 |
 
 ::: {.gw-box}
-Rewiring one edge in twenty costs 14% of the clustering and removes 84% of the distance. A handful of long-range shortcuts is enough to make a large network small — which is why six degrees of separation is not a paradox.
+Rewiring one edge in twenty costs 14% of the clustering and removes 84% of the distance. A few long-range shortcuts make a large network small — which is why six degrees of separation is not a paradox.
 :::
 
-# Anatomy of a graph {background-color="#2E6E8E"}
+# Anatomy of a graph {background-color="#00223e"}
 
 ## The vocabulary
 
@@ -169,7 +169,7 @@ Rewiring one edge in twenty costs 14% of the clustering and removes 84% of the d
 fig, ax = plt.subplots(figsize=(7, 2.6))
 mini = nx.Graph([("Ana","Ben"),("Ben","Cal"),("Ana","Cal"),("Cal","Dee")])
 mpos = nx.spring_layout(mini, seed=3)
-nx.draw_networkx(mini, mpos, ax=ax, node_color="#2E6E8E",
+nx.draw_networkx(mini, mpos, ax=ax, node_color="#033c5a",
                  font_color="white", node_size=1500, font_size=9,
                  edge_color="#888888", width=2)
 ax.axis("off"); plt.tight_layout(); plt.show()
@@ -200,7 +200,7 @@ fig, axes = plt.subplots(1, 2, figsize=(10.4, 3.2))
 # --- directed: in-degree and out-degree are different questions ---
 D = nx.DiGraph([("A", "C"), ("B", "C"), ("E", "C"), ("C", "D"), ("D", "E")])
 dpos = nx.spring_layout(D, seed=11)
-nx.draw_networkx(D, dpos, ax=axes[0], node_color="#2E6E8E", font_color="white",
+nx.draw_networkx(D, dpos, ax=axes[0], node_color="#033c5a", font_color="white",
                  node_size=900, font_size=9, edge_color="#888888",
                  arrows=True, arrowsize=16, width=1.6)
 axes[0].set_title(f"Directed: C has in-degree {D.in_degree('C')}, "
@@ -212,7 +212,7 @@ W = nx.Graph()
 W.add_weighted_edges_from([("Ana", "Ben", 1), ("Ben", "Cal", 9),
                            ("Ana", "Cal", 3), ("Cal", "Dee", 6)])
 wpos = nx.spring_layout(W, seed=3)
-nx.draw_networkx(W, wpos, ax=axes[1], node_color="#2E6E8E", font_color="white",
+nx.draw_networkx(W, wpos, ax=axes[1], node_color="#033c5a", font_color="white",
                  node_size=900, font_size=9, edge_color="#888888",
                  width=[W[u][v]["weight"] * 0.6 for u, v in W.edges()])
 nx.draw_networkx_edge_labels(W, wpos, ax=axes[1], font_size=8,
@@ -235,7 +235,7 @@ plt.tight_layout(); plt.show()
 #| fig-align: center
 fig, ax = plt.subplots(figsize=(4.6, 4.2))
 nx.draw_networkx(G, pos, ax=ax, with_labels=False,
-                 node_color="#2E6E8E", node_size=80, edge_color="#cccccc")
+                 node_color="#033c5a", node_size=80, edge_color="#cccccc")
 ax.set_title("Node–link diagram", fontsize=11)
 ax.axis("off"); plt.tight_layout(); plt.show()
 ```
@@ -257,7 +257,7 @@ plt.tight_layout(); plt.show()
 
 Same 78 edges. $A_{ij}=1$ when an edge connects $i$ and $j$. The node–link view shows *shape*; the matrix shows *density* and scales better.
 
-# Layouts: where the positions come from {background-color="#2E6E8E"}
+# Layouts: where the positions come from {background-color="#00223e"}
 
 ## Where do the node positions come from?
 
@@ -282,7 +282,7 @@ layouts = [
 ]
 for ax, (lpos, name) in zip(axes, layouts):
     nx.draw_networkx(G, lpos, ax=ax, with_labels=False,
-                     node_color="#2E6E8E", node_size=60, edge_color="#cccccc")
+                     node_color="#033c5a", node_size=60, edge_color="#cccccc")
     ax.set_title(name, fontsize=11)
     ax.axis("off")
 plt.tight_layout(); plt.show()
@@ -302,7 +302,7 @@ So in the final picture:
 - Distance ≈ "structural closeness" — **not** a measured quantity
 - Different runs give different pictures → **fix the random seed**
 
-# Measuring structure: centrality {background-color="#2E6E8E"}
+# Measuring structure: centrality {background-color="#00223e"}
 
 ## Which nodes matter?
 
@@ -327,7 +327,7 @@ top2 = sorted(degd, key=degd.get, reverse=True)[:2]
 fig, ax = plt.subplots(figsize=(8, 3.9))
 nx.draw_networkx(G, pos, ax=ax, with_labels=False,
                  node_size=[degd[n]*40 for n in G.nodes()],
-                 node_color=["#d9534f" if n in top2 else "#2E6E8E" for n in G.nodes()],
+                 node_color=["#d9534f" if n in top2 else "#033c5a" for n in G.nodes()],
                  edge_color="#dddddd")
 for n in top2:
     ax.annotate(f"degree {degd[n]}", pos[n], textcoords="offset points",
@@ -354,7 +354,7 @@ btw_b = nx.betweenness_centrality(B)
 bridge = max(btw_b, key=btw_b.get)
 fig, ax = plt.subplots(figsize=(8, 3.2))
 nx.draw_networkx(B, bpos, ax=ax, with_labels=False, node_size=320,
-                 node_color=["#d9534f" if n == bridge else "#2E6E8E" for n in B.nodes()],
+                 node_color=["#d9534f" if n == bridge else "#033c5a" for n in B.nodes()],
                  edge_color="#999999")
 ax.set_title(f"The bridge (red) lies on every inter-group shortest path — betweenness = {btw_b[bridge]:.2f}",
              fontsize=11)
@@ -432,7 +432,7 @@ ppos = nx.spring_layout(P, seed=8)
 fig, ax = plt.subplots(figsize=(9.4, 2.5))
 nx.draw_networkx(P, ppos, ax=ax, with_labels=True, font_size=7, font_color="white",
                  node_size=[pr[n] * 5200 + 90 for n in P.nodes()],
-                 node_color=["#d9534f" if n in ("A", "B") else "#2E6E8E" for n in P.nodes()],
+                 node_color=["#d9534f" if n in ("A", "B") else "#033c5a" for n in P.nodes()],
                  edge_color="#cccccc", arrows=True, arrowsize=9, width=0.9)
 ax.set_title(f"Node size = PageRank.   A: in-degree {P.in_degree('A')}, PR {pr['A']:.3f}   ·   "
              f"B: in-degree {P.in_degree('B')}, PR {pr['B']:.3f}", fontsize=10)
@@ -447,7 +447,7 @@ Read it as a **random surfer**: follow links at random, occasionally jump to a r
 This is what Google was built on: the web is a graph, and its link structure already records which pages people treat as authoritative. `nx.pagerank(G)` is one line.
 :::
 
-# Finding groups: community detection {background-color="#2E6E8E"}
+# Finding groups: community detection {background-color="#00223e"}
 
 ## What is a community?
 
@@ -467,7 +467,7 @@ Q = modularity(G, comms)
 fig, ax = plt.subplots(figsize=(8, 3.9))
 nx.draw_networkx_nodes(G, pos, ax=ax, node_color=[cmap[n] for n in G.nodes()],
                        cmap=plt.cm.Set2, node_size=140)
-nx.draw_networkx_edges(G, pos, ax=ax, edgelist=within, edge_color="#2E6E8E", width=1.6)
+nx.draw_networkx_edges(G, pos, ax=ax, edgelist=within, edge_color="#033c5a", width=1.6)
 nx.draw_networkx_edges(G, pos, ax=ax, edgelist=between, edge_color="#bbbbbb", style="dashed")
 ax.set_title(f"{len(within)} edges within communities (teal) · {len(between)} between (dashed) · Q = {Q:.2f}",
              fontsize=11)
@@ -540,7 +540,7 @@ ax.axis("off"); plt.tight_layout(); plt.show()
 
 Hubs, factions and bridges can now all be read off a single picture.
 
-# When the picture fails {background-color="#2E6E8E"}
+# When the picture fails {background-color="#00223e"}
 
 ## The hairball problem
 
@@ -551,7 +551,7 @@ H = nx.barabasi_albert_graph(450, 3, seed=7)
 hpos = nx.spring_layout(H, seed=7)
 fig, ax = plt.subplots(figsize=(7.5, 4.2))
 nx.draw_networkx(H, hpos, ax=ax, with_labels=False,
-                 node_color="#2E6E8E", node_size=14,
+                 node_color="#033c5a", node_size=14,
                  edge_color="#bbbbbb", width=0.4, alpha=0.7)
 ax.set_title("450 nodes, about 1,340 edges", fontsize=11)
 ax.axis("off"); plt.tight_layout(); plt.show()
@@ -589,14 +589,14 @@ for u, v in H.edges():
         Qg.add_edge(a, b, weight=Qg.get_edge_data(a, b, {}).get("weight", 0) + 1)
 
 fig, axes = plt.subplots(1, 2, figsize=(10.4, 3.2))
-nx.draw_networkx(H, hpos, ax=axes[0], with_labels=False, node_color="#2E6E8E",
+nx.draw_networkx(H, hpos, ax=axes[0], with_labels=False, node_color="#033c5a",
                  node_size=12, edge_color="#cccccc", width=0.3, alpha=0.7)
 axes[0].set_title(f"{H.number_of_nodes()} nodes as drawn before", fontsize=10)
 axes[0].axis("off")
 
 qpos = nx.spring_layout(Qg, seed=2)
 nx.draw_networkx(Qg, qpos, ax=axes[1], with_labels=False,
-                 node_color="#2E6E8E",
+                 node_color="#033c5a",
                  node_size=[Qg.nodes[n]["members"] * 14 for n in Qg.nodes()],
                  edge_color="#888888",
                  width=[Qg[u][v]["weight"] * 0.12 for u, v in Qg.edges()])

@@ -1,16 +1,27 @@
 /*-- scss:defaults --*/
 
-// DATS 6401 — GW teal identity, matched to the course syllabus & book
-$gw-teal: #2E6E8E;
-$gw-teal-dark: #235670;
-$gw-teal-light: #EAF2F6;
-$gw-ink: #1a1a1a;
-$gw-muted: #5a6672;
+// DATS 6401 — GW identity, ported from the DATS 2104 course pages: navy and
+// blue carry the structure, buff is the accent rule.
+//
+// The type metrics below are deliberately identical to the teal theme they
+// replace. Every deck was fitted slide by slide against the 720px frame, and
+// a font size changed here pushes text under the footer, where the reader
+// never finds out it was there.
+
+$gw-navy:    #00223e;   // section dividers
+$gw-blue:    #033c5a;   // headings, title rule, data marks
+$gw-buff:    #d6bf91;   // the accent rule under headings
+$gw-buff-20: #f6f1e8;   // soft fill behind callout boxes
+$gw-blue-08: #ebf0f2;   // soft blue fill
+$gw-body:    #373a3c;
+$gw-muted:   #6c757d;
+$gw-rule:    #dee2e6;
+$gw-link:    #0075c8;
 
 $body-bg: #ffffff;
-$body-color: $gw-ink;
-$link-color: $gw-teal;
-$presentation-heading-color: $gw-teal;
+$body-color: $gw-body;
+$link-color: $gw-link;
+$presentation-heading-color: $gw-blue;
 $presentation-heading-font-weight: 600;
 $presentation-font-size-root: 36px;
 $presentation-h1-font-size: 1.6em;
@@ -21,37 +32,61 @@ $code-block-font-size: 0.62em;
 
 // Title slide
 .reveal .quarto-title-block .title {
-  color: $gw-teal;
+  color: $gw-blue;
   font-weight: 650;
-  border-bottom: 4px solid $gw-teal;
+  border-bottom: 4px solid $gw-buff;
   padding-bottom: 0.25em;
 }
 .reveal .quarto-title-block .subtitle { color: $gw-muted; }
 .reveal .quarto-title-block .quarto-title-authors { color: $gw-muted; }
 
-// Section divider slides (level-1 headings)
-.reveal .slide section h1 { color: $gw-teal; }
+// Slide titles carry the buff rule from the course pages. The margin below is
+// pulled back by exactly what the rule and its padding add, so a slide is no
+// taller than it was under the teal theme and the fitted decks still fit.
+.reveal .slide h2 {
+  border-bottom: 2px solid $gw-buff;
+  padding-bottom: 0.08em;
+  margin-bottom: 0.18em;
+}
+
+// Section divider slides (level-1 headings) sit on navy.
+.reveal .slide section h1,
+.reveal .slide h1 { color: $gw-blue; }
+.reveal .has-dark-background h1,
+.reveal .has-dark-background h2 {
+  color: #ffffff;
+  border-bottom-color: $gw-buff;
+}
+// The divider slide is this deck's version of the banner on the course pages,
+// so it gets the banner's heavier buff rule.
+.reveal .has-dark-background h1 {
+  border-bottom: 4px solid $gw-buff;
+  padding-bottom: 0.18em;
+  display: inline-block;
+}
 
 // Accent for emphasis
-.reveal strong { color: $gw-teal-dark; }
+.reveal strong { color: $gw-blue; }
 
-// Callout-ish boxes
+// Callout-ish boxes: the warm fill from the course pages, anchored by a blue
+// edge so it reads as structure rather than decoration.
 .reveal .gw-box {
-  background: $gw-teal-light;
-  border-left: 6px solid $gw-teal;
+  background: $gw-buff-20;
+  border-left: 6px solid $gw-blue;
   border-radius: 6px;
   padding: 0.5em 0.8em;
-  margin-top: 0.6em;
+  margin-top: 0.25em;
 }
 
 // Discussion slide styling
 .reveal .gw-discussion {
-  background: $gw-teal;
+  background: $gw-navy;
   color: white;
   border-radius: 10px;
   padding: 0.8em 1em;
 }
 .reveal .gw-discussion h2, .reveal .gw-discussion strong { color: white; }
+.reveal .gw-discussion h2 { border-bottom-color: $gw-buff; }
 
 // Footer / slide numbers subtle
 .reveal .slide-number { color: $gw-muted; }

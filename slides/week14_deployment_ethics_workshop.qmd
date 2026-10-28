@@ -19,7 +19,7 @@ format: revealjs
 **Last session.** Two jobs: get your client–server system **onto the web**, and step back to the responsibility that comes with charts people believe.
 :::
 
-# Deployment {background-color="#2E6E8E"}
+# Deployment {background-color="#00223e"}
 
 ## Two pieces, two homes
 
@@ -31,10 +31,10 @@ Your final project is **two processes** — they deploy separately and find each
 import matplotlib.pyplot as plt
 import matplotlib.patches as mp
 fig, ax = plt.subplots(figsize=(9.5, 3.4))
-ax.add_patch(mp.FancyBboxPatch((0.3, 0.7), 3.4, 1.6, boxstyle="round,pad=0.1", fc="#EAF2F6", ec="#2E6E8E"))
+ax.add_patch(mp.FancyBboxPatch((0.3, 0.7), 3.4, 1.6, boxstyle="round,pad=0.1", fc="#ebf0f2", ec="#033c5a"))
 ax.text(2.0, 1.7, "Streamlit client", ha="center", fontsize=11, fontweight="bold")
 ax.text(2.0, 1.15, "Streamlit Community Cloud\n(from your GitHub repo)", ha="center", fontsize=9)
-ax.add_patch(mp.FancyBboxPatch((6.1, 0.7), 3.4, 1.6, boxstyle="round,pad=0.1", fc="#2E6E8E", ec="#2E6E8E"))
+ax.add_patch(mp.FancyBboxPatch((6.1, 0.7), 3.4, 1.6, boxstyle="round,pad=0.1", fc="#033c5a", ec="#033c5a"))
 ax.text(7.8, 1.7, "FastAPI model server", ha="center", fontsize=11, fontweight="bold", color="white")
 ax.text(7.8, 1.15, "any host that runs uvicorn\n(Render / Railway / a VM)", ha="center", fontsize=9, color="white")
 ax.annotate("", xy=(6.0, 1.5), xytext=(3.8, 1.5), arrowprops=dict(arrowstyle="->", lw=2, color="#d9534f"))
@@ -74,7 +74,7 @@ API_URL = st.secrets.get("API_URL",
 
 We run this list live in Block 2, on a real project.
 
-# Ethics: charts people believe {background-color="#2E6E8E"}
+# Ethics: charts people believe {background-color="#00223e"}
 
 ## The course's honesty lessons, in one place {.smaller}
 
@@ -101,7 +101,7 @@ fig, axes = plt.subplots(1, 2, figsize=(10, 2.9))
 axes[0].plot(months, vals, color="#d9534f", lw=2)
 axes[0].set_ylim(vals.min()-0.5, vals.max()+0.5)
 axes[0].set_title("'SURGING' — truncated, no context")
-axes[1].plot(months, vals, color="#2E6E8E", lw=2)
+axes[1].plot(months, vals, color="#033c5a", lw=2)
 axes[1].set_ylim(0, vals.max()*1.15)
 axes[1].set_title("Same data, zero baseline: ~3% drift")
 for a in axes: a.set_xlabel("month")
@@ -123,7 +123,7 @@ win = slice(28, 43)                      # a window that rises inside a falling 
 fig, axes = plt.subplots(1, 2, figsize=(10, 3.3))
 axes[0].plot(t[win], series[win], color="#d9534f", lw=2)
 axes[0].set_title("The window they showed you: 'recovery'", fontsize=10)
-axes[1].plot(t, series, color="#2E6E8E", lw=2)
+axes[1].plot(t, series, color="#033c5a", lw=2)
 axes[1].axvspan(t[win][0], t[win][-1], color="#d9534f", alpha=0.15)
 axes[1].set_title("The full record: a steady decline", fontsize=10)
 for a in axes: a.set_xlabel("week")

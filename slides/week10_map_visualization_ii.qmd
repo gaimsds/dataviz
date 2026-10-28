@@ -24,7 +24,7 @@ which usually means a spatial operation rather than a chart option.
 Running example: **2,264 Tesla Supercharger sites** in the United States, with
 coordinates, stall counts and opening dates.
 
-# Maps you can interrogate {background-color="#2E6E8E"}
+# Maps you can interrogate {background-color="#00223e"}
 
 ## What interaction is actually for {.smaller}
 
@@ -61,7 +61,7 @@ circles.
 All four fetch their JavaScript from a CDN, so the maps need internet to
 display even when your analysis is entirely offline.
 
-# From points to regions {background-color="#2E6E8E"}
+# From points to regions {background-color="#00223e"}
 
 ## The data is points; the question is about states {.smaller}
 
@@ -128,7 +128,7 @@ print(tagged[tagged.fips.isna()][["name", "state", "lat", "lon"]].to_string(inde
 missed = tagged[tagged.fips.isna()]
 fig, axes = plt.subplots(1, 3, figsize=(11.5, 2.6))
 for ax, (_, r) in zip(axes, missed.iterrows()):
-    states.plot(ax=ax, color="#EAF2F6", edgecolor="#2E6E8E", linewidth=1.1)
+    states.plot(ax=ax, color="#ebf0f2", edgecolor="#033c5a", linewidth=1.1)
     ax.scatter([r.lon], [r.lat], s=95, color="#d9534f", zorder=5,
                edgecolor="white", linewidth=1.2)
     ax.set_xlim(r.lon - 0.18, r.lon + 0.18); ax.set_ylim(r.lat - 0.18, r.lat + 0.18)
@@ -207,7 +207,7 @@ about twenty sites each.
 Getting here took **two joins of two different kinds**: points to polygons by
 location, then polygons to population by key.
 
-# The layout problem {background-color="#2E6E8E"}
+# The layout problem {background-color="#00223e"}
 
 ## Where Alaska actually is {.smaller}
 
@@ -215,10 +215,10 @@ location, then polygons to population by key.
 #| echo: false
 #| fig-align: center
 fig, axes = plt.subplots(1, 2, figsize=(13, 3.3))
-shapes.plot(ax=axes[0], color="#EAF2F6", edgecolor="#2E6E8E", linewidth=0.4)
+shapes.plot(ax=axes[0], color="#ebf0f2", edgecolor="#033c5a", linewidth=0.4)
 axes[0].set_title("all 52, at their real coordinates", fontsize=10)
 shapes[~shapes.state.isin(["Alaska", "Hawaii", "Puerto Rico"])].plot(
-    ax=axes[1], color="#EAF2F6", edgecolor="#2E6E8E", linewidth=0.4)
+    ax=axes[1], color="#ebf0f2", edgecolor="#033c5a", linewidth=0.4)
 axes[1].set_title("the lower 48 and DC", fontsize=10)
 for a in axes:
     a.set_xticks([]); a.set_yticks([]); a.set_aspect(1.3)
@@ -256,7 +256,7 @@ not because it is true, and most readers have never noticed it. It is also not
 an Alaska problem — it is a **dateline** problem, and it will meet you again in
 Fiji, Kiribati, Russia, or any shipping route across the Pacific.
 
-# Altair: one view drives another {background-color="#2E6E8E"}
+# Altair: one view drives another {background-color="#00223e"}
 
 ## Selections {.smaller}
 
@@ -294,7 +294,7 @@ Altair embeds the data inside the chart specification, which is why the charts
 are self-contained and also why a large GeoDataFrame makes a large notebook.
 Ours is about 530 KB. Simplify the geometry if that becomes a problem.
 
-# Distance {background-color="#2E6E8E"}
+# Distance {background-color="#00223e"}
 
 ## Degrees are not a distance {.smaller}
 
@@ -312,7 +312,7 @@ print("\nat every latitude, one degree of latitude = ~111.0 km")
 #| echo: false
 #| fig-align: center
 fig, axes = plt.subplots(1, 3, figsize=(11, 2.9))
-for ax, (la, col) in zip(axes, [(26, "#2E6E8E"), (42, "#e6a23c"), (58, "#d9534f")]):
+for ax, (la, col) in zip(axes, [(26, "#033c5a"), (42, "#e6a23c"), (58, "#d9534f")]):
     th = np.linspace(0, 2 * np.pi, 300)
     ax.plot((50 / (111.32 * np.cos(np.radians(la)))) * np.cos(th),
             (50 / 111.32) * np.sin(th), color=col, lw=2.2)
@@ -363,7 +363,7 @@ dist, idx = tree.query(np.radians(conus[["lat", "lon"]].values), k=2)
 conus["nearest_km"] = dist[:, 1] * EARTH_KM
 
 fig, ax = plt.subplots(figsize=(9, 2.7))
-ax.hist(conus.nearest_km, bins=60, color="#2E6E8E")
+ax.hist(conus.nearest_km, bins=60, color="#033c5a")
 ax.set_xlabel("km to the nearest other Supercharger"); ax.set_ylabel("sites")
 plt.tight_layout(); plt.show()
 print(f"median {conus.nearest_km.median():.1f} km | mean {conus.nearest_km.mean():.1f} km "
@@ -392,7 +392,7 @@ entered twice. A query written to answer a coverage question has found a data
 quality problem that every map so far hid, because at national zoom the two
 dots are one dot.
 
-# Finding groups {background-color="#2E6E8E"}
+# Finding groups {background-color="#00223e"}
 
 ## DBSCAN {.smaller}
 
@@ -578,7 +578,7 @@ For a charging network the grey points may be the **most** interesting
 category: the lone stations on long highways, built so a gap is covered rather
 than because demand was dense.
 
-# Density surfaces {background-color="#2E6E8E"}
+# Density surfaces {background-color="#00223e"}
 
 ## The heat map {.smaller}
 
@@ -610,7 +610,7 @@ A density surface also invents a value **between** the observations, where
 nothing was measured. That is usually what you want, and it is worth knowing
 you asked for it.
 
-# The third dimension {background-color="#2E6E8E"}
+# The third dimension {background-color="#00223e"}
 
 ## Height as an encoding {.smaller}
 
@@ -665,17 +665,17 @@ import matplotlib.patches as mp
 fig, ax = plt.subplots(figsize=(8.6, 2.6))
 def box(x, y, w, h, label, fc, tc="#1a1a1a", fs=8):
     ax.add_patch(mp.FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.04",
-                                   fc=fc, ec="#2E6E8E", lw=.9))
+                                   fc=fc, ec="#033c5a", lw=.9))
     ax.text(x + w / 2, y + h / 2, label, ha="center", va="center",
             fontsize=fs, color=tc)
-box(0.1, 2.5, 3.2, 0.55, "hour-of-day slider", "#2E6E8E", "white", 9)
-box(3.7, 2.5, 5.6, 0.55, "cached data, filtered on that hour", "#EAF2F6")
-box(0.1, 1.25, 4.0, 1.0, "HexagonLayer\nall of New York", "#9ab8c9")
+box(0.1, 2.5, 3.2, 0.55, "hour-of-day slider", "#033c5a", "white", 9)
+box(3.7, 2.5, 5.6, 0.55, "cached data, filtered on that hour", "#ebf0f2")
+box(0.1, 1.25, 4.0, 1.0, "HexagonLayer\nall of New York", "#7494a4")
 for i, nm in enumerate(["LaGuardia", "JFK", "Newark"]):
-    box(4.4 + i * 1.7, 1.25, 1.55, 1.0, f"{nm}\nzoom 12", "#9ab8c9")
-box(0.1, 0.2, 9.2, 0.8, "Altair histogram — rides per minute, same filter", "#EAF2F6")
+    box(4.4 + i * 1.7, 1.25, 1.55, 1.0, f"{nm}\nzoom 12", "#7494a4")
+box(0.1, 0.2, 9.2, 0.8, "Altair histogram — rides per minute, same filter", "#ebf0f2")
 ax.annotate("", xy=(4.9, 2.45), xytext=(1.7, 2.45),
-            arrowprops=dict(arrowstyle="->", color="#2E6E8E"))
+            arrowprops=dict(arrowstyle="->", color="#033c5a"))
 ax.set_xlim(0, 9.5); ax.set_ylim(0, 3.3); ax.axis("off")
 ax.set_title("the shape of Streamlit's NYC ridesharing demo", fontsize=10)
 plt.tight_layout(); plt.show()

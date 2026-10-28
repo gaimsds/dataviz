@@ -19,7 +19,7 @@ format: revealjs
 **Today's idea:** with images, a picture is often the only way to check your work. A number can tell you a model is 97% accurate. Only a picture can tell you *why*. We use one dataset all session: 1,797 handwritten digits, each 8×8 pixels, included with scikit-learn.
 :::
 
-# An image is an array {background-color="#2E6E8E"}
+# An image is an array {background-color="#00223e"}
 
 ## Pixels, channels, shape
 
@@ -40,7 +40,7 @@ axes[0].set_title(f"One digit: an {digits.images[0].shape} array")
 im = axes[1].imshow(digits.images[0], cmap="gray")
 for (i, j), v in np.ndenumerate(digits.images[0]):
     axes[1].text(j, i, int(v), ha="center", va="center",
-                 color="red" if v > 8 else "#2E6E8E", fontsize=7)
+                 color="red" if v > 8 else "#033c5a", fontsize=7)
 axes[1].set_title("…and the numbers it actually is")
 for a in axes: a.axis("off")
 plt.tight_layout(); plt.show()
@@ -131,7 +131,7 @@ sizes = [img[i, j] * 13 for (i, j) in G.nodes]
 
 fig, axes = plt.subplots(1, 3, figsize=(10.5, 3.6))
 axes[0].imshow(img, cmap="gray"); axes[0].set_title("the image: a '2'")
-nx.draw(G, pos, ax=axes[1], node_size=sizes, node_color="#2E6E8E",
+nx.draw(G, pos, ax=axes[1], node_size=sizes, node_color="#033c5a",
         edge_color="#bbbbbb", width=0.8)
 axes[1].set_title("on bare axes (y up)\nupside down"); axes[1].set_aspect("equal")
 axes[2].imshow(img, cmap="gray")
@@ -162,7 +162,7 @@ on the left, the image itself on the right.
 The first is what you would do with a spreadsheet by scrolling through the first
 few rows. The second has no spreadsheet equivalent, which is why it gets skipped.
 
-# Job 1: collections {background-color="#2E6E8E"}
+# Job 1: collections {background-color="#00223e"}
 
 ## The montage: looking at many images at once
 
@@ -289,7 +289,7 @@ the average 7 and average 9 look quite different.
 #| echo: false
 #| fig-align: center
 fig, ax = plt.subplots(figsize=(8, 3))
-for d, color in [(0, "#2E6E8E"), (1, "#d9534f")]:
+for d, color in [(0, "#033c5a"), (1, "#d9534f")]:
     vals = digits.images[digits.target == d].ravel()
     ax.hist(vals, bins=17, alpha=0.55, label=f"digit {d}", color=color, density=True)
     print(f"digit {d}: average brightness {vals.mean():.2f}, "
@@ -346,7 +346,7 @@ one group of images is much darker than the rest, they were probably taken at a
 different time of day or on a different camera — and a model is perfectly happy
 to use "slightly bluer" as its way of telling two classes apart.
 
-# Job 2: inside the model {background-color="#2E6E8E"}
+# Job 2: inside the model {background-color="#00223e"}
 
 ## What is the model looking at?
 
@@ -441,7 +441,7 @@ memorised would tell you about the memory, not about the method.
 The bright parts sit on the digit itself and the corners stay dark, so this model
 is using the digit to decide. That is the result we were hoping for.
 
-# Right for the wrong reason {background-color="#2E6E8E"}
+# Right for the wrong reason {background-color="#00223e"}
 
 ## A model with excellent numbers {.smaller}
 
