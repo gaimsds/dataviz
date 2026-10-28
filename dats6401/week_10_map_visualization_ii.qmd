@@ -104,11 +104,56 @@ On 2,264 US Supercharger sites, included in the materials:
 
 ### Materials: [Block 2 demo](weekly/week10/week10_block2_demo.ipynb) · [hands-on](weekly/week10/week10_block3_handson.ipynb) · [dashboard starter](weekly/week10/dashboard_starter.py) · [Supercharger locations](weekly/week10/data/superchargers_us.csv)
 
-Uses the Week 9 dataset — keep `week9/data/` alongside `week10/`.
+Everything the week needs is in `week10/data/`: the Supercharger
+locations, plus copies of the Week 9 state boundaries and ACS table so
+the folder stands on its own.
 
 ---
 
-{{< include _live_app_embed.qmd >}}
+::: {.callout-tip title="Live app"}
+`dashboard_starter.py`, deployed. One dataset — 2,254 Supercharger sites —
+under three tabs, because the three questions this week asks need three
+different maps.
+
+- **Where they are** — the folium map, with a state picker and a minimum-stall
+  filter. Leaflet tiles, so you can keep zooming until you are looking at the
+  parking lot the chargers stand in.
+- **What is nearby** — Altair. Point at any site and every site in its state
+  lights up, along with the line from each of them to its nearest neighbor.
+  Every line is drawn the whole time; pointing only changes what stands out,
+  which is why nothing is recomputed as you move.
+- **How states compare** — two plotly choropleths, sites per state and stalls
+  per state, over a table of both.
+
+```{=html}
+<iframe src="https://krbu2vnjc4polnk7nuj9ry.streamlit.app/?embed=true"
+        width="100%" height="780"
+        style="border:1px solid #ddd; border-radius:8px;" loading="lazy"
+        title="Week 10 — Supercharger dashboard"></iframe>
+```
+
+Inside the frame the filter panel starts collapsed — the **»** at the top
+left opens it. [Open the app in its own
+tab](https://krbu2vnjc4polnk7nuj9ry.streamlit.app/) if the frame feels
+cramped. Free Streamlit apps sleep when nobody has used them for a while, so a
+first visit after a quiet spell takes a few seconds to wake.
+
+**The thing to actually do.** Open *How states compare* and read the two maps
+as a pair. Florida is second in the country by number of sites and third by
+number of stalls; Texas is third by sites and second by stalls. The two maps
+put the same two states in a different order, from the same table, because a
+site with 40 stalls is not one site's worth of charging. Which of the two you
+publish is a claim about what you think a reader wants to know.
+
+Then open *What is nearby* and point at a site in Wyoming, then at one in New
+Jersey. The median gap to the nearest other site is 8 km nationally, and the
+long lines in the interior are what the median hides.
+
+Start from [`dashboard_starter.py`](weekly/week10/dashboard_starter.py), with
+`data/` beside it. The two TODOs at the bottom are where to take it next: the
+first adds a chart that moves with the filters, and the second measures the
+same distances the wrong way on purpose.
+:::
 
 ## 💻 Notebook / App Snippets
 
