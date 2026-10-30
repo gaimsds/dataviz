@@ -39,6 +39,9 @@ The week still ends in a Streamlit dashboard, because that is the delivery forma
 
 - `superchargers_us.csv` in this week's materials — 2,264 US Tesla Supercharger sites with coordinates, stall counts and opening dates.
 - [OpenStreetMap via Overpass](https://overpass-turbo.eu/) — extract points of a chosen type (cafes, clinics, bus stops) for any area.
+- [data.gov](https://data.gov/) — federal, state and local open data, including boundary files and point inventories.
+- [Social Explorer](https://www.socialexplorer.com/) — census and ACS tables with matching geographies, tract level and up. A subscription product; check whether the GW library covers it before you rely on it.
+- [Census TIGER/Line](https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html) — the US boundary files themselves, for every unit from block group to state.
 - Any point dataset with latitude and longitude: incidents, stations, sightings, listings.
 
 ---
@@ -98,7 +101,7 @@ On 2,264 US Supercharger sites, included in the materials:
 ### Block 4 — Wrap-Up & Homework Preview (~10 min)
 
 1. Compare clusterings: whose parameters, and what changed (9 min)
-2. Preview homework — the dashboard here is the pattern the final project builds on (6 min)
+2. Preview the combined Week 9-10 assignment — the dashboard here is the pattern it and the final project both build on (6 min)
 
 ---
 
@@ -253,25 +256,82 @@ of duplicate would this method miss?
 
 ---
 
-## 🏠 Homework
+## 🏠 Homework — Weeks 9 and 10
 
-1. Choose a point dataset with at least a few hundred locations.
-2. Answer one question about **density** or **distance** that a choropleth of
-   the same area could not have answered.
-3. Use haversine wherever a distance is involved, and say in a comment what
-   would have gone wrong with Euclidean.
-4. Build a Streamlit dashboard: an interactive map, one filter, and one chart
-   that responds to the same filter.
-5. Caption every map with the parameters that produced it — resolution, `eps`,
-   `min_samples`, projection, and anything you left out.
-6. Deploy it and submit the live URL plus the repo link to Blackboard.
+One assignment covers both map modules. Build and deploy a multi-tab Streamlit
+app on one point dataset, with at least two tabs. The requirements below are
+what the app has to contain, not how to divide it between tabs.
+
+The Supercharger locations in `week10/data/` are the default, and that folder
+also holds state boundaries and an ACS table, so you can start without hunting
+for anything.
+
+The state is only the default unit, though. Aggregate to whatever boundary
+interests you — counties, metro areas, census tracts, ZIP code areas — and work
+somewhere other than the US if you would rather, with your own points. The
+readings list above is where to look: `data.gov` for open data and boundary
+files, Social Explorer for census and ACS tables with geographies to match,
+TIGER/Line for US boundaries at any level.
+
+Choosing your own region means finding three things rather than one — the
+points, the boundaries, and a denominator for the rate — and all three have to
+agree on how regions are identified. Same codes, same vintage. A FIPS column
+stored as an integer has lost its leading zero and will match nothing, and a
+2020 boundary file joined to a 2015 table drops every region that changed in
+between. Both failures are silent, which is why requirement 2 asks for the
+count of what did not match.
+
+1. **A layered thematic map.** A choropleth carrying at least two layers of
+   information — polygons encoding one measure, plus a second data layer over
+   them: the points themselves, a heatmap, or graduated symbols. Basemap tiles
+   do not count as a layer. folium, plotly or Altair, your choice.
+2. **Both joins, each one shown.** A **spatial join** attaching the points to
+   the regions that contain them, with a count of the points that matched
+   nothing and an account of why they didn't. And an **attribute join** to an
+   external dataset on a shared key, for normalization. `state_stats.csv` has
+   population and a few other columns; join on `fips` or on the state name.
+   Note that the boundary file already carries `land_sqmi`, so normalizing by
+   area alone involves no join and does not satisfy this. Map the rate, and
+   state your classification scheme and your projection.
+3. **Captions.** Every map names what each layer encodes and the parameters
+   behind it: projection, classification scheme and number of classes, heatmap
+   radius or `eps` and `min_samples` if you used them, and anything you left
+   out.
+4. **One filter shared across tabs.** A sidebar control that moves more than
+   one view.
+5. **Deploy it** and submit the live URL plus the repo link to Blackboard.
+
+**Bonus — up to 1 point.** Two routes; one is enough.
+
+*A coordinated view.* Selecting in one chart updates another: click a state and
+the distribution beside it refilters, or brush a scatter and the matching
+regions highlight. Altair selection parameters,
+`st.plotly_chart(on_select="rerun")`, and the click object `st_folium` hands
+back all support this, so this route is open whichever library you picked.
+
+*Clustering.* Run DBSCAN on the points and add the clusters to the map as a
+further layer. Say which `eps` and `min_samples` you chose and why you chose
+them — on this data that means deciding what counts as one metro area. Label
+`-1` is noise rather than failure: report how many points it covers and what you
+did with them, the same way you account for the points that matched no region.
+The stronger version runs it twice with different `eps` and says what changed.
+Cluster numbers are handed out in discovery order, so compare the groupings and
+not the labels.
+
+Other work past the required pattern counts too — the extensions below are a
+good place to look.
 
 **Rubric (10 pts)**
 
-- A density or distance result a choropleth could not produce (3)
-- Distances computed correctly, with the reasoning stated (2)
-- Working dashboard: map, filter, coordinated chart (3)
-- Parameters disclosed in the captions (2)
+- Layered map: two data layers, both legible, both explained (3)
+- Spatial join, with the unmatched points accounted for (2)
+- External join and a correctly normalized rate (2)
+- Multi-tab app, deployed, running without errors (2)
+- Captions naming layers, projection, classification and parameters (1)
+- Bonus: a coordinated view, DBSCAN clusters, or a comparable extension (+1)
+
+The bonus offsets points lost elsewhere. The most this assignment can score
+is 10.
 
 ---
 
@@ -295,8 +355,13 @@ Before submitting, make sure:
 
 - Your app is deployed and the live URL works.
 
-- The map, filter, and coordinated chart update together without errors.
+- Your thematic map carries two layers of data, not one layer over a basemap.
 
-- Every map caption names the parameters behind it.
+- Both joins are in the app: the spatial one, and the attribute one behind the
+  rate. The points that matched no region are counted and explained.
+
+- The shared filter moves every view that should respond to it, without errors.
+
+- Every map caption names its layers and the parameters behind it.
 
 ---

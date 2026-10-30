@@ -76,7 +76,7 @@ GeoPandas can be finicky to install — confirm `import geopandas` works in your
 ### Block 4 — Wrap-Up & Homework Preview (~15 min)
 
 1. Compare choropleths using counts vs. rates — the story changes (9 min)
-2. Preview homework and Module II (6 min)
+2. Preview Module II and the assignment the two modules share (6 min)
 
 ---
 
@@ -183,16 +183,13 @@ Does your projection preserve area? Should it, for this map?
 
 ## 🏠 Homework
 
-1. Choose a dataset with a geographic key (region/state/county).
-2. Build a rate-based choropleth with an appropriate projection and classification.
-3. Write a short note justifying your projection, normalization, and classification choices.
-4. Submit as a Streamlit app or `.ipynb` + `.html`.
+Nothing to submit this week. Modules I and II share a single assignment, set at
+the end of [Week 10](week_10_map_visualization_ii.qmd), and half of it is graded
+on this week's material: the spatial join, the normalized rate, the projection
+and the classification all come from here.
 
-**Rubric (10 pts)**
-
-- Correct CRS/projection and spatial join (3)
-- Rate-based, well-classified choropleth (4)
-- Justification of cartographic choices (3)
+The In-Class Activity above is the practice for it. Do that properly and the
+Module I half of the assignment is most of the way done.
 
 ---
 
@@ -204,14 +201,18 @@ Does your projection preserve area? Should it, for this map?
 
 ---
 
-## ✅ Submission Checklist
+## ✅ Self-Check
 
-Before submitting, make sure:
+Nothing is submitted for Week 9, so this is a check on your own work. Before
+Module II, make sure:
 
-- Your assignment fulfills all the basic requirements listed above.
+- Your geometry and your attribute table are in the same CRS before you join
+  them.
 
-- Any Streamlit app runs locally with no errors.
+- You can say why your projection suits the map you made, and what it distorts.
 
-- You map a rate (not a raw count) and justify your projection.
+- You map a rate rather than a raw count, and you can name the denominator.
+
+- You can defend your classification scheme against one of the alternatives.
 
 ---
