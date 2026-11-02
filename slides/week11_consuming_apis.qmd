@@ -10,13 +10,13 @@ format: revealjs
 | | | |
 |---|---|---|
 | **Block 1** | Concepts & Theory — *this deck* | ~30 min |
-| **Block 2** | Worked examples: public API + the course endpoint | ~45 min |
+| **Block 2** | Five worked examples: USGS, three failures, your own server, two model APIs, Streamlit | ~45 min |
 | ☕ | Break | ~15 min |
 | **Block 3** | Hands-on: your API, your Streamlit client | ~50 min |
 | **Block 4** | Wrap-up & homework preview | ~10 min |
 
 ::: {.gw-box}
-**The three-week arc starts now:** this week you **consume** endpoints someone else built → next week you **serve** your own model → Week 13 you **visualize** its live output. Today is deliberately client-only.
+**The three-week arc starts now:** this week you **consume** endpoints — and start one, so your client has something to talk to. Next week you **serve** your own model. Week 13 you **visualize** its live output.
 :::
 
 # Client and server {background-color="#00223e"}
@@ -50,36 +50,175 @@ Why: the data is **too big/live/private** to ship; the model should run **once, 
 | Piece | Example | Your lever |
 |---|---|---|
 | Method | `GET` (read) / `POST` (send a body) | matches the action |
-| URL | `https://api.open-meteo.com/v1/forecast` | *which* resource |
-| Query params | `?latitude=38.9&hourly=temperature_2m` | parameterize the ask |
-| Status code | `200` ok · `404` not found · `422` bad input · `500` server bug | **read it before the body** |
+| URL | `https://earthquake.usgs.gov/fdsnws/event/1/query` | *which* resource |
+| Query params | `?format=geojson&minmagnitude=5` | parameterize the ask |
+| **Headers** | `Authorization: Bearer …`, `Content-Type` | who you are, what you accept |
+| Status code | `200` ok · `404` not found · `422` bad input · `500` server bug | read it before the body |
 | Body | JSON | the payload |
 
-The discipline of the week: **timeout on every call, check the status, then parse.**
+The discipline of the week: **timeout on every call, check the response, then parse.**
 
 # JSON to DataFrame {background-color="#00223e"}
 
-## The four-step pattern (memorize this one)
+## The four-step pattern
 
 ```python
 import requests, pandas as pd
 
-r = requests.get(url, params={...}, timeout=10)   # 1 request (ALWAYS timeout)
+r = requests.get(url, params={...}, timeout=20)   # 1 request (ALWAYS timeout)
 r.raise_for_status()                              # 2 4xx/5xx -> exception
 payload = r.json()                                # 3 JSON -> dicts/lists
 df = pd.DataFrame(payload["records"])             # 4 the part you need
 ```
 
-Everything else this week is a variation. JSON is nested dicts and lists — your job is finding **which slice** is the table.
+Everything else this week is a variation on these four lines.
+
+Step 4 is where the work is: JSON is nested dicts and lists, and your job is finding **which slice is the table**.
+
+## The table is never at the top {.smaller}
+
+Three real APIs, three different places the records hide:
+
+| API | Shape | Where the rows are |
+|---|---|---|
+| USGS earthquakes | GeoJSON | `payload["features"]`, each split across `properties` and `geometry` |
+| Open-Meteo | parallel arrays | `payload["hourly"]`, one list per column |
+| the course endpoint | records | `payload["records"]` |
+
+```python
+print(list(payload))     # look BEFORE you assume
+```
+
+One coordinate trap carried over from Weeks 9–10: GeoJSON gives
+`[longitude, latitude, depth]` — longitude first, and a third value most
+code does not expect.
+
+# When a 200 is not a success {background-color="#00223e"}
+
+## What a 200 actually means
+
+> *The server received your request and chose to answer.*
+
+That is all. It does not promise the answer is your data, that the body is
+JSON, or that the fields you expect are present.
+
+`raise_for_status()` checks one layer of three. For an API you control, one
+layer is usually enough. For an API you do not control, it is not.
+
+## Three ways a 200 lies {.smaller}
+
+All three are live today, and all three were in last year's course materials.
+
+| API | Status | Content-Type | Parsed | What broke |
+|---|---|---|---|---|
+| REST Countries | **200** | `application/json` | a `dict` | the **shape** — the API was retired and answers with a deprecation notice |
+| Census ACS | **200** | `text/html` | raises | the **content type** — it now wants a key and returns an HTML page |
+| USGS, bad param | **400** | `text/plain` | raises | the status — and the error body is not JSON either |
+
+::: {.gw-box}
+The first one is the dangerous one. `raise_for_status()` passes, the body is
+valid JSON, and the failure surfaces later as `TypeError: string indices must
+be integers` on a parsing line that has been correct for years.
+:::
+
+## The three checks
+
+```python
+def get_json(url, params=None, timeout=20, expect=dict):
+    r = requests.get(url, params=params, timeout=timeout)
+    r.raise_for_status()                                   # 1. status
+
+    ctype = r.headers.get("content-type", "")
+    if "json" not in ctype:                                # 2. content type
+        raise ValueError(f"expected JSON, got {ctype!r}")
+
+    payload = r.json()
+    if not isinstance(payload, expect):                    # 3. shape
+        raise ValueError(f"expected {expect.__name__}, "
+                         f"got {type(payload).__name__}")
+    return payload
+```
+
+Each check moves a failure to the line that caused it. Without them, the error
+appears somewhere else entirely, long after the real problem.
+
+## Why this keeps happening {.smaller}
+
+An API that changes under you does not announce it. REST Countries still
+answers, still returns 200, still returns JSON — and every notebook that
+depended on it broke silently.
+
+**Versioning** is the defence, and it is a header or a path segment:
+
+```text
+anthropic-version: 2026-10-21        # pin the request format
+https://api.example.com/v3/things    # or pin it in the URL
+```
+
+Pin a version and the endpoint can change without breaking you. Where an API
+offers none, your three checks are the whole of your protection.
+
+# Keys, headers and cost {background-color="#00223e"}
+
+## Authentication is a header {.smaller}
+
+Public APIs need nothing. The moment an API costs money or returns private
+data, it needs to know who you are — and that goes in a **header**, not the URL.
+
+```python
+r = requests.post(
+    "https://api.openai.com/v1/responses",
+    headers={"Authorization": f"Bearer {os.environ['OPENAI_API_KEY']}",
+             "content-type": "application/json"},
+    json={"model": ..., "input": ...},      # a BODY, not params=
+    timeout=90,                             # models are slow
+)
+```
+
+A URL ends up in logs, browser history and error messages. A header does not.
+That is the whole reason for the convention.
+
+## Keep the key out of the code
+
+```python
+import os
+key = os.environ["OPENAI_API_KEY"]     # from the environment
+```
+
+A key pasted into a notebook is a key committed to git and published with the
+site. Treat one as already leaked the moment it is written down in a file you
+track.
+
+::: {.gw-box}
+Services scan public repositories for keys. The practical rule: if a key has
+ever been committed, rotate it — do not try to remove it from history.
+:::
+
+## What a model call costs {.smaller}
+
+A free data API answers in a quarter of a second. A model API takes seconds and
+charges per token — so the call itself becomes something worth measuring.
+
+| | USGS | a model API |
+|---|---|---|
+| latency | ~0.25 s | seconds |
+| cost | none | per token, output ~5× input |
+| determinism | same answer | varies between calls |
+
+Both vendors also bill **thinking tokens** you never see. In one recorded run,
+88 of 206 output tokens were thinking — 43% of the cost, for text that never
+reached the page. You find that by measuring, not from a price list.
+
+# Designing for failure {background-color="#00223e"}
 
 ## Failure is a feature to design for
 
-Networks drop. Servers nap. Parameters typo. The graceful client:
+Networks drop. Servers go down. Parameters get typos. The graceful client:
 
 ```python
 @st.cache_data(ttl=300)                 # don't hammer the API on re-runs
 def fetch(url, params):
-    r = requests.get(url, params=params, timeout=10)
+    r = requests.get(url, params=params, timeout=20)
     r.raise_for_status()
     return r.json()
 
@@ -91,35 +230,63 @@ except requests.RequestException as e:
 ```
 
 ::: {.gw-box}
-A Streamlit client that crashes with a traceback when the server is down **fails the homework**. `st.error` + `st.stop()` is the graceful path — and we'll kill the server live to prove yours works.
+A Streamlit client that crashes with a traceback when the server is down
+**fails the homework**. `st.error` + `st.stop()` is the graceful path — and
+we will kill the server live to check yours.
 :::
+
+## Two failures, two messages {.smaller}
+
+The network and the payload are different problems and deserve different
+errors:
+
+```python
+except requests.RequestException as e:
+    st.error(f"Could not reach the endpoint: {e}")   # it never answered
+    st.stop()
+except ValueError as e:
+    st.error(f"It answered, but not with what we asked for: {e}")
+    st.stop()
+```
+
+"Something went wrong" tells the reader nothing and tells you nothing when
+they report it.
 
 ## Caching API calls: the ttl decision {.smaller}
 
 Week 5's `@st.cache_data` gains a knob: **`ttl`** (time-to-live).
 
 - Country lists, historical data → cache for hours
-- Weather forecast → minutes
-- Live scores / model predictions → **don't cache** (staleness = wrongness)
+- Weather forecast, earthquake feed → minutes
+- Live scores → do not cache; staleness is wrongness
 
 The question is always: *how wrong can a stale answer be, and for how long?*
 
+The cache key is the **arguments**. A cached function that reads a widget from
+global scope instead of taking it as an argument returns the first answer
+forever — and looks like working code.
+
 ## Discussion {.gw-discussion}
 
-**1.** Your client calls a paid API at \$0.001/request. A user drags a slider 50 times. What happens — and which of today's tools prevents the bill?
+**1.** Your client calls a paid API at \$0.001/request. A user drags a slider 50
+times. What happens — and which of today's tools prevents the bill?
 
-**2.** The course endpoint 404s on an unknown species. Should it instead return an empty list with a 200? Argue both sides.
+**2.** An API you depend on starts returning 200 with an empty list instead of
+404 for unknown inputs. Which of your three checks catches it? Should it?
 
 ## Coming up next — Block 2 {.smaller}
 
-The two worked examples, live (notebook provided):
+Five parts, live (notebook provided):
 
-1. **Example A:** Open-Meteo (public, no key) → params → JSON → DataFrame → chart
-2. **Example B:** the **course endpoint** — status codes, the deliberate 404, caching
-3. Both inside a Streamlit client (`client_starter.py`) — then we kill the server and watch it degrade *gracefully*
+1. **USGS earthquakes** — the four-step pattern, and query parameters as the interface
+2. **When a 200 is not a success** — the three failures above, on live APIs, and `get_json`
+3. **The course endpoint** — you start your own server in a second terminal
+4. **APIs that need a key** — the same call to two vendors, and what tokens, latency and cost look like side by side
+5. **Into Streamlit** — caching, then we kill the server and watch the client degrade
 
-**Then Block 3:** pick an API, fetch in a notebook first, then build your client: a widget that changes a **request parameter**, caching, graceful failure.
+**Then Block 3:** pick an API, fetch in a notebook first, then build your client:
+a widget that changes a **request parameter**, caching, graceful failure.
 
 **Readings:** MDN HTTP overview · requests quickstart · Streamlit caching guide
 
-**Homework preview:** the robust client — next week, you build the server it talks to.
+**Homework preview:** the robust client — next week you build the server it talks to.

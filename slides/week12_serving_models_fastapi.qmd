@@ -16,7 +16,9 @@ format: revealjs
 | **Block 4** | Wrap-up & homework preview | ~10 min |
 
 ::: {.gw-box}
-**Last week you were the client. Today you're the server.** A trained model goes behind an HTTP endpoint — the standard shape of a deployed model, and the back half of your final project.
+**Last week you ran a server. Today you write one.** You started
+`course_endpoint.py` so your client had something to talk to, and never looked
+inside it. Today is what was inside.
 :::
 
 # What "serving a model" means {background-color="#00223e"}
@@ -53,11 +55,15 @@ The model trains **once**, loads **once**, predicts **many times** — and every
 
 | | FastAPI | Flask |
 |---|---|---|
-| Input validation | **automatic** (Pydantic) | manual |
+| Input validation | **automatic** (Pydantic) | you write it |
 | Interactive docs | **free** (`/docs`) | add-on |
 | Style | typed, modern | minimal, classic |
 
-We teach FastAPI for the validation + docs; Flask appears in the materials as the lighter alternative. Both produce the same thing: a URL that predicts.
+We teach FastAPI for the validation and the docs. Flask is in the materials as
+the lighter alternative, and it is instructive precisely because you can see
+what you give up: no declared schema, no automatic 422, no `/docs`. The
+validation does not disappear — it becomes yours to write and yours to get
+wrong.
 
 # Design the contract first {background-color="#00223e"}
 
@@ -75,14 +81,33 @@ class Flower(BaseModel):          # the REQUEST contract
 
 ```json
 // the RESPONSE contract
-{"prediction": "versicolor",
- "confidence": 0.91,
- "probabilities": {"setosa": 0.0, "versicolor": 0.91, "virginica": 0.09}}
+{"prediction": "virginica",
+ "confidence": 0.53,
+ "probabilities": {"setosa": 0.0, "versicolor": 0.47, "virginica": 0.53}}
 ```
 
 ::: {.gw-box}
-**Return the full distribution, not just the winner.** Week 13 needs those probabilities to visualize uncertainty honestly — design the contract for the client you'll build next week.
+**Return the full distribution, not just the winner.** Week 13 needs those
+probabilities to visualize uncertainty honestly — design the contract for the
+client you will build next week.
 :::
+
+## That 0.53 is a real answer {.smaller}
+
+The response above is this week's model on a real flower from the dataset:
+`(6.0, 2.7, 5.0, 1.7)`.
+
+| request | prediction | confidence |
+|---|---|---|
+| `(5.1, 3.5, 1.4, 0.2)` | setosa | **1.00** |
+| `(6.0, 2.7, 5.0, 1.7)` | virginica | **0.53** |
+
+Setosa separates cleanly from the other two, so most of this dataset comes back
+at or near certainty. The second flower sits on the versicolor/virginica
+boundary and the model is barely choosing.
+
+A client that prints the label and drops the number reports a coin flip as a
+fact. That is the argument for the whole response contract, in one example.
 
 ## Pydantic: validation you don't write
 
@@ -95,14 +120,21 @@ POST /predict  {"sepal_length": "oops"}
                 "msg": "Input should be a valid number"}]}
 ```
 
-The error names the field and the reason. That's the difference between an API and a script with a URL.
+The error names the field and the reason. That is the difference between an API
+and a script with a URL.
+
+Try it before you write any logic: the skeleton's endpoints are empty, and a
+bad request **still** returns 422. The validation comes from the schema, not
+from the body of the function.
+
+# Two rules and two traps {background-color="#00223e"}
 
 ## The two server rules {.smaller}
 
 **1. Load once, at startup** — never inside the endpoint:
 
 ```python
-bundle = joblib.load("model.joblib")     # module level: runs ONCE
+bundle = joblib.load(BUNDLE_PATH)        # module level: runs ONCE
 model = bundle["model"]
 
 @app.post("/predict")
@@ -110,30 +142,87 @@ def predict(x: Flower):                  # called PER REQUEST: must be fast
     ...
 ```
 
-**2. Stay stateless** — each request is independent. No globals that accumulate per-user state; that's what databases (and, client-side, `session_state`) are for. Stateless servers scale by simply running more copies.
+**2. Stay stateless** — each request is independent. No globals that accumulate
+per-user state; that is what databases (and, client-side, `session_state`) are
+for. Stateless servers scale by simply running more copies.
+
+## Trap 1: the path you load from {.smaller}
+
+```python
+bundle = joblib.load("model.joblib")                       # resolves against
+                                                           # the WORKING DIRECTORY
+bundle = joblib.load(Path(__file__).resolve().parent       # resolves against
+                     / "model.joblib")                     # THIS FILE
+```
+
+The first works right up until someone starts uvicorn from one folder up. Then
+it raises `FileNotFoundError` **at import**, before the server exists — which
+reads like a broken server rather than a wrong directory.
+
+Resolve paths against the file. It costs one line and removes a whole class of
+"it works on my machine".
+
+## Trap 2: the model file is not portable {.smaller}
+
+```python
+joblib.dump(model, "model.joblib")     # a PICKLE
+```
+
+A pickle is tied to the scikit-learn version that wrote it. A model file from
+my machine may refuse to load on yours, which is why the model is **not
+distributed** — you run `train_model.py` and produce your own.
+
+::: {.gw-box}
+The same problem shows up in deployment. If you containerize this, train the
+model **inside** the image rather than copying one in: then the version that
+writes the model is by construction the version that reads it.
+:::
 
 ## The wow moment: /docs
 
-Run `uvicorn server:app --reload`, open **`http://127.0.0.1:8000/docs`** — FastAPI generated **interactive documentation from your type hints**: every endpoint, every field, a *Try it out* button.
+Run `uvicorn server_skeleton:app --reload`, open **`http://127.0.0.1:8000/docs`** — FastAPI generated **interactive documentation from your type hints**: every endpoint, every field, a *Try it out* button.
 
-This is your manual test bench in Block 3, and the de facto spec you hand a teammate. (`test_endpoint.py` then automates the same checks: a good 200, a bad 422.)
+This is your manual test bench in Block 3, and the de facto spec you hand a
+teammate. (`test_endpoint.py` then automates the same checks.)
+
+## What the test script proves {.smaller}
+
+Three requests, three different things:
+
+| request | result | what it shows |
+|---|---|---|
+| easy flower | `setosa`, confidence 1.00 | the happy path, and the shape of your response |
+| hard flower | `virginica`, confidence 0.53 | why the response carries a number, not just a label |
+| `{"sepal_length": "not a number"}` | **422** | validation rejected it before your code ran |
+
+Running this against *your* server is the Block 3 deliverable. If all three
+behave, the contract works.
 
 ## Discussion {.gw-discussion}
 
-**1.** Why is `joblib.load` inside the endpoint a disaster at 100 requests/min — and what *else* should load once? (Think Week 13: scalers, label encoders…)
+**1.** Why is `joblib.load` inside the endpoint a disaster at 100 requests/min —
+and what *else* should load once? (Think Week 13: scalers, label encoders…)
 
-**2.** Your model needs 30 features. Is a 30-field Pydantic schema right, or would you accept a list? What does each choice do to the 422 errors your client sees?
+**2.** Your model needs 30 features. Is a 30-field Pydantic schema right, or
+would you accept a list? What does each choice do to the 422 errors your client
+sees?
+
+**3.** Should `/predict` refuse to answer when confidence is below some
+threshold, or always answer and let the client decide? Who is better placed to
+make that call?
 
 ## Coming up next — Block 2 {.smaller}
 
 Live build (materials provided in this week's folder):
 
-1. `python train_model.py` → `model.joblib` (regenerate per machine — pickles are version-sensitive!)
-2. Schema first, then `/predict`, narrating the two rules
-3. `uvicorn ... --reload` → tour **/docs** → `python test_endpoint.py` (the 200 and the 422)
+1. `python train_model.py` → `model.joblib` (regenerate per machine — pickles are version-sensitive)
+2. Schema first, then `/predict`, narrating the two rules and the path trap
+3. `uvicorn ... --reload` → tour **/docs** → `python test_endpoint.py` (1.00, 0.53, 422)
 
-**Then Block 3:** complete `server_skeleton.py`'s four TODOs; prove it with the test script; add `/model-info` if you finish early.
+**Then Block 3:** complete `server_skeleton.py`'s four TODOs; prove it with the
+test script; add `/model-info` if you finish early.
 
 **Readings:** FastAPI first steps & request body · sklearn model persistence · uvicorn docs
 
-**Homework preview:** your served model, documented request/response design, graceful bad-input handling. Week 13 wires your client to it.
+**Homework preview:** your served model, documented request/response design,
+graceful bad-input handling. Week 13 wires your client to it.
