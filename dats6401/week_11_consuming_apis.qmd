@@ -107,9 +107,9 @@ pip install -U Brotli
 
 1. **A — USGS earthquakes:** request → check → parse → DataFrame, and query parameters as the interface (12 min)
 2. **B — when a 200 is not a success:** three live APIs failing three different ways, and the three checks that catch them (10 min)
-3. **C — the course endpoint:** start your own server, and a deliberate 404 (8 min)
-4. **D — an API that needs a key:** headers, auth, tokens, latency and cost. Instructor demo (10 min)
-5. **E — into Streamlit:** caching, and killing the server to watch the client degrade (5 min)
+3. **C — the course endpoint:** start your own server, and a deliberate 404 (7 min)
+4. **D — APIs that need a key:** headers and auth, the same call to two vendors, and what tokens, latency and cost look like side by side. Instructor demo (12 min)
+5. **E — into Streamlit:** caching, and killing the server to watch the client degrade (4 min)
 
 ### ☕ Break (~15 min)
 
