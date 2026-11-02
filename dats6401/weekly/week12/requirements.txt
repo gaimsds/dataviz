@@ -1,0 +1,12 @@
+# Pinned to the versions this week was built and tested against.
+#
+# Pins matter more than usual here: the model is a pickle, and a pickle is tied
+# to the scikit-learn version that wrote it. Pinning scikit-learn is what lets
+# the image train the model at build time and load it at run time without the
+# two disagreeing.
+fastapi==0.121.1
+uvicorn==0.38.0
+scikit-learn==1.8.0
+joblib==1.5.2
+pandas==2.3.2
+pydantic==2.11.10

@@ -234,8 +234,44 @@ what would a client have shown the user in each case?
 ## 🧩 Optional Extensions
 
 - Add a `/health` and a `/model-info` endpoint (version, features, classes).
-- Containerize the server with a simple Dockerfile.
 - Add batch prediction (accept a list of inputs).
+
+### Containerize it
+
+A `Dockerfile`, `requirements.txt` and `.dockerignore` are in this week's folder.
+
+```bash
+docker build -t iris-server .
+docker run -p 8000:7860 iris-server      # then open http://127.0.0.1:8000/docs
+```
+
+Two details in it are worth reading rather than skipping:
+
+- **The model is trained inside the image**, not copied in. A pickle is tied to
+  the scikit-learn that wrote it, so training at build time guarantees the
+  version that writes the model is the version that reads it — the pinned one
+  in `requirements.txt`. This is the same version-skew problem that is the
+  reason `model.joblib` is not distributed.
+- **`--host 0.0.0.0`**, not the default. A server bound to `127.0.0.1` inside a
+  container is reachable only from inside that container, which presents as a
+  container that starts cleanly and refuses every connection.
+
+::: {.callout-note title="On actually deploying it"}
+Containerizing is worth doing on its own — "it works on my machine" stops being
+a defence when the image carries the Python version, the libraries and the
+model together. Hosting it is a separate question, and the free options are
+thinner than they look.
+
+Hugging Face Spaces needs the **Docker** SDK to run FastAPI, and Docker Spaces
+require a paid PRO plan; the free allowance covers Gradio Spaces only. Render,
+Railway and Fly.io have free tiers that do run containers, but a free instance
+sleeps when idle and takes the better part of a minute to wake — so the first
+request after a quiet spell times out, which is a poor thing to discover during
+a demonstration. Set a generous client timeout if you deploy there.
+
+For this course the server runs on your own machine. Week 14 is where deployment
+gets the attention it needs.
+:::
 
 ---
 
