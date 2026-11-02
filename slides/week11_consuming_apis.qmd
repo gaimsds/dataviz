@@ -9,11 +9,11 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~30 min |
-| **Block 2** | Five worked examples: USGS, three failures, your own server, two model APIs, Streamlit | ~45 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~45 min |
+| **Block 2** | Five worked examples: USGS, three failures, your own server, two model APIs, Streamlit | ~70 min |
 | ☕ | Break | ~15 min |
-| **Block 3** | Hands-on: your API, your Streamlit client | ~50 min |
 | **Block 4** | Wrap-up & homework preview | ~10 min |
+| **Block 3** | Hands-on: your API, your Streamlit client — **on your own after class** | ~50 min |
 
 ::: {.gw-box}
 **The three-week arc starts now:** this week you **consume** endpoints — and start one, so your client has something to talk to. Next week you **serve** your own model. Week 13 you **visualize** its live output.

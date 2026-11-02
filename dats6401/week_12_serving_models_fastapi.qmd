@@ -68,21 +68,23 @@ door is already guarded.
 
 > Single 2.5-hour block, 6:10-8:40 PM. Scaffolded so boilerplate doesn't eat the session.
 
-### Block 1 — Concepts & Theory (~30 min, PowerPoint)
+### Block 1 — Concepts & Theory (~45 min, PowerPoint)
 
-1. What "serving a model" means; the deployment picture (10 min)
-2. Request/response schema design; why validation matters (12 min)
-3. Load-once vs. load-per-request; statelessness and performance (8 min)
+1. What "serving a model" means; the deployment picture (8 min)
+2. Why FastAPI, and what Flask costs you (6 min)
+3. Request/response schema design, and why the response carries a number and not just a label (13 min)
+4. Load-once vs. load-per-request; statelessness and performance (8 min)
+5. Two traps: the path you load from, and the model file that is not portable (10 min)
 
-### Block 2 — Guided Demonstration (~50 min, live coding)
+### Block 2 — Guided Demonstration (~70 min, live coding)
 
-1. Load the provided model; define a Pydantic request schema (15 min)
-2. Write the `/predict` endpoint; return a structured JSON response (19 min)
-3. Run with uvicorn; test via the auto-generated `/docs` and via `requests` (16 min)
+1. Train the model, then load it; define a Pydantic request schema (20 min)
+2. Write the `/predict` endpoint; return a structured JSON response (28 min)
+3. Run with uvicorn; tour the auto-generated `/docs`; run `test_endpoint.py` and read all three results (22 min)
 
 ### ☕ Break (~15 min)
 
-### Block 3 — Hands-On Activity (~45 min, students working)
+### Block 3 — Hands-On Activity (~45 min, on your own after class)
 
 1. Students complete the skeleton server's TODOs to serve the model (26 min)
 2. Test their endpoint with `requests` and the `/docs` UI (13 min)

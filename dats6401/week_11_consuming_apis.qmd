@@ -97,23 +97,25 @@ pip install -U Brotli
 
 > Single 2.5-hour block, 6:10-8:40 PM. Tooling week — the guided demo is the longest block.
 
-### Block 1 — Concepts & Theory (~30 min, PowerPoint)
+### Block 1 — Concepts & Theory (~45 min, PowerPoint)
 
-1. Client vs. server: why we separate them (10 min)
-2. Anatomy of an HTTP request: method, URL, params, headers, status codes (12 min)
-3. JSON as the lingua franca; latency and failure as design realities (8 min)
+1. Client vs. server: why we separate them (8 min)
+2. Anatomy of an HTTP request: method, URL, params, headers, status codes (10 min)
+3. Finding the table inside nested JSON (6 min)
+4. When a 200 is not a success: the three checks, and why versioning is the defence (12 min)
+5. Keys, headers and what a model call costs (9 min)
 
-### Block 2 — Guided Demonstration (~45 min, live coding)
+### Block 2 — Guided Demonstration (~70 min, live coding)
 
-1. **A — USGS earthquakes:** request → check → parse → DataFrame, and query parameters as the interface (12 min)
-2. **B — when a 200 is not a success:** three live APIs failing three different ways, and the three checks that catch them (10 min)
-3. **C — the course endpoint:** start your own server, and a deliberate 404 (7 min)
-4. **D — APIs that need a key:** headers and auth, the same call to two vendors, and what tokens, latency and cost look like side by side. Instructor demo (12 min)
-5. **E — into Streamlit:** caching, and killing the server to watch the client degrade (4 min)
+1. **A — USGS earthquakes:** request → check → parse → DataFrame, and query parameters as the interface (18 min)
+2. **B — when a 200 is not a success:** three live APIs failing three different ways, and the three checks that catch them (16 min)
+3. **C — the course endpoint:** start your own server, and a deliberate 404 (10 min)
+4. **D — APIs that need a key:** headers and auth, the same call to two vendors, and what tokens, latency and cost look like side by side. Instructor demo (18 min)
+5. **E — into Streamlit:** caching, and killing the server to watch the client degrade (8 min)
 
 ### ☕ Break (~15 min)
 
-### Block 3 — Hands-On Activity (~50 min, students working)
+### Block 3 — Hands-On Activity (~50 min, on your own after class)
 
 1. Pick an API, fetch and parse it in the notebook, and check the response past its status (15 min)
 2. Move the call into a Streamlit client: one widget on a **request parameter**, cached (20 min)
