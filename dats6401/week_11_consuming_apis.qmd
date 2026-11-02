@@ -75,6 +75,22 @@ python -c "import requests; print(requests.get('https://earthquake.usgs.gov/fdsn
 uvicorn course_endpoint:app --port 8001
 ```
 
+Part D of the demo calls two model APIs and needs `pip install anthropic openai`
+plus a key for each. It is an instructor demo — the cells skip themselves when a
+key is absent, so nothing below depends on it.
+
+::: {.callout-important title="One trap worth knowing before you hit it"}
+If an SDK call fails with `APIConnectionError: Connection error.` while plain
+`requests` calls work, it is not your network. Anaconda ships `Brotli 1.0.9`,
+and both vendors' SDKs use an HTTP layer that calls a newer Brotli API, so the
+*response* fails to decompress — and the error it raises names the wrong cause
+entirely. Fix:
+
+```bash
+pip install -U Brotli
+```
+:::
+
 ---
 
 ## 🧭 Session Outline (2.5 hours)
