@@ -17,6 +17,8 @@ This week is deliberately client-only: we learn the request/response pattern by 
 - Explain the client–server model and the structure of an HTTP request/response.
 - Call REST APIs from Python with `requests` and parse JSON into pandas.
 - Handle errors, status codes, and latency gracefully in a Streamlit client.
+- Check a response past its status code — content type and shape — and explain why a 200 is not a promise.
+- Send an authenticated request, keeping the key out of the code.
 - Visualize data fetched live from an endpoint, with caching.
 
 ---
@@ -28,11 +30,25 @@ This week is deliberately client-only: we learn the request/response pattern by 
 - [What is a REST API?](https://www.redhat.com/en/topics/api/what-is-a-rest-api) — conceptual.
 - [Streamlit — caching data](https://docs.streamlit.io/develop/concepts/architecture/caching) — caching API calls.
 
-**Sample Data Sources / Endpoints for Practice:**
+**Endpoints for practice — all public, no key, no account:**
 
-- A small **course-provided REST endpoint** (URL on Blackboard) returning JSON.
-- [Open-Meteo](https://open-meteo.com/) — free weather API, no key.
-- [REST Countries](https://restcountries.com/) — simple JSON, no key.
+- [USGS earthquakes](https://earthquake.usgs.gov/fdsnws/event/1/) — GeoJSON, with `minmagnitude`, `starttime` and `bbox` as query parameters. The main example this week.
+- [Open-Meteo](https://open-meteo.com/) — free weather API, hourly time series.
+- [Frankfurter](https://frankfurter.dev/) — exchange rates, latest and by date range.
+- `course_endpoint.py` in this week's materials — **you run it yourself**, in a second terminal. There is no shared server.
+
+::: {.callout-warning title="Two APIs that used to be here"}
+[REST Countries](https://restcountries.com/) and the [Census ACS
+API](https://api.census.gov/) were both keyless and are no longer usable for
+this course. REST Countries was taken down and answers every request with a
+deprecation notice — at HTTP 200, as valid JSON, so `raise_for_status()`
+passes and the failure surfaces later as a type error. Census now answers
+without a key by returning an HTML page, also at 200.
+
+Neither is a dead link; both are live endpoints that lie. Part B of the Block 2
+demo uses them as worked examples, which is the only reason they are still
+mentioned.
+:::
 
 ---
 
@@ -41,16 +57,29 @@ This week is deliberately client-only: we learn the request/response pattern by 
 Make sure your environment includes:
 
 ```bash
-pip install requests pandas streamlit
+pip install requests pandas matplotlib streamlit fastapi uvicorn scikit-learn
 ```
 
-Confirm you can `requests.get(...)` a public endpoint and print the JSON before class.
+`requests`, `pandas` and `matplotlib` are for the client work. `fastapi`,
+`uvicorn` and `scikit-learn` are for `course_endpoint.py`, the small server you
+run yourself in Block 2 — and they are the same three you will need in Week 12,
+when you write the server instead of just starting it.
+
+Before class, confirm two things:
+
+```bash
+# 1. you can reach a public endpoint
+python -c "import requests; print(requests.get('https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&limit=1', timeout=20).status_code)"
+
+# 2. you can start the course endpoint (Ctrl-C to stop it again)
+uvicorn course_endpoint:app --port 8001
+```
 
 ---
 
 ## 🧭 Session Outline (2.5 hours)
 
-> Single 2.5-hour block, 6:10-8:40 PM. The two worked examples you asked for live in Block 2.
+> Single 2.5-hour block, 6:10-8:40 PM. Tooling week — the guided demo is the longest block.
 
 ### Block 1 — Concepts & Theory (~30 min, PowerPoint)
 
@@ -58,19 +87,24 @@ Confirm you can `requests.get(...)` a public endpoint and print the JSON before 
 2. Anatomy of an HTTP request: method, URL, params, headers, status codes (12 min)
 3. JSON as the lingua franca; latency and failure as design realities (8 min)
 
-### Block 2 — Guided Demonstration (~45 min, live coding) — **Worked Examples**
+### Block 2 — Guided Demonstration (~45 min, live coding)
 
-1. **Example A:** call a public no-key API (Open-Meteo), parse JSON → pandas, chart it (19 min)
-2. **Example B:** call the course-provided endpoint, handle a non-200 status, cache the call (16 min)
-3. Wrap both into a Streamlit app with a fetch button and error handling (10 min)
+1. **A — USGS earthquakes:** request → check → parse → DataFrame, and query parameters as the interface (12 min)
+2. **B — when a 200 is not a success:** three live APIs failing three different ways, and the three checks that catch them (10 min)
+3. **C — the course endpoint:** start your own server, and a deliberate 404 (8 min)
+4. **D — an API that needs a key:** headers, auth, tokens, latency and cost. Instructor demo (10 min)
+5. **E — into Streamlit:** caching, and killing the server to watch the client degrade (5 min)
 
 ### ☕ Break (~15 min)
 
 ### Block 3 — Hands-On Activity (~50 min, students working)
 
-1. Students pick a public API and successfully fetch + parse it (19 min)
-2. Visualize the response in Streamlit with caching (19 min)
-3. Add graceful error handling for a bad request (12 min)
+1. Pick an API, fetch and parse it in the notebook, and check the response past its status (15 min)
+2. Move the call into a Streamlit client: one widget on a **request parameter**, cached (20 min)
+3. Break it on purpose and handle the failure gracefully (15 min)
+
+Students who use the course endpoint run their own copy:
+`uvicorn course_endpoint:app --port 8001`, in a second terminal.
 
 ### Block 4 — Wrap-Up & Homework Preview (~10 min)
 
@@ -83,11 +117,9 @@ Confirm you can `requests.get(...)` a public endpoint and print the JSON before 
 
 ---
 
-{{< include _live_app_embed.qmd >}}
-
 ## 💻 Notebook / App Snippets
 
-### Example A — public API → pandas → chart
+### Open-Meteo — parallel arrays into a tidy frame
 
 ```python
 import requests, pandas as pd
@@ -102,23 +134,43 @@ data = r.json()["hourly"]
 df = pd.DataFrame({"time": pd.to_datetime(data["time"]), "temp": data["temperature_2m"]})
 ```
 
-### Example B — robust call with caching
+### Three checks, not one
+
+`raise_for_status()` checks the status. Against an API you do not control that
+is the weakest of the three things worth checking, because a 200 only means the
+server chose to answer.
 
 ```python
 import streamlit as st, requests
 
 @st.cache_data(ttl=300)
-def fetch(url, params=None):
-    r = requests.get(url, params=params, timeout=10)
-    r.raise_for_status()        # raises on 4xx/5xx
-    return r.json()
+def get_json(url, params=None, timeout=20, expect=dict):
+    r = requests.get(url, params=params, timeout=timeout)
+    r.raise_for_status()                                   # 1. status
+
+    ctype = r.headers.get("content-type", "")
+    if "json" not in ctype:                                # 2. content type
+        raise ValueError(f"expected JSON, got {ctype!r}: {r.text[:120]}")
+
+    payload = r.json()
+    if not isinstance(payload, expect):                    # 3. shape
+        raise ValueError(f"expected {expect.__name__}, got "
+                         f"{type(payload).__name__}: {str(payload)[:140]}")
+    return payload
 
 try:
-    payload = fetch("https://api.restcountries.com/v3.1/all")
-except requests.HTTPError as e:
-    st.error(f"Request failed: {e}")
-    payload = None
+    payload = get_json(URL, params={...})
+except requests.RequestException as e:
+    st.error(f"Could not reach the endpoint: {e}")   # network, timeout, 4xx/5xx
+    st.stop()
+except ValueError as e:
+    st.error(f"It answered, but not with what we asked for: {e}")
+    st.stop()
 ```
+
+The two `except` clauses are different failures and deserve different messages:
+one means the server is unreachable, the other means it is reachable and
+wrong.
 
 ### Client app skeleton
 
