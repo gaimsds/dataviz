@@ -9,11 +9,11 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~35 min |
-| **Block 2** | Guided demo: build & draw a graph in networkx | ~35 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~45 min |
+| **Block 2** | Guided demo: build & draw a graph in networkx | ~65 min |
 | ☕ | Break | ~15 min |
-| **Block 3** | Hands-on: centrality, layouts, PyVis → Streamlit | ~50 min |
 | **Block 4** | Wrap-up & homework preview | ~15 min |
+| **Block 3** | Hands-on: centrality, layouts, PyVis → Streamlit — **on your own after class** | ~50 min |
 
 ::: {.gw-box}
 You can build Streamlit apps after Week 5. This week is the first of the complex modalities: data whose meaning is carried by the **connections** between records rather than by the records themselves.

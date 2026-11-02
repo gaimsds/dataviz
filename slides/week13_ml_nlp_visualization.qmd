@@ -9,11 +9,11 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~35 min |
-| **Block 2** | Guided demo: performance & behavior visuals → the live wire | ~45 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~45 min |
+| **Block 2** | Guided demo: performance & behavior visuals → the live wire | ~70 min |
 | ☕ | Break | ~15 min |
-| **Block 3** | Hands-on: your visuals; your client ↔ your server | ~45 min |
 | **Block 4** | Wrap-up — this IS the final-project architecture | ~10 min |
+| **Block 3** | Hands-on: your visuals; your client ↔ your server — **on your own after class** | ~45 min |
 
 ::: {.gw-box}
 **The arc completes:** Week 11 you consumed, Week 12 you served — today you **visualize live model output**, and the consume→serve→visualize loop becomes one running system.

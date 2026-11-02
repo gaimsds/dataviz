@@ -9,11 +9,11 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~35 min |
-| **Block 2** | Guided demo, run live | ~35 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~45 min |
+| **Block 2** | Guided demo, run live | ~70 min |
 | ☕ | Break | ~15 min |
-| **Block 3** | Hands-on, on your own afterwards | ~50 min |
-| **Block 4** | Wrap-up & homework preview | ~15 min |
+| **Block 4** | Wrap-up & homework preview | ~10 min |
+| **Block 3** | Hands-on — **on your own after class** | ~50 min |
 
 ::: {.gw-box}
 **Today's idea:** Week 9 built maps you look at. This week builds maps you can

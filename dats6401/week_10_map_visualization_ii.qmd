@@ -64,7 +64,7 @@ before class.
 
 > Single 2.5-hour block, 6:10-8:40 PM. Tooling/interactive week — hands-on dominates.
 
-### Block 1 — Concepts & Theory (~35 min)
+### Block 1 — Concepts & Theory (~45 min)
 
 1. What interaction is for, and the four tools that provide it
 2. Point in polygon: joining by location instead of by key
@@ -74,7 +74,7 @@ before class.
 6. Extensions: DBSCAN, heat maps and 3D
 
 
-### Block 2 — Guided Demonstration (~35 min, live coding)
+### Block 2 — Guided Demonstration (~70 min, live coding)
 
 On 2,264 US Supercharger sites, included in the materials:
 

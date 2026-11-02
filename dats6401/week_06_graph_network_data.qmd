@@ -60,24 +60,24 @@ Confirm you can build a small graph in a notebook and render it, and that you ca
 
 > Single 2.5-hour block, 6:10-8:40 PM. Concepts and hands-on work are interleaved. This is a moderately tooling-heavy week, so the hands-on blocks run a little longer than the lecture.
 
-### Block 1 — Concepts & Theory (~35 min, PowerPoint)
+### Block 1 — Concepts & Theory (~45 min, PowerPoint)
 
-1. From records to relationships; how network science began, and regular vs. random vs. scale-free structure (7 min)
-2. Anatomy of a graph: nodes, edges, direction, weight, and the adjacency matrix as the dual representation (6 min)
-3. Layouts as algorithms: force-directed vs. circular vs. random, and what position does and does not mean (6 min)
-4. Centrality: degree, betweenness, closeness; PageRank and why importance flows along directed edges (9 min)
-5. Community detection: modularity and its resolution limit, and Infomap's flow-based alternative (5 min)
-6. When the picture fails: the hairball, filtering, aggregation, interaction; discussion (2 min)
+1. From records to relationships; how network science began, and regular vs. random vs. scale-free structure (9 min)
+2. Anatomy of a graph: nodes, edges, direction, weight, and the adjacency matrix as the dual representation (8 min)
+3. Layouts as algorithms: force-directed vs. circular vs. random, and what position does and does not mean (8 min)
+4. Centrality: degree, betweenness, closeness; PageRank and why importance flows along directed edges (11 min)
+5. Community detection: modularity and its resolution limit, and Infomap's flow-based alternative (6 min)
+6. When the picture fails: the hairball, filtering, aggregation, interaction; discussion (3 min)
 
-### Block 2 — Guided Demonstration (~35 min, live coding)
+### Block 2 — Guided Demonstration (~65 min, live coding)
 
-1. Build a graph from an edge list in NetworkX; inspect degree and basic properties (12 min)
-2. Draw it with a force-directed layout; encode degree to node size and a computed community to color (17 min)
-3. Show the same graph as an adjacency matrix — when this reveals more than the node-link view (6 min)
+1. Build a graph from an edge list in NetworkX; inspect degree and basic properties (22 min)
+2. Draw it with a force-directed layout; encode degree to node size and a computed community to color (32 min)
+3. Show the same graph as an adjacency matrix — when this reveals more than the node-link view (11 min)
 
 ### ☕ Break (~15 min)
 
-### Block 3 — Hands-On Activity (~50 min, students working)
+### Block 3 — Hands-On Activity (~50 min, on your own after class)
 
 1. Set up: each student loads the Les Misérables (or a SNAP) network (6 min)
 2. Independent work: compute a centrality measure, encode it visually, and try two different layouts; instructor circulates (31 min)

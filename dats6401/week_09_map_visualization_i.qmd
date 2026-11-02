@@ -52,22 +52,22 @@ GeoPandas can be finicky to install — confirm `import geopandas` works in your
 
 > Single 2.5-hour block, 6:10-8:40 PM.
 
-### Block 1 — Concepts & Theory (~35 min, PowerPoint)
+### Block 1 — Concepts & Theory (~45 min, PowerPoint)
 
-1. CRS and projections: why flat maps distort (12 min)
-2. Spatial joins: attaching data to geometry (9 min)
-3. Choropleths done right: rates, classification, color (12 min)
-4. Discussion: a famous misleading map (2 min)
+1. CRS and projections: why flat maps distort (15 min)
+2. Spatial joins: attaching data to geometry (12 min)
+3. Choropleths done right: rates, classification, color (15 min)
+4. Discussion: a famous misleading map (3 min)
 
-### Block 2 — Guided Demonstration (~35 min, live coding)
+### Block 2 — Guided Demonstration (~65 min, live coding)
 
-1. Load geometry, set/reproject CRS (9 min)
-2. Spatial-join attribute data; build a choropleth with a classification scheme (18 min)
-3. Add a basemap with contextily (8 min)
+1. Load geometry, set/reproject CRS (17 min)
+2. Spatial-join attribute data; build a choropleth with a classification scheme (33 min)
+3. Add a basemap with contextily (15 min)
 
 ### ☕ Break (~15 min)
 
-### Block 3 — Hands-On Activity (~50 min, students working)
+### Block 3 — Hands-On Activity (~50 min, on your own after class)
 
 1. Students load geometry + data and reproject correctly (13 min)
 2. Build a rate-based choropleth with a defensible classification (25 min)

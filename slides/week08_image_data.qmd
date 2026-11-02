@@ -9,11 +9,11 @@ format: revealjs
 
 | | | |
 |---|---|---|
-| **Block 1** | Concepts & Theory — *this deck* | ~35 min |
-| **Block 2** | Guided demo: six short parts, run live | ~35 min |
+| **Block 1** | Concepts & Theory — *this deck* | ~45 min |
+| **Block 2** | Guided demo: six short parts, run live | ~65 min |
 | ☕ | Break | ~15 min |
-| **Block 3** | Hands-on, to work through on your own afterwards | ~50 min |
 | **Block 4** | Wrap-up & homework preview | ~15 min |
+| **Block 3** | Hands-on, to work through on your own afterwards — **on your own after class** | ~50 min |
 
 ::: {.gw-box}
 **Today's idea:** with images, a picture is often the only way to check your work. A number can tell you a model is 97% accurate. Only a picture can tell you *why*. We use one dataset all session: 1,797 handwritten digits, each 8×8 pixels, included with scikit-learn.

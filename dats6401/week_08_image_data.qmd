@@ -51,14 +51,14 @@ Confirm you can load and display an image array in a notebook before class.
 
 > Single 2.5-hour block, 6:10-8:40 PM.
 
-### Block 1 — Concepts & Theory (~35 min, PowerPoint)
+### Block 1 — Concepts & Theory (~45 min, PowerPoint)
 
-1. An image is an array: shape, channels, intensity (9 min)
-2. Visualizing collections: grids, montages, and why they catch data problems (12 min)
-3. Looking inside models: feature maps and saliency (12 min)
-4. Discussion: a model that's "right for the wrong reason" (2 min)
+1. An image is an array: shape, channels, intensity (12 min)
+2. Visualizing collections: grids, montages, and why they catch data problems (15 min)
+3. Looking inside models: feature maps and saliency (15 min)
+4. Discussion: a model that's "right for the wrong reason" (3 min)
 
-### Block 2 — Guided Demonstration (~35 min, live coding)
+### Block 2 — Guided Demonstration (~65 min, live coding)
 
 1. Montage, class outliers and class balance
 2. Mean images, then testing the confusion they predict
@@ -69,7 +69,7 @@ Confirm you can load and display an image array in a notebook before class.
 
 ### ☕ Break (~15 min)
 
-### Block 3 — Hands-On Activity (~50 min, students working)
+### Block 3 — Hands-On Activity (~50 min, on your own after class)
 
 1. Montage of one class, plus the class-balance bar
 2. Mean images, and a prediction you then test against a confusion matrix

@@ -50,21 +50,21 @@ Have a free Streamlit Community Cloud (or equivalent) account ready, and a GitHu
 
 > Single 2.5-hour block, 6:10-8:40 PM. Tooling week — hands-on dominates.
 
-### Block 1 — Concepts & Theory (~25 min, PowerPoint)
+### Block 1 — Concepts & Theory (~45 min, PowerPoint)
 
-1. Why apps, not just notebooks; rendering your existing matplotlib/plotly figures with `st.pyplot` and `st.plotly_chart` (7 min)
-2. The re-run model: `session_state`, widget keys, caching and where it goes wrong (12 min)
-3. Controlling re-runs with `st.form` and `@st.fragment`; layout: columns, tabs, sidebar (6 min)
+1. Why apps, not just notebooks; rendering your existing matplotlib/plotly figures with `st.pyplot` and `st.plotly_chart` (13 min)
+2. The re-run model: `session_state`, widget keys, caching and where it goes wrong (21 min)
+3. Controlling re-runs with `st.form` and `@st.fragment`; layout: columns, tabs, sidebar (11 min)
 
-### Block 2 — Guided Demonstration (~45 min, live coding)
+### Block 2 — Guided Demonstration (~70 min, live coding)
 
-1. Build an app with a sidebar, widgets, and a live chart (19 min)
-2. Add caching to a slow data load; see the speedup (13 min)
-3. Push to GitHub and deploy to Streamlit Community Cloud (13 min)
+1. Build an app with a sidebar, widgets, and a live chart (30 min)
+2. Add caching to a slow data load; see the speedup (20 min)
+3. Push to GitHub and deploy to Streamlit Community Cloud (20 min)
 
 ### ☕ Break (~15 min)
 
-### Block 3 — Hands-On Activity (~55 min, students working)
+### Block 3 — Hands-On Activity (~55 min, on your own after class)
 
 1. Each student takes a notebook from Weeks 2–4 and converts it to an app (31 min)
 2. Add at least two widgets and a layout element (12 min)
