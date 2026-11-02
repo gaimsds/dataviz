@@ -5,11 +5,22 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
 import pandas as pd
+from pathlib import Path
 
 app = FastAPI(title="My Model Server")
 
-# Load ONCE at startup — never inside the endpoint (why? discuss!)
-bundle = joblib.load("model.joblib")
+# Next to THIS file, not next to wherever you launched uvicorn from. A bare
+# "model.joblib" resolves against the working directory, so starting the server
+# from anywhere else raises FileNotFoundError at import -- which reads like a
+# broken server rather than a wrong directory.
+BUNDLE_PATH = Path(__file__).resolve().parent / "model.joblib"
+if not BUNDLE_PATH.exists():
+    raise FileNotFoundError(
+        f"{BUNDLE_PATH.name} not found next to {Path(__file__).name}. "
+        f"Create it first:\n    python train_model.py"
+    )
+
+bundle = joblib.load(BUNDLE_PATH)       # LOAD ONCE, at startup
 model = bundle["model"]
 FEATURES = bundle["feature_names"]      # the four iris measurements
 CLASSES = bundle["class_names"]
