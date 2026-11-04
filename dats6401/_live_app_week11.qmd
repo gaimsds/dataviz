@@ -23,7 +23,8 @@ at once:
 </iframe>
 ```
 
-Source: [`week11_app/`](https://github.com/gaimsds/dataviz/tree/main/week11_app).
+Source: [`app_api_client_wk11.py`](https://github.com/gaimsds/viz/blob/main/app_api_client_wk11.py),
+in the repository that holds the course's Streamlit apps.
 The `?embed=true` on the URL is what hides Streamlit's own chrome inside the
 frame. Community Cloud apps sleep when idle, so the first load after a quiet
 spell takes a few seconds to wake — which is itself worth noticing: a cold
