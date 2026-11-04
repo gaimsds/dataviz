@@ -266,6 +266,32 @@ The cache key is the **arguments**. A cached function that reads a widget from
 global scope instead of taking it as an argument returns the first answer
 forever — and looks like working code.
 
+## The three decisions, in code {.smaller}
+
+```python
+# 1 — reference data, republished once a day → hours
+@st.cache_data(ttl=6 * 60 * 60)
+def rates(base):
+    return get_json("https://api.frankfurter.app/latest",
+                    params={"base": base})
+
+# 2 — a feed that moves every few minutes → minutes
+@st.cache_data(ttl=300)
+def quakes(minmag, days):
+    return get_json(USGS, params={"minmagnitude": minmag, "days": days})
+
+# 3 — a health check → no cache at all
+def endpoint_is_up(url):
+    try:
+        return requests.get(url, timeout=3).ok
+    except requests.RequestException:
+        return False
+```
+
+Scenario 3 has **no decorator**. That is the clearest way to say "never cache" —
+clearer than a zero `ttl` the next reader has to interpret. A cached health
+check reports the server up for five minutes after it has gone down.
+
 ## Discussion {.gw-discussion}
 
 **1.** Your client calls a paid API at \$0.001/request. A user drags a slider 50
