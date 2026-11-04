@@ -135,6 +135,8 @@ Students who use the course endpoint run their own copy:
 
 ---
 
+{{< include _live_app_week11.qmd >}}
+
 ## 💻 Notebook / App Snippets
 
 ### Open-Meteo — parallel arrays into a tidy frame
