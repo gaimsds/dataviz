@@ -75,9 +75,9 @@ def draw_boxes(image, detections):
     """
     out = image.copy()
     pen = ImageDraw.Draw(out)
-    line = max(3, round(out.width / 120))
-    font = ImageFont.load_default(size=max(16, round(out.width / 20)))
-    pad = max(2, round(out.width / 200))
+    line = max(2, round(out.width / 250))
+    font = ImageFont.load_default(size=max(14, round(out.width / 32)))
+    pad = max(2, round(out.width / 300))
     labels = sorted({d["label"] for d in detections})
     # Least confident first, so where labels overlap the surest one is on top.
     for d in sorted(detections, key=lambda d: d["score"]):
