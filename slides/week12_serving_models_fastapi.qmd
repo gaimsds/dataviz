@@ -228,5 +228,6 @@ test script; add `/model-info` if you finish early.
 
 **Readings:** FastAPI first steps & request body · sklearn model persistence · uvicorn docs
 
-**Homework preview:** your served model, documented request/response design,
-graceful bad-input handling. Week 13 wires your client to it.
+**Homework preview:** one submission for Weeks 11 and 12 — last week's client
+and this week's server. Screenshots of both working are fine; nothing has to be
+deployed. Week 13 wires the client to the server.

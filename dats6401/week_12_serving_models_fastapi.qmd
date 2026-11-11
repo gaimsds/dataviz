@@ -105,7 +105,7 @@ TODO 1.)
 ### Block 4 — Wrap-Up & Homework Preview (~10 min)
 
 1. Compare request/response designs across the room (6 min)
-2. Preview Week 13 — your Week 11 client will call this server (4 min)
+2. Preview the assignment (the Week 11 client and this week's server, submitted together) and Week 13 — your client will call this server (4 min)
 
 ---
 
@@ -243,14 +243,50 @@ what would a client have shown the user in each case?
 
 ---
 
-## 🏠 Homework
+## 🏠 Homework — Weeks 11 and 12 {#homework-weeks-11-and-12}
+
+One assignment covers both weeks: the client from Week 11 and the server from
+this week. Submit the two parts together.
+
+**Part A — the client (Week 11)**
+
+1. Choose a public REST API (or the course endpoint).
+2. Build a Streamlit client that fetches live data, parses it, and visualizes it.
+3. Include caching and graceful error handling for a failed request.
+
+**Part B — the server (Week 12)**
 
 1. Serve a trained model (the provided one, or your own) behind a FastAPI/Flask `/predict` endpoint.
 2. Define a clear request schema and a structured response (prediction + confidence/metadata).
 3. Handle invalid input gracefully.
-4. Submit the server code plus a short test script (or `/docs` screenshot showing a successful call) to Blackboard.
 
-**Rubric (10 pts)**
+**What to submit (Blackboard)**
+
+- Part A: the runnable app, and the endpoint and parameters you used.
+- Part B: the server code and a short test script.
+- Screenshots of both working: the client showing live data, a successful
+  `/predict` call (in `/docs` or from your test script), and a bad request
+  being rejected.
+
+::: {.callout-note title="You do not have to deploy anything"}
+The server only needs to run on your own machine. If you have trouble deploying
+it or getting it running somewhere we can reach, screenshots are fine: they are
+the evidence that it works, alongside your code.
+:::
+
+**Rubric (10 pts per part)**
+
+Each part is graded out of 10 and counts as one assignment, 3 points in the
+grade book. The two parts together are worth 6 points.
+
+*Part A — the client (10)*
+
+- Correct request + JSON parsing into a usable structure (3)
+- Caching applied sensibly (2)
+- Graceful error/latency handling (2)
+- Clear visualization of the fetched data (3)
+
+*Part B — the server (10)*
 
 - Working endpoint that returns correct predictions (4)
 - Clear request/response schema design (3)
@@ -334,10 +370,16 @@ gets the attention it needs.
 
 Before submitting, make sure:
 
-- Your assignment fulfills all the basic requirements listed above.
+- Your assignment fulfills all the basic requirements listed above, for both parts.
 
-- The server runs with `uvicorn app:app` (or `flask run`) and `/predict` returns valid JSON.
+- **Client:** the app runs locally with no errors and handles a failed request without crashing.
 
-- A bad request returns a sensible error, not a crash.
+- **Client:** API calls are cached and timeouts are set.
+
+- **Server:** it runs with `uvicorn app:app` (or `flask run`) and `/predict` returns valid JSON.
+
+- **Server:** a bad request returns a sensible error, not a crash.
+
+- Your screenshots show the client with live data, a successful `/predict` call, and a rejected bad request.
 
 ---

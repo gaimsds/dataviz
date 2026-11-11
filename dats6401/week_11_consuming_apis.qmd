@@ -127,7 +127,7 @@ Students who use the course endpoint run their own copy:
 ### Block 4 — Wrap-Up & Homework Preview (~10 min)
 
 1. Share apps; discuss latency/error handling (6 min)
-2. Preview homework and Week 12 (you'll build the server next) (4 min)
+2. Preview Week 12 (you'll build the server next) and the assignment that covers both weeks (4 min)
 
 ---
 
@@ -238,17 +238,10 @@ How does the app behave while waiting on a slow response?
 
 ## 🏠 Homework
 
-1. Choose a public REST API (or the course endpoint).
-2. Build a Streamlit client that fetches live data, parses it, and visualizes it.
-3. Include caching and graceful error handling for a failed request.
-4. Submit the runnable app (and the endpoint/params you used) to Blackboard.
-
-**Rubric (10 pts)**
-
-- Correct request + JSON parsing into a usable structure (3)
-- Caching applied sensibly (2)
-- Graceful error/latency handling (2)
-- Clear visualization of the fetched data (3)
+There is no separate homework this week. The client you build here is **Part A**
+of one assignment that covers Weeks 11 and 12, and the two parts are submitted
+together. The requirements and rubric are in
+[Week 12's homework section](week_12_serving_models_fastapi.qmd#homework-weeks-11-and-12).
 
 ---
 
@@ -260,14 +253,3 @@ How does the app behave while waiting on a slow response?
 
 ---
 
-## ✅ Submission Checklist
-
-Before submitting, make sure:
-
-- Your assignment fulfills all the basic requirements listed above.
-
-- Your app runs locally with no errors and handles a failed request without crashing.
-
-- API calls are cached and timeouts are set.
-
----

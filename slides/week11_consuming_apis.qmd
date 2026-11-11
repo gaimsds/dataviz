@@ -315,4 +315,4 @@ a widget that changes a **request parameter**, caching, graceful failure.
 
 **Readings:** MDN HTTP overview · requests quickstart · Streamlit caching guide
 
-**Homework preview:** the robust client — next week you build the server it talks to.
+**Homework preview:** the robust client is Part A of one assignment. Next week you build the server, Part B, and submit both together.
