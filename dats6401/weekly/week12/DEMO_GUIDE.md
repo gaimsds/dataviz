@@ -12,7 +12,9 @@ Dependencies: `pip install fastapi uvicorn scikit-learn joblib pandas requests`
 ## Part 1 (~20 min) — schema first
 
 Open `server_solution.py` for reference but build it live from an empty file, in
-this order: load the bundle, then the Pydantic `Flower` class.
+this order: load the bundle, then the Pydantic `Flower` class, then
+`Prediction`. Write both schemas before either endpoint — that is the
+point of the slide.
 
 Two things to narrate:
 

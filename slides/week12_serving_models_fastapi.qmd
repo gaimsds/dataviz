@@ -67,7 +67,7 @@ wrong.
 
 # Design the contract first {background-color="#00223e"}
 
-## The schema IS the API
+## The schema IS the API {.smaller}
 
 Before any logic: what does a request look like, and what comes back?
 
@@ -77,19 +77,23 @@ class Flower(BaseModel):          # the REQUEST contract
     sepal_width: float
     petal_length: float
     petal_width: float
-```
 
-```json
-// the RESPONSE contract
-{"prediction": "virginica",
- "confidence": 0.53,
- "probabilities": {"setosa": 0.0, "versicolor": 0.47, "virginica": 0.53}}
+class Prediction(BaseModel):      # the RESPONSE contract
+    prediction: str
+    confidence: float
+    probabilities: dict[str, float]
+
+@app.post("/predict", response_model=Prediction)
 ```
 
 ::: {.gw-box}
 **Return the full distribution, not just the winner.** Week 13 needs those
 probabilities to visualize uncertainty honestly — design the contract for the
 client you will build next week.
+
+Both classes are enforced, in opposite directions: `Flower` rejects a bad
+**request** with a 422, `Prediction` rejects a bad **response** of your own
+with a 500.
 :::
 
 ## That 0.53 is a real answer {.smaller}

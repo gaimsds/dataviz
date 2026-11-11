@@ -27,12 +27,21 @@ CLASSES = bundle["class_names"]
 
 
 class Flower(BaseModel):
-    """The request schema. Pydantic validates types automatically:
+    """The REQUEST contract. Pydantic validates types automatically:
     a bad request gets a 422 before your code even runs."""
     sepal_length: float
     sepal_width: float
     petal_length: float
     petal_width: float
+
+
+class Prediction(BaseModel):
+    """The RESPONSE contract. Declaring it is what makes /docs describe what
+    comes back, not just what goes in -- and it is why the client you build
+    next week can rely on the probabilities being there."""
+    prediction: str
+    confidence: float
+    probabilities: dict[str, float]
 
 
 @app.get("/health")
@@ -41,8 +50,12 @@ def health():
     ...
 
 
-@app.post("/predict")
+@app.post("/predict", response_model=Prediction)
 def predict(x: Flower):
+    # response_model=Prediction above means FastAPI checks YOUR return value
+    # against the contract too. Return the wrong shape and you get a 500 with
+    # a message naming the field -- the same service the 422 does for callers.
+    #
     # TODO 2: build a one-row DataFrame in the FEATURE ORDER the model expects:
     #   row = pd.DataFrame([[x.sepal_length, x.sepal_width, x.petal_length, x.petal_width]],
     #                      columns=FEATURES)

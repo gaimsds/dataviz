@@ -56,11 +56,18 @@ uvicorn server_skeleton:app --reload               # then open /docs
 ```
 
 The skeleton has unfinished endpoints, so it will start and `/docs` will load,
-but `/health` and `/predict` return `null` until you fill the TODOs. That is
-expected — and worth one experiment before you write anything: send `/predict` a
-bad request and you still get a **422**. The validation comes from the schema,
-not from the body of the function. You have not written any logic yet and the
-door is already guarded.
+but nothing works yet. Before you write a line of logic, send it two requests
+and watch the contract guard the door in **both** directions:
+
+- A **bad** request — `"oops"` in any field — comes back **422**. Pydantic
+  checked it against `Flower` and `predict()` was never called.
+- A **valid** request comes back **500**. `response_model=Prediction` checked
+  what your function returned, got `None`, and refused it.
+
+Neither of those errors is a bug, and you have written no logic yet. One schema
+guards what callers may send you; the other guards what you may send back.
+(`/health` has no response model, so it quietly returns `null` until you fill
+TODO 1.)
 
 ---
 
@@ -101,6 +108,10 @@ door is already guarded.
 
 ---
 
+{{< include _live_api_week12.qmd >}}
+
+---
+
 ## 💻 Notebook / App Snippets
 
 ### FastAPI model-serving endpoint
@@ -123,13 +134,20 @@ model, FEATURES, CLASSES = (bundle["model"],
                             bundle["feature_names"],
                             bundle["class_names"])
 
-class Flower(BaseModel):          # the schema IS the contract
+class Flower(BaseModel):          # the REQUEST contract
     sepal_length: float
     sepal_width: float
     petal_length: float
     petal_width: float
 
-@app.post("/predict")
+class Prediction(BaseModel):      # the RESPONSE contract
+    prediction: str
+    confidence: float
+    probabilities: dict[str, float]
+
+# response_model= is what puts the RESPONSE in the generated docs too. Without
+# it, /docs describes what goes in and says the answer is a bare string.
+@app.post("/predict", response_model=Prediction)
 def predict(x: Flower):
     # Column names and order must match training, which is why they travel
     # with the model instead of being retyped here.

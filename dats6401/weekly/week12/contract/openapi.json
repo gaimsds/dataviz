@@ -1,0 +1,204 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Iris Model Server \u2014 DATS 6401 Week 12",
+    "description": "A **static copy** of this server's own `/docs` page. Every field, type, example and error shape below was generated from the `Flower` class \u2014 nobody wrote this page.\n\nThere is no *Try it out* button here because there is no server behind it. To get the live version, run your own:\n\n```\nuvicorn server_skeleton:app --reload\n```\n\nthen open `http://127.0.0.1:8000/docs`. It is this page, plus a send button.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "description": "Is the server up, and what can it predict?",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/predict": {
+      "post": {
+        "summary": "Predict",
+        "description": "Return the full probability distribution, not just the winner.\n\nA client that prints the label and drops the number reports a coin flip\nas a fact.",
+        "operationId": "predict_predict_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Flower"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Prediction"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Flower": {
+        "properties": {
+          "sepal_length": {
+            "type": "number",
+            "title": "Sepal Length",
+            "examples": [
+              6.0
+            ]
+          },
+          "sepal_width": {
+            "type": "number",
+            "title": "Sepal Width",
+            "examples": [
+              2.7
+            ]
+          },
+          "petal_length": {
+            "type": "number",
+            "title": "Petal Length",
+            "examples": [
+              5.0
+            ]
+          },
+          "petal_width": {
+            "type": "number",
+            "title": "Petal Width",
+            "examples": [
+              1.7
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "sepal_length",
+          "sepal_width",
+          "petal_length",
+          "petal_width"
+        ],
+        "title": "Flower"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Prediction": {
+        "properties": {
+          "prediction": {
+            "type": "string",
+            "title": "Prediction",
+            "examples": [
+              "virginica"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence",
+            "examples": [
+              0.53
+            ]
+          },
+          "probabilities": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Probabilities",
+            "examples": [
+              {
+                "setosa": 0.0,
+                "versicolor": 0.47,
+                "virginica": 0.53
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "prediction",
+          "confidence",
+          "probabilities"
+        ],
+        "title": "Prediction",
+        "description": "Declaring this is what makes the docs describe what comes BACK, not\nonly what goes in. Without it the generated docs say the response is a\nbare string, which is the opposite of a contract."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8000",
+      "description": "your own server, once you run it"
+    }
+  ]
+}

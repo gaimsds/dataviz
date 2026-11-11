@@ -1,0 +1,29 @@
+::: {.callout-tip title="The contract, before you write any code"}
+This is the server's own `/docs` page — a static copy of it, served from this
+site. Three things are worth doing with it before class:
+
+- **Notice that nobody wrote it.** Every field name, type, example value and
+  error shape below was generated from the `Flower` class. That is what "the
+  schema *is* the API" means in practice.
+- **Open `POST /predict` and read the example request.** It is pre-filled with
+  `6.0, 2.7, 5.0, 1.7` — a real flower on the versicolor/virginica boundary.
+  The three response cards underneath show what the server actually returns for
+  it, and why the contract carries a confidence and not just a label.
+- **Look at the 422.** It is in the contract as a documented response, not an
+  accident. Pydantic rejects a bad request before `predict()` is ever called.
+
+There is no *Try it out* button here, because there is no server behind a static
+page. You get the live version by running your own — `uvicorn
+server_skeleton:app --reload`, then `127.0.0.1:8000/docs`. It is this page plus
+a send button, and getting there is Block 3.
+:::
+
+::: {.column-page}
+```{=html}
+<iframe
+  src="weekly/week12/contract/index.html"
+  width="100%" height="860" style="border:1px solid #ddd; border-radius:8px;"
+  loading="lazy">
+</iframe>
+```
+:::
