@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Week 12 — Block 2 demo guide</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <style>
+    body { max-width: 46rem; margin: 0 auto; padding: 1.5rem 1.25rem 4rem;
+           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+           font-size: 17px; line-height: 1.6; color: #1f2328; background: #fff; }
+    h1 { color: #033C5A; font-size: 1.7rem; line-height: 1.25;
+         padding-bottom: .5rem; border-bottom: 4px solid #D6BF91; }
+    h2 { color: #033C5A; font-size: 1.25rem; margin-top: 2.2rem; }
+    a { color: #0075C8; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+           font-size: .9em; background: #f3f5f6; padding: .1em .3em; border-radius: 3px; }
+    pre { background: #f3f5f6; padding: .9rem 1rem; border-radius: 6px; overflow-x: auto; }
+    pre code { background: none; padding: 0; }
+    table { border-collapse: collapse; margin: 1rem 0; display: block; overflow-x: auto; }
+    th, td { border: 1px solid #d0d7de; padding: .4rem .7rem; text-align: left; vertical-align: top; }
+    th { background: #f3f5f6; }
+    .back { font-size: .9rem; margin: 0 0 1.2rem; }
+  </style>
+</head>
+<body>
+<p class="back"><a href="../../week_12_serving_models_fastapi.html">&larr; Back to the Week 12 page</a></p>
+<h1 id="week-12--block-2-demo-guide-70-min">Week 12 — Block 2 Demo Guide
+(~70 min)</h1>
+<p><strong>Before class, in this folder:</strong></p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> train_model.py        <span class="co"># writes model.joblib (not distributed -- pickles</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                             <span class="co"># are tied to the scikit-learn version that wrote them)</span></span></code></pre></div>
+<p>Dependencies:
+<code>pip install fastapi uvicorn scikit-learn joblib pandas requests</code></p>
+<h2 id="part-1-20-min--schema-first">Part 1 (~20 min) — schema
+first</h2>
+<p>Open <code>server_solution.py</code> for reference but build it live
+from an empty file, in this order: load the bundle, then the Pydantic
+<code>Flower</code> class, then <code>Prediction</code>. Write both
+schemas before either endpoint — that is the point of the slide.</p>
+<p>Two things to narrate:</p>
+<ul>
+<li><strong>Load once.</strong> The <code>joblib.load</code> sits at
+module level, not inside the endpoint. Ask why before you say why.</li>
+<li><strong>Resolve the path against the file, not the working
+directory.</strong>
+<code>Path(__file__).resolve().parent / "model.joblib"</code>. A bare
+<code>"model.joblib"</code> works right up until someone starts uvicorn
+from one folder up, and then it raises <code>FileNotFoundError</code> at
+<em>import</em>, which reads like a broken server.</li>
+</ul>
+<p>Key line: <em>"the schema IS the API contract — design it before any
+logic."</em></p>
+<h2 id="part-2-28-min--the-predict-endpoint">Part 2 (~28 min) — the
+/predict endpoint</h2>
+<p>Write <code>/predict</code> live. Run
+<code>uvicorn server_solution:app --reload</code> and open <strong><a
+href="http://127.0.0.1:8000/docs">http://127.0.0.1:8000/docs</a></strong>
+— the auto-generated docs are the wow moment. Make a request from the
+docs UI.</p>
+<p>Return <code>probabilities</code> as well as <code>prediction</code>
+and <code>confidence</code>. Part 3 is where that pays off.</p>
+<h2 id="part-3-22-min--test-like-a-client">Part 3 (~22 min) — test like
+a client</h2>
+<p>Run <code>python test_endpoint.py</code>. Three results, three
+points:</p>
+<table>
+<thead>
+<tr>
+<th>request</th>
+<th>result</th>
+<th>the point</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>easy flower</td>
+<td><code>setosa</code>, confidence <strong>1.0</strong></td>
+<td>setosa separates cleanly; the model is certain</td>
+</tr>
+<tr>
+<td>hard flower</td>
+<td><code>virginica</code>, confidence <strong>0.53</strong></td>
+<td>a real flower on the boundary — versicolor 0.47</td>
+</tr>
+<tr>
+<td>bad input</td>
+<td><strong>422</strong></td>
+<td>validation rejected it before your code ran</td>
+</tr>
+</tbody>
+</table>
+<p>The hard case is the one worth dwelling on. It is the reason the
+response carries a confidence and not just a label: a client that prints
+the label and drops the number reports a coin flip as a fact. That is
+also the thread into Week 13, where this output gets visualized.</p>
+<h2 id="part-4-optional-10-min--the-same-steps-a-real-model">Part 4
+(optional, ~10 min) — the same steps, a real model</h2>
+<p>Needs the <code>requirements_detect.txt</code> packages. Start the
+model <strong>before class</strong> once, so the download is already
+cached.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uvicorn</span> detect_server:app <span class="at">--reload</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> test_detect.py</span></code></pre></div>
+<p>Points to make, in this order:</p>
+<ul>
+<li>The file has the same shape as the iris server: load once, response
+model, endpoint. Scroll both side by side.</li>
+<li>The load takes seconds this time. Ask what would happen if it sat
+inside <code>detect()</code>.</li>
+<li>Read the scores aloud: person 1.00, then knife 0.36 and clock 0.31.
+Open <code>sample_astronaut.jpg</code> and ask where the knife is. It is
+the model shuttle.</li>
+<li>No file gives 422, a text file gives 400. One is free, one we
+wrote.</li>
+</ul>
+<p>The Streamlit client for this server is Week 13's
+(<code>app_detect_client.py</code>).</p>
+<h2 id="block-3-45-min-on-your-own-after-class">Block 3 (~45 min, on
+your own after class)</h2>
+<p>Students complete <code>server_skeleton.py</code>'s 4 TODOs, run
+<code>test_endpoint.py</code> against <strong>their</strong> server,
+then add a <code>/model-info</code> endpoint if they finish early.</p>
+<p>This runs after the session, so the notebook and the skeleton have to
+stand on their own: everything needed is in this folder, and
+<code>test_endpoint.py</code> tells a student whether their server works
+without anyone looking at it.</p>
+</body>
+</html>

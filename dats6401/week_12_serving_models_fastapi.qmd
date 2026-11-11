@@ -109,7 +109,7 @@ TODO 1.)
 
 ---
 
-### Materials: [training script](weekly/week12/train_model.py) · [server skeleton](weekly/week12/server_skeleton.py) · [endpoint test](weekly/week12/test_endpoint.py)
+### Materials: [training script](weekly/week12/train_model.py) · [server skeleton](weekly/week12/server_skeleton.py) · [endpoint test](weekly/week12/test_endpoint.py) · [Block 2 demo guide](weekly/week12/DEMO_GUIDE.html)
 
 ### A real model: [detection server](weekly/week12/detect_server.py) · [its test](weekly/week12/test_detect.py) · [sample image](weekly/week12/sample_astronaut.jpg) · [extra requirements](weekly/week12/requirements_detect.txt)
 

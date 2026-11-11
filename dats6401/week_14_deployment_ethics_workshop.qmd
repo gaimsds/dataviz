@@ -76,7 +76,7 @@ Have a GitHub repo for your app and a free deployment account ready before class
 
 ---
 
-### Materials: [workshop runsheet](weekly/week14/workshop_runsheet.md) · [deployment checklist](weekly/week14/deployment_checklist.md) · [critique sheet](weekly/week14/critique_sheet.md)
+### Materials: [workshop runsheet](weekly/week14/workshop_runsheet.md) · [deployment checklist](weekly/week14/deployment_checklist.md) · [critique sheet](weekly/week14/critique_sheet.md) · [Block 2 demo guide](weekly/week14/DEMO_GUIDE.html)
 
 ---
 
