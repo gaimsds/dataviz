@@ -1,0 +1,11 @@
+# Extra packages for detect_server.py and the Week 13 detection client.
+# Separate from requirements.txt so the iris server stays a small install:
+# torch alone is several hundred megabytes.
+torch==2.15.0
+transformers==5.22.2
+pillow==13.0.0
+fastapi==0.162.4
+uvicorn==0.54.0
+python-multipart==0.0.33     # FastAPI needs this to accept a file upload
+requests==2.34.2
+streamlit==1.67.0

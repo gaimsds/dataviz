@@ -56,6 +56,12 @@ def predict(x: Flower):
     # against the contract too. Return the wrong shape and you get a 500 with
     # a message naming the field -- the same service the 422 does for callers.
     #
+    # EXPECTED until you finish the TODOs: this function returns None, so a
+    # valid request gets a 500 and the uvicorn terminal prints
+    #     fastapi.exceptions.ResponseValidationError ... 'input': None
+    # The server has not crashed. That is the check above doing its job, and
+    # it stops as soon as TODO 4 returns the dictionary.
+    #
     # TODO 2: build a one-row DataFrame in the FEATURE ORDER the model expects:
     #   row = pd.DataFrame([[x.sepal_length, x.sepal_width, x.petal_length, x.petal_width]],
     #                      columns=FEATURES)

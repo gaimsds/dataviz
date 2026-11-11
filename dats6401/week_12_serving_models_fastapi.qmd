@@ -62,7 +62,11 @@ and watch the contract guard the door in **both** directions:
 - A **bad** request — `"oops"` in any field — comes back **422**. Pydantic
   checked it against `Flower` and `predict()` was never called.
 - A **valid** request comes back **500**. `response_model=Prediction` checked
-  what your function returned, got `None`, and refused it.
+  what your function returned, got `None`, and refused it. The terminal running
+  uvicorn prints a long traceback ending in
+  `ResponseValidationError ... 'input': None`. The server has not crashed; that
+  is this check reporting what it found, and it stops once TODO 4 returns the
+  dictionary.
 
 Neither of those errors is a bug, and you have written no logic yet. One schema
 guards what callers may send you; the other guards what you may send back.
@@ -88,6 +92,7 @@ TODO 1.)
 1. Train the model, then load it; define a Pydantic request schema (20 min)
 2. Write the `/predict` endpoint; return a structured JSON response (28 min)
 3. Run with uvicorn; tour the auto-generated `/docs`; run `test_endpoint.py` and read all three results (22 min)
+4. As time allows: the same four steps on a real model. Start `detect_server.py`, an object detector from the Hugging Face Hub, and run `test_detect.py` (demo only, ~10 min)
 
 ### ☕ Break (~15 min)
 
@@ -105,6 +110,8 @@ TODO 1.)
 ---
 
 ### Materials: [training script](weekly/week12/train_model.py) · [server skeleton](weekly/week12/server_skeleton.py) · [endpoint test](weekly/week12/test_endpoint.py)
+
+### A real model: [detection server](weekly/week12/detect_server.py) · [its test](weekly/week12/test_detect.py) · [sample image](weekly/week12/sample_astronaut.jpg) · [extra requirements](weekly/week12/requirements_detect.txt)
 
 ---
 
@@ -255,6 +262,34 @@ what would a client have shown the user in each case?
 
 - Add a `/health` and a `/model-info` endpoint (version, features, classes).
 - Add batch prediction (accept a list of inputs).
+
+### Serve a real model
+
+`detect_server.py` wraps an object detector from the Hugging Face Hub
+(`hustvl/yolos-tiny`, about 25 MB) in the same structure as the iris server.
+It needs PyTorch, so it has its own requirements file and is not part of the
+required hands-on.
+
+```bash
+pip install -r requirements_detect.txt
+uvicorn detect_server:app --reload        # first run downloads the model
+python test_detect.py                     # in a second terminal
+```
+
+Three things change when the model is real, and they are the reason to run it:
+
+- **Load once stops being a formality.** The iris model loads in milliseconds.
+  This one takes a few seconds, so loading it inside the endpoint would charge
+  every caller for it on every request. Once it is loaded, an answer takes well
+  under a second on a laptop.
+- **Some validation you still write yourself.** A request with no file gets the
+  same automatic **422**. A file that is not an image gets a **400** the server
+  raises by hand, because "is a picture" is not something a type can state.
+- **The low scores are the lesson.** On the sample photo the model finds the
+  person at 1.00 — and also a "knife" at 0.36 and a "clock" at 0.31. They are a
+  model space shuttle and a helmet. The model has no label for either, so it
+  answers with the nearest one it knows. The server returns all of them with
+  their scores, and Week 13's client decides which to draw.
 
 ### Containerize it
 

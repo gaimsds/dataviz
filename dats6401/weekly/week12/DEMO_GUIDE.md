@@ -50,6 +50,28 @@ carries a confidence and not just a label: a client that prints the label and
 drops the number reports a coin flip as a fact. That is also the thread into
 Week 13, where this output gets visualized.
 
+## Part 4 (optional, ~10 min) — the same steps, a real model
+
+Needs the `requirements_detect.txt` packages. Start the model **before class**
+once, so the download is already cached.
+
+```bash
+uvicorn detect_server:app --reload
+python test_detect.py
+```
+
+Points to make, in this order:
+
+- The file has the same shape as the iris server: load once, response model,
+  endpoint. Scroll both side by side.
+- The load takes seconds this time. Ask what would happen if it sat inside
+  `detect()`.
+- Read the scores aloud: person 1.00, then knife 0.36 and clock 0.31. Open
+  `sample_astronaut.jpg` and ask where the knife is. It is the model shuttle.
+- No file gives 422, a text file gives 400. One is free, one we wrote.
+
+The Streamlit client for this server is Week 13's (`app_detect_client.py`).
+
 ## Block 3 (~45 min, on your own after class)
 
 Students complete `server_skeleton.py`'s 4 TODOs, run `test_endpoint.py` against

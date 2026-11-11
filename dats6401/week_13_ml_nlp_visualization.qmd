@@ -79,7 +79,7 @@ Have your Week 12 server runnable and your Week 11 client handy before class.
 
 ---
 
-### Materials: [Block 2 demo](weekly/week13/week13_block2_demo.ipynb) · [hands-on](weekly/week13/week13_block3_handson.ipynb) · [live predictions app](weekly/week13/app_live_predictions.py)
+### Materials: [Block 2 demo](weekly/week13/week13_block2_demo.ipynb) · [hands-on](weekly/week13/week13_block3_handson.ipynb) · [live predictions app](weekly/week13/app_live_predictions.py) · [detection client](weekly/week13/app_detect_client.py)
 
 ---
 
@@ -169,6 +169,23 @@ What happens to the client when the server is down? Does it fail gracefully?
 - Add a calibration plot and discuss whether confidences are trustworthy.
 - Color an embedding by correct/incorrect prediction to see where the model fails.
 - Add SHAP or permutation importance for per-prediction explanation.
+
+### A client for the detection server
+
+`app_detect_client.py` is the client for Week 12's `detect_server.py`. It sends
+an image, gets back every box the model scored, and draws only the ones above a
+threshold you set, with a before/after slider between the original and the
+annotated image.
+
+```bash
+uvicorn detect_server:app --reload        # in the week12 folder
+streamlit run app_detect_client.py        # in the week13 folder
+```
+
+Start with the sample photo and drag the threshold down from 0.50 to 0.30.
+Three more boxes appear, and all three are wrong. The threshold is a decision
+the client makes about how much doubt to show, and it re-filters boxes the app
+already has: moving it never calls the model again.
 
 ---
 
