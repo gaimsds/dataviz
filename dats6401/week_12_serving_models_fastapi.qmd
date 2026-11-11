@@ -324,6 +324,10 @@ grade book. The two parts together are worth 6 points.
 
 - Add a `/health` and a `/model-info` endpoint (version, features, classes).
 - Add batch prediction (accept a list of inputs).
+- Put an app in front of your server. Week 13's
+  [Streamlit client](weekly/week13/app_live_predictions.py) sends the four
+  measurements to `/predict` and charts the probabilities that come back. It
+  works with your FastAPI server and with the Flask one.
 
 ### Serve a real model
 

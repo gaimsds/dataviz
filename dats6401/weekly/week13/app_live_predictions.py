@@ -1,5 +1,7 @@
 # app_live_predictions.py — Week 13: Streamlit client for the Week 12 model server
-# 1) Start the server (week12 folder):  uvicorn server_solution:app --reload
+# 1) Start a Week 12 server (week12 folder) -- either one works:
+#       uvicorn server_skeleton:app --reload        (once its TODOs are filled in)
+#       flask --app server_flask run --port 8000
 # 2) Run this app:                      streamlit run app_live_predictions.py
 import streamlit as st
 import requests
@@ -29,7 +31,8 @@ if st.button("Predict", type="primary"):
             st.bar_chart(pd.Series(out["probabilities"]))
     except requests.RequestException as e:
         st.error(f"Server error: {e}")
-        st.caption("Is the Week 12 server running?  uvicorn server_solution:app --reload")
+        st.caption("Is a Week 12 server running at that address? The top of this "
+                   "file shows how to start one.")
 
 # ------------------------------------------------------------------
 # TODO (pick one in class):
