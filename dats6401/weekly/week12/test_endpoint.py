@@ -26,9 +26,18 @@ hard = {"sepal_length": 6.0, "sepal_width": 2.7, "petal_length": 5.0, "petal_wid
 r = requests.post(f"{BASE}/predict", json=hard, timeout=5)
 print("hard   ->", r.status_code, r.json())
 
-# 3. A broken one. Pydantic checks the request against the schema and returns
-#    422 on its own; predict() is never called.
+# 3. A broken one. The server should refuse it rather than crash.
+#    FastAPI answers 422 on its own: Pydantic checks the request against the
+#    schema and predict() is never called. The Flask server answers 400,
+#    because there the check is code somebody had to write.
 bad = {"sepal_length": "not a number"}
 r = requests.post(f"{BASE}/predict", json=bad, timeout=5)
-print("bad    ->", r.status_code, "(expect 422: rejected before your code ran)")
-print("detail:", r.json()["detail"][0]["msg"] if r.status_code == 422 else r.text[:120])
+if r.status_code == 422:
+    print("bad    -> 422 (rejected by the schema, before your code ran)")
+    print("detail:", r.json()["detail"][0]["msg"])
+elif r.status_code == 400:
+    print("bad    -> 400 (rejected by a check the server wrote itself)")
+    print("detail:", r.json().get("detail"))
+else:
+    print("bad    ->", r.status_code, "(expected 422 or 400: the server did not reject it)")
+    print("detail:", r.text[:120])

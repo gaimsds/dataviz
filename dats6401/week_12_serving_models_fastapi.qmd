@@ -109,7 +109,7 @@ TODO 1.)
 
 ---
 
-### Materials: [training script](weekly/week12/train_model.py) · [server skeleton](weekly/week12/server_skeleton.py) · [endpoint test](weekly/week12/test_endpoint.py) · [Block 2 demo guide](weekly/week12/DEMO_GUIDE.html)
+### Materials: [training script](weekly/week12/train_model.py) · [server skeleton](weekly/week12/server_skeleton.py) · [endpoint test](weekly/week12/test_endpoint.py) · [the same server in Flask](weekly/week12/server_flask.py) · [Block 2 demo guide](weekly/week12/DEMO_GUIDE.html)
 
 ### A real model: [detection server](weekly/week12/detect_server.py) · [its test](weekly/week12/test_detect.py) · [sample image](weekly/week12/sample_astronaut.jpg) · [extra requirements](weekly/week12/requirements_detect.txt)
 
@@ -169,33 +169,59 @@ def predict(x: Flower):
 
 ### The same thing in Flask, and what it costs
 
-```python
-from flask import Flask, request, jsonify
+The complete, runnable version is [`server_flask.py`](weekly/week12/server_flask.py).
+Its `/predict` is the part worth reading:
 
-app = Flask(__name__)
-# ... same bundle loading as above ...
+```python
+FIELDS = ("sepal_length", "sepal_width", "petal_length", "petal_width")
 
 @app.post("/predict")
 def predict():
-    data = request.get_json()
+    data = request.get_json(silent=True)
 
-    # Everything Pydantic did for free, by hand. Without this the first bad
-    # request is a 500 from inside predict_proba, not a 422 from the door.
-    try:
-        row = [[float(data[f]) for f in
-                ("sepal_length", "sepal_width", "petal_length", "petal_width")]]
-    except (KeyError, TypeError, ValueError) as e:
-        return jsonify(error=f"bad request: {e}"), 400
+    # Everything Pydantic did for free, by hand. Without this block a bad
+    # request is a 500 from inside predict_proba, not a rejection at the door.
+    if not isinstance(data, dict):
+        return jsonify(detail="Send a JSON object with the four measurements."), 400
 
-    proba = model.predict_proba(pd.DataFrame(row, columns=FEATURES))[0]
+    values, problems = [], []
+    for field in FIELDS:
+        if field not in data:
+            problems.append(f"{field}: missing")
+            continue
+        try:
+            values.append(float(data[field]))
+        except (TypeError, ValueError):
+            problems.append(f"{field}: not a number")
+    if problems:
+        return jsonify(detail=problems), 400
+
+    row = pd.DataFrame([values], columns=FEATURES)
+    proba = model.predict_proba(row)[0]
     i = int(proba.argmax())
-    return jsonify(prediction=str(CLASSES[i]), confidence=float(proba[i]))
+    return jsonify(prediction=str(CLASSES[i]),
+                   confidence=float(proba[i]),
+                   probabilities={str(c): float(p) for c, p in zip(CLASSES, proba)})
 ```
+
+```bash
+pip install flask
+flask --app server_flask run --port 8000
+python test_endpoint.py          # the same script, in a second terminal
+```
+
+The same test script runs against both servers, and the two flowers come back
+identical: setosa at 1.00, virginica at 0.53. The third request is where they
+differ. FastAPI rejects the bad input with a **422** it produced from the
+`Flower` class. Flask rejects it with a **400**, because the fifteen lines of
+checking above are the only thing standing at the door.
 
 Flask is lighter and less magical — you can see the JSON being parsed. What you
 give up is the part this week is about: there is no declared schema, no
-automatic 422, and no `/docs` page. The validation does not disappear, it just
-becomes yours to write and yours to get wrong.
+automatic 422, and no `/docs` page (try the address; it is a 404). Nothing
+checks the response either, so a misspelled key is found by the client. The
+validation does not disappear, it just becomes yours to write and yours to get
+wrong.
 
 ### Test the endpoint
 
