@@ -242,7 +242,8 @@ ax.set_xlim(-0.03, 1.02); ax.set_ylim(0, 1.13); ax.legend(loc="center right")
 plt.tight_layout(); plt.show()
 ```
 
-Each point on a curve is one threshold. Moving right along a curve means
+ROC stands for **receiver operating characteristic**. The curve plots recall
+against the false alarm rate, one point for each threshold. Moving right along a curve means
 lowering the threshold: the model catches more cancers and also raises more
 false alarms.
 
