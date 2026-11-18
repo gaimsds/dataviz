@@ -58,6 +58,41 @@ text_model = make_pipeline(TfidfVectorizer(stop_words="english", max_features=50
 p_positive = text_model.predict_proba(test_df["text"])[:, 1]
 text_wrong = ((p_positive >= 0.5).astype(int) != test_df["label"]).to_numpy()
 
+vec = text_model.named_steps["tfidfvectorizer"]; clf = text_model.named_steps["logisticregression"]
+
+def word_table(i):
+    """One row per word of review i that the model knows: tf-idf value and contribution."""
+    row = vec.transform([test_df["text"][i]]).toarray()[0]
+    d = pd.DataFrame({"tfidf": row, "contribution": row * clf.coef_[0]}, index=vec.get_feature_names_out())
+    return d[d["tfidf"] > 0]
+
+# --- a pretrained transformer on the same 1,000 reviews
+import re, torch, umap
+from IPython.display import HTML, display
+from wordcloud import WordCloud
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+bert_name = "distilbert-base-uncased-finetuned-sst-2-english"
+bert_tok = AutoTokenizer.from_pretrained(bert_name)
+bert_net = AutoModelForSequenceClassification.from_pretrained(bert_name).eval()
+
+def run_bert(texts):
+    """P(positive) and the model's internal 768 numbers for each text."""
+    probs, inside = [], []
+    for i in range(0, len(texts), 16):
+        batch = bert_tok(texts[i:i + 16], truncation=True, max_length=512, padding=True, return_tensors="pt")
+        with torch.no_grad():
+            out = bert_net(**batch, output_hidden_states=True)
+        probs.append(torch.softmax(out.logits, 1)[:, 1].numpy()); inside.append(out.hidden_states[-1][:, 0].numpy())
+    return np.concatenate(probs), np.concatenate(inside)
+
+bert_p, bert_inside = run_bert(test_df["text"].str.replace("<br />", " ").tolist())
+bert_wrong = ((bert_p >= 0.5).astype(int) != test_df["label"]).to_numpy()
+bert_xy = umap.UMAP(random_state=42).fit_transform(bert_inside)
+
+pair_sentences = ["This movie is good.", "This movie is not good.", "It was boring.", "It was never boring."]
+pair_counts = text_model.predict_proba(pair_sentences)[:, 1]
+pair_bert = run_bert(pair_sentences)[0]
+
 # --- the supercharger sites
 sites = pd.read_csv("../dats6401/weekly/week13/data/superchargers_us.csv")
 sites["cluster"] = DBSCAN(eps=25 / 6371.0088, min_samples=5, algorithm="ball_tree",
@@ -465,6 +500,27 @@ coefficient per word. The model is trained on 20,000 reviews.
 positive, and 70 positive reviews called negative. Here the two errors cost the
 same, and the matrix shows the model does not favor either class.
 
+## From a review to a row of numbers {.smaller}
+
+> "Its the best movie I have seen in 2000, it has the beautiful and talented
+> Natalie Portman in it. It has a great storyline, cast and soundtrack. I enjoyed
+> it very much. 10 out of 10"
+
+```{python}
+#| echo: false
+#| fig-align: center
+d = word_table(463).sort_values("tfidf")
+fig, ax = plt.subplots(figsize=(7.6, 3.3))
+d["tfidf"].plot.barh(color="gray", ax=ax)
+ax.set_xlabel("TF-IDF value of each word in this review")
+plt.tight_layout(); plt.show()
+```
+
+A model cannot take text as input. The vectorizer keeps the 5,000 most common
+words and gives every review one number per word. This review uses 12 of them,
+so its row holds 12 values and 4,988 zeros. A word scores higher when it is rare
+in other reviews. The order of the words is not kept.
+
 ## The code: a text classifier
 
 ```python
@@ -488,6 +544,23 @@ text_model.score(test["text"], test["label"])      # 0.859
 Each row is one review and a label, 0 for negative or 1 for positive. The
 pipeline turns text into 5,000 word weights, then into P(positive).
 
+## A word cloud looks good and shows little
+
+```{python}
+#| echo: false
+#| fig-align: center
+fig, axes = plt.subplots(1, 2, figsize=(11, 3.7))
+for ax, label, name in [(axes[0], 0, "10,000 negative reviews"), (axes[1], 1, "10,000 positive reviews")]:
+    text = " ".join(train_df.loc[train_df["label"] == label, "text"]).replace("<br />", " ")
+    cloud = WordCloud(width=700, height=420, background_color="white", random_state=42, max_words=80).generate(text)
+    ax.imshow(cloud); ax.axis("off"); ax.set_title(name)
+plt.tight_layout(); plt.show()
+```
+
+The largest words in both clouds are "movie", "film" and "one". Size shows how
+often a word appears, and the most frequent words are the same in praise and in
+complaint. The words that separate the two classes are on the next slide.
+
 ## What it uses: one coefficient per word
 
 ```{python}
@@ -506,7 +579,40 @@ plt.tight_layout(); plt.show()
 The model has learned which words signal praise and which signal complaint. It
 adds up word weights. It does not read sentences.
 
-## The code: word weights and confident errors
+## Explaining one prediction {.smaller}
+
+```{python}
+#| echo: false
+d = word_table(743)
+top = d["contribution"].abs().max()
+
+def paint(match):
+    word = match.group(0)
+    c = d["contribution"].get(word.lower())
+    if c is None:
+        return word
+    rgb = "70, 130, 180" if c > 0 else "178, 34, 34"
+    return f'<span style="background: rgba({rgb}, {0.15 + 0.75 * abs(c) / top:.2f}); padding: 0 3px; border-radius: 3px;">{word}</span>'
+
+display(HTML('<p style="line-height: 1.7;">' + re.sub(r"\w+", paint, test_df["text"][743]) + "</p>"))
+```
+
+```{python}
+#| echo: false
+#| fig-align: center
+c = d["contribution"].sort_values()
+fig, ax = plt.subplots(figsize=(8.4, 3.5))
+c.plot.barh(color=np.where(c > 0, "steelblue", "firebrick"), ax=ax)
+ax.axvline(0, color="black", linewidth=1)
+ax.set_xlabel("What each word adds to the score (blue: toward positive, red: toward negative)")
+plt.tight_layout(); plt.show()
+```
+
+A **positive** review, and the model says P(positive) = **0.95**. The largest
+push comes from "great", which the writer used in "not great acting" and "not
+really a great film". The answer is right and part of the reason is wrong.
+
+## The code: word weights and one prediction
 
 ```python
 vectorizer = text_model.named_steps["tfidfvectorizer"]
@@ -518,15 +624,15 @@ words = pd.Series(classifier.coef_[0],
 pd.concat([words.head(10), words.tail(10)]).plot.barh()
 ```
 
-To find the reviews worth reading, rank the errors by how sure the model was:
+For one review, a word's contribution is its value in that review times its
+coefficient:
 
 ```python
-p = text_model.predict_proba(test["text"])[:, 1]       # P(positive)
-results = test.assign(p_positive=p)
-results["wrong"] = (p >= 0.5).astype(int) != results["label"]
-results["sureness"] = abs(p - 0.5)                     # distance from 0.5
+row = vectorizer.transform([test["text"][743]]).toarray()[0]   # 5,000 numbers
+contribution = pd.Series(row * classifier.coef_[0],
+                         index=vectorizer.get_feature_names_out())
 
-results[results["wrong"]].sort_values("sureness").tail(3)
+contribution[row > 0].sort_values().plot.barh()     # only the words it uses
 ```
 
 ## Read the errors {.smaller}
@@ -550,6 +656,24 @@ the film for being bad, and the model counts "bad" twice.
 No metric would have shown this. Reading a few confident errors is the text
 version of the error map.
 
+## The code: finding the confident errors
+
+```python
+p = text_model.predict_proba(test["text"])[:, 1]       # P(positive)
+results = test.assign(p_positive=p)
+results["wrong"] = (p >= 0.5).astype(int) != results["label"]
+results["sureness"] = abs(p - 0.5)                     # distance from 0.5
+
+# The errors the model was most sure about
+worst = results[results["wrong"]].sort_values("sureness").tail(3)
+
+for _, r in worst.iterrows():
+    print(r["label"], round(r["p_positive"], 2), r["text"][:300])
+```
+
+Sorting by sureness puts the most useful reviews at the end. Read them before
+you look at any more metrics.
+
 ## Errors are concentrated where the model is unsure
 
 ```{python}
@@ -568,6 +692,91 @@ account for 55% of its errors.
 
 An app that uses this model can treat that band differently, for example by
 labeling the review "mixed" or by sending it to a person.
+
+## What word counts cannot see
+
+```{python}
+#| echo: false
+#| output: asis
+print("| Sentence | P(positive) |")
+print("|---|---:|")
+for sentence, p in zip(pair_sentences, pair_counts):
+    print(f"| {sentence} | {p:.2f} |")
+```
+
+The model gives each pair the same score. It weighs every word on its own, so
+it cannot connect "not" to "good".
+
+In this model the cause is even simpler. "Not" and "never" are on the list of
+stop words that the vectorizer removes, so the model never receives them.
+
+## A model that reads the sentence {.smaller}
+
+**DistilBERT** is a small transformer. Other people have already trained it on
+sentences from movie reviews, so we download it and use it without training. It
+reads the words in order, and each word is interpreted with the words around it.
+
+```{python}
+#| echo: false
+#| output: asis
+print("| | Word counts | DistilBERT |")
+print("|------------------------------------------------|--------:|--------:|")
+for sentence, a, b in zip(pair_sentences, pair_counts, pair_bert):
+    print(f"| {sentence} | {a:.2f} | {b:.2f} |")
+print(f"| A sarcastic negative review: \"the most hilarious movie I've ever seen\" | {p_positive[108]:.2f} | {bert_p[108]:.2f} |")
+print(f"| **Accuracy on the same 1,000 reviews** | **{1 - text_wrong.mean():.3f}** | **{1 - bert_wrong.mean():.3f}** |")
+```
+
+The numbers are P(positive). DistilBERT handles "not" and "never". The sarcastic
+review still fools it, and it is more sure of the wrong answer than the
+word-count model was.
+
+## The code: a pretrained text model
+
+```python
+from transformers import pipeline
+
+# Downloads the model once, about 270 MB. Then it runs on your laptop.
+reader = pipeline("sentiment-analysis",
+                  model="distilbert-base-uncased-finetuned-sst-2-english")
+
+reader(["This movie is good.", "This movie is not good."])
+```
+
+```
+[{'label': 'POSITIVE', 'score': 0.9999},
+ {'label': 'NEGATIVE', 'score': 0.9998}]
+```
+
+This is the Hugging Face library from the Week 12 detection server. The model
+reads at most 512 tokens, so for long reviews call `reader(texts, truncation=True)`.
+
+## Inside the model: where it places each review {.smaller}
+
+```{python}
+#| echo: false
+#| fig-align: center
+labels = test_df["label"].to_numpy()
+fig, axes = plt.subplots(1, 2, figsize=(11.5, 4.1))
+axes[0].scatter(*bert_xy[labels == 0].T, s=12, color="orange", label="negative review")
+axes[0].scatter(*bert_xy[labels == 1].T, s=12, color="steelblue", label="positive review")
+axes[0].scatter(*bert_xy[bert_wrong].T, s=42, marker="x", color="black", label="model was wrong")
+axes[0].set_xticks([]); axes[0].set_yticks([]); axes[0].legend(fontsize=10)
+axes[0].set_title("1,000 reviews, as the model represents them")
+axes[1].hist(bert_p[~bert_wrong], bins=25, range=(0, 1), color="lightgray", label="correct")
+axes[1].hist(bert_p[bert_wrong], bins=25, range=(0, 1), color="firebrick", label="wrong")
+axes[1].set_xlabel("Predicted P(positive)"); axes[1].set_ylabel("Test reviews"); axes[1].legend()
+axes[1].set_title("How sure it is")
+plt.tight_layout(); plt.show()
+```
+
+Before it answers, the model turns each review into 768 numbers. UMAP, from
+Week 7, draws those numbers in two dimensions. The model puts reviews in two
+groups, and its errors are reviews placed in the wrong group.
+
+The model answers above 0.95 or below 0.05 for 90% of the reviews, and 78 of its
+121 errors are among those. It is more accurate than the word-count model, and
+its confidence tells you less.
 
 # Structure without labels {background-color="#00223e"}
 

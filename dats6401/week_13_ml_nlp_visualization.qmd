@@ -8,7 +8,7 @@ title: "Week 13 — ML/NLP Visualization"
 
 A trained model reports one number, its accuracy. That number does not say which cases the model gets wrong, what those errors cost, which inputs drive its predictions, or whether its confidence can be trusted. Each of those questions has a standard chart, and this week works through them on two models: a random forest that classifies breast tumors from 30 measurements, and a text classifier that labels movie reviews as positive or negative.
 
-The tumor model shows why the confusion matrix matters more than accuracy: it makes 6 errors on 143 tumors, and 4 of them are cancers it called benign. The review model shows what the same charts look like for text, and why reading a model's confident errors tells you things no metric does. A short section on clustering covers the case where there are no labels to predict.
+The tumor model shows why the confusion matrix matters more than accuracy: it makes 6 errors on 143 tumors, and 4 of them are cancers it called benign. The review model shows what the same charts look like for text, and why reading a model's confident errors tells you things no metric does. It also shows what a model built on word counts cannot see, such as the word "not", and how a pretrained transformer compares on the same reviews. A short section on clustering covers the case where there are no labels to predict.
 
 The week closes the arc of Weeks 11 and 12. The Streamlit client calls the FastAPI server, and the question becomes what the app should show a user when the model is unsure. That client, server and display together are the architecture of the final project.
 
@@ -21,6 +21,7 @@ The week closes the arc of Weeks 11 and 12. The Streamlit client calls the FastA
 - Compare impurity-based and permutation feature importance, and say which one a chart shows.
 - Locate a model's errors with a projection and with a histogram of its predicted probabilities.
 - Ask the same questions of a text classifier, including by reading its confident errors.
+- Explain one text prediction word by word, and say what a word-count model cannot see that a pretrained transformer can.
 - Cluster unlabeled data with K-means and DBSCAN, and report the parameters with the result.
 - Connect a Streamlit client to a model server and display the prediction with its uncertainty.
 
@@ -38,6 +39,7 @@ The week closes the arc of Weeks 11 and 12. The Streamlit client calls the FastA
 
 - Breast Cancer Wisconsin (Diagnostic): 569 tumors, 30 measurements. Ships with scikit-learn.
 - IMDB movie reviews, loaded with the Hugging Face `datasets` package.
+- [DistilBERT fine-tuned for sentiment](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english), a pretrained model used without training (optional section).
 - [Supercharger sites](weekly/week13/data/superchargers_us.csv): 2,254 locations in the lower 48 states.
 - The model server from **Week 12**.
 
@@ -48,7 +50,13 @@ The week closes the arc of Weeks 11 and 12. The Streamlit client calls the FastA
 Make sure your environment includes:
 
 ```bash
-pip install scikit-learn pandas matplotlib datasets requests streamlit
+pip install scikit-learn pandas matplotlib datasets requests streamlit wordcloud
+```
+
+The last section of the text part uses a pretrained model. It is optional, and it needs three more packages and a download of about 270 MB the first time:
+
+```bash
+pip install transformers torch umap-learn
 ```
 
 The first time the demo notebook loads the IMDB reviews it downloads about 80 MB; after that it reads a local cache. Do that once before class.
@@ -72,7 +80,7 @@ flask --app server_flask run --port 8000      # or the Flask version
 2. How a model fails: the confusion matrix, recall and precision, the ROC curve, and the threshold as a choice (12 min)
 3. What a model uses: feature importance, two ways (7 min)
 4. Where it fails and whether it knows: the error map and the confidence histogram (6 min)
-5. The same questions for a text classifier, and reading its confident errors (8 min)
+5. The same questions for a text classifier: what the model receives, why a word cloud shows little, explaining one prediction, reading the confident errors, and a pretrained transformer on the same reviews (8 min)
 6. Clustering without labels: K-means, DBSCAN, and reporting the parameters (5 min)
 7. Showing uncertainty to the user (2 min)
 
@@ -80,7 +88,7 @@ flask --app server_flask run --port 8000      # or the Flask version
 
 1. The tumor classifier: confusion matrix, recall and precision, ROC, and the threshold table (18 min)
 2. Feature importance two ways, the error map, and the confidence histogram (16 min)
-3. The review classifier: the same three questions, and reading the confident errors (16 min)
+3. The review classifier: the same three questions, explaining one prediction, and reading the confident errors (16 min). If time allows, the pretrained transformer on the same reviews; otherwise read that section after class
 4. Clustering: K-means and DBSCAN on a toy shape, then DBSCAN on Supercharger sites (10 min)
 5. **The live loop:** start the Week 12 server, call it from the notebook, then from the Streamlit app; stop the server and watch the client (10 min)
 
@@ -152,6 +160,37 @@ results["sureness"] = (results["p_positive"] - 0.5).abs()
 for _, row in results[results["wrong"]].sort_values("sureness", ascending=False).head(3).iterrows():
     print(row["label"], round(row["p_positive"], 2), row["text"][:300], "\n")
 ```
+
+### Explaining one text prediction
+
+```python
+vectorizer = text_model.named_steps["tfidfvectorizer"]
+classifier = text_model.named_steps["logisticregression"]
+
+review = test_df["text"][743]
+row = vectorizer.transform([review]).toarray()[0]          # one row, 5,000 numbers
+contribution = pd.Series(row * classifier.coef_[0],
+                         index=vectorizer.get_feature_names_out())[row > 0]
+
+contribution.sort_values().plot.barh()
+```
+
+What a word adds to the score is its TF-IDF value in the review times its coefficient. The model calls this positive review positive at 0.95, and the largest push comes from "great", which the writer used in "not great acting" and "not really a great film".
+
+### What word counts cannot see, and a pretrained model
+
+```python
+pairs = ["This movie is good.", "This movie is not good."]
+
+text_model.predict_proba(pairs)[:, 1]       # 0.81 and 0.81
+
+from transformers import pipeline
+reader = pipeline("sentiment-analysis",
+                  model="distilbert-base-uncased-finetuned-sst-2-english")
+reader(pairs)                               # POSITIVE, then NEGATIVE
+```
+
+The word-count model gives both sentences the same score, because `stop_words="english"` removes "not" before the model sees it. DistilBERT reads the words in order and gets both right. On the same 1,000 reviews it scores 0.879 against 0.859. It answers above 0.95 or below 0.05 for 90% of the reviews, and 78 of its 121 errors are among those, so its confidence is less useful than the simpler model's.
 
 ### DBSCAN on locations
 
