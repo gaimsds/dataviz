@@ -68,9 +68,9 @@ sites["cluster"] = DBSCAN(eps=25 / 6371.0088, min_samples=5, algorithm="ball_tre
 
 ## One number, six patients
 
-The model for most of today is a random forest trained on 569 breast tumors.
-Each tumor has 30 measurements taken from a biopsy image, and a label:
-malignant or benign.
+The model for most of today predicts whether a breast tumor is malignant or
+benign, from measurements of a biopsy image. The next two slides describe the
+data and the model.
 
 On 143 tumors it has never seen, the model is **95.8% accurate**. That means it
 called 6 of them wrong.
@@ -82,7 +82,86 @@ model. Three questions are left open, and each one has a chart:
 2. **What is it using?** Which measurements drive the predictions.
 3. **How sure is it?** Whether its confidence tells us anything.
 
+## The data: one row per tumor
+
+```{python}
+#| echo: false
+#| output: asis
+cols = ["mean radius", "mean texture", "mean area", "worst radius", "worst area"]
+peek = X.loc[[0, 1, 19, 20], cols].round(1)
+peek.insert(0, "diagnosis", y.loc[peek.index].map({0: "malignant", 1: "benign"}))
+print(peek.to_markdown(index=False))
+```
+
+Four of the 569 rows and 5 of the 30 columns. Each column summarizes the cell
+nuclei in one biopsy image. The model should predict `diagnosis`.
+
+```python
+from sklearn.datasets import load_breast_cancer
+
+bc = load_breast_cancer(as_frame=True)   # ships with scikit-learn
+X, y = bc.data, bc.target                # y: 0 = malignant, 1 = benign
+```
+
+## The model: a random forest
+
+A **decision tree** asks a series of yes-or-no questions about the measurements,
+such as "is the worst radius above 16.8?", and ends at a diagnosis.
+
+A **random forest** trains many trees, each on a different random sample of the
+tumors, and lets them vote.
+
+The share of trees that vote malignant is the model's probability that the tumor
+is malignant. That probability is what the rest of today builds on.
+
+## The code: train on some tumors, test on the rest
+
+```python
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+
+# Hold back a quarter of the tumors. The model never sees them.
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=42, stratify=y)
+
+model = RandomForestClassifier(n_estimators=150, random_state=42)
+model.fit(X_train, y_train)        # learn from 426 tumors
+
+model.score(X_test, y_test)        # accuracy on the other 143: 0.958
+```
+
+We judge the model only on the 143 held-back tumors. A model can memorize the
+tumors it trained on, so its score on those says little.
+
 # How does it fail? {background-color="#00223e"}
+
+## Four kinds of outcome {.smaller}
+
+```{python}
+#| echo: false
+#| fig-align: center
+fig, ax = plt.subplots(figsize=(9.2, 4.0))
+cells = [(0, 1, "TRUE POSITIVE", "a cancer, caught", "lightgreen"),
+         (1, 1, "FALSE NEGATIVE", "a cancer, missed", "lightcoral"),
+         (0, 0, "FALSE POSITIVE", "a false alarm", "moccasin"),
+         (1, 0, "TRUE NEGATIVE", "healthy, cleared", "lightgreen")]
+for cx, cy, name, meaning, color in cells:
+    ax.add_patch(plt.Rectangle((cx, cy), 1, 1, facecolor=color, edgecolor="black"))
+    ax.text(cx + 0.5, cy + 0.60, name, ha="center", va="center", fontsize=14, fontweight="bold")
+    ax.text(cx + 0.5, cy + 0.36, meaning, ha="center", va="center", fontsize=13)
+ax.text(0.5, 2.08, "Model says malignant", ha="center", fontsize=13)
+ax.text(1.5, 2.08, "Model says benign", ha="center", fontsize=13)
+ax.text(-0.06, 1.5, "Actually malignant", ha="right", va="center", fontsize=13)
+ax.text(-0.06, 0.5, "Actually benign", ha="right", va="center", fontsize=13)
+ax.set_xlim(-0.8, 2.05); ax.set_ylim(-0.05, 2.3); ax.axis("off")
+plt.tight_layout(); plt.show()
+```
+
+"Positive" means the thing we are looking for, which here is malignant. Every
+tumor in the test set lands in one of these four cells.
+
+- **Recall** reads across the top row: of the tumors that are malignant, what share did the model catch? TP / (TP + FN)
+- **Precision** reads down the left column: of the tumors the model called malignant, what share are? TP / (TP + FP)
 
 ## The confusion matrix
 
@@ -98,6 +177,32 @@ plt.tight_layout(); plt.show()
 
 Read it by row. Of 53 malignant tumors, the model called 49 malignant and
 4 benign. Of 90 benign tumors, it called 88 benign and 2 malignant.
+
+## The code: a confusion matrix
+
+```python
+from sklearn.metrics import ConfusionMatrixDisplay
+
+ConfusionMatrixDisplay.from_estimator(
+    model, X_test, y_test,
+    display_labels=["malignant", "benign"],    # names for classes 0 and 1
+    cmap="Blues")
+```
+
+One call draws the chart on the previous slide. For the numbers:
+
+```python
+from sklearn.metrics import classification_report
+
+print(classification_report(y_test, model.predict(X_test),
+                            target_names=["malignant", "benign"]))
+```
+
+```text
+              precision    recall  f1-score   support
+   malignant      0.961     0.925     0.942        53
+      benign      0.957     0.978     0.967        90
+```
 
 ## The two errors do not cost the same {.smaller}
 
@@ -115,6 +220,34 @@ The metrics below keep them apart.
 Which metric matters depends on which error is worse. For screening, a missed
 cancer is the worse error, so recall is the number to report first.
 :::
+
+## How to read an ROC curve {.smaller}
+
+```{python}
+#| echo: false
+#| fig-align: center
+fig, ax = plt.subplots(figsize=(6.8, 4.2))
+g = np.linspace(0, 1, 200)
+for k, color, name in [(6, "steelblue", "a strong model"), (2.2, "orange", "a weaker model")]:
+    ax.plot(g, g ** (1 / k), color=color, lw=2.2, label=name)
+ax.plot([0, 1], [0, 1], linestyle="--", color="gray", label="guessing")
+ax.scatter([0], [1], s=110, color="firebrick", zorder=5, clip_on=False)
+ax.text(0.035, 1.07, "a perfect model: every cancer caught, no false alarms",
+        fontsize=10.5, color="firebrick", va="center")
+ax.annotate("", xy=(0.56, 0.44), xytext=(0.82, 0.18), arrowprops=dict(arrowstyle="->", lw=2, color="black"))
+ax.text(0.72, 0.36, "better", fontsize=12)
+ax.set_xlabel("False alarm rate  (healthy patients flagged)")
+ax.set_ylabel("Recall  (cancers caught)")
+ax.set_xlim(-0.03, 1.02); ax.set_ylim(0, 1.13); ax.legend(loc="center right")
+plt.tight_layout(); plt.show()
+```
+
+Each point on a curve is one threshold. Moving right along a curve means
+lowering the threshold: the model catches more cancers and also raises more
+false alarms.
+
+A curve that climbs steeply toward the top-left corner catches most cancers
+before it raises many false alarms. The diagonal is what guessing would give.
 
 ## The threshold is a choice
 
@@ -140,6 +273,28 @@ plt.tight_layout(); plt.show()
 
 The model outputs a probability. The label comes from a cutoff, and 0.5 is only
 the default. Each point on the ROC curve is one possible cutoff.
+
+## The code: probabilities and thresholds
+
+```python
+# Ask for probabilities instead of labels. Column 0 is P(malignant).
+p_malignant = model.predict_proba(X_test)[:, 0]
+is_malignant = (y_test == 0)
+
+from sklearn.metrics import RocCurveDisplay
+RocCurveDisplay.from_predictions(is_malignant, p_malignant)
+```
+
+`predict` gives a label. `predict_proba` gives the probability behind it, so we
+can apply any threshold ourselves:
+
+```python
+for t in [0.5, 0.4, 0.3, 0.2, 0.1]:
+    called = p_malignant >= t                  # called malignant
+    missed = (is_malignant & ~called).sum()    # cancers not called
+    alarms = (~is_malignant & called).sum()    # healthy, but called
+    print(t, missed, alarms)
+```
 
 ## What each threshold does to these 143 patients {.smaller}
 
@@ -176,6 +331,29 @@ plt.tight_layout(); plt.show()
 
 A sorted bar chart, so the values are compared on a common scale. The top of the
 list is three size measurements: area, perimeter and radius.
+
+## The code: feature importance, two ways
+
+```python
+# 1. What the forest split on. Training already computed it.
+importance = pd.Series(model.feature_importances_, index=X.columns)
+importance.sort_values().tail(10).plot.barh(color="steelblue")
+```
+
+Sorting before plotting is what makes the chart readable.
+
+```python
+from sklearn.inspection import permutation_importance
+
+# 2. What the model cannot do without: shuffle one column
+#    at a time and measure how much accuracy is lost.
+perm = permutation_importance(model, X_test, y_test,
+                              n_repeats=30, random_state=0)
+perm.importances_mean        # one number per feature
+```
+
+The second re-scores the model many times, on the test set. It is the one to
+trust when features overlap.
 
 ## Correlated features share the credit {.smaller}
 
@@ -224,6 +402,27 @@ plt.tight_layout(); plt.show()
 The projection is PCA, the method from Week 7. The six errors are not scattered.
 They lie where the two classes meet, among tumors that resemble both.
 
+## The code: the error map
+
+```python
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+
+# Put all 30 measurements on one scale, then find the 2 directions
+# that spread the data most. Both are fitted on the training tumors.
+scaler = StandardScaler().fit(X_train)
+pca = PCA(n_components=2).fit(scaler.transform(X_train))
+
+pcs = pca.transform(scaler.transform(X_test))     # test tumors, in 2-D
+wrong = model.predict(X_test) != y_test           # True for the 6 errors
+
+plt.scatter(pcs[~wrong, 0], pcs[~wrong, 1], c=y_test[~wrong], s=22)
+plt.scatter(pcs[wrong, 0], pcs[wrong, 1], marker="x", color="black")
+```
+
+Scaling comes first because area is in the hundreds and smoothness is below 1.
+Without it, PCA would see only the large columns.
+
 ## Confidence carries information
 
 ```{python}
@@ -265,6 +464,29 @@ coefficient per word. The model is trained on 20,000 reviews.
 positive, and 70 positive reviews called negative. Here the two errors cost the
 same, and the matrix shows the model does not favor either class.
 
+## The code: a text classifier
+
+```python
+from datasets import load_dataset
+from sklearn.pipeline import make_pipeline
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+
+imdb = load_dataset("imdb")        # downloads once, then reads a local copy
+train = pd.DataFrame(imdb["train"].shuffle(seed=42).select(range(20000)))
+test = pd.DataFrame(imdb["test"].shuffle(seed=42).select(range(1000)))
+
+text_model = make_pipeline(
+    TfidfVectorizer(stop_words="english", max_features=5000),
+    LogisticRegression(max_iter=1000, random_state=42),
+).fit(train["text"], train["label"])
+
+text_model.score(test["text"], test["label"])      # 0.859
+```
+
+Each row is one review and a label, 0 for negative or 1 for positive. The
+pipeline turns text into 5,000 word weights, then into P(positive).
+
 ## What it uses: one coefficient per word
 
 ```{python}
@@ -282,6 +504,29 @@ plt.tight_layout(); plt.show()
 
 The model has learned which words signal praise and which signal complaint. It
 adds up word weights. It does not read sentences.
+
+## The code: word weights and confident errors
+
+```python
+vectorizer = text_model.named_steps["tfidfvectorizer"]
+classifier = text_model.named_steps["logisticregression"]
+
+# One coefficient per word: below zero pushes toward negative
+words = pd.Series(classifier.coef_[0],
+                  index=vectorizer.get_feature_names_out()).sort_values()
+pd.concat([words.head(10), words.tail(10)]).plot.barh()
+```
+
+To find the reviews worth reading, rank the errors by how sure the model was:
+
+```python
+p = text_model.predict_proba(test["text"])[:, 1]       # P(positive)
+results = test.assign(p_positive=p)
+results["wrong"] = (p >= 0.5).astype(int) != results["label"]
+results["sureness"] = abs(p - 0.5)                     # distance from 0.5
+
+results[results["wrong"]].sort_values("sureness").tail(3)
+```
 
 ## Read the errors {.smaller}
 
@@ -365,6 +610,28 @@ DBSCAN finds 49 clusters and labels 1,041 sites as noise. The clusters are
 metropolitan areas: New York and New Jersey (297 sites), the Bay Area (170),
 Los Angeles (152). The gray sites are the highway network between them.
 
+## The code: DBSCAN on coordinates
+
+```python
+from sklearn.cluster import DBSCAN
+
+sites = pd.read_csv("data/superchargers_us.csv")   # lat and lon per site
+
+EARTH_RADIUS_KM = 6371.0088
+eps_km = 25                            # how close counts as a neighbor
+
+sites["cluster"] = DBSCAN(
+    eps=eps_km / EARTH_RADIUS_KM,      # kilometers, converted to radians
+    min_samples=5,                     # at least 5 sites in that radius
+    metric="haversine",                # distance over the Earth's surface
+    algorithm="ball_tree",
+).fit_predict(np.radians(sites[["lat", "lon"]]))
+```
+
+Latitude and longitude are angles, so straight-line distance is wrong for them.
+DBSCAN returns one number per site: its cluster, or **-1** for noise. The map
+is a scatter plot colored by that number.
+
 ## The parameters are part of the result {.smaller}
 
 The same 2,254 sites, with the neighborhood radius changed and nothing else:
@@ -400,6 +667,30 @@ the app shows decides whether they can tell a sure answer from an unsure one.
 For the iris flower `(6.0, 2.7, 5.0, 1.7)`, the Week 12 server answers virginica
 at 0.53, with versicolor at 0.47. In Block 3 you will send it a flower that comes
 back at exactly 0.50 and 0.50, and decide what the app should show.
+
+## The code: asking the server
+
+```python
+import requests
+
+flower = {"sepal_length": 6.0, "sepal_width": 2.7,
+          "petal_length": 5.0, "petal_width": 1.7}
+try:
+    r = requests.post("http://127.0.0.1:8000/predict", json=flower, timeout=5)
+    r.raise_for_status()
+    out = r.json()
+except requests.RequestException as e:
+    print("Could not reach the server:", e)
+```
+
+The Week 11 pattern: a timeout, a status check, a handled failure. The answer:
+
+```json
+{"prediction": "virginica", "confidence": 0.53,
+ "probabilities": {"setosa": 0.0, "versicolor": 0.47, "virginica": 0.53}}
+```
+
+In Streamlit, `st.bar_chart(pd.Series(out["probabilities"]))` draws it.
 
 ## One system, three parts
 
